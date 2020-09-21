@@ -1,0 +1,7 @@
+{
+  "name": "PAID-wallet",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}
