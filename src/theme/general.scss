@@ -1,0 +1,40 @@
+ion-item {
+  --border-width: 0;
+  --inner-border-width: 0;
+
+}
+
+ion-button {
+  width: 100%;
+  height: 48px;
+  text-transform: none;
+  font-size: 0.9em;
+  font-weight: 600;
+
+  &.red-button {
+    background-color: $brand-red;
+
+  }
+
+  &.purple-button {
+    background-color: $brand-primary;
+
+  }
+}
+
+.terms {
+  font-size: 0.8em;
+
+}
+
+.terms-modal {
+  padding: 10vh 15px;
+  overflow-y: scroll;
+
+  .ion-page {
+    max-width: 95%;
+    margin: auto;
+
+  }
+
+}
