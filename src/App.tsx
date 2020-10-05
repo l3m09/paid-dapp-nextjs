@@ -28,25 +28,27 @@ import '@ionic/react/css/display.css';
 import './theme/variables.css';
 import './theme/main.scss';
 import LoginGmail from "./pages/auth/LoginGmail";
+import Menu from "./components/Menu";
 
 const App: React.FC = () => {
 
-  return (
-    <IonApp>
-      <IonReactRouter>
-        <IonSplitPane contentId="main">
-          <IonRouterOutlet id="main">
-            <Route path="/" component={Landing} exact />
-            <Route path="/login" component={Login} exact />
-            <Route path="/login-gmail" component={LoginGmail} exact />
-            <Route path="/signup" component={SignUp} exact />
-            <Route path="/page/:name" component={Page} exact />
-            {/*<Redirect from="/" to="/" exact />*/}
-          </IonRouterOutlet>
-        </IonSplitPane>
-      </IonReactRouter>
-    </IonApp>
-  );
+    return (
+        <IonApp>
+            <IonReactRouter>
+                <IonSplitPane contentId="main">
+                    <Menu/>
+                    <IonRouterOutlet id="main">
+                        <Route path="/" component={Landing} exact />
+                        <Route path="/login" component={Login} exact />
+                        <Route path="/login-gmail" component={LoginGmail} exact />
+                        <Route path="/signup" component={SignUp} exact />
+                        <Route path="/page/:name" component={Page} exact />
+                        {/*<Redirect from="/" to="/" exact />*/}
+                    </IonRouterOutlet>
+                </IonSplitPane>
+            </IonReactRouter>
+        </IonApp>
+    );
 };
 
 export default App;

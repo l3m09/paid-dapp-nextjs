@@ -33,7 +33,7 @@ const SignUp: React.FC = () => {
                         <Terms/>
                     </IonItem>
                     <IonItem class="form-options">
-                        <IonButton routerLink="/page/inbox" class="purple-button " color="8500FF">Sign up</IonButton>
+                        <IonButton routerLink="/page/wallet" class="purple-button " color="8500FF">Sign up</IonButton>
                     </IonItem>
                     <IonItem >
                         <span><IonRouterLink routerLink="/login">Log in with email</IonRouterLink></span>
