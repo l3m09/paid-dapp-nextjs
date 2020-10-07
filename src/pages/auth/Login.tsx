@@ -18,7 +18,7 @@ const Login: React.FC = () => {
 
     return (
         <IonPage >
-            <IonHeader class="auth-header">
+            <IonHeader class="backarrow-header">
                 <IonRouterLink routerLink="/">
                     <IonIcon icon={arrowBackOutline}/>
                 </IonRouterLink>
@@ -37,7 +37,7 @@ const Login: React.FC = () => {
                         <IonInput type="password" placeholder="Enter your password"></IonInput>
                     </IonItem>
                     <IonItem class="form-options">
-                        <IonButton routerLink="/page/wallet" class="purple-button " color="8500FF">Log In</IonButton>
+                        <IonButton routerLink="/phrase/instructions" class="purple-button " color="8500FF">Log In</IonButton>
                     </IonItem>
                     <IonItem class="form-options">
                         <span>Don't have an account? <IonRouterLink routerLink="/signup">Sign up</IonRouterLink></span>

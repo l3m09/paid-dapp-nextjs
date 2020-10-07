@@ -5,13 +5,15 @@
 
 .landing-content a {
     color: #8500FF;
-}
+} 
 
 .landing-logo {
     height: 60vh;
     display: flex;
     justify-content: center;
     align-items: center;
+    max-width: 80%;
+    margin: auto;
 }
 
 .landing-actions {
