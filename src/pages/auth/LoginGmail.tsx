@@ -19,7 +19,7 @@ const LoginGmail: React.FC = () => {
 
     return (
         <IonPage >
-            <IonHeader class="auth-header">
+            <IonHeader class="backarrow-header">
                 <IonRouterLink routerLink="/">
                     <IonIcon icon={arrowBackOutline}/>
                 </IonRouterLink>

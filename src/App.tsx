@@ -27,8 +27,13 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 import './theme/main.scss';
+/* Pages */
 import LoginGmail from "./pages/auth/LoginGmail";
 import Menu from "./components/Menu";
+import Instructions from "./pages/seed/Instructions";
+import SeedPhrase from "./pages/seed/SeedPhrase";
+import ConfirmPhrase from "./pages/seed/ConfirmPhrase";
+import Completed from "./pages/seed/Completed";
 
 const App: React.FC = () => {
 
@@ -43,6 +48,10 @@ const App: React.FC = () => {
                         <Route path="/login-gmail" component={LoginGmail} exact />
                         <Route path="/signup" component={SignUp} exact />
                         <Route path="/page/:name" component={Page} exact />
+                        <Route path="/phrase/instructions" component={Instructions} exact />
+                        <Route path="/phrase/seed" component={SeedPhrase} exact />
+                        <Route path="/phrase/confirm" component={ConfirmPhrase} exact />
+                        <Route path="/phrase/completed" component={Completed} exact />
                         {/*<Redirect from="/" to="/" exact />*/}
                     </IonRouterOutlet>
                 </IonSplitPane>

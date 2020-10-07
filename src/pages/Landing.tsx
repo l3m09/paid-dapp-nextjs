@@ -10,7 +10,7 @@ const Landing: React.FC = () => {
     <IonPage>
       <IonContent fullscreen class="landing-content">
           <div className="landing-logo">
-              <IonImg src="/assets/images/landing-logo.png"/>
+              <IonImg src="/assets/images/logo-full.png"/>
           </div>
           <div className="landing-actions">
               <IonButton routerLink="/login-gmail" class="red-button " color="FF4300">Continue with Gmail</IonButton>
