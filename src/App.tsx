@@ -34,6 +34,9 @@ import Instructions from "./pages/seed/Instructions";
 import SeedPhrase from "./pages/seed/SeedPhrase";
 import ConfirmPhrase from "./pages/seed/ConfirmPhrase";
 import Completed from "./pages/seed/Completed";
+import Wallets from "./pages/wallet/Wallets";
+import Import from "./pages/wallet/Import";
+import Export from "./pages/wallet/Export";
 
 const App: React.FC = () => {
 
@@ -52,6 +55,10 @@ const App: React.FC = () => {
                         <Route path="/phrase/seed" component={SeedPhrase} exact />
                         <Route path="/phrase/confirm" component={ConfirmPhrase} exact />
                         <Route path="/phrase/completed" component={Completed} exact />
+                        <Route path="/wallets" component={Wallets} exact />
+                        <Route path="/wallet/import" component={Import} exact />
+                        <Route path="/wallet/create" component={Instructions} exact />
+                        <Route path="/wallet/export" component={Export} exact />
                         {/*<Redirect from="/" to="/" exact />*/}
                     </IonRouterOutlet>
                 </IonSplitPane>

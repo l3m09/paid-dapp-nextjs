@@ -1,0 +1,135 @@
+.wallets-page {
+
+  .wallets-container {
+    margin-top: 5vh;
+
+    .wallet-wrapper {
+      margin-bottom: 1vh;
+
+      .wallet-container {
+        background-color: $brand-primary;
+        width: 100%;
+        border-radius: 10px;
+        padding: 10px;
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        box-shadow: 1px 1px 1px #cdcdcd;
+
+        &:hover {
+          background-color: $brand-secondary;
+
+        }
+
+        span {
+          width: 100%;
+          text-align: center;
+          margin-bottom: 1vh;
+
+          &.amount {
+            font-size: 1.4em;
+            text-shadow: 1px 1px 1px #dedede;
+          }
+
+          &.label {
+
+          }
+
+          &.type {
+
+          }
+
+          &.address {
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+            margin-bottom: 0;
+
+          }
+
+        }
+
+      }
+
+    }
+
+  }
+
+}
+
+.wallet-content {
+
+  form {
+
+    ion-item {
+      display: flex;
+      flex-direction: column;
+      margin-top: 5vh;
+
+      .item-inner {
+        border: none;
+      }
+      span {
+        width: 100%;
+        text-align: center;
+        font-weight: bold;
+        font-size: 0.9em;
+      }
+
+    }
+
+    ion-label {
+      font-weight: bold;
+      padding-bottom: 5vh;
+    }
+
+    ion-textarea {
+      border: 2px solid $brand-primary;
+      border-radius: 10px;
+      min-height: 15vh;
+      padding: 0 10px;
+    }
+
+    .form-options {
+      height: initial;
+      display: flex;
+      flex-direction: column;
+    }
+
+   .form-options {
+     width: 100%;
+     position: absolute;
+     bottom: 1vh;
+   }
+
+  }
+
+  .what-is {
+    width: 100%;
+    text-align: center;
+    margin-top: 15vh;
+
+    ion-router-link {
+      color: $brand-primary;
+
+    }
+  }
+
+  ion-title, ion-text {
+    width: 100%;
+    text-align: center;
+    margin-top: 2vh;
+
+    &.import-information {
+      font-size: 1em;
+      font-weight: 500;
+      margin-top: 5vh;
+
+    }
+
+  }
+
+
+}

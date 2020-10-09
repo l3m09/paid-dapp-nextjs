@@ -18,7 +18,7 @@ const Instructions: React.FC = () => {
     return (
         <IonPage >
             <IonHeader class="backarrow-header">
-                <IonRouterLink routerLink="/">
+                <IonRouterLink routerLink="/wallets">
                     <IonIcon icon={arrowBackOutline}/>
                 </IonRouterLink>
                 <IonTitle>Secure your wallet</IonTitle>

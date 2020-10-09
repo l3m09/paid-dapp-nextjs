@@ -63,7 +63,7 @@ const Completed: React.FC = () => {
                     </IonText>
                 </IonItem>
                 <IonItem class="">
-                    <IonButton routerLink="/page/wallet" class="purple-button done-button" color="8500FF">
+                    <IonButton routerLink="/wallets" class="purple-button done-button" color="8500FF">
                         Done
                     </IonButton>
                 </IonItem>

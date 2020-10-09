@@ -24,8 +24,8 @@ interface AppPage {
 
 const appPages: AppPage[] = [
   {
-    title: 'Wallet',
-    url: '/page/wallet',
+    title: 'Wallets',
+    url: '/wallets',
     iosIcon: mailOutline,
     mdIcon: mailSharp
   },

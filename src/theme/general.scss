@@ -73,3 +73,19 @@ ion-button {
 .text-success {
   color: $green-success;
 }
+
+
+.item-native, main {
+  background-color: $grey-bg;
+
+}
+
+.ion-color-primary {
+  background-color: $brand-primary;
+  --ion-color-base: $brand-primary !important;
+}
+
+.ion-color-secondary {
+  background-color: $brand-secondary;
+  --ion-color-base: $brand-secondary !important;
+}
