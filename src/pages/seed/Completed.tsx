@@ -1,5 +1,4 @@
 import {
-    IonIcon,
     IonContent,
     IonHeader,
     IonPage,
@@ -10,7 +9,7 @@ import {
     IonText, IonModal, IonImg
 } from '@ionic/react';
 import React, {useState} from 'react';
-import { arrowBackOutline } from 'ionicons/icons';
+// import { arrowBackOutline } from 'ionicons/icons';
 
 const Completed: React.FC = () => {
     const [showModal, setShowModal] = useState(false);
@@ -18,9 +17,9 @@ const Completed: React.FC = () => {
     return (
         <IonPage >
             <IonHeader class="backarrow-header">
-                <IonRouterLink routerLink="/page/wallet">
-                    <IonIcon icon={arrowBackOutline}/>
-                </IonRouterLink>
+                {/*<IonRouterLink routerLink="/page/wallet">*/}
+                {/*    <IonIcon icon={arrowBackOutline}/>*/}
+                {/*</IonRouterLink>*/}
                 <IonTitle>Secure your wallet</IonTitle>
             </IonHeader>
 
@@ -32,7 +31,7 @@ const Completed: React.FC = () => {
                 </IonItem>
                 <IonItem>
                     <IonTitle class="phrase-content-title phrase-completed-title">
-                        Congratularions
+                        Congratulations
                     </IonTitle>
                 </IonItem>
                 <IonItem>

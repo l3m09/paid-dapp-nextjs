@@ -9,13 +9,26 @@ import {
     IonRouterLink,
     IonText
 } from '@ionic/react';
-import React from 'react';
+import React, {useEffect} from 'react';
 import { arrowBackOutline, lockClosedOutline } from 'ionicons/icons';
+import {useDispatch, useSelector} from "react-redux";
+import {doGeneratePhrase} from "../../redux/actions/wallet";
 
-const words = ['glide', 'slim', 'edit', 'jacket', 'suit', 'stock', 'vast', 'gym',
-    'index', 'square', 'people', 'glide'];
+let words: [] = [];
 
 const SeedPhrase: React.FC = () => {
+    const dispatch = useDispatch();
+    const wallet = useSelector((state: any) => state.wallet);
+    const { permanentSeedPhrase } = wallet;
+
+    useEffect(() => {
+        if (permanentSeedPhrase.length > 0) {
+            words = permanentSeedPhrase;
+        } else {
+            dispatch(doGeneratePhrase());
+        }
+    },[permanentSeedPhrase]);
+
 
     return (
         <IonPage >

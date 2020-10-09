@@ -1,17 +1,49 @@
-import { createReducer } from "@reduxjs/toolkit";
-import { generatePhrase } from "../actions/wallet";
+import { WalletActionTypes } from '../actionTypes/wallet';
 
-const wallet = {
-    isLoading: false,
-    seedPhrase: []
+const initialState = {
+    loading: false,
+    confirmed: false,
+    permanentSeedPhrase: [],
+    seedPhrase: [],
+    confirmedSeedPhrase: []
 };
 
-export const WalletReducer = createReducer(
-    { wallet },
-    {
-        [generatePhrase.type]: (state, action) => ({
-            ...state,
-            wallet: { ...action.payload }
-        }),
+export const WalletReducer = function (state = initialState, action: any) {
+    const { type, payload } = action;
+    switch (type) {
+        case WalletActionTypes.GENERATE_PHRASE:
+            return { ...state, seedPhrase: payload, permanentSeedPhrase: payload, confirmedSeedPhrase: [] }
+
+        case WalletActionTypes.ADD_WORD: {
+            let confirmedPhrase = state.confirmedSeedPhrase.slice();
+            let seedPhrase = state.seedPhrase.slice();
+            const index = state.confirmedSeedPhrase.length;
+            // @ts-ignore
+            confirmedPhrase.splice(index, 0, payload.word);
+            seedPhrase.splice(payload.index, 1)
+            for (let i = 0; i < state.permanentSeedPhrase.length; i += 1) {
+                if (state.permanentSeedPhrase[i] === confirmedPhrase[i]) {
+                    if (i === 11) {
+                        return {...state, seedPhrase: seedPhrase, confirmedSeedPhrase: confirmedPhrase, confirmed: true}
+                    }
+                }
+            }
+            return {...state, seedPhrase: seedPhrase, confirmedSeedPhrase: confirmedPhrase, confirmed: false}
+        }
+
+        case WalletActionTypes.REMOVE_WORD: {
+            let confirmedPhrase = state.confirmedSeedPhrase.slice();
+            let seedPhrase = state.seedPhrase.slice();
+            const index = state.seedPhrase.length;
+
+            confirmedPhrase.splice(payload.index, 1);
+            // @ts-ignore
+            seedPhrase.splice(index, 0, payload.word);
+
+            return {...state, seedPhrase: seedPhrase, confirmedSeedPhrase: confirmedPhrase, confirmed: false}
+        }
+
+        default:
+            return state;
     }
-);
+}
