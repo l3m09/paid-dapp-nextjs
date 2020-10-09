@@ -1,0 +1,49 @@
+.landing-content {
+  display: flex;
+  flex-direction: column;
+  background-color: #faebd7;
+
+
+  a {
+    color: #8500FF;
+  }
+
+  .landing-logo {
+    height: 60vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 100%;
+    padding: 20%;
+    background-color: #faebd7;
+
+  }
+
+  .landing-actions {
+    width: 100%;
+    padding: 0 3vh;
+    display: flex;
+    flex-direction: column;
+    background-color: #faebd7;
+    height: 25vh;
+
+  }
+
+  .landing-actions ion-router-link {
+    width: 100%;
+    text-align: center;
+    padding: 5vh 0;
+    background-color: #faebd7;
+
+  }
+
+  .terms {
+    text-align: center;
+    width: 100%;
+    padding: 1vh 3vh;
+    font-size: 0.9em;
+    background-color: #faebd7;
+    height: 15vh;
+
+  }
+}

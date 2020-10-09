@@ -74,11 +74,16 @@ ion-button {
   color: $green-success;
 }
 
+.landing-content {
+  background-color: $brand-bg;
+  main, .background-content {
+    background-color: $brand-bg;
 
-.item-native, main {
-  background-color: $grey-bg;
+  }
 
 }
+
+
 
 .ion-color-primary {
   background-color: $brand-primary;
