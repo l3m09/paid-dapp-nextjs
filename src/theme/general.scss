@@ -74,15 +74,20 @@ ion-button {
   color: $green-success;
 }
 
-.landing-content {
+ion-app {
+  --ion-background-color: $brand-bg;
   background-color: $brand-bg;
-  main, .background-content {
-    background-color: $brand-bg;
-
-  }
-
 }
 
+ion-router-link {
+  color: $brand-secondary;
+}
+
+ion-input {
+  background-color: white;
+  --ion-background-color: white;
+
+}
 
 
 .ion-color-primary {

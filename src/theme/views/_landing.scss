@@ -1,7 +1,7 @@
 .landing-content {
   display: flex;
   flex-direction: column;
-  background-color: #faebd7;
+  //background-color: $brand-bg;
 
 
   a {
@@ -15,7 +15,7 @@
     align-items: center;
     max-width: 100%;
     padding: 20%;
-    background-color: #faebd7;
+    //background-color: $brand-bg;
 
   }
 
@@ -24,8 +24,8 @@
     padding: 0 3vh;
     display: flex;
     flex-direction: column;
-    background-color: #faebd7;
-    height: 25vh;
+    //background-color: $brand-bg;
+    height: 30vh;
 
   }
 
@@ -33,7 +33,7 @@
     width: 100%;
     text-align: center;
     padding: 5vh 0;
-    background-color: #faebd7;
+    //background-color: $brand-bg;
 
   }
 
@@ -42,8 +42,8 @@
     width: 100%;
     padding: 1vh 3vh;
     font-size: 0.9em;
-    background-color: #faebd7;
-    height: 15vh;
+    //background-color: $brand-bg;
+    height: 10vh;
 
   }
 }
