@@ -1,6 +1,5 @@
 import {IonButton, IonContent, IonImg, IonPage, IonRouterLink} from '@ionic/react';
 import React from 'react';
-import './Landing.css';
 import Terms from "../components/Terms";
 
 const Landing: React.FC = () => {

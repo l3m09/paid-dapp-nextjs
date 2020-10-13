@@ -19,26 +19,9 @@ import { Redirect } from 'react-router';
 
 const Login: React.FC = () => {
     const dispatch = useDispatch();
-    const auth = useSelector((state: any) => state.auth);
-    const { loading, error, user, redirect } = auth;
+    const wallet = useSelector((state: any) => state.wallet);
+    const { loading, error, user, redirect } = wallet;
 
-    useEffect(() => {
-        if (error) {
-            console.log('USE EFFECT ERROR', error)
-        } else if (user) {
-            console.log('USE EFFECT SUCCESS', user)
-        }
-    },[loading, error, user]);
-
-    const onSubmit = () => {
-        // e.preventDefault();
-        dispatch(doLogin({username: 'John Cena'}));
-
-    }
-
-    if (redirect) {
-        return <Redirect to="/wallets"/>
-    }
     return (
         <IonPage >
             <IonHeader class="backarrow-header">
@@ -62,7 +45,6 @@ const Login: React.FC = () => {
                     <IonItem class="form-options">
                         <IonButton
                             // routerLink="/phrase/instructions"
-                            onClick={() => {onSubmit()}}
                             class="purple-button "
                             color="8500FF"
                             disabled={loading}
