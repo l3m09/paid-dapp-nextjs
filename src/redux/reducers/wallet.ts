@@ -8,12 +8,14 @@ const initialState = {
     confirmedSeedPhrase: [],
     wallets: [] = [
         {
+            id: '0x0E17',
             address: '0x0E17219355683A6FAF9eE9697b04dFa01d5CeBf2',
             label: 'Wallet 1',
             type: 'Multi-Coin',
             amount: 3.8
         },
         {
+            id: '0x0E23',
             address: '0x0E23948753083A6FAF9eE9697b04dFa01d5CeBf2',
             label: 'Wallet 2',
             type: 'Multi-Coin',

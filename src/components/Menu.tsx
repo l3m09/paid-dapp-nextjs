@@ -20,6 +20,7 @@ interface AppPage {
   iosIcon: string;
   mdIcon: string;
   title: string;
+  disabled: boolean;
 }
 
 const appPages: AppPage[] = [
@@ -27,25 +28,29 @@ const appPages: AppPage[] = [
     title: 'Wallets',
     url: '/wallets',
     iosIcon: mailOutline,
-    mdIcon: mailSharp
+    mdIcon: mailSharp,
+    disabled: false
   },
   {
     title: 'Documents',
     url: '/page/documents',
     iosIcon: paperPlaneOutline,
-    mdIcon: paperPlaneSharp
+    mdIcon: paperPlaneSharp,
+    disabled: false
   },
   {
     title: 'Settings',
     url: '/page/settings',
     iosIcon: heartOutline,
-    mdIcon: heartSharp
+    mdIcon: heartSharp,
+    disabled: true
   },
   {
     title: 'Help',
     url: '/page/help',
     iosIcon: archiveOutline,
-    mdIcon: archiveSharp
+    mdIcon: archiveSharp,
+    disabled: true
   },
 ];
 const labels: AppPage[] = [
@@ -53,19 +58,22 @@ const labels: AppPage[] = [
     title: 'Contacts',
     url: '/page/contacts',
     iosIcon: personAddSharp,
-    mdIcon: personAddOutline
+    mdIcon: personAddOutline,
+    disabled: true
   },
   {
     title: 'View signing phrase',
     url: '/page/phrase',
     iosIcon: bookOutline,
-    mdIcon: bookSharp
+    mdIcon: bookSharp,
+    disabled: true
   },
   {
     title: 'Account',
     url: '/page/account',
     iosIcon: giftOutline,
-    mdIcon: giftSharp
+    mdIcon: giftSharp,
+    disabled: true
   }
 ];
 
@@ -80,7 +88,7 @@ const Menu: React.FC = () => {
           {appPages.map((appPage, index) => {
             return (
               <IonMenuToggle key={index} autoHide={false}>
-                <IonItem className={location.pathname === appPage.url ? 'selected' : ''} routerLink={appPage.url} routerDirection="none" lines="none" detail={false}>
+                <IonItem disabled={appPage.disabled} className={location.pathname === appPage.url ? 'selected' : ''} routerLink={appPage.url} routerDirection="none" lines="none" detail={false}>
                   <IonIcon slot="start" ios={appPage.iosIcon} md={appPage.mdIcon} />
                   <IonLabel>{appPage.title}</IonLabel>
                 </IonItem>
@@ -93,7 +101,7 @@ const Menu: React.FC = () => {
           {labels.map((appPage, index) => {
             return (
                 <IonMenuToggle key={index} autoHide={false}>
-                  <IonItem className={location.pathname === appPage.url ? 'selected' : ''} routerLink={appPage.url} routerDirection="none" lines="none" detail={false}>
+                  <IonItem disabled={appPage.disabled} className={location.pathname === appPage.url ? 'selected' : ''} routerLink={appPage.url} routerDirection="none" lines="none" detail={false}>
                     <IonIcon slot="start" ios={appPage.iosIcon} md={appPage.mdIcon} />
                     <IonLabel>{appPage.title}</IonLabel>
                   </IonItem>

@@ -22,6 +22,17 @@ ion-button {
     background-color: $brand-primary;
 
   }
+
+  &.grey-button {
+    color: $brand-secondary;
+    border-color: $grey-border;
+
+  }
+
+  &.no-button {
+    border-radius: 0;
+    text-align: left;
+  }
 }
 
 .terms {
