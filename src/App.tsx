@@ -37,6 +37,7 @@ import Completed from "./pages/seed/Completed";
 import Wallets from "./pages/wallet/Wallets";
 import Import from "./pages/wallet/Import";
 import Export from "./pages/wallet/Export";
+import Documents from "./pages/documents/Documents";
 
 const App: React.FC = () => {
 
@@ -59,6 +60,7 @@ const App: React.FC = () => {
                         <Route path="/wallet/import" component={Import} exact />
                         <Route path="/wallet/create" component={Instructions} exact />
                         <Route path="/wallet/export" component={Export} exact />
+                        <Route path="/documents/:id" component={Documents} exact />
                         {/*<Redirect from="/" to="/" exact />*/}
                     </IonRouterOutlet>
                 </IonSplitPane>

@@ -14,7 +14,6 @@ const SignUp: React.FC = () => {
                 </IonRouterLink>
                 <IonTitle>Sign up with email</IonTitle>
             </IonHeader>
-
             <IonContent fullscreen class="signup-content auth-content">
                 <form action="" className="login-form">
                     <IonItem>
