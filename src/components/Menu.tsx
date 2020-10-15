@@ -33,7 +33,7 @@ const appPages: AppPage[] = [
   },
   {
     title: 'Documents',
-    url: '/page/documents',
+    url: '/documents',
     iosIcon: paperPlaneOutline,
     mdIcon: paperPlaneSharp,
     disabled: false

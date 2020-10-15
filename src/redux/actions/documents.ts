@@ -7,6 +7,12 @@ const getDocuments = () => {
         type: DocumentsActionTypes.GET_DOCUMENTS_SUCCESS
     }
 }
+const getSelectedDocument = (document: any) => {
+    return {
+        type: DocumentsActionTypes.GET_SELECTED_DOCUMENT_SUCCESS,
+        payload: document
+    }
+}
 
 // ACTIONS
 export const doGetDocuments = (wallet: any) => async (dispatch: any) => {
@@ -28,4 +34,9 @@ export const doGetDocuments = (wallet: any) => async (dispatch: any) => {
         console.log(err);
         dispatch({ type: DocumentsActionTypes.GET_DOCUMENTS_FAILURE, payload: err.msg });
     }
+};
+
+export const doGetSelectedDocument = (document: any) => (dispatch: any, payload: any) => {
+    dispatch(getSelectedDocument({document}));
+
 };
