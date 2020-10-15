@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import './ExploreContainer.css';
 import {IonButton, IonModal, IonRouterLink} from "@ionic/react";
 
 const Terms: React.FC = () => {

@@ -1,5 +1,3 @@
-// import Menu from './components/Menu';
-import Page from './pages/Page';
 import Login from './pages/auth/Login';
 import SignUp from './pages/auth/SignUp';
 import Landing from './pages/Landing';
@@ -51,7 +49,6 @@ const App: React.FC = () => {
                         <Route path="/login" component={Login} exact />
                         <Route path="/login-gmail" component={LoginGmail} exact />
                         <Route path="/signup" component={SignUp} exact />
-                        <Route path="/page/:name" component={Page} exact />
                         <Route path="/phrase/instructions" component={Instructions} exact />
                         <Route path="/phrase/seed" component={SeedPhrase} exact />
                         <Route path="/phrase/confirm" component={ConfirmPhrase} exact />
