@@ -12,7 +12,7 @@ import {
 import React from 'react';
 import { arrowBackOutline, checkmarkCircle } from 'ionicons/icons';
 import {useDispatch, useSelector} from "react-redux";
-import {doAddWord, doRemoveWord} from "../../redux/actions/wallet";
+import {doAddWord, doRemoveWord} from "../../../redux/actions/wallet";
 
 const ConfirmPhrase: React.FC = () => {
     const dispatch = useDispatch();

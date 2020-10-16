@@ -12,7 +12,7 @@ import {
 import React, {useEffect} from 'react';
 import { arrowBackOutline, lockClosedOutline } from 'ionicons/icons';
 import {useDispatch, useSelector} from "react-redux";
-import {doGeneratePhrase} from "../../redux/actions/wallet";
+import {doGeneratePhrase} from "../../../redux/actions/wallet";
 
 let words: [] = [];
 
