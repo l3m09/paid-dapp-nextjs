@@ -12,24 +12,19 @@ import {
     IonToolbar,
     IonButton
 } from '@ionic/react';
-import React, {useEffect, useState} from 'react';
-import {useDispatch, useSelector} from "react-redux";
+import React from 'react';
+import {useSelector} from "react-redux";
 const Wallets: React.FC = () => {
-    const dispatch = useDispatch();
     const wallet = useSelector((state: any) => state.wallet);
-    const {wallets, loading} = wallet;
-    const [showPopover, setShowPopover] = useState(false);
+    const {wallets} = wallet;
 
     let totalValue: number = 0.00;
     for (let i = 0; i < wallets.length; i += 1) {
         totalValue = totalValue + wallets[i].amount;
     }
 
-    function doSomething(item:any) {
-        console.log('Wallet', item)
-    }
     return (
-        <IonPage class="wallets-page">
+        <IonPage className="wallets-page">
             <IonHeader>
                 <IonToolbar>
                     <IonButtons slot="start">

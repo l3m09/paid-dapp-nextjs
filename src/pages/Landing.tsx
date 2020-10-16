@@ -13,11 +13,12 @@ function NotWallets() {
 const Landing: React.FC = () => {
  const wallet = useSelector((state: { wallet: { wallets: [], loading: boolean }}) => state.wallet);
     const {wallets, loading} = wallet;
-
-
+    
+  
   if (wallets.length <= 0) {
     return <NotWallets/>
   }
+
   return (
     <IonPage>
       <IonContent fullscreen class="landing-content">

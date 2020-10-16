@@ -57,7 +57,7 @@ const App: React.FC = () => {
                         <Route path="/wallet/import" component={Import} exact />
                         {/* <Route path="/wallet/create" component={Instructions} exact />
                         <Route path="/wallet/export" component={Export} exact /> */}
-                        <Route path="/documents/:id" component={Documents} exact />
+                        <Route path="/documents/:id?" component={Documents} exact />
                         {/*<Redirect from="/" to="/" exact />*/}
                     </IonRouterOutlet>
                 </IonSplitPane>
