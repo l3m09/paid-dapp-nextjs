@@ -18,12 +18,12 @@ import {
     IonCardHeader,
     IonCard
 } from '@ionic/react';
-import {documentsOutline as documentsIcon, documentOutline as documentIcon} from 'ionicons/icons';
+import {add, documentsOutline as documentsIcon, documentOutline as documentIcon, downloadOutline} from 'ionicons/icons';
 
 import React, {useEffect, useState} from 'react';
 import { useParams } from 'react-router';
 import {useDispatch, useSelector} from "react-redux";
-import {doGetSelectedDocument} from "../../redux/actions/documents";
+import {doGetSelectedDocument, doUploadDocuments} from "../../redux/actions/documents";
 
 import Collapsible from 'react-collapsible';
 
@@ -57,6 +57,11 @@ const Documents: React.FC = () => {
     function closeShowDocument() {
         dispatch(doGetSelectedDocument({}))
         setShowModal(false)
+    }
+
+    function setFileData(file: any) {
+        console.log('file', file);
+        dispatch(doUploadDocuments(file));
     }
 
     function trigger(name: string) {
@@ -115,6 +120,17 @@ const Documents: React.FC = () => {
                             : null
                     }
                 </div>
+                <IonButton className="add-document-button">
+                    <IonIcon icon={add}/>
+                    <input
+                        className="upload-input"
+                        type="file"
+                        accept="pdf"
+                        onChange={(e: any) => {
+                            setFileData(e.target.files[0]);
+                        }}
+                    />
+                </IonButton>
                 <div id="modal-container">
                     <IonModal isOpen={showModal} cssClass='document-modal'>
                         <IonCard>
@@ -128,38 +144,47 @@ const Documents: React.FC = () => {
                                     <IonItem>
                                         <IonLabel position="stacked">Hash</IonLabel>
                                         <span>
-                                        {selectedD.hash}
-                                    </span>
+                                            {selectedD.hash}
+                                        </span>
                                     </IonItem>
                                     <IonItem>
                                         <IonLabel position="stacked">Signature</IonLabel>
                                         <span>
-                                        {selectedD.signature}
-                                    </span>
+                                            {selectedD.signature}
+                                        </span>
                                     </IonItem>
                                     <IonItem>
                                         <IonLabel position="stacked">Size</IonLabel>
                                         <span>
-                                        {selectedD.size}
-                                    </span>
+                                            {selectedD.size}
+                                        </span>
                                     </IonItem>
                                     <IonItem>
                                         <IonLabel position="stacked">Last Modified</IonLabel>
                                         <span>
-                                        {selectedD.modified_at}
-                                    </span>
+                                            {selectedD.modified_at}
+                                        </span>
                                     </IonItem>
                                     <IonItem>
                                         <IonLabel position="stacked">Created</IonLabel>
                                         <span>
-                                        {selectedD.created_at}
-                                    </span>
+                                            {selectedD.created_at}
+                                        </span>
                                     </IonItem>
                                 </div>
                             </IonCardContent>
                         </IonCard>
                         <hr/>
-                        <IonButton buttonType="secondary" onClick={() => {closeShowDocument()}}>Close</IonButton>
+                        <IonItem className="modal-actions">
+                            <IonButton download={selectedD.link} className="download-button">
+                                <IonIcon icon={downloadOutline}/>
+                                <span>Download</span>
+                                )}
+                            </IonButton>
+                            <IonButton buttonType="danger" className="close-button" onClick={() => {closeShowDocument()}}>
+                                <span>Close</span>
+                            </IonButton>
+                        </IonItem>
                     </IonModal>
                 </div>
             </IonContent>

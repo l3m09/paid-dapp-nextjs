@@ -89,6 +89,27 @@
 
   }
 
+  .add-document-button {
+    position: fixed;
+    bottom: 15px;
+    right: 15px;
+    width: 55px;
+    height: 55px;
+    --border-radius: 50%;
+    box-shadow: none;
+
+    ion-icon {
+      font-weight: bold;
+      position: absolute;
+
+    }
+
+    .upload-input {
+      opacity: 0;
+    }
+
+  }
+
 }
 
 .document-modal {
@@ -112,6 +133,31 @@
       }
 
       .details-wrapper{
+
+      }
+
+    }
+
+    .modal-actions {
+      height: 65px;
+      align-items: center;
+      display: flex;
+
+      .close-button {
+        background-color: $brand-red;
+        --ion-background-color: $brand-red;
+        color: white;
+
+      }
+
+      .download-button {
+        position: relative;
+
+        ion-icon {
+          //position: absolute;
+          margin-right: 5px;
+
+        }
 
       }
 
