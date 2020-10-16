@@ -2,17 +2,16 @@ import { DocumentsActionTypes } from '../actionTypes/documents';
 
 const initialState = {
     loading: false,
-    documents: [] = [
+    documents: [
         {
             id: '0x0E17',
             label: 'Content block #1',
             documents: [
                 {
                     id: 1,
-                    name: 'SafeSign IC Standard Version 3.5 Windows Silent Install Guide.pdf',
+                    name: 'aSafeSign IC Standard Version 3.5 Windows Silent Install Guide.pdf',
                     hash: '50D858E0985ECC7F60418AAF0CC5AB587F42C2570A884095A9E8CCACD0F6545C',
                     signature: 'da135216asdfgasda36w516awef5a1fw6e51fas3e21faw51651fasea...awse65a1wefawef6a5sd1651asdf',
-                    qualifiedSignature: false,
                     type: 'application/pdf',
                     size: '748.231 kb',
                     modified_at: 'Tue Oct 09 2020 18:13:57 GMT-0500 (EST)',
@@ -20,10 +19,9 @@ const initialState = {
                 },
                 {
                     id: 2,
-                    name: 'SafeSign IC Standard Version 3.5 Windows Silent Install Guide.pdf',
+                    name: 'bSafeSign IC Standard Version 3.5 Windows Silent Install Guide.pdf',
                     hash: '50D858E0985ECC7F60418AAF0CC5AB587F42C2570A884095A9E8CCACD0F6545C',
                     signature: 'da135216asdfgasda36w516awef5a1fw6e51fas3e21faw51651fasea...awse65a1wefawef6a5sd1651asdf',
-                    qualifiedSignature: false,
                     type: 'application/pdf',
                     size: '748.231 kb',
                     modified_at: 'Tue Oct 09 2020 18:13:57 GMT-0500 (EST)',
@@ -40,7 +38,6 @@ const initialState = {
                     name: 'SafeSign IC Standard Version 3.5 Windows Silent Install Guide.pdf',
                     hash: '50D858E0985ECC7F60418AAF0CC5AB587F42C2570A884095A9E8CCACD0F6545C',
                     signature: 'da135216asdfgasda36w516awef5a1fw6e51fas3e21faw51651fasea...awse65a1wefawef6a5sd1651asdf',
-                    qualifiedSignature: false,
                     type: 'application/pdf',
                     size: '748.231 kb',
                     modified_at: 'Tue Oct 09 2020 18:13:57 GMT-0500 (EST)',
@@ -51,7 +48,6 @@ const initialState = {
                     name: 'SafeSign IC Standard Version 3.5 Windows Silent Install Guide.pdf',
                     hash: '50D858E0985ECC7F60418AAF0CC5AB587F42C2570A884095A9E8CCACD0F6545C',
                     signature: 'da135216asdfgasda36w516awef5a1fw6e51fas3e21faw51651fasea...awse65a1wefawef6a5sd1651asdf',
-                    qualifiedSignature: false,
                     type: 'application/pdf',
                     size: '748.231 kb',
                     modified_at: 'Tue Oct 09 2020 18:13:57 GMT-0500 (EST)',
@@ -68,7 +64,6 @@ const initialState = {
                     name: 'SafeSign IC Standard Version 3.5 Windows Silent Install Guide.pdf',
                     hash: '50D858E0985ECC7F60418AAF0CC5AB587F42C2570A884095A9E8CCACD0F6545C',
                     signature: 'da135216asdfgasda36w516awef5a1fw6e51fas3e21faw51651fasea...awse65a1wefawef6a5sd1651asdf',
-                    qualifiedSignature: false,
                     type: 'application/pdf',
                     size: '748.231 kb',
                     modified_at: 'Tue Oct 09 2020 18:13:57 GMT-0500 (EST)',
@@ -79,7 +74,6 @@ const initialState = {
                     name: 'SafeSign IC Standard Version 3.5 Windows Silent Install Guide.pdf',
                     hash: '50D858E0985ECC7F60418AAF0CC5AB587F42C2570A884095A9E8CCACD0F6545C',
                     signature: 'da135216asdfgasda36w516awef5a1fw6e51fas3e21faw51651fasea...awse65a1wefawef6a5sd1651asdf',
-                    qualifiedSignature: false,
                     type: 'application/pdf',
                     size: '748.231 kb',
                     modified_at: 'Tue Oct 09 2020 18:13:57 GMT-0500 (EST)',
@@ -96,7 +90,6 @@ const initialState = {
                     name: 'SafeSign IC Standard Version 3.5 Windows Silent Install Guide.pdf',
                     hash: '50D858E0985ECC7F60418AAF0CC5AB587F42C2570A884095A9E8CCACD0F6545C',
                     signature: 'da135216asdfgasda36w516awef5a1fw6e51fas3e21faw51651fasea...awse65a1wefawef6a5sd1651asdf',
-                    qualifiedSignature: false,
                     type: 'application/pdf',
                     size: '748.231 kb',
                     modified_at: 'Tue Oct 09 2020 18:13:57 GMT-0500 (EST)',
@@ -107,7 +100,6 @@ const initialState = {
                     name: 'SafeSign IC Standard Version 3.5 Windows Silent Install Guide.pdf',
                     hash: '50D858E0985ECC7F60418AAF0CC5AB587F42C2570A884095A9E8CCACD0F6545C',
                     signature: 'da135216asdfgasda36w516awef5a1fw6e51fas3e21faw51651fasea...awse65a1wefawef6a5sd1651asdf',
-                    qualifiedSignature: false,
                     type: 'application/pdf',
                     size: '748.231 kb',
                     modified_at: 'Tue Oct 09 2020 18:13:57 GMT-0500 (EST)',
@@ -124,7 +116,6 @@ const initialState = {
                     name: 'SafeSign IC Standard Version 3.5 Windows Silent Install Guide.pdf',
                     hash: '50D858E0985ECC7F60418AAF0CC5AB587F42C2570A884095A9E8CCACD0F6545C',
                     signature: 'da135216asdfgasda36w516awef5a1fw6e51fas3e21faw51651fasea...awse65a1wefawef6a5sd1651asdf',
-                    qualifiedSignature: false,
                     type: 'application/pdf',
                     size: '748.231 kb',
                     modified_at: 'Tue Oct 09 2020 18:13:57 GMT-0500 (EST)',
@@ -135,7 +126,6 @@ const initialState = {
                     name: 'SafeSign IC Standard Version 3.5 Windows Silent Install Guide.pdf',
                     hash: '50D858E0985ECC7F60418AAF0CC5AB587F42C2570A884095A9E8CCACD0F6545C',
                     signature: 'da135216asdfgasda36w516awef5a1fw6e51fas3e21faw51651fasea...awse65a1wefawef6a5sd1651asdf',
-                    qualifiedSignature: false,
                     type: 'application/pdf',
                     size: '748.231 kb',
                     modified_at: 'Tue Oct 09 2020 18:13:57 GMT-0500 (EST)',
@@ -152,7 +142,6 @@ const initialState = {
                     name: 'SafeSign IC Standard Version 3.5 Windows Silent Install Guide.pdf',
                     hash: '50D858E0985ECC7F60418AAF0CC5AB587F42C2570A884095A9E8CCACD0F6545C',
                     signature: 'da135216asdfgasda36w516awef5a1fw6e51fas3e21faw51651fasea...awse65a1wefawef6a5sd1651asdf',
-                    qualifiedSignature: false,
                     type: 'application/pdf',
                     size: '748.231 kb',
                     modified_at: 'Tue Oct 09 2020 18:13:57 GMT-0500 (EST)',
@@ -163,7 +152,6 @@ const initialState = {
                     name: 'SafeSign IC Standard Version 3.5 Windows Silent Install Guide.pdf',
                     hash: '50D858E0985ECC7F60418AAF0CC5AB587F42C2570A884095A9E8CCACD0F6545C',
                     signature: 'da135216asdfgasda36w516awef5a1fw6e51fas3e21faw51651fasea...awse65a1wefawef6a5sd1651asdf',
-                    qualifiedSignature: false,
                     type: 'application/pdf',
                     size: '748.231 kb',
                     modified_at: 'Tue Oct 09 2020 18:13:57 GMT-0500 (EST)',
@@ -172,6 +160,16 @@ const initialState = {
             ]
         },
     ],
+    selectedDocument: {
+        id: 1,
+        name: 'SafeSign IC Standard Version 3.5 Windows Silent Install Guide.pdf',
+        hash: '50D858E0985ECC7F60418AAF0CC5AB587F42C2570A884095A9E8CCACD0F6545C',
+        signature: 'da135216asdfgasda36w516awef5a1fw6e51fas3e21faw51651fasea...awse65a1wefawef6a5sd1651asdf',
+        type: 'application/pdf',
+        size: '748.231 kb',
+        modified_at: 'Tue Oct 09 2020 18:13:57 GMT-0500 (EST)',
+        created_at: 'Tue Oct 09 2020 18:13:57 GMT-0500 (EST)'
+    }
 };
 
 export const DocumentsReducer = function (state = initialState, action: any) {
@@ -186,6 +184,23 @@ export const DocumentsReducer = function (state = initialState, action: any) {
 
         case DocumentsActionTypes.GET_DOCUMENTS_FAILURE:
             return { ...state, documents: [], error: payload, loading: false};
+
+        case DocumentsActionTypes.UPLOAD_DOCUMENTS_LOADING:
+            return { ...state, loading: true }
+
+        case DocumentsActionTypes.UPLOAD_DOCUMENTS_SUCCESS: {
+            console.log('UPLOAD_DOCUMENTS_SUCCESS', payload);
+
+            return {...state, loading: false};
+        }
+
+        case DocumentsActionTypes.UPLOAD_DOCUMENTS_FAILURE:
+            return { ...state, documents: [], error: payload, loading: false};
+
+        case DocumentsActionTypes.GET_SELECTED_DOCUMENT_SUCCESS: {
+            return { ...state, selectedDocument: payload, loading: false };
+
+        }
 
         default:
             return state;

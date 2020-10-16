@@ -10,17 +10,13 @@ import {
     IonButton,
     IonRouterLink
 } from '@ionic/react';
-import React, {useEffect} from 'react';
-// import '../../theme/views/_menu.scss'
+import React from 'react';
 import { arrowBackOutline } from 'ionicons/icons';
-import { doLogin } from '../../redux/actions/auth';
-import { useDispatch, useSelector } from 'react-redux';
-import { Redirect } from 'react-router';
+import { useSelector } from 'react-redux';
 
-const Login: React.FC = () => {
-    const dispatch = useDispatch();
+const Export: React.FC = () => {
     const wallet = useSelector((state: any) => state.wallet);
-    const { loading, error, user, redirect } = wallet;
+    const { loading } = wallet;
 
     return (
         <IonPage >
@@ -61,4 +57,4 @@ const Login: React.FC = () => {
     );
 };
 
-export default Login;
+export default Export;

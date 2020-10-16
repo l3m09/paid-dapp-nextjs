@@ -8,10 +8,12 @@ import {
     IonItem,
     IonButton,
     IonRouterLink,
-    IonTextarea, IonText, IonList, IonItemDivider, IonPopover
+    IonTextarea,
+    IonText,
+    IonList,
+    IonPopover
 } from '@ionic/react';
-import React, {useEffect, useState} from 'react';
-// import '../../theme/views/_menu.scss'
+import React, {useState} from 'react';
 import { arrowBackOutline } from 'ionicons/icons';
 import { useSelector } from 'react-redux';
 

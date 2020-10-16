@@ -6,7 +6,7 @@ const initialState = {
     permanentSeedPhrase: [],
     seedPhrase: [],
     confirmedSeedPhrase: [],
-    wallets: [] = [
+    wallets: [
         {
             id: '0x0E17',
             address: '0x0E17219355683A6FAF9eE9697b04dFa01d5CeBf2',
