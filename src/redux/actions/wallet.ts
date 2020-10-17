@@ -5,7 +5,7 @@ const { Storage } = Plugins;
 const walletManager = createWalletManager();
 
 // CREATORS
-const generatePhrase = (payload: any) => {
+const generatePhrase = (payload: string[]) => {
 	return {
 		type: WalletActionTypes.GENERATE_PHRASE,
 		payload
@@ -49,7 +49,8 @@ const exportWallet = (payload: any) => {
 
 // ACTIONS
 export const doGeneratePhrase = () => async (dispatch: any) => {
-	let words = walletManager.generateMnemonic();
+	const mnemonic = walletManager.generateMnemonic();
+	const words = mnemonic.split(' ');
 	dispatch(generatePhrase(words));
 };
 

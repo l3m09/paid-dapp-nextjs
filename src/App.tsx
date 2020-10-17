@@ -27,43 +27,40 @@ import './theme/variables.css';
 import './theme/main.scss';
 
 /* Pages */
-import LoginGmail from "./pages/auth/LoginGmail";
-import Menu from "./components/Menu";
-import Wallets from "./pages/wallet/Wallets";
-import Import from "./pages/wallet/ImportWallet";
-import Documents from "./pages/documents/Documents";
-import CreateWallet from './pages/wallet/create-wallet/CreateWallet';
+import LoginGmail from './pages/auth/LoginGmail';
+import Menu from './components/Menu';
+import Wallets from './pages/wallet/Wallets';
+import Import from './pages/wallet/ImportWallet';
+import Documents from './pages/documents/Documents';
 
 const App: React.FC = () => {
-    const routerRef = useRef<HTMLIonRouterOutletElement | null>(null);
-    
-    return (
-        <IonApp>
-            <IonReactRouter>
-                <IonSplitPane contentId="main">
-                    <Menu/>
-                    <IonRouterOutlet id="main" ref={routerRef}>
-                        <Route path="/" component={Landing} exact />
-                        <Route path="/login" component={Login} exact />
-                        <Route path="/login-gmail" component={LoginGmail} exact />
-                        <Route path="/signup" component={SignUp} exact />
+	const routerRef = useRef<HTMLIonRouterOutletElement | null>(null);
 
-                        <Route path="/wallet" render={() => <CreateWallet router={routerRef.current} />}  exact={true} />
-                        {/* <Route path="/phrase/instructions" component={Instructions} exact />
+	return (
+		<IonApp>
+			<IonReactRouter>
+				<IonSplitPane contentId="main">
+					<Menu />
+					<IonRouterOutlet id="main" ref={routerRef}>
+						<Route path="/" component={Landing} exact />
+						<Route path="/login" component={Login} exact />
+						<Route path="/login-gmail" component={LoginGmail} exact />
+						<Route path="/signup" component={SignUp} exact />
+						{/* <Route path="/phrase/instructions" component={Instructions} exact />
                         <Route path="/phrase/seed" component={SeedPhrase} exact />
                         <Route path="/phrase/confirm" component={ConfirmPhrase} exact />
                         <Route path="/phrase/completed" component={Completed} exact /> */}
-                        <Route path="/wallets" component={Wallets} exact />
-                        <Route path="/wallet/import" component={Import} exact />
-                        {/* <Route path="/wallet/create" component={Instructions} exact />
+						<Route path="/wallets" component={Wallets} exact />
+						<Route path="/wallet/import" component={Import} exact />
+						{/* <Route path="/wallet/create" component={Instructions} exact />
                         <Route path="/wallet/export" component={Export} exact /> */}
-                        <Route path="/documents/:id?" component={Documents} exact />
-                        {/*<Redirect from="/" to="/" exact />*/}
-                    </IonRouterOutlet>
-                </IonSplitPane>
-            </IonReactRouter>
-        </IonApp>
-    );
+						<Route path="/documents/:id?" component={Documents} exact />
+						{/*<Redirect from="/" to="/" exact />*/}
+					</IonRouterOutlet>
+				</IonSplitPane>
+			</IonReactRouter>
+		</IonApp>
+	);
 };
 
 export default App;

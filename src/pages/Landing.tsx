@@ -1,39 +1,72 @@
-import {IonButton, IonContent, IonImg, IonPage, IonRouterLink} from '@ionic/react';
-import React from 'react';
+import {
+	IonButton,
+	IonContent,
+	IonImg,
+	IonPage,
+	IonRouterLink
+} from '@ionic/react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import Terms from "../components/Terms";
-
-function NotWallets() {
-  return <div className="landing-actions">
-              <IonButton routerLink="/wallet" class="red-button " color="FF4300">Create New Wallet</IonButton>
-              <IonButton routerLink="/login" class="purple-button " color="8500FF">Import a Wallet</IonButton>
-          </div>
-}
+import { useHistory } from 'react-router';
+import Terms from '../components/Terms';
+import CreateWallet from './wallet/create-wallet/CreateWallet';
 
 const Landing: React.FC = () => {
- const wallet = useSelector((state: { wallet: { wallets: [], loading: boolean }}) => state.wallet);
-    const {wallets, loading} = wallet;
-    
-  
-  if (wallets.length <= 0) {
-    return <NotWallets/>
-  }
+	const wallet = useSelector(
+		(state: { wallet: { wallets: []; loading: boolean } }) => state.wallet
+	);
+	const { wallets, loading } = wallet;
+	const [showCreateModal, setShowCreateModal] = useState(true);
+	const dismissModal = () => {
+		setShowCreateModal(false);
+	};
+	return (
+		<IonPage>
+			<IonContent fullscreen class="landing-content">
+				<div className="landing-logo">
+					<IonImg src="/assets/images/logo-full.png" />
+				</div>
 
-  return (
-    <IonPage>
-      <IonContent fullscreen class="landing-content">
-          <div className="landing-logo">
-              <IonImg src="/assets/images/logo-full.png"/>
-        </div>
-        
-          <div className="landing-actions">
-              <IonButton routerLink="/login-gmail" class="red-button " color="FF4300">Create New Wallet</IonButton>
-              <IonButton routerLink="/login" class="purple-button " color="8500FF">Import a Wallet</IonButton>
-          </div>
-          <Terms/>
-      </IonContent>
-    </IonPage>
-  );
+				{wallets.length <= 0 ? (
+					<div className="landing-actions">
+						<IonButton
+							onClick={() => setShowCreateModal(true)}
+							class="red-button "
+							color="FF4300"
+						>
+							Create New Wallet
+						</IonButton>
+						<IonButton
+							routerLink="/login"
+							class="purple-button "
+							color="8500FF"
+						>
+							Import a Wallet
+						</IonButton>
+					</div>
+				) : (
+					<div className="landing-actions">
+						<IonButton
+							routerLink="/login-gmail"
+							class="red-button "
+							color="FF4300"
+						>
+							Create New Wallet
+						</IonButton>
+						<IonButton
+							routerLink="/login"
+							class="purple-button "
+							color="8500FF"
+						>
+							Import a Wallet
+						</IonButton>
+					</div>
+				)}
+				<CreateWallet show={showCreateModal} dismiss={dismissModal} />
+				<Terms />
+			</IonContent>
+		</IonPage>
+	);
 };
 
 export default Landing;
