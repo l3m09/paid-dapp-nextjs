@@ -10,9 +10,19 @@ import {
 } from '@ionic/react';
 import React, { useState } from 'react';
 
-const Completed: React.FC = () => {
+interface CompletedProps {
+	dismiss: () => void;
+	current: any;
+}
+
+const Completed: React.FC<CompletedProps> = ({dismiss, current}) => {
 	const [showModal, setShowModal] = useState(false);
 
+	function doDismiss() {
+		dismiss();
+		// @ts-ignore
+		// this.props.history.push('/wallets')
+	}
 	return (
 		<IonContent fullscreen class="phrase-content phrase-completed">
 			<IonItem>
@@ -63,7 +73,7 @@ const Completed: React.FC = () => {
 			</IonItem>
 			<IonItem class="">
 				<IonButton
-					routerLink="/wallets"
+					onClick={() => {doDismiss()}}
 					class="purple-button done-button"
 					color="8500FF"
 				>

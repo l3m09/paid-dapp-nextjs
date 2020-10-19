@@ -23,19 +23,33 @@ interface CreateWalletProps {
 const CreateWallet: React.FC<CreateWalletProps> = ({ show, dismiss }) => {
 	const slidesRef = useRef<HTMLIonSlidesElement | null>(null);
 	const slideOpts = {
-		initialSlide: 1,
-		speed: 400
+		initialSlide: 0,
+		speed: 400,
+		slidesPerView: 1,
 	};
 
 	useEffect(() => {
-		slidesRef.current?.lockSwipeToPrev(true);
-		slidesRef.current?.lockSwipeToNext(true);
+		lockSwipes().then(r => {})
 	}, [slidesRef]);
 
+	async function lockSwipes() {
+		await slidesRef.current?.slideTo(0);
+		await slidesRef.current?.lockSwipeToPrev(true);
+		await slidesRef.current?.lockSwipeToNext(true);
+	}
+
+	lockSwipes().then(r => {})
+
+	async function doDismiss() {
+		await slidesRef.current?.lockSwipeToPrev(false);
+		await slidesRef.current?.lockSwipeToNext(false);
+		await lockSwipes()
+		dismiss()
+	}
 	return (
 		<IonModal
 			isOpen={show}
-			cssClass="modal-page"
+			cssClass="create-wallet-modal"
 			onDidDismiss={() => dismiss()}
 		>
 			<IonHeader translucent>
@@ -51,16 +65,16 @@ const CreateWallet: React.FC<CreateWalletProps> = ({ show, dismiss }) => {
 			<IonContent fullscreen>
 				<IonSlides pager={false} options={slideOpts} ref={slidesRef}>
 					<IonSlide>
-						<Instructions />
+						<Instructions current={slidesRef.current} />
 					</IonSlide>
 					<IonSlide>
-						<SeedPhrase />
+						<SeedPhrase current={slidesRef.current} />
 					</IonSlide>
 					<IonSlide>
-						<ConfirmPhrase />
+						<ConfirmPhrase current={slidesRef.current} />
 					</IonSlide>
 					<IonSlide>
-						<Completed />
+						<Completed current={slidesRef.current} dismiss={doDismiss}/>
 					</IonSlide>
 				</IonSlides>
 			</IonContent>

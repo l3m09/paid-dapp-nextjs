@@ -16,7 +16,7 @@ const Landing: React.FC = () => {
 		(state: { wallet: { wallets: []; loading: boolean } }) => state.wallet
 	);
 	const { wallets, loading } = wallet;
-	const [showCreateModal, setShowCreateModal] = useState(true);
+	const [showCreateModal, setShowCreateModal] = useState(false);
 	const dismissModal = () => {
 		setShowCreateModal(false);
 	};
@@ -37,7 +37,7 @@ const Landing: React.FC = () => {
 							Create New Wallet
 						</IonButton>
 						<IonButton
-							routerLink="/login"
+							routerLink="/wallet/import"
 							class="purple-button "
 							color="8500FF"
 						>
