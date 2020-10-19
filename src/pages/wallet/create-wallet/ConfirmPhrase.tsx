@@ -54,13 +54,13 @@ const ConfirmPhrase: React.FC = () => {
     }
 
     return (
-        <IonPage >
-            <IonHeader class="backarrow-header">
-                <IonRouterLink routerLink="/phrase/seed">
-                    <IonIcon icon={arrowBackOutline}/>
-                </IonRouterLink>
-                <IonTitle>Secure your wallet</IonTitle>
-            </IonHeader>
+        // <IonPage >
+        //     <IonHeader class="backarrow-header">
+        //         <IonRouterLink routerLink="/phrase/seed">
+        //             <IonIcon icon={arrowBackOutline}/>
+        //         </IonRouterLink>
+        //         <IonTitle>Secure your wallet</IonTitle>
+        //     </IonHeader>
 
             <IonContent fullscreen class="phrase-content confirm-phrase">
                 <IonItem>
@@ -100,7 +100,7 @@ const ConfirmPhrase: React.FC = () => {
                             : ''
                     }
             </IonContent>
-        </IonPage>
+        // </IonPage>
     );
 };
 

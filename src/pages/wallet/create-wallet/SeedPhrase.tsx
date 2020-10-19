@@ -23,7 +23,7 @@ const SeedPhrase: React.FC = () => {
 
 	useEffect(() => {
 		dispatch(doGeneratePhrase());
-	}, [doGeneratePhrase, dispatch]);
+	}, []);
 
 	return (
 		<IonContent fullscreen class="phrase-content seed-phrase">

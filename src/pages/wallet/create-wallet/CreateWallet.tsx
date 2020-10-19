@@ -12,6 +12,7 @@ import {
 } from '@ionic/react';
 import Instructions from './Instructions';
 import SeedPhrase from './SeedPhrase';
+import ConfirmPhrase from './ConfirmPhrase';
 
 interface CreateWalletProps {
 	show: boolean;
@@ -22,13 +23,14 @@ const CreateWallet: React.FC<CreateWalletProps> = ({ show, dismiss }) => {
 	const slidesRef = useRef<HTMLIonSlideElement | null>(null);
 	const slideOpts = {
 		initialSlide: 1,
-		speed: 400
+		speed: 400,
+		slidesPerView: 1,
 	};
 
 	return (
 		<IonModal
 			isOpen={show}
-			cssClass="modal-page"
+			cssClass="create-wallet-modal"
 			onDidDismiss={() => dismiss()}
 		>
 			<IonHeader translucent>
@@ -50,7 +52,7 @@ const CreateWallet: React.FC<CreateWalletProps> = ({ show, dismiss }) => {
 						<SeedPhrase />
 					</IonSlide>
 					<IonSlide>
-						<h1>Slide 3</h1>
+						<ConfirmPhrase/>
 					</IonSlide>
 				</IonSlides>
 			</IonContent>
