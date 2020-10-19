@@ -1,11 +1,5 @@
 import { DocumentsActionTypes } from '../actionTypes/documents';
 
-const IPFS_ENDPOINT = 'https://api.pinata.cloud';
-const PINATA_API_KEY = '934e8eeeaef5de746e02';
-const PINATA_SECRET_API_KEY =
-	'33db6417d1708b0e6abeb45a0a49435348e8304ca43036197e872b68c5f55d02';
-// CREATORS
-
 const getDocuments = (payload: any[]) => {
 	return {
 		type: DocumentsActionTypes.GET_DOCUMENTS_SUCCESS,
@@ -27,16 +21,9 @@ const getSelectedDocument = (document: any) => {
 // ACTIONS
 export const doGetDocuments = (wallet: any) => async (dispatch: any) => {
 	dispatch({ type: DocumentsActionTypes.GET_DOCUMENTS_LOADING });
-	const headers = {
-		pinata_api_key: PINATA_API_KEY,
-		pinata_secret_api_key: PINATA_SECRET_API_KEY
-	};
+
 	try {
-		const response = await fetch(`${IPFS_ENDPOINT}/data/pinList`, {
-			headers
-		});
-		const { rows } = await response.json();
-		dispatch(getDocuments(rows));
+		dispatch(getDocuments([]));
 	} catch (err) {
 		console.log(err);
 		dispatch({
