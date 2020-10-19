@@ -29,9 +29,10 @@ const getWallets = (payload: any[]) => {
 		payload
 	};
 };
-const createWallet = () => {
+const createWallet = (payload: any) => {
 	return {
-		type: WalletActionTypes.CREATE_WALLET_SUCCESS
+		type: WalletActionTypes.CREATE_WALLET_SUCCESS,
+		payload
 	};
 };
 const importWallet = (payload: any) => {
@@ -81,22 +82,24 @@ export const doGetWallets = () => async (dispatch: any) => {
 	}
 };
 
-export const doCreateWallet = () => async (dispatch: any) => {
+export const doCreateWallet = (payload: {
+	name: string;
+	mnemonic: string;
+	password: string;
+}) => async (dispatch: any) => {
 	dispatch({ type: WalletActionTypes.CREATE_WALLET_LOADING });
-	// const config = {
-	//     headers: {
-	//         'Content-type': 'application/json'
-	//     }
-	// };
 	try {
-		console.log('creating wallet');
-		// const res = await axios.post(`${API_ENDPOINT}/wallet/create`, loginForm, config);
-		// dispatch(login(res.data);
-		setTimeout(function () {
-			dispatch(createWallet());
-		}, 3000);
+		const { name, password, mnemonic } = payload;
+		const wallet = await walletManager.createWallet(password, mnemonic);
+		const { _id, address } = wallet;
+		dispatch(
+			createWallet({
+				_id,
+				address,
+				name
+			})
+		);
 	} catch (err) {
-		console.log(err);
 		dispatch({
 			type: WalletActionTypes.CREATE_WALLET_FAILURE,
 			payload: err.msg
@@ -104,22 +107,24 @@ export const doCreateWallet = () => async (dispatch: any) => {
 	}
 };
 
-export const doImportWallet = (payload: any) => async (dispatch: any) => {
+export const doImportWallet = (payload: {
+	name: string;
+	mnemonic: string;
+	password: string;
+}) => async (dispatch: any) => {
 	dispatch({ type: WalletActionTypes.IMPORT_WALLET_LOADING });
-	// const config = {
-	//     headers: {
-	//         'Content-type': 'application/json'
-	//     }
-	// };
 	try {
-		console.log('importing wallet');
-		// const res = await axios.post(`${API_ENDPOINT}/wallet/import`, loginForm, config);
-		// dispatch(login(res.data);
-		setTimeout(function () {
-			dispatch(importWallet(payload));
-		}, 3000);
+		const { name, password, mnemonic } = payload;
+		const wallet = await walletManager.createWallet(password, mnemonic);
+		const { _id, address } = wallet;
+		dispatch(
+			importWallet({
+				_id,
+				address,
+				name
+			})
+		);
 	} catch (err) {
-		console.log(err);
 		dispatch({
 			type: WalletActionTypes.IMPORT_WALLET_FAILURE,
 			payload: err.msg

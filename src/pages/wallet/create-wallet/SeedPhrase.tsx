@@ -14,12 +14,24 @@ import { arrowBackOutline, lockClosedOutline } from 'ionicons/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { doGeneratePhrase } from '../../../redux/actions/wallet';
 
-const SeedPhrase: React.FC = () => {
+interface SeedPhraseProps {
+	current: any
+}
+
+const SeedPhrase: React.FC<SeedPhraseProps> = ({current}) => {
 	const dispatch = useDispatch();
 	const wallet = useSelector(
 		(state: { wallet: { seedPhrase: string[] } }) => state.wallet
 	);
 	const { seedPhrase } = wallet;
+
+	async function slideNext() {
+		console.log('SeddPhrase', await current.getActiveIndex())
+		await current.lockSwipeToNext(false);
+		current.slideNext()
+		await current.lockSwipeToNext(true);
+
+	}
 
 	useEffect(() => {
 		dispatch(doGeneratePhrase());
@@ -57,7 +69,7 @@ const SeedPhrase: React.FC = () => {
 			</IonItem>
 			<IonItem class="">
 				<IonButton
-					routerLink="/phrase/confirm"
+					onClick={() => {slideNext()}}
 					class="purple-button create-button"
 					color="8500FF"
 				>

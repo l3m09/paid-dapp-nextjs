@@ -1,7 +1,10 @@
 import { WalletActionTypes } from '../actionTypes/wallet';
 
 const initialState = {
-	loading: false,
+	loadingWallets: false,
+	creatingWallet: false,
+	importingWallet: false,
+	exportingWallet: false,
 	confirmed: false,
 	permanentSeedPhrase: [],
 	seedPhrase: [],
@@ -64,40 +67,48 @@ export const WalletReducer = function (state = initialState, action: any) {
 			};
 		}
 		case WalletActionTypes.GET_WALLETS_LOADING:
-			return { ...state, loading: true };
+			return { ...state, loadingWallets: true };
 
 		case WalletActionTypes.GET_WALLETS_SUCCESS:
-			return { ...state, wallets: payload, loading: false };
+			return { ...state, wallets: payload, loadingWallets: false };
 
 		case WalletActionTypes.GET_WALLETS_FAILURE:
-			return { ...state, wallets: [], error: payload, loading: false };
+			return { ...state, wallets: [], error: payload, loadingWallets: false };
 
 		case WalletActionTypes.CREATE_WALLET_LOADING:
-			return { ...state, loading: true };
+			return { ...state, creatingWallet: true };
 
 		case WalletActionTypes.CREATE_WALLET_SUCCESS:
-			return { ...state, wallets: payload, loading: false };
+			return {
+				...state,
+				wallets: [...state.wallets, payload],
+				creatingWallet: false
+			};
 
 		case WalletActionTypes.CREATE_WALLET_FAILURE:
-			return { ...state, user: [], error: payload, loading: false };
+			return { ...state, user: [], error: payload, creatingWallet: false };
 
 		case WalletActionTypes.IMPORT_WALLET_LOADING:
-			return { ...state, loading: true };
+			return { ...state, importingWallet: true };
 
 		case WalletActionTypes.IMPORT_WALLET_SUCCESS:
-			return { ...state, wallets: payload, loading: false };
+			return {
+				...state,
+				wallets: [...state.wallets, payload],
+				importingWallet: false
+			};
 
 		case WalletActionTypes.IMPORT_WALLET_FAILURE:
-			return { ...state, user: [], error: payload, loading: false };
+			return { ...state, user: [], error: payload, importingWallet: false };
 
 		case WalletActionTypes.EXPORT_WALLET_LOADING:
-			return { ...state, loading: true };
+			return { ...state, exportingWallet: true };
 
 		case WalletActionTypes.EXPORT_WALLET_SUCCESS:
-			return { ...state, wallets: payload, loading: false };
+			return { ...state, wallets: payload, exportingWallet: false };
 
 		case WalletActionTypes.EXPORT_WALLET_FAILURE:
-			return { ...state, user: [], error: payload, loading: false };
+			return { ...state, user: [], error: payload, exportingWallet: false };
 
 		default:
 			return state;
