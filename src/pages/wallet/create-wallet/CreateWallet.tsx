@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
 	IonButton,
 	IonModal,
@@ -12,6 +12,8 @@ import {
 } from '@ionic/react';
 import Instructions from './Instructions';
 import SeedPhrase from './SeedPhrase';
+import Completed from './Completed';
+import ConfirmPhrase from './ConfirmPhrase';
 
 interface CreateWalletProps {
 	show: boolean;
@@ -19,11 +21,16 @@ interface CreateWalletProps {
 }
 
 const CreateWallet: React.FC<CreateWalletProps> = ({ show, dismiss }) => {
-	const slidesRef = useRef<HTMLIonSlideElement | null>(null);
+	const slidesRef = useRef<HTMLIonSlidesElement | null>(null);
 	const slideOpts = {
 		initialSlide: 1,
 		speed: 400
 	};
+
+	useEffect(() => {
+		slidesRef.current?.lockSwipeToPrev(true);
+		slidesRef.current?.lockSwipeToNext(true);
+	}, [slidesRef]);
 
 	return (
 		<IonModal
@@ -42,7 +49,7 @@ const CreateWallet: React.FC<CreateWalletProps> = ({ show, dismiss }) => {
 				</IonToolbar>
 			</IonHeader>
 			<IonContent fullscreen>
-				<IonSlides pager={false} options={slideOpts}>
+				<IonSlides pager={false} options={slideOpts} ref={slidesRef}>
 					<IonSlide>
 						<Instructions />
 					</IonSlide>
@@ -50,7 +57,10 @@ const CreateWallet: React.FC<CreateWalletProps> = ({ show, dismiss }) => {
 						<SeedPhrase />
 					</IonSlide>
 					<IonSlide>
-						<h1>Slide 3</h1>
+						<ConfirmPhrase />
+					</IonSlide>
+					<IonSlide>
+						<Completed />
 					</IonSlide>
 				</IonSlides>
 			</IonContent>
