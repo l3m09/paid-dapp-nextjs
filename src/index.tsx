@@ -1,16 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-// import App from './App';
 import { Provider } from "react-redux";
-
 import store from "./redux/store";
-
 import * as serviceWorker from './serviceWorker';
-//
-// ReactDOM.render(
-//     <App />,
-//     document.getElementById('root')
-// );
 
 const render = () => {
     const App = require("./App").default;

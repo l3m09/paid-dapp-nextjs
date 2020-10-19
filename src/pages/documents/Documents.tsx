@@ -23,29 +23,24 @@ import {add, documentsOutline as documentsIcon, documentOutline as documentIcon,
 import React, {useEffect, useState} from 'react';
 import { useParams } from 'react-router';
 import {useDispatch, useSelector} from "react-redux";
-import {doGetSelectedDocument, doUploadDocuments} from "../../redux/actions/documents";
+import {doGetDocuments, doGetSelectedDocument, doUploadDocuments} from "../../redux/actions/documents";
 
 import Collapsible from 'react-collapsible';
 
 const Documents: React.FC = () => {
     const dispatch = useDispatch();
     const documentsState = useSelector((state: any) => state.documents);
-    const {documents, selectedDocument} = documentsState;
-
-    const [showLoading, setShowLoading] = useState(true);
+    const {documents, selectedDocument, loading } = documentsState;
     const [showModal, setShowModal] = useState(false);
 
-    setTimeout(() => {
-        setShowLoading(false);
-    }, 1000);
 
     const { id } = useParams<{ id: string; }>();
 
     useEffect(() => {
-        // dispatch(doGetDocuments({id}))
-    },[documents, selectedDocument]);
+        dispatch(doGetDocuments({id}))
+        },[dispatch, id]);
 
-    let selectedD: any = selectedDocument.document ? selectedDocument.document : {};
+    let selectedD: any = selectedDocument ? selectedDocument : { metadata: {} };
 
 
     function showDocument(item:any) {
@@ -85,8 +80,7 @@ const Documents: React.FC = () => {
             </IonHeader>
             <IonLoading
                 cssClass='my-custom-class'
-                isOpen={showLoading}
-                onDidDismiss={() => setShowLoading(false)}
+                isOpen={loading}
                 message={'Please wait...'}
                 duration={1000}
             />
@@ -96,7 +90,7 @@ const Documents: React.FC = () => {
                         documents ?
                             documents.map((document: any, index: number) => {
                                 return (
-                                    <Collapsible contentInnerClassName="document-container" trigger={trigger(document.label)} key={index}>
+                                    <Collapsible contentInnerClassName="document-container" trigger={trigger(document.metadata.name)} key={index}>
                                         <div className="document-titles">
                                             {document.documents ?
                                                 document.documents.map((file: any, i: number) => {
@@ -104,7 +98,7 @@ const Documents: React.FC = () => {
                                                         <div key={i} className="document-title-wrapper">
                                                             <div className="document-title" onClick={() => {showDocument(file)}}>
                                                                 <IonIcon icon={documentIcon}/>
-                                                                <span>{file.name}</span>
+                                                                <span>{file.metadata.name}</span>
                                                             </div>
                                                             <hr/>
                                                         </div>
@@ -135,7 +129,7 @@ const Documents: React.FC = () => {
                     <IonModal isOpen={showModal} cssClass='document-modal'>
                         <IonCard>
                             <IonCardHeader>
-                                <IonCardTitle>{selectedD.name}</IonCardTitle>
+                                <IonCardTitle>{selectedD.metadata.name}</IonCardTitle>
                                 <IonCardSubtitle>{selectedD.type}</IonCardSubtitle>
                             </IonCardHeader>
                             <IonCardContent>
@@ -144,7 +138,7 @@ const Documents: React.FC = () => {
                                     <IonItem>
                                         <IonLabel position="stacked">Hash</IonLabel>
                                         <span>
-                                            {selectedD.hash}
+                                            {selectedD.ipfs_pin_hash}
                                         </span>
                                     </IonItem>
                                     <IonItem>
@@ -179,7 +173,7 @@ const Documents: React.FC = () => {
                             <IonButton download={selectedD.link} className="download-button">
                                 <IonIcon icon={downloadOutline}/>
                                 <span>Download</span>
-                                )}
+                                
                             </IonButton>
                             <IonButton buttonType="danger" className="close-button" onClick={() => {closeShowDocument()}}>
                                 <span>Close</span>
