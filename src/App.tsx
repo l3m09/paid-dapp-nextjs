@@ -30,7 +30,6 @@ import './theme/main.scss';
 import LoginGmail from './pages/auth/LoginGmail';
 import Menu from './components/Menu';
 import Wallets from './pages/wallet/Wallets';
-import Import from './pages/wallet/ImportWallet';
 import Documents from './pages/documents/Documents';
 
 const App: React.FC = () => {
@@ -46,16 +45,8 @@ const App: React.FC = () => {
 						<Route path="/login" component={Login} exact />
 						<Route path="/login-gmail" component={LoginGmail} exact />
 						<Route path="/signup" component={SignUp} exact />
-						{/* <Route path="/phrase/instructions" component={Instructions} exact />
-                        <Route path="/phrase/seed" component={SeedPhrase} exact />
-                        <Route path="/phrase/confirm" component={ConfirmPhrase} exact />
-                        <Route path="/phrase/completed" component={Completed} exact /> */}
 						<Route path="/wallets" component={Wallets} exact />
-						<Route path="/wallet/import" component={Import} exact />
-						{/* <Route path="/wallet/create" component={Instructions} exact />
-                        <Route path="/wallet/export" component={Export} exact /> */}
 						<Route path="/documents/:id?" component={Documents} exact />
-						{/*<Redirect from="/" to="/" exact />*/}
 					</IonRouterOutlet>
 				</IonSplitPane>
 			</IonReactRouter>
