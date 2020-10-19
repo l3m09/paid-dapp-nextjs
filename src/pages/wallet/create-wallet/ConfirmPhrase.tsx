@@ -11,10 +11,22 @@ import { checkmarkCircle } from 'ionicons/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { doAddWord, doRemoveWord } from '../../../redux/actions/wallet';
 
-const ConfirmPhrase: React.FC = () => {
+interface ConfirmPhraseProps {
+	current: any
+}
+
+const ConfirmPhrase: React.FC<ConfirmPhraseProps> = ({current}) => {
 	const dispatch = useDispatch();
 	const wallet = useSelector((state: any) => state.wallet);
 	const { seedPhrase, confirmedSeedPhrase, confirmed } = wallet;
+
+	async function slideNext() {
+		console.log('ConfirmPhrase', await current.getActiveIndex())
+		await current.lockSwipeToNext(false);
+		current.slideNext()
+		await current.lockSwipeToNext(true);
+
+	}
 
 	function selectWord(word: string, index: number) {
 		dispatch(doAddWord(word, index));
@@ -102,7 +114,7 @@ const ConfirmPhrase: React.FC = () => {
 			{confirmed ? (
 				<IonItem class="button-wrapper">
 					<IonButton
-						routerLink="/phrase/completed"
+						onClick={() => {slideNext()}}
 						disabled={!confirmed}
 						class="purple-button complete-button"
 						color="8500FF"

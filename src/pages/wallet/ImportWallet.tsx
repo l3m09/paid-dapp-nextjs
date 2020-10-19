@@ -25,7 +25,7 @@ const Import: React.FC = () => {
     return (
         <IonPage >
             <IonHeader class="backarrow-header">
-                <IonRouterLink routerLink="/wallets">
+                <IonRouterLink routerLink="/">
                     <IonIcon icon={arrowBackOutline}/>
                 </IonRouterLink>
                 <IonTitle>Import Wallet</IonTitle>

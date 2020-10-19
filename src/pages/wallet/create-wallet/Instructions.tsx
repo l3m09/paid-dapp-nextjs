@@ -11,8 +11,22 @@ import {
 import React, { useState } from 'react';
 import { lockClosedOutline, warning } from 'ionicons/icons';
 
-const Instructions: React.FC = () => {
+
+interface InstructionsProps {
+	current: any
+}
+
+const Instructions: React.FC<InstructionsProps> = ({current}) => {
 	const [showModal, setShowModal] = useState(false);
+
+	async function slideNext() {
+		console.log('Instructions', await current.getActiveIndex())
+		await current.lockSwipeToNext(false);
+		current.slideNext()
+		await current.lockSwipeToNext(true);
+
+	}
+
 	return (
 		<IonContent fullscreen class="phrase-content seed-phrase-instructions">
 			<IonItem>
@@ -21,8 +35,10 @@ const Instructions: React.FC = () => {
 				</span>
 			</IonItem>
 			<IonItem>
-				Secure your wallet’s &nbsp;
-				<span className="text-brand-primary"> seed phrase</span>
+				<span className="some-text">
+					Secure your wallet’s
+					<span className="text-brand-primary"> seed phrase</span>
+				</span>
 			</IonItem>
 			<IonItem>
 				<IonText class="phrase-content-sub-text seed-phrase-instructions-sub-text">
@@ -70,7 +86,7 @@ const Instructions: React.FC = () => {
 						<li>Store in multiple secret places</li>
 					</ul>
 					<IonButton
-						routerLink="/phrase/seed"
+						onClick={() => {slideNext()}}
 						class="purple-button start-button"
 						color="8500FF"
 					>
@@ -78,7 +94,7 @@ const Instructions: React.FC = () => {
 					</IonButton>
 				</div>
 			</IonItem>
-			<IonModal isOpen={showModal} cssClass="terms-modal">
+			<IonModal isOpen={showModal} cssClass="instructions-info-modal">
 				<p>
 					Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deserunt
 					impedit minima nesciunt nihil quos sapiente sequi temporibus.

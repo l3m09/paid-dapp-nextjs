@@ -1,6 +1,11 @@
 .phrase-content {
   position: relative;
 
+  .some-text {
+    margin: auto;
+
+  }
+
   .phrase-lock-icon {
     margin: 3vh auto 1vh;
     width: 48px;
@@ -201,7 +206,8 @@
     border: 1px solid $grey-border;
     box-sizing: border-box;
     border-radius: 10px;
-    padding: 20px;
+    padding: 20px 20px 10px;
+    margin-bottom: 10px;
     width: 100%;
 
     .instructions-title{
@@ -290,12 +296,12 @@
   }
 
   .done-button {
-    margin-top: 5vh;
+    //margin-top: 5vh;
 
   }
 
   .button-wrapper{
-    position: absolute;
+    position: fixed;
     bottom: 2vh;
     left: 0;
     right: 0;

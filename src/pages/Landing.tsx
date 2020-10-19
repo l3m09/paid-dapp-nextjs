@@ -37,7 +37,7 @@ const Landing: React.FC = () => {
 							Create New Wallet
 						</IonButton>
 						<IonButton
-							routerLink="/login"
+							routerLink="/wallet/import"
 							class="purple-button "
 							color="8500FF"
 						>

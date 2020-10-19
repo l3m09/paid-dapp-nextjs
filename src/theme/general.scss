@@ -1,5 +1,13 @@
-.modal-page .modal-wrapper {
-  background: $brand-bg;
+ion-modal {
+  position: absolute;
+
+  .modal-wrapper {
+    height: 95vh !important;
+    width: 95% !important;
+    margin: auto;
+    background-color: white !important;
+
+  }
 }
 
 ion-slides {
@@ -48,17 +56,6 @@ ion-button {
 
 }
 
-.terms-modal {
-  padding: 10vh 15px;
-  overflow-y: scroll;
-
-  .ion-page {
-    max-width: 95%;
-    margin: auto;
-
-  }
-
-}
 
 .backarrow-header {
   display: flex;
