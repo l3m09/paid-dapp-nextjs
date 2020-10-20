@@ -9,7 +9,10 @@ const initialState = {
 	permanentSeedPhrase: [],
 	seedPhrase: [],
 	confirmedSeedPhrase: [],
-	wallets: []
+	wallets: [],
+	currentWallet: null,
+	settingCurrentWallet: false,
+	gettingCurrentWallet: false
 };
 
 export const WalletReducer = function (state = initialState, action: any) {
@@ -82,6 +85,7 @@ export const WalletReducer = function (state = initialState, action: any) {
 			return {
 				...state,
 				wallets: [...state.wallets, payload],
+				currentWallet: payload,
 				creatingWallet: false
 			};
 
@@ -109,6 +113,24 @@ export const WalletReducer = function (state = initialState, action: any) {
 
 		case WalletActionTypes.EXPORT_WALLET_FAILURE:
 			return { ...state, user: [], error: payload, exportingWallet: false };
+
+		case WalletActionTypes.SET_CURRENT_WALLET_LOADING:
+			return { ...state, settingCurrentWallet: true };
+
+		case WalletActionTypes.SET_CURRENT_WALLET_SUCCESS:
+			return { ...state, currentWallet: payload, settingCurrentWallet: false };
+
+		case WalletActionTypes.SET_CURRENT_WALLET_FAILURE:
+			return { ...state, error: payload, gettingCurrentWallet: false };
+
+		case WalletActionTypes.GET_CURRENT_WALLET_LOADING:
+			return { ...state, settingCurrentWallet: true };
+
+		case WalletActionTypes.GET_CURRENT_WALLET_SUCCESS:
+			return { ...state, currentWallet: payload, gettingCurrentWallet: false };
+
+		case WalletActionTypes.GET_CURRENT_WALLET_FAILURE:
+			return { ...state, error: payload, gettingCurrentWallet: false };
 
 		default:
 			return state;
