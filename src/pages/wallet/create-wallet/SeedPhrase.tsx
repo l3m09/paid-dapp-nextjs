@@ -1,16 +1,13 @@
 import {
 	IonIcon,
 	IonContent,
-	IonHeader,
-	IonPage,
 	IonTitle,
 	IonItem,
 	IonButton,
-	IonRouterLink,
 	IonText
 } from '@ionic/react';
 import React, { useEffect } from 'react';
-import { arrowBackOutline, lockClosedOutline } from 'ionicons/icons';
+import { lockClosedOutline } from 'ionicons/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { doGeneratePhrase } from '../../../redux/actions/wallet';
 

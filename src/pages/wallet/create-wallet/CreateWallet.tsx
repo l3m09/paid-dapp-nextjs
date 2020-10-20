@@ -14,6 +14,7 @@ import Instructions from './Instructions';
 import SeedPhrase from './SeedPhrase';
 import Completed from './Completed';
 import ConfirmPhrase from './ConfirmPhrase';
+import NamePassword from './NamePassword';
 
 interface CreateWalletProps {
 	show: boolean;
@@ -23,7 +24,7 @@ interface CreateWalletProps {
 const CreateWallet: React.FC<CreateWalletProps> = ({ show, dismiss }) => {
 	const slidesRef = useRef<HTMLIonSlidesElement | null>(null);
 	const slideOpts = {
-		initialSlide: 0,
+		initialSlide: 1,
 		speed: 400,
 		slidesPerView: 1,
 	};
@@ -72,6 +73,9 @@ const CreateWallet: React.FC<CreateWalletProps> = ({ show, dismiss }) => {
 					</IonSlide>
 					<IonSlide>
 						<ConfirmPhrase current={slidesRef.current} />
+					</IonSlide>
+					<IonSlide>
+						<NamePassword current={slidesRef.current} />
 					</IonSlide>
 					<IonSlide>
 						<Completed current={slidesRef.current} dismiss={doDismiss}/>
