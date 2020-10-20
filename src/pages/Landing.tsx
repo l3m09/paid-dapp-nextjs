@@ -7,7 +7,7 @@ import {
 } from '@ionic/react';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useHistory } from 'react-router';
+import {Redirect, useHistory} from 'react-router';
 import Terms from '../components/Terms';
 import CreateWallet from './wallet/create-wallet/CreateWallet';
 
@@ -20,6 +20,11 @@ const Landing: React.FC = () => {
 	const dismissModal = () => {
 		setShowCreateModal(false);
 	};
+
+	if (wallets.length > 0) {
+		return (<Redirect to="/wallets"/>)
+	}
+
 	return (
 		<IonPage>
 			<IonContent fullscreen class="landing-content">
@@ -40,6 +45,7 @@ const Landing: React.FC = () => {
 							routerLink="/wallet/import"
 							class="purple-button "
 							color="8500FF"
+							disabled
 						>
 							Import a Wallet
 						</IonButton>
