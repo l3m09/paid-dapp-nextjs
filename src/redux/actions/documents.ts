@@ -2,17 +2,23 @@ import { DocumentsActionTypes } from '../actionTypes/documents';
 import Web3 from 'web3';
 import { Contract } from 'web3-eth-contract';
 import Agreement from '../../contracts/Agreement.json';
-import { sign } from 'crypto';
 let web3: Web3 | null = null;
+let agreementContract: Contract | null = null;
 const GETH_URL = '';
 const AGREEMENT_ADDRESS = '0x50A9D90013dD4C690ca299f8d79C23b012fB73e3';
 
-const createAgrementContract = () => {
+const getAgrementContract = () => {
 	if (!web3) {
 		web3 = new Web3(GETH_URL);
 	}
 
-	return new web3.eth.Contract(Agreement.abi as any, AGREEMENT_ADDRESS);
+	if (!agreementContract) {
+		agreementContract = new web3.eth.Contract(
+			Agreement.abi as any,
+			AGREEMENT_ADDRESS
+		);
+	}
+	return agreementContract;
 };
 
 const getDocuments = (payload: any[]) => {
@@ -65,7 +71,7 @@ export const doCreateAgreement = (payload: {
 			digest
 		} = payload;
 		const { r, s, v } = sig;
-		const contract = createAgrementContract();
+		const contract = getAgrementContract();
 		const agreement = await contract.methods
 			.create({
 				signatoryA,
@@ -92,9 +98,40 @@ export const doCreateAgreement = (payload: {
 
 export const doGetDocuments = (wallet: any) => async (dispatch: any) => {
 	dispatch({ type: DocumentsActionTypes.GET_DOCUMENTS_LOADING });
-
 	try {
-		dispatch(getDocuments([]));
+		const { address } = wallet;
+		const contract = getAgrementContract();
+		const events = await contract.getPastEvents('AgreementCreated', {
+			filter: { from: [address], to: [address] },
+			fromBlock: 0,
+			toBlock: 'latest'
+		});
+
+		const agreements = events.map((data) => {
+			const {
+				returnValues,
+				signature,
+				logIndex,
+				transactionIndex,
+				transactionHash,
+				blockHash,
+				blockNumber,
+				address
+			} = data;
+
+			return {
+				...returnValues,
+				signature,
+				logIndex,
+				transactionIndex,
+				transactionHash,
+				blockHash,
+				blockNumber,
+				address
+			};
+		});
+
+		dispatch(getDocuments(agreements));
 	} catch (err) {
 		console.log(err);
 		dispatch({

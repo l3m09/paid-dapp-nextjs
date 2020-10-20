@@ -29,6 +29,21 @@ const getWallets = (payload: any[]) => {
 		payload
 	};
 };
+
+const setCurrentWallet = (payload: any) => {
+	return {
+		type: WalletActionTypes.SET_CURRENT_WALLET_SUCCESS,
+		payload
+	};
+};
+
+const getCurrentWallet = (payload: any) => {
+	return {
+		type: WalletActionTypes.GET_CURRENT_WALLET_SUCCESS,
+		payload
+	};
+};
+
 const createWallet = (payload: any) => {
 	return {
 		type: WalletActionTypes.CREATE_WALLET_SUCCESS,
@@ -82,6 +97,38 @@ export const doGetWallets = () => async (dispatch: any) => {
 	}
 };
 
+export const doGetCurrentWallet = () => async (dispatch: any) => {
+	dispatch({ type: WalletActionTypes.GET_CURRENT_WALLET_LOADING });
+	try {
+		const stored = await Storage.get({ key: 'CURRENT_WALLET' });
+		if (!stored || !stored.value) {
+			dispatch(getCurrentWallet(null));
+		} else {
+			const wallet = JSON.parse(stored.value);
+			dispatch(getCurrentWallet(wallet));
+		}
+	} catch (err) {
+		dispatch({
+			type: WalletActionTypes.GET_CURRENT_WALLET_FAILURE,
+			payload: err.msg
+		});
+	}
+};
+
+export const doSetCurrentWallet = (wallet: any) => async (dispatch: any) => {
+	dispatch({ type: WalletActionTypes.SET_CURRENT_WALLET_LOADING });
+	try {
+		const encoded = JSON.stringify(wallet);
+		await Storage.set({ key: 'CURRENT_WALLET', value: encoded });
+		dispatch(setCurrentWallet(wallet));
+	} catch (err) {
+		dispatch({
+			type: WalletActionTypes.SET_CURRENT_WALLET_FAILURE,
+			payload: err.msg
+		});
+	}
+};
+
 export const doCreateWallet = (payload: {
 	name: string;
 	mnemonic: string;
@@ -91,14 +138,24 @@ export const doCreateWallet = (payload: {
 	try {
 		const { name, password, mnemonic } = payload;
 		const wallet = await walletManager.createWallet(password, mnemonic);
-		const { _id, address } = wallet;
-		dispatch(
-			createWallet({
-				_id,
-				address,
-				name
-			})
-		);
+		const { _id, address, created } = wallet;
+
+		const referenceWallet = {
+			_id,
+			address,
+			name,
+			created
+		};
+		const encoded = JSON.stringify(referenceWallet);
+		await Storage.set({ key: 'CURRENT_WALLET', value: encoded });
+		const stored = await Storage.get({ key: 'WALLETS' });
+		if (stored && stored.value) {
+			const wallets: any[] = JSON.parse(stored.value);
+			wallets.push(referenceWallet);
+			const encodedWallets = JSON.stringify(wallets);
+			await Storage.set({ key: 'WALLETS', value: encodedWallets });
+			dispatch(createWallet(wallet));
+		}
 	} catch (err) {
 		dispatch({
 			type: WalletActionTypes.CREATE_WALLET_FAILURE,
