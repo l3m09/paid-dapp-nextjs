@@ -24,7 +24,7 @@ interface CreateWalletProps {
 const CreateWallet: React.FC<CreateWalletProps> = ({ show, dismiss }) => {
 	const slidesRef = useRef<HTMLIonSlidesElement | null>(null);
 	const slideOpts = {
-		initialSlide: 1,
+		initialSlide: 0,
 		speed: 400,
 		slidesPerView: 1,
 	};
@@ -44,20 +44,23 @@ const CreateWallet: React.FC<CreateWalletProps> = ({ show, dismiss }) => {
 	async function doDismiss() {
 		await slidesRef.current?.lockSwipeToPrev(false);
 		await slidesRef.current?.lockSwipeToNext(false);
-		await lockSwipes()
-		dismiss()
+		await slidesRef.current?.slideTo(0).then(
+			() => {
+				dismiss()
+			}
+		)
 	}
 	return (
 		<IonModal
 			isOpen={show}
 			cssClass="create-wallet-modal"
-			onDidDismiss={() => dismiss()}
+			onDidDismiss={() => doDismiss()}
 		>
 			<IonHeader translucent>
 				<IonToolbar>
 					<IonTitle>Create a New Wallet</IonTitle>
 					<IonButtons slot="end">
-						<IonButton buttonType="" fill="clear" onClick={() => dismiss()}>
+						<IonButton buttonType="" fill="clear" onClick={() => doDismiss()}>
 							Cancel
 						</IonButton>
 					</IonButtons>

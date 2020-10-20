@@ -119,7 +119,7 @@ const ConfirmPhrase: React.FC<ConfirmPhraseProps> = ({current}) => {
 						class="purple-button complete-button"
 						color="8500FF"
 					>
-						Complete Backup
+						Next
 					</IonButton>
 				</IonItem>
 			) : (

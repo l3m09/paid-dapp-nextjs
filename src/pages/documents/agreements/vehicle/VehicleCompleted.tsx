@@ -3,74 +3,63 @@ import {
 	IonTitle,
 	IonItem,
 	IonButton,
-	IonRouterLink,
 	IonText,
 	IonModal,
-	IonImg
 } from '@ionic/react';
 import React, { useState } from 'react';
-import { useHistory } from "react-router";
+import {useHistory} from 'react-router';
+import {useDispatch, useSelector} from "react-redux";
+import {doSetAgreementFormInfo} from "../../../../redux/actions/documents";
 
-interface CompletedProps {
-	dismiss: () => void;
+interface VehicleCompletedProps {
 	current: any;
 }
 
-const Completed: React.FC<CompletedProps> = ({dismiss, current}) => {
+const VehicleCompleted: React.FC<VehicleCompletedProps> = ({current}) => {
 	const history = useHistory();
+	const dispatch = useDispatch();
 	const [showModal, setShowModal] = useState(false);
+	const documentsState = useSelector((state: any) => state.documents);
+	const {loading, agreementFormInfo } = documentsState;
+	async function toDocuments() {
+		dispatch(doSetAgreementFormInfo({}));
+
+		await current.lockSwipeToPrev(false);
+		await current.lockSwipeToNext(false);
+		await current.slideTo(0).then(
+			() => {
+				history.push('/documents')
+			}
+		)
+	}
 
 	return (
-		<IonContent fullscreen class="phrase-content phrase-completed">
+		<IonContent fullscreen class="agreement-content agreement-completed">
 			<IonItem>
-				<span className="phrase-completed-image">
-					<IonImg src="/assets/images/shield.svg" />
-				</span>
-			</IonItem>
-			<IonItem>
-				<IonTitle class="phrase-content-title phrase-completed-title">
-					Congratulations
+				<IonTitle class="agreement-content-title agreement-completed-title">
+					You, <span className="text-primary">{agreementFormInfo.name}</span>
 				</IonTitle>
 			</IonItem>
 			<IonItem>
 				<IonText class="phrase-content-sub-text phrase-completed-sub-text">
-					You’ve successfully protected your wallet. Remember to keep your seed
-					phrase safe, it’s your responsibility!
+					Have agreed with the conclusion of this transaction on <span className="text-orange">{agreementFormInfo.createdAt}</span>
 				</IonText>
 			</IonItem>
 			<IonItem>
 				<IonText class="phrase-content-sub-text phrase-completed-sub-text">
-					<span className="text-brand-primary">
-						<IonRouterLink
-							class="text-brand-primary"
-							onClick={() => setShowModal(true)}
-						>
-							Leave yourself a hint?
-						</IonRouterLink>
-					</span>
+					And accepted transference of the currency to (SELLER) wallet address <span className="text-orange">{agreementFormInfo.destinationWallet}</span>
 				</IonText>
 			</IonItem>
 			<IonItem>
 				<IonText class="phrase-content-sub-text phrase-completed-sub-text">
-					Paid cannot recover your wallet should you lose it. You can find your
-					seed phrase in Settings.
+					This offer to purchase is valid for Nine Days from date of offer and will not be valid if there are any
+					changes to the value of the vehicle due to physical or mechanical issues upon delivery to (SELLER)
 				</IonText>
 			</IonItem>
-			<IonItem>
-				<IonText class="phrase-content-sub-text phrase-completed-sub-text">
-					<span className="text-brand-primary">
-						<IonRouterLink
-							class="text-brand-primary"
-							onClick={() => setShowModal(true)}
-						>
-							Learn more
-						</IonRouterLink>
-					</span>
-				</IonText>
-			</IonItem>
-			<IonItem class="">
+
+			<IonItem class="form-options">
 				<IonButton
-					onClick={() => {dismiss()}}
+					onClick={() => {toDocuments()}}
 					class="purple-button done-button"
 					color="8500FF"
 				>
@@ -99,4 +88,4 @@ const Completed: React.FC<CompletedProps> = ({dismiss, current}) => {
 	);
 };
 
-export default Completed;
+export default VehicleCompleted;

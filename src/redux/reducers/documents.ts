@@ -3,7 +3,9 @@ import { DocumentsActionTypes } from '../actionTypes/documents';
 const initialState = {
 	loading: false,
 	documents: [],
-	selectedDocument: null
+	selectedDocument: null,
+	agreementTypes: ['Vehicle', 'Rental'],
+	agreementFormInfo: {}
 };
 
 export const DocumentsReducer = function (state = initialState, action: any) {
@@ -32,6 +34,10 @@ export const DocumentsReducer = function (state = initialState, action: any) {
 
 		case DocumentsActionTypes.GET_SELECTED_DOCUMENT_SUCCESS: {
 			return { ...state, selectedDocument: payload, loading: false };
+		}
+
+		case DocumentsActionTypes.SET_AGREEMENT_FORM_INFO: {
+			return { ...state, agreementFormInfo: payload };
 		}
 
 		default:
