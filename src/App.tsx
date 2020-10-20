@@ -43,8 +43,6 @@ const App: React.FC = () => {
 					<IonRouterOutlet id="main" ref={routerRef}>
 						<Route path="/" component={Landing} exact />
 						<Route path="/login" component={Login} exact />
-						<Route path="/login-gmail" component={LoginGmail} exact />
-						<Route path="/signup" component={SignUp} exact />
 						<Route path="/wallets" component={Wallets} exact />
 						<Route path="/documents/:id?" component={Documents} exact />
 					</IonRouterOutlet>

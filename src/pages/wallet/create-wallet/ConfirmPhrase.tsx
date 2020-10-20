@@ -4,7 +4,10 @@ import {
 	IonTitle,
 	IonItem,
 	IonButton,
-	IonText
+	IonText,
+	IonCol,
+	IonGrid,
+	IonRow
 } from '@ionic/react';
 import React from 'react';
 import { checkmarkCircle } from 'ionicons/icons';
@@ -12,20 +15,19 @@ import { useDispatch, useSelector } from 'react-redux';
 import { doAddWord, doRemoveWord } from '../../../redux/actions/wallet';
 
 interface ConfirmPhraseProps {
-	current: any
+	current: any;
 }
 
-const ConfirmPhrase: React.FC<ConfirmPhraseProps> = ({current}) => {
+const ConfirmPhrase: React.FC<ConfirmPhraseProps> = ({ current }) => {
 	const dispatch = useDispatch();
 	const wallet = useSelector((state: any) => state.wallet);
 	const { seedPhrase, confirmedSeedPhrase, confirmed } = wallet;
 
 	async function slideNext() {
-		console.log('ConfirmPhrase', await current.getActiveIndex())
+		console.log('ConfirmPhrase', await current.getActiveIndex());
 		await current.lockSwipeToNext(false);
-		current.slideNext()
+		current.slideNext();
 		await current.lockSwipeToNext(true);
-
 	}
 
 	function selectWord(word: string, index: number) {
@@ -112,16 +114,22 @@ const ConfirmPhrase: React.FC<ConfirmPhraseProps> = ({current}) => {
 				</div>
 			</IonItem>
 			{confirmed ? (
-				<IonItem class="button-wrapper">
-					<IonButton
-						onClick={() => {slideNext()}}
-						disabled={!confirmed}
-						class="purple-button complete-button"
-						color="8500FF"
-					>
-						Complete Backup
-					</IonButton>
-				</IonItem>
+				<IonGrid>
+					<IonRow>
+						<IonCol>
+							<IonButton
+								onClick={() => {
+									slideNext();
+								}}
+								disabled={!confirmed}
+								class="purple-button complete-button"
+								color="8500FF"
+							>
+								Complete Backup
+							</IonButton>
+						</IonCol>
+					</IonRow>
+				</IonGrid>
 			) : (
 				''
 			)}

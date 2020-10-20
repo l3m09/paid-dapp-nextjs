@@ -1,13 +1,6 @@
-import {
-	IonButton,
-	IonContent,
-	IonImg,
-	IonPage,
-	IonRouterLink
-} from '@ionic/react';
+import { IonButton, IonContent, IonImg, IonPage } from '@ionic/react';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import {Redirect, useHistory} from 'react-router';
 import Terms from '../components/Terms';
 import CreateWallet from './wallet/create-wallet/CreateWallet';
 
@@ -20,10 +13,6 @@ const Landing: React.FC = () => {
 	const dismissModal = () => {
 		setShowCreateModal(false);
 	};
-
-	if (wallets.length > 0) {
-		return (<Redirect to="/wallets"/>)
-	}
 
 	return (
 		<IonPage>

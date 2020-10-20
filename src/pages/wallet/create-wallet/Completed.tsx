@@ -9,19 +9,19 @@ import {
 	IonImg
 } from '@ionic/react';
 import React, { useState } from 'react';
+import { useHistory } from 'react-router';
 
 interface CompletedProps {
 	dismiss: () => void;
 	current: any;
 }
 
-const Completed: React.FC<CompletedProps> = ({dismiss, current}) => {
+const Completed: React.FC<CompletedProps> = ({ dismiss }) => {
 	const [showModal, setShowModal] = useState(false);
-
+	const history = useHistory();
 	function doDismiss() {
 		dismiss();
-		// @ts-ignore
-		// this.props.history.push('/wallets')
+		history.push('/login');
 	}
 	return (
 		<IonContent fullscreen class="phrase-content phrase-completed">
@@ -73,7 +73,9 @@ const Completed: React.FC<CompletedProps> = ({dismiss, current}) => {
 			</IonItem>
 			<IonItem class="">
 				<IonButton
-					onClick={() => {doDismiss()}}
+					onClick={() => {
+						doDismiss();
+					}}
 					class="purple-button done-button"
 					color="8500FF"
 				>

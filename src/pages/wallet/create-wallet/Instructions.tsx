@@ -11,20 +11,17 @@ import {
 import React, { useState } from 'react';
 import { lockClosedOutline, warning } from 'ionicons/icons';
 
-
 interface InstructionsProps {
-	current: any
+	current: HTMLIonSlidesElement | null;
 }
 
-const Instructions: React.FC<InstructionsProps> = ({current}) => {
+const Instructions: React.FC<InstructionsProps> = ({ current }) => {
 	const [showModal, setShowModal] = useState(false);
 
 	async function slideNext() {
-		console.log('Instructions', await current.getActiveIndex())
-		await current.lockSwipeToNext(false);
-		current.slideNext()
-		await current.lockSwipeToNext(true);
-
+		await current?.lockSwipeToNext(false);
+		current?.slideNext();
+		// await current.lockSwipeToNext(true);
 	}
 
 	return (
@@ -86,7 +83,9 @@ const Instructions: React.FC<InstructionsProps> = ({current}) => {
 						<li>Store in multiple secret places</li>
 					</ul>
 					<IonButton
-						onClick={() => {slideNext()}}
+						onClick={() => {
+							slideNext();
+						}}
 						class="purple-button start-button"
 						color="8500FF"
 					>
