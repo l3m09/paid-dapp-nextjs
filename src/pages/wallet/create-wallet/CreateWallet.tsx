@@ -24,7 +24,7 @@ interface CreateWalletProps {
 const CreateWallet: React.FC<CreateWalletProps> = ({ show, dismiss }) => {
 	const slidesRef = useRef<HTMLIonSlidesElement | null>(null);
 	const slideOpts = {
-		initialSlide: 3,
+		initialSlide: 1,
 		speed: 400,
 		slidesPerView: 1,
 	};

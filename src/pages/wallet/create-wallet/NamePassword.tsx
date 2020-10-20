@@ -21,9 +21,9 @@ interface WalletInfo {
 const NamePassword: React.FC<NamePasswordProps> = ({current}) => {
     const dispatch = useDispatch();
     const wallet = useSelector(
-        (state: { wallet: { wallets: []; loading: boolean } }) => state.wallet
+        (state: { wallet: { wallets: []; loading: boolean, confirmedSeedPhrase: [] } }) => state.wallet
     );
-    const { wallets, loading } = wallet;
+    const { loading, confirmedSeedPhrase } = wallet;
 
     let walletInfo: WalletInfo = { name: '', password: '', verified: false}
 
@@ -52,9 +52,8 @@ const NamePassword: React.FC<NamePasswordProps> = ({current}) => {
 
     const onSubmit = () => {
         // e.preventDefault();
-        dispatch(doCreateWallet({name: walletInfo.name, password: walletInfo.password, mnemonic: ''}));
-        console.log('Wallet Name', walletInfo.name)
-        console.log('Wallet Password', walletInfo.password)
+        let mnemonic = confirmedSeedPhrase.join(' ')
+        dispatch(doCreateWallet({name: walletInfo.name, password: walletInfo.password, mnemonic: mnemonic}));
         slideNext().then(r => {})
 
     }
@@ -62,7 +61,6 @@ const NamePassword: React.FC<NamePasswordProps> = ({current}) => {
     return (
             <IonContent fullscreen class="phrase-content phrase-name-password">
                 <form action="" className="name-password-form">
-
                     <IonItem>
                         <IonLabel position="stacked">Wallet Name</IonLabel>
                         <IonInput title="Label"
