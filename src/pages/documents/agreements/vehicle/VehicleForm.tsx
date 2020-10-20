@@ -7,7 +7,8 @@ import {
 } from '@ionic/react';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {doSetAgreementFormInfo} from "../../../../redux/actions/documents";
+import {doCreateAgreement, doSetAgreementFormInfo} from "../../../../redux/actions/documents";
+import {useParams} from "react-router";
 
 interface AgreementFormProps {
     current: any
@@ -23,7 +24,13 @@ interface AgreementInfo {
 
 const VehicleForm: React.FC<AgreementFormProps> = ({current}) => {
     const dispatch = useDispatch();
+    const { type } = useParams<{ type: string; }>();
     const documentsState = useSelector((state: any) => state.documents);
+    const wallet = useSelector(
+        (state: { wallet: { currentWallet: any } }) => state.wallet
+    );
+    const { currentWallet } = wallet;
+
     const {loading} = documentsState;
 
     let agreementInfo: AgreementInfo = { name: '', filled: false, address: '', phone: '', destinationWallet: '', createdAt: ''}
@@ -63,6 +70,13 @@ const VehicleForm: React.FC<AgreementFormProps> = ({current}) => {
         // e.preventDefault();
         agreementInfo.createdAt = new Date().toDateString();
         dispatch(doSetAgreementFormInfo(agreementInfo));
+        dispatch(doCreateAgreement({
+            signatoryA: currentWallet.address,
+            signatoryB: agreementInfo.destinationWallet,
+            validUntil: 0,
+            agreementFormTemplateId: type,
+            agreementForm: agreementInfo
+        }))
         slideNext().then(r => {})
 
     }
