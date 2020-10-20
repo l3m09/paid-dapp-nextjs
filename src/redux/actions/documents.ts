@@ -2,10 +2,28 @@ import { DocumentsActionTypes } from '../actionTypes/documents';
 import Web3 from 'web3';
 import { Contract } from 'web3-eth-contract';
 import Agreement from '../../contracts/Agreement.json';
+import { ethers } from 'ethers';
 let web3: Web3 | null = null;
 let agreementContract: Contract | null = null;
 const GETH_URL = '';
-const AGREEMENT_ADDRESS = '0x50A9D90013dD4C690ca299f8d79C23b012fB73e3';
+const AGREEMENT_ADDRESS = '0x91Df554FA6Abc7f42b3ad2465f4969EE1658Dd4f';
+
+const createAgreementFormPayload = (obj: any) => {
+	const types: string[] = [];
+	const values: any[] = [];
+	const keys = Object.keys(obj);
+	keys.forEach((k) => {
+		if (typeof obj[k] === 'string') {
+			types.push('string');
+			values.push(obj[k]);
+		}
+		if (typeof obj[k] === 'number') {
+			types.push('uint256');
+			values.push(obj[k]);
+		}
+	});
+	return ethers.utils.defaultAbiCoder.encode(types, values);
+};
 
 const getAgrementContract = () => {
 	if (!web3) {
@@ -58,39 +76,29 @@ export const doCreateAgreement = (payload: {
 	signatoryA: string;
 	signatoryB: string;
 	validUntil: number;
-	multiaddrReference: string;
 	agreementFormTemplateId: string;
-	agreementForm: string;
-	sig: { r: string; s: string; v: string };
-	digest: string;
+	agreementForm: any;
 }) => async (dispatch: any) => {
 	dispatch({ type: DocumentsActionTypes.CREATE_AGREEMENT_LOADING });
 	try {
-		// TODO: process data before send to the contract
 		const {
 			signatoryA,
 			signatoryB,
 			validUntil,
-			multiaddrReference,
 			agreementFormTemplateId,
-			agreementForm,
-			sig,
-			digest
+			agreementForm
 		} = payload;
-		const { r, s, v } = sig;
+
+		const formId = ethers.utils.formatBytes32String(agreementFormTemplateId);
+		const form = createAgreementFormPayload(agreementForm);
 		const contract = getAgrementContract();
 		const agreement = await contract.methods
 			.create({
 				signatoryA,
 				signatoryB,
 				validUntil,
-				multiaddrReference,
-				agreementFormTemplateId,
-				agreementForm,
-				r,
-				s,
-				v,
-				digest
+				formId,
+				form
 			})
 			.send();
 		dispatch(createAgreement(agreement));
