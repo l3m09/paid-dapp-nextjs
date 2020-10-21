@@ -178,7 +178,12 @@ export const doCreateWallet = (payload: {
 			_id,
 			address,
 			name,
-			created
+			created: created.toString()
+		};
+
+		const createdWallet = {
+			...referenceWallet,
+			mnemonic
 		};
 		const encoded = JSON.stringify(referenceWallet);
 		await Storage.set({ key: 'CURRENT_WALLET', value: encoded });
@@ -190,7 +195,7 @@ export const doCreateWallet = (payload: {
 		await Storage.set({ key: 'WALLETS', value: encodedWallets });
 
 		dispatch(createWallet(referenceWallet));
-		dispatch(unlockWallet(wallet));
+		dispatch(unlockWallet(createdWallet));
 	} catch (err) {
 		dispatch({
 			type: WalletActionTypes.CREATE_WALLET_FAILURE,
