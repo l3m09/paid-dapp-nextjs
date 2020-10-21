@@ -3,6 +3,7 @@ import { ethers } from 'ethers';
 import { ContractFactory } from '../../utils/contractFactory';
 import { BlockchainFactory } from '../../utils/blockchainFactory';
 import { Wallet } from 'cea-crypto-wallet';
+import { KeyStorageModel } from 'cea-crypto-wallet/dist/key-storage/KeyStorageModel';
 
 const createAgreementFormPayload = (obj: any) => {
 	const types: string[] = [];
@@ -79,7 +80,10 @@ export const doCreateAgreement = (payload: {
 			throw new Error('Not unlocked wallet found');
 		}
 
-		const web3 = BlockchainFactory.getWeb3Instance(unlockedWallet as Wallet);
+		const manager = BlockchainFactory.getWalletManager();
+		const storage = manager.getKeyStorage();
+		const rawWallet = await storage.find<KeyStorageModel>(unlockedWallet._id);
+		const web3 = BlockchainFactory.getWeb3Instance(rawWallet.keypairs);
 		const contract = ContractFactory.getAgrementContract(web3);
 		const agreement = await contract.methods
 			.create({
