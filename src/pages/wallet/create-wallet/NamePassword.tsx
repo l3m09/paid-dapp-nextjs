@@ -21,9 +21,9 @@ interface WalletInfo {
 const NamePassword: React.FC<NamePasswordProps> = ({current}) => {
     const dispatch = useDispatch();
     const wallet = useSelector(
-        (state: { wallet: { wallets: []; loading: boolean, confirmedSeedPhrase: [] } }) => state.wallet
+        (state: { wallet: { wallets: []; loading: boolean, confirmedSeedPhrase: [], creatingWallet: boolean } }) => state.wallet
     );
-    const { loading, confirmedSeedPhrase } = wallet;
+    const { loading, confirmedSeedPhrase, creatingWallet } = wallet;
 
     let walletInfo: WalletInfo = { name: '', password: '', verified: false}
 
@@ -85,9 +85,9 @@ const NamePassword: React.FC<NamePasswordProps> = ({current}) => {
                             onClick={() => {onSubmit()}}
                             class="purple-button "
                             color="8500FF"
-                            disabled={loading}
+                            disabled={creatingWallet}
                         >
-                            {loading ? 'Loading..' : 'Confirm'}
+                            {creatingWallet ? 'Loading..' : 'Confirm'}
                         </IonButton>
                     </IonItem>
                 </form>

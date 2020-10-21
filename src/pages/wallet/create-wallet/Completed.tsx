@@ -6,10 +6,11 @@ import {
 	IonRouterLink,
 	IonText,
 	IonModal,
-	IonImg
+	IonImg, IonLoading
 } from '@ionic/react';
 import React, { useState } from 'react';
 import { useHistory } from 'react-router';
+import {useSelector} from "react-redux";
 
 interface CompletedProps {
 	dismiss: () => void;
@@ -17,6 +18,11 @@ interface CompletedProps {
 }
 
 const Completed: React.FC<CompletedProps> = ({ dismiss }) => {
+	const wallet = useSelector(
+		(state: { wallet: { creatingWallet: boolean } }) => state.wallet
+	);
+	const {  creatingWallet } = wallet;
+
 	const [showModal, setShowModal] = useState(false);
 	const history = useHistory();
 	function doDismiss() {
@@ -25,6 +31,10 @@ const Completed: React.FC<CompletedProps> = ({ dismiss }) => {
 	}
 	return (
 		<IonContent fullscreen class="phrase-content phrase-completed">
+			<IonLoading
+				cssClass='loader'
+				isOpen={creatingWallet}
+			/>
 			<IonItem>
 				<span className="phrase-completed-image">
 					<IonImg src="/assets/images/shield.svg" />
@@ -78,6 +88,7 @@ const Completed: React.FC<CompletedProps> = ({ dismiss }) => {
 					}}
 					class="purple-button done-button"
 					color="8500FF"
+					disabled={creatingWallet}
 				>
 					Done
 				</IonButton>

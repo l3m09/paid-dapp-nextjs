@@ -1,11 +1,7 @@
-import Login from './pages/auth/Login';
-import SignUp from './pages/auth/SignUp';
-import Landing from './pages/Landing';
 import React, { useRef } from 'react';
 import { IonApp, IonRouterOutlet, IonSplitPane } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 
-import { Route } from 'react-router-dom';
 /* Core CSS required for Ionic components to work properly */
 
 import '@ionic/react/css/core.css';
@@ -27,11 +23,8 @@ import './theme/variables.css';
 import './theme/main.scss';
 
 /* Pages */
-import LoginGmail from './pages/auth/LoginGmail';
 import Menu from './components/Menu';
-import Wallets from './pages/wallet/Wallets';
-import Documents from './pages/documents/Documents';
-import Agreements from './pages/documents/agreements/Agreements';
+import Layout from './Layout';
 
 const App: React.FC = () => {
 	const routerRef = useRef<HTMLIonRouterOutletElement | null>(null);
@@ -42,11 +35,7 @@ const App: React.FC = () => {
 				<IonSplitPane contentId="main">
 					<Menu />
 					<IonRouterOutlet id="main" ref={routerRef}>
-						<Route path="/" component={Landing} exact />
-						<Route path="/login" component={Login} exact />
-						<Route path="/wallets" component={Wallets} exact />
-						<Route path="/documents/:id?" component={Documents} exact />
-						<Route path="/agreements/:type" component={Agreements} exact />
+						<Layout/>
 					</IonRouterOutlet>
 				</IonSplitPane>
 			</IonReactRouter>
