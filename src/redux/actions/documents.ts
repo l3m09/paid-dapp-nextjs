@@ -86,13 +86,7 @@ export const doCreateAgreement = (payload: {
 		const web3 = BlockchainFactory.getWeb3Instance(rawWallet.keypairs);
 		const contract = ContractFactory.getAgrementContract(web3);
 		const agreement = await contract.methods
-			.create({
-				signatoryA,
-				signatoryB,
-				validUntil,
-				formId,
-				form
-			})
+			.create(signatoryA, signatoryB, validUntil, formId, form)
 			.send();
 		dispatch(createAgreement(agreement));
 	} catch (err) {
