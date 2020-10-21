@@ -13,10 +13,13 @@ import {
 	IonButton
 } from '@ionic/react';
 import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
-import { doGetWallets } from '../../redux/actions/wallet';
+import {doGetWallets, doSetCurrentWallet} from '../../redux/actions/wallet';
 import CreateWallet from './create-wallet/CreateWallet';
+
 const Wallets: React.FC = () => {
+	const history = useHistory();
 	const dispatch = useDispatch();
 	const wallet = useSelector((state: any) => state.wallet);
 	const [showCreateModal, setShowCreateModal] = useState(false);
@@ -27,6 +30,11 @@ const Wallets: React.FC = () => {
 	useEffect(() => {
 		dispatch(doGetWallets());
 	}, [dispatch]);
+
+	function toDocuments(wallet: any) {
+		dispatch(doSetCurrentWallet(wallet))
+		history.push('/documents/' + wallet.name)
+	}
 
 	return (
 		<IonPage className="wallets-page">
@@ -40,32 +48,21 @@ const Wallets: React.FC = () => {
 			</IonHeader>
 
 			<IonContent fullscreen>
+				<IonItem className="wallets-title">
+					<h5>Select default Wallet</h5>
+				</IonItem>
 				<IonItemGroup class="wallets-container">
 					{wallets.map((wallet: any, index: any) => {
 						return (
 							<IonItem
 								class="wallet-wrapper"
 								key={index}
-								routerLink={'/documents/' + wallet.id}
-								// onClick={() => setShowPopover(true)}
+								onClick={() => toDocuments(wallet)}
 							>
 								<div className="wallet-container">
 									<span className="label">{wallet.name}</span>
 									<span className="address">{wallet.address}</span>
 								</div>
-								{/*<IonPopover*/}
-								{/*    isOpen={showPopover}*/}
-								{/*    cssClass='my-custom-class'*/}
-								{/*    onDidDismiss={e => setShowPopover(false)}*/}
-								{/*>*/}
-								{/*    <IonList>*/}
-								{/*        <IonItem button onClick={() => {doSomething(wallet)}}>Send</IonItem>*/}
-								{/*        <IonItem button onClick={() => {doSomething(wallet)}}>Transfer</IonItem>*/}
-								{/*        <IonItem button onClick={() => {doSomething(wallet)}}>Export</IonItem>*/}
-								{/*        <IonItemDivider/>*/}
-								{/*        <IonItem button onClick={() => {doSomething(wallet)}}>Edit</IonItem>*/}
-								{/*    </IonList>*/}
-								{/*</IonPopover>*/}
 							</IonItem>
 						);
 					})}
@@ -75,13 +72,13 @@ const Wallets: React.FC = () => {
 						<IonButton
 							onClick={() => setShowCreateModal(true)}
 							class=""
-							color="secondary"
+							color="primary"
 						>
-							Create
+							Add
 						</IonButton>
-						<IonButton routerLink="/wallet/import" class="" color="secondary">
-							Import
-						</IonButton>
+						{/*<IonButton routerLink="/wallet/import" class="" color="secondary">*/}
+						{/*	Import*/}
+						{/*</IonButton>*/}
 					</IonItem>
 				</IonItemGroup>
 				<CreateWallet show={showCreateModal} dismiss={dismissModal} />

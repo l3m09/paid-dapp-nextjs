@@ -1,8 +1,8 @@
 import {
 	IonContent,
 	IonIcon,
-	IonImg,
-	IonItem,
+	// IonImg,
+	IonItem, IonItemDivider,
 	IonLabel,
 	IonList,
 	IonListHeader,
@@ -14,22 +14,21 @@ import {
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import {
-	archiveOutline,
-	archiveSharp,
-	heartOutline,
-	heartSharp,
+	// archiveOutline,
+	// archiveSharp,
+	// heartOutline,
+	// heartSharp,
 	mailOutline,
 	mailSharp,
 	paperPlaneOutline,
 	paperPlaneSharp,
-	personAddSharp,
-	personAddOutline,
-	bookSharp,
-	bookOutline,
-	giftSharp,
-	giftOutline
+	// personAddSharp,
+	// personAddOutline,
+	// bookSharp,
+	// bookOutline,
+	// giftSharp,
+	// giftOutline
 } from 'ionicons/icons';
-import './Menu.css';
 
 interface AppPage {
 	url: string;
@@ -54,43 +53,43 @@ const appPages: AppPage[] = [
 		mdIcon: paperPlaneSharp,
 		disabled: false
 	},
-	{
-		title: 'Settings',
-		url: '/page/settings',
-		iosIcon: heartOutline,
-		mdIcon: heartSharp,
-		disabled: true
-	},
-	{
-		title: 'Help',
-		url: '/page/help',
-		iosIcon: archiveOutline,
-		mdIcon: archiveSharp,
-		disabled: true
-	}
+	// {
+	// 	title: 'Settings',
+	// 	url: '/page/settings',
+	// 	iosIcon: heartOutline,
+	// 	mdIcon: heartSharp,
+	// 	disabled: true
+	// },
+	// {
+	// 	title: 'Help',
+	// 	url: '/page/help',
+	// 	iosIcon: archiveOutline,
+	// 	mdIcon: archiveSharp,
+	// 	disabled: true
+	// }
 ];
 const labels: AppPage[] = [
-	{
-		title: 'Contacts',
-		url: '/page/contacts',
-		iosIcon: personAddSharp,
-		mdIcon: personAddOutline,
-		disabled: true
-	},
-	{
-		title: 'View signing phrase',
-		url: '/page/phrase',
-		iosIcon: bookOutline,
-		mdIcon: bookSharp,
-		disabled: true
-	},
-	{
-		title: 'Account',
-		url: '/page/account',
-		iosIcon: giftOutline,
-		mdIcon: giftSharp,
-		disabled: true
-	}
+	// {
+	// 	title: 'Contacts',
+	// 	url: '/page/contacts',
+	// 	iosIcon: personAddSharp,
+	// 	mdIcon: personAddOutline,
+	// 	disabled: true
+	// },
+	// {
+	// 	title: 'View signing phrase',
+	// 	url: '/page/phrase',
+	// 	iosIcon: bookOutline,
+	// 	mdIcon: bookSharp,
+	// 	disabled: true
+	// },
+	// {
+	// 	title: 'Account',
+	// 	url: '/page/account',
+	// 	iosIcon: giftOutline,
+	// 	mdIcon: giftSharp,
+	// 	disabled: true
+	// }
 ];
 
 const Menu: React.FC = () => {
@@ -101,6 +100,7 @@ const Menu: React.FC = () => {
 			<IonContent>
 				<IonList id="inbox-list">
 					<IonListHeader>Menu</IonListHeader>
+					<IonItemDivider/>
 					{appPages.map((appPage, index) => {
 						return (
 							<IonMenuToggle key={index} autoHide={false}>
@@ -152,10 +152,10 @@ const Menu: React.FC = () => {
 					})}
 				</IonList>
 				<IonItem>
-					<IonImg class="avatar" src="/assets/images/avatar-placeholder.png" />
+					{/*<IonImg class="avatar" src="/assets/images/avatar-placeholder.png" />*/}
 					<IonItem>
 						<IonTitle>
-							<span>John Doe</span>
+							{/*<span>John Doe</span>*/}
 							{/*<small>XYC Community</small>*/}
 						</IonTitle>
 					</IonItem>

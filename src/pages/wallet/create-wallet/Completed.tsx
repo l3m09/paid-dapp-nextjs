@@ -21,7 +21,7 @@ const Completed: React.FC<CompletedProps> = ({ dismiss }) => {
 	const history = useHistory();
 	function doDismiss() {
 		dismiss();
-		history.push('/login');
+		history.push('/wallets');
 	}
 	return (
 		<IonContent fullscreen class="phrase-content phrase-completed">

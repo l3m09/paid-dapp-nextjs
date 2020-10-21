@@ -5,10 +5,11 @@ import {
     IonInput,
     IonButton, IonTitle, IonTextarea,
 } from '@ionic/react';
-import React from 'react';
+import React, {useEffect} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {doCreateAgreement, doSetAgreementFormInfo} from "../../../../redux/actions/documents";
 import {useParams} from "react-router";
+import {doGetCurrentWallet} from "../../../../redux/actions/wallet";
 
 interface AgreementFormProps {
     current: any
@@ -29,6 +30,9 @@ const VehicleForm: React.FC<AgreementFormProps> = ({current}) => {
     const wallet = useSelector(
         (state: { wallet: { currentWallet: any } }) => state.wallet
     );
+    useEffect(() => {
+        dispatch(doGetCurrentWallet());
+    }, []);
     const { currentWallet } = wallet;
 
     const {loading} = documentsState;
@@ -82,7 +86,7 @@ const VehicleForm: React.FC<AgreementFormProps> = ({current}) => {
     }
 
     return (
-            <IonContent fullscreen class="phrase-content phrase-name-password">
+            <IonContent fullscreen class="agreement-content phrase-name-password">
                <h5>
                    <IonTitle>Information</IonTitle>
                </h5>

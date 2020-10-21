@@ -487,10 +487,10 @@
     }
 
     .form-options {
-      position: fixed;
-      bottom: 2vh;
-      left: 0;
-      right: 0;
+      //position: fixed;
+      //bottom: 2vh;
+      //left: 0;
+      //right: 0;
 
       .done-button {
         //margin-top: 5vh;
@@ -501,10 +501,10 @@
 
 
     .button-wrapper{
-      position: fixed;
-      bottom: 2vh;
-      left: 0;
-      right: 0;
+      //position: fixed;
+      //bottom: 2vh;
+      //left: 0;
+      //right: 0;
       .complete-button {
       }
     }
@@ -539,9 +539,9 @@
         height: initial;
         display: flex;
         flex-direction: column;
-        position: fixed;
-        bottom: 2vh;
-        width: 100%;
+        //position: fixed;
+        //bottom: 2vh;
+        //width: 100%;
 
         ion-button {
         }
