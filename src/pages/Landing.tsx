@@ -61,7 +61,7 @@ const Landing: React.FC = () => {
 					</div>
 				) : (
 					<div className="landing-actions">
-						<IonButton routerLink="/login" class="red-button " color="FF4300">
+						<IonButton routerLink="/wallets" class="red-button " color="FF4300">
 							Login with your wallet
 						</IonButton>
 					</div>
@@ -72,4 +72,5 @@ const Landing: React.FC = () => {
 	);
 };
 
+// @ts-ignore
 export default Landing;
