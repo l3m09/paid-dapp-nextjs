@@ -12,10 +12,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { doGeneratePhrase } from '../../../redux/actions/wallet';
 
 interface SeedPhraseProps {
-	current: any
+	current: any;
 }
 
-const SeedPhrase: React.FC<SeedPhraseProps> = ({current}) => {
+const SeedPhrase: React.FC<SeedPhraseProps> = ({ current }) => {
 	const dispatch = useDispatch();
 	const wallet = useSelector(
 		(state: { wallet: { seedPhrase: string[] } }) => state.wallet
@@ -23,16 +23,15 @@ const SeedPhrase: React.FC<SeedPhraseProps> = ({current}) => {
 	const { seedPhrase } = wallet;
 
 	async function slideNext() {
-		console.log('SeddPhrase', await current.getActiveIndex())
+		console.log('SeddPhrase', await current.getActiveIndex());
 		await current.lockSwipeToNext(false);
-		current.slideNext()
+		current.slideNext();
 		await current.lockSwipeToNext(true);
-
 	}
 
 	useEffect(() => {
 		dispatch(doGeneratePhrase());
-	}, []);
+	}, [dispatch]);
 
 	return (
 		<IonContent fullscreen class="phrase-content seed-phrase">
@@ -66,7 +65,9 @@ const SeedPhrase: React.FC<SeedPhraseProps> = ({current}) => {
 			</IonItem>
 			<IonItem class="">
 				<IonButton
-					onClick={() => {slideNext()}}
+					onClick={() => {
+						slideNext();
+					}}
 					class="purple-button create-button"
 					color="8500FF"
 				>
