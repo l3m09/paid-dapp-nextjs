@@ -63,7 +63,28 @@
 
       }
 
+      &.selected-wallet {
+        position: relative;
+
+        .wallet-container {
+          background-color: $brand-primary;
+          color: white;
+          touch-action: none;
+
+          .current-tag {
+            position: absolute;
+            top: 5px;
+            right: 20px;
+            font-size: 0.9em;
+
+          }
+
+        }
+
+      }
+
     }
+
 
   }
 

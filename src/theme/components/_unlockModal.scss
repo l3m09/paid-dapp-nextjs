@@ -1,0 +1,35 @@
+.unlock-modal {
+
+  .modal-wrapper {
+    min-height: 60vh !important;
+    max-height: 65vh !important;
+
+    .ion-page {
+      justify-content: flex-start !important;
+
+      >ion-item {
+        margin-top: 2vh;
+
+      }
+
+      form {
+        margin-top: 4vh;
+
+        .form-options {
+          margin-top: 5vh;
+
+        }
+
+        .text-error {
+          color: $brand-red;
+          width: 100%;
+
+        }
+
+      }
+
+    }
+
+  }
+
+}

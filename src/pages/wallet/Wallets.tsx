@@ -10,30 +10,32 @@ import {
 	IonPage,
 	IonTitle,
 	IonToolbar,
-	IonButton
+	IonButton, IonIcon
 } from '@ionic/react';
+import { checkmarkCircle } from 'ionicons/icons';
+
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import {doGetWallets, doSetCurrentWallet} from '../../redux/actions/wallet';
 import CreateWallet from './create-wallet/CreateWallet';
+import UnlockWallet from '../../components/UnlockWallet';
 
 const Wallets: React.FC = () => {
 	const history = useHistory();
 	const dispatch = useDispatch();
 	const wallet = useSelector((state: any) => state.wallet);
 	const [showCreateModal, setShowCreateModal] = useState(false);
+	const [showUnlockWalletModal, setShowUnlockWalletModal] = useState(false);
+
 	const dismissModal = () => {
 		setShowCreateModal(false);
 	};
-	const { wallets } = wallet;
-	useEffect(() => {
-		dispatch(doGetWallets());
-	}, [dispatch]);
+	const { wallets, currentWallet, unlockedWallet } = wallet;;
 
-	function toDocuments(wallet: any) {
+	function openUnlockWallet(wallet: any) {
 		dispatch(doSetCurrentWallet(wallet))
-		history.push('/documents/' + wallet.name)
+		setShowUnlockWalletModal(true);
 	}
 
 	return (
@@ -52,16 +54,18 @@ const Wallets: React.FC = () => {
 					<h5>Select default Wallet</h5>
 				</IonItem>
 				<IonItemGroup class="wallets-container">
-					{wallets.map((wallet: any, index: any) => {
+					{wallets.map((item: any, index: any) => {
 						return (
 							<IonItem
 								class="wallet-wrapper"
+								className={unlockedWallet?._id === item._id ? 'selected-wallet' : ''}
 								key={index}
-								onClick={() => toDocuments(wallet)}
+								onClick={() => openUnlockWallet(item)}
 							>
 								<div className="wallet-container">
-									<span className="label">{wallet.name}</span>
-									<span className="address">{wallet.address}</span>
+									{unlockedWallet?._id === item._id ? <IonIcon icon={checkmarkCircle} className="current-tag"/> : ''}
+									<span className="label">{item.name}</span>
+									<span className="address">{item.address}</span>
 								</div>
 							</IonItem>
 						);
@@ -82,6 +86,7 @@ const Wallets: React.FC = () => {
 					</IonItem>
 				</IonItemGroup>
 				<CreateWallet show={showCreateModal} dismiss={dismissModal} />
+				{ currentWallet !== null ? <UnlockWallet show={showUnlockWalletModal} dismissible={true}/> : null}
 			</IonContent>
 		</IonPage>
 	);
