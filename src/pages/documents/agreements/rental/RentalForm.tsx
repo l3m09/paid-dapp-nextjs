@@ -30,9 +30,7 @@ const RentalForm: React.FC<AgreementFormProps> = ({current}) => {
     const wallet = useSelector(
         (state: { wallet: { currentWallet: any } }) => state.wallet
     );
-    useEffect(() => {
-        dispatch(doGetCurrentWallet());
-    }, []);
+
     const { currentWallet } = wallet;
     const {loading} = documentsState;
 

@@ -31,10 +31,6 @@ interface AgreementInfo {
 const VehicleForm: React.FC<AgreementFormProps> = ({ current }) => {
 	const dispatch = useDispatch();
 
-	useEffect(() => {
-		dispatch(doGetCurrentWallet());
-	}, [dispatch]);
-
 	const { type } = useParams<{ type: string }>();
 	const documentsState = useSelector((state: any) => state.documents);
 	const wallet = useSelector(
