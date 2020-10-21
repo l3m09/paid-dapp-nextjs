@@ -1,12 +1,8 @@
 import { DocumentsActionTypes } from '../actionTypes/documents';
-import Web3 from 'web3';
-import { Contract } from 'web3-eth-contract';
-import Agreement from '../../contracts/Agreement.json';
 import { ethers } from 'ethers';
-let web3: Web3 | null = null;
-let agreementContract: Contract | null = null;
-const GETH_URL = '';
-const AGREEMENT_ADDRESS = '0x91Df554FA6Abc7f42b3ad2465f4969EE1658Dd4f';
+import { ContractFactory } from '../../utils/contractFactory';
+import { BlockchainFactory } from '../../utils/blockchainFactory';
+import { Wallet } from 'cea-crypto-wallet';
 
 const createAgreementFormPayload = (obj: any) => {
 	const types: string[] = [];
@@ -23,20 +19,6 @@ const createAgreementFormPayload = (obj: any) => {
 		}
 	});
 	return ethers.utils.defaultAbiCoder.encode(types, values);
-};
-
-const getAgrementContract = () => {
-	if (!web3) {
-		web3 = new Web3(GETH_URL);
-	}
-
-	if (!agreementContract) {
-		agreementContract = new web3.eth.Contract(
-			Agreement.abi as any,
-			AGREEMENT_ADDRESS
-		);
-	}
-	return agreementContract;
 };
 
 const getDocuments = (payload: any[]) => {
@@ -78,7 +60,7 @@ export const doCreateAgreement = (payload: {
 	validUntil: number;
 	agreementFormTemplateId: string;
 	agreementForm: any;
-}) => async (dispatch: any) => {
+}) => async (dispatch: any, getState: () => { wallet: any }) => {
 	dispatch({ type: DocumentsActionTypes.CREATE_AGREEMENT_LOADING });
 	try {
 		const {
@@ -91,7 +73,14 @@ export const doCreateAgreement = (payload: {
 
 		const formId = ethers.utils.formatBytes32String(agreementFormTemplateId);
 		const form = createAgreementFormPayload(agreementForm);
-		const contract = getAgrementContract();
+		const { wallet } = getState();
+		const { unlockedWallet } = wallet;
+		if (!unlockedWallet) {
+			throw new Error('Not unlocked wallet found');
+		}
+
+		const web3 = BlockchainFactory.getWeb3Instance(unlockedWallet as Wallet);
+		const contract = ContractFactory.getAgrementContract(web3);
 		const agreement = await contract.methods
 			.create({
 				signatoryA,
@@ -111,11 +100,21 @@ export const doCreateAgreement = (payload: {
 	}
 };
 
-export const doGetDocuments = (wallet: any) => async (dispatch: any) => {
+export const doGetDocuments = (currentWallet: any) => async (
+	dispatch: any,
+	getState: () => { wallet: any }
+) => {
 	dispatch({ type: DocumentsActionTypes.GET_DOCUMENTS_LOADING });
 	try {
-		const { address } = wallet;
-		const contract = getAgrementContract();
+		const { address } = currentWallet;
+		const { wallet } = getState();
+		const { unlockedWallet } = wallet;
+		if (!unlockedWallet) {
+			throw new Error('Not unlocked wallet found');
+		}
+
+		const web3 = BlockchainFactory.getWeb3Instance(unlockedWallet as Wallet);
+		const contract = ContractFactory.getAgrementContract(web3);
 		const events = await contract.getPastEvents('AgreementCreated', {
 			filter: { from: [address], to: [address] },
 			fromBlock: 0,
@@ -186,7 +185,9 @@ export const doGetSelectedDocument = (document: any) => (
 	dispatch(getSelectedDocument({ document }));
 };
 
-export const doSetAgreementFormInfo = (formInfo: any) => async (dispatch: any) => {
+export const doSetAgreementFormInfo = (formInfo: any) => async (
+	dispatch: any
+) => {
 	try {
 		dispatch(setAgreementFormInfo(formInfo));
 	} catch (err) {
