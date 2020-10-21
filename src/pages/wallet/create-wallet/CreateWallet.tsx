@@ -26,11 +26,11 @@ const CreateWallet: React.FC<CreateWalletProps> = ({ show, dismiss }) => {
 	const slideOpts = {
 		initialSlide: 0,
 		speed: 400,
-		slidesPerView: 1,
+		slidesPerView: 1
 	};
 
 	useEffect(() => {
-		lockSwipes().then(r => {})
+		lockSwipes().then((r) => {});
 	}, [slidesRef]);
 
 	async function lockSwipes() {
@@ -39,7 +39,7 @@ const CreateWallet: React.FC<CreateWalletProps> = ({ show, dismiss }) => {
 		await slidesRef.current?.lockSwipeToNext(true);
 	}
 
-	lockSwipes().then(r => {})
+	lockSwipes().then((r) => {});
 
 	async function doDismiss() {
 		await slidesRef.current?.lockSwipeToPrev(false);
@@ -81,7 +81,7 @@ const CreateWallet: React.FC<CreateWalletProps> = ({ show, dismiss }) => {
 						<NamePassword current={slidesRef.current} />
 					</IonSlide>
 					<IonSlide>
-						<Completed current={slidesRef.current} dismiss={doDismiss}/>
+						<Completed current={slidesRef.current} dismiss={doDismiss} />
 					</IonSlide>
 				</IonSlides>
 			</IonContent>

@@ -149,13 +149,12 @@ export const doCreateWallet = (payload: {
 		const encoded = JSON.stringify(referenceWallet);
 		await Storage.set({ key: 'CURRENT_WALLET', value: encoded });
 		const stored = await Storage.get({ key: 'WALLETS' });
-		if (stored && stored.value) {
-			const wallets: any[] = JSON.parse(stored.value);
-			wallets.push(referenceWallet);
-			const encodedWallets = JSON.stringify(wallets);
-			await Storage.set({ key: 'WALLETS', value: encodedWallets });
-			dispatch(createWallet(wallet));
-		}
+		const encodedList = stored.value ? stored.value : `[]`;
+		const wallets: any[] = JSON.parse(encodedList);
+		wallets.push(referenceWallet);
+		const encodedWallets = JSON.stringify(wallets);
+		await Storage.set({ key: 'WALLETS', value: encodedWallets });
+		dispatch(createWallet(wallet));
 	} catch (err) {
 		dispatch({
 			type: WalletActionTypes.CREATE_WALLET_FAILURE,
