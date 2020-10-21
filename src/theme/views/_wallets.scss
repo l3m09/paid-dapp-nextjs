@@ -1,17 +1,27 @@
 .wallets-page {
 
+  .wallets-title {
+
+    h5 {
+      width: 100%;
+      text-align: center;
+      color: $brand-primary;
+    }
+
+  }
+
   .wallets-container {
-    margin-top: 5vh;
+    margin-top: 1vh;
 
     .wallet-wrapper {
       margin-bottom: 1vh;
 
       .wallet-container {
-        background-color: $brand-primary;
+        background-color: aliceblue;
         width: 100%;
         border-radius: 10px;
         padding: 10px;
-        color: white;
+        color: black;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -19,7 +29,7 @@
         box-shadow: 1px 1px 1px #cdcdcd;
 
         &:hover {
-          background-color: $brand-secondary;
+          background-color: $brand-primary;
 
         }
 

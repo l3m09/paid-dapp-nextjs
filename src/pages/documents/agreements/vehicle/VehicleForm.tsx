@@ -102,7 +102,7 @@ const VehicleForm: React.FC<AgreementFormProps> = ({ current }) => {
 	};
 
 	return (
-		<IonContent fullscreen class="phrase-content phrase-name-password">
+		<IonContent fullscreen class="agreement-content phrase-name-password">
 			<h5>
 				<IonTitle>Information</IonTitle>
 			</h5>
