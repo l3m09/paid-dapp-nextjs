@@ -12,7 +12,9 @@ const initialState = {
 	wallets: [],
 	currentWallet: null,
 	settingCurrentWallet: false,
-	gettingCurrentWallet: false
+	gettingCurrentWallet: false,
+	unlockingWallet: false,
+	unlockedWallet: null
 };
 
 export const WalletReducer = function (state = initialState, action: any) {
@@ -131,6 +133,15 @@ export const WalletReducer = function (state = initialState, action: any) {
 
 		case WalletActionTypes.GET_CURRENT_WALLET_FAILURE:
 			return { ...state, error: payload, gettingCurrentWallet: false };
+
+		case WalletActionTypes.UNLOCK_WALLET_LOADING:
+			return { ...state, unlockingWallet: true };
+
+		case WalletActionTypes.UNLOCK_WALLET_SUCCESS:
+			return { ...state, unlockedWallet: payload, unlockingWallet: false };
+
+		case WalletActionTypes.UNLOCK_WALLET_FAILURE:
+			return { ...state, error: payload, unlockingWallet: false };
 
 		default:
 			return state;

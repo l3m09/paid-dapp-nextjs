@@ -1,8 +1,8 @@
 import { WalletActionTypes } from '../actionTypes/wallet';
 import { createWalletManager } from 'cea-crypto-wallet';
 import { Plugins } from '@capacitor/core';
+import { BlockchainFactory } from '../../utils/blockchainFactory';
 const { Storage } = Plugins;
-const walletManager = createWalletManager();
 
 // CREATORS
 const generatePhrase = (payload: string[]) => {
@@ -63,8 +63,41 @@ const exportWallet = (payload: any) => {
 	};
 };
 
+const unlockWallet = (payload: any) => {
+	return {
+		type: WalletActionTypes.UNLOCK_WALLET_SUCCESS,
+		payload
+	};
+};
+
 // ACTIONS
+export const doUnlockWallet = (payload: {
+	walletId: string;
+	password: string;
+}) => async (dispatch: any) => {
+	dispatch({ type: WalletActionTypes.UNLOCK_WALLET_LOADING });
+	try {
+		const { walletId, password } = payload;
+		const walletManager = BlockchainFactory.getWalletManager();
+		const wallet = await walletManager.unlockWallet(walletId, password);
+		if (!wallet) {
+			dispatch({
+				type: WalletActionTypes.UNLOCK_WALLET_FAILURE,
+				payload: 'Unlock wallet failure, check password and wallet'
+			});
+		} else {
+			dispatch(unlockWallet(wallet));
+		}
+	} catch (err) {
+		dispatch({
+			type: WalletActionTypes.UNLOCK_WALLET_FAILURE,
+			payload: err.msg
+		});
+	}
+};
+
 export const doGeneratePhrase = () => async (dispatch: any) => {
+	const walletManager = BlockchainFactory.getWalletManager();
 	const mnemonic = walletManager.generateMnemonic();
 	const words = mnemonic.split(' ');
 	dispatch(generatePhrase(words));
@@ -137,6 +170,7 @@ export const doCreateWallet = (payload: {
 	dispatch({ type: WalletActionTypes.CREATE_WALLET_LOADING });
 	try {
 		const { name, password, mnemonic } = payload;
+		const walletManager = BlockchainFactory.getWalletManager();
 		const wallet = await walletManager.createWallet(password, mnemonic);
 		const { _id, address, created } = wallet;
 
@@ -154,7 +188,9 @@ export const doCreateWallet = (payload: {
 		wallets.push(referenceWallet);
 		const encodedWallets = JSON.stringify(wallets);
 		await Storage.set({ key: 'WALLETS', value: encodedWallets });
-		dispatch(createWallet(wallet));
+
+		dispatch(createWallet(referenceWallet));
+		dispatch(unlockWallet(wallet));
 	} catch (err) {
 		dispatch({
 			type: WalletActionTypes.CREATE_WALLET_FAILURE,
@@ -171,6 +207,7 @@ export const doImportWallet = (payload: {
 	dispatch({ type: WalletActionTypes.IMPORT_WALLET_LOADING });
 	try {
 		const { name, password, mnemonic } = payload;
+		const walletManager = BlockchainFactory.getWalletManager();
 		const wallet = await walletManager.createWallet(password, mnemonic);
 		const { _id, address } = wallet;
 		dispatch(
