@@ -16,23 +16,24 @@ import {
     IonCardTitle,
     IonCardSubtitle,
     IonCardHeader,
-    IonCard
+    IonCard, IonPopover, IonItemDivider
 } from '@ionic/react';
 import {add, documentsOutline as documentsIcon, documentOutline as documentIcon, downloadOutline} from 'ionicons/icons';
 
 import React, {useEffect, useState} from 'react';
-import { useParams } from 'react-router';
+import { useParams, useHistory } from 'react-router';
 import {useDispatch, useSelector} from "react-redux";
 import {doGetDocuments, doGetSelectedDocument, doUploadDocuments} from "../../redux/actions/documents";
 
 import Collapsible from 'react-collapsible';
 
 const Documents: React.FC = () => {
+    const history = useHistory();
     const dispatch = useDispatch();
     const documentsState = useSelector((state: any) => state.documents);
-    const {documents, selectedDocument, loading } = documentsState;
+    const {documents, selectedDocument, loading, agreementTypes } = documentsState;
     const [showModal, setShowModal] = useState(false);
-
+    const [showPopOver, setShowPopover] = useState(false);
 
     const { id } = useParams<{ id: string; }>();
 
@@ -41,7 +42,6 @@ const Documents: React.FC = () => {
         },[dispatch, id]);
 
     let selectedD: any = selectedDocument ? selectedDocument : { metadata: {} };
-
 
     function showDocument(item:any) {
         // selectedDocument = item;
@@ -66,6 +66,11 @@ const Documents: React.FC = () => {
                 <span>{name} {id ? `(${id})` : ''}</span>
             </button>
         )
+    }
+
+    function chooseOption(type: string) {
+        setShowPopover(false)
+        history.push('/agreements/' + type.toLowerCase())
     }
 
     return (
@@ -114,16 +119,28 @@ const Documents: React.FC = () => {
                             : null
                     }
                 </div>
-                <IonButton className="add-document-button">
+                <IonPopover isOpen={showPopOver} cssClass="agreements-popover">
+                    <IonItemDivider>
+                        <IonItem>Select Agreement type</IonItem>
+                    </IonItemDivider>
+                    {agreementTypes.map((type: string) => {
+                        return (
+                            <IonItem onClick={() => {chooseOption(type)}}>
+                                {type}
+                            </IonItem>
+                        )
+                    })}
+                </IonPopover>
+                <IonButton className="add-document-button" onClick={() => {setShowPopover(true)}}>
                     <IonIcon icon={add}/>
-                    <input
+                    {/*<input
                         className="upload-input"
                         type="file"
                         accept="pdf"
                         onChange={(e: any) => {
                             setFileData(e.target.files[0]);
                         }}
-                    />
+                    />*/}
                 </IonButton>
                 <div id="modal-container">
                     <IonModal isOpen={showModal} cssClass='document-modal'>

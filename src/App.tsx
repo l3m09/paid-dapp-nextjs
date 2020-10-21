@@ -31,6 +31,7 @@ import LoginGmail from './pages/auth/LoginGmail';
 import Menu from './components/Menu';
 import Wallets from './pages/wallet/Wallets';
 import Documents from './pages/documents/Documents';
+import Agreements from './pages/documents/agreements/Agreements';
 
 const App: React.FC = () => {
 	const routerRef = useRef<HTMLIonRouterOutletElement | null>(null);
@@ -45,6 +46,7 @@ const App: React.FC = () => {
 						<Route path="/login" component={Login} exact />
 						<Route path="/wallets" component={Wallets} exact />
 						<Route path="/documents/:id?" component={Documents} exact />
+						<Route path="/agreements/:type" component={Agreements} exact />
 					</IonRouterOutlet>
 				</IonSplitPane>
 			</IonReactRouter>

@@ -57,6 +57,13 @@ const getSelectedDocument = (document: any) => {
 	};
 };
 
+const setAgreementFormInfo = (formInfo: any) => {
+	return {
+		type: DocumentsActionTypes.SET_AGREEMENT_FORM_INFO,
+		payload: formInfo
+	};
+};
+
 const createAgreement = (agreementId: string) => {
 	return {
 		type: DocumentsActionTypes.CREATE_AGREEMENT_SUCCESS,
@@ -177,4 +184,12 @@ export const doGetSelectedDocument = (document: any) => (
 	payload: any
 ) => {
 	dispatch(getSelectedDocument({ document }));
+};
+
+export const doSetAgreementFormInfo = (formInfo: any) => async (dispatch: any) => {
+	try {
+		dispatch(setAgreementFormInfo(formInfo));
+	} catch (err) {
+		console.log(err);
+	}
 };
