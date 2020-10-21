@@ -1,4 +1,10 @@
-import { createWalletManager, Wallet, WalletManager } from 'cea-crypto-wallet';
+import {
+	AlgorithmType,
+	createWalletManager,
+	KeyModel,
+	Wallet,
+	WalletManager
+} from 'cea-crypto-wallet';
 import Web3 from 'web3';
 
 const GETH_URL =
@@ -8,14 +14,16 @@ export class BlockchainFactory {
 	private static _web3: Web3 | null = null;
 	private static _walletManager: WalletManager | null = null;
 
-	public static getWeb3Instance = (wallet: Wallet) => {
+	public static getWeb3Instance = (keyModel: KeyModel) => {
 		if (!BlockchainFactory._web3) {
 			BlockchainFactory._web3 = new Web3(GETH_URL);
 		}
 
-		BlockchainFactory._web3.eth.accounts.wallet.add(
-			'0x4c0883a69102937d6231471b5dbb6204fe5129617082792ae468d01a3f362318'
-		);
+		const keyService = BlockchainFactory._walletManager?.getKeyService();
+		if (keyService) {
+			const pk = keyService.getPrivateKey(AlgorithmType.ES256K, keyModel);
+			BlockchainFactory._web3.eth.accounts.wallet.clear().add(pk);
+		}
 
 		return BlockchainFactory._web3;
 	};
