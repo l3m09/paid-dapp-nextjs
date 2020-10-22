@@ -28,12 +28,11 @@ import {
 } from 'ionicons/icons';
 
 import React, { useEffect, useState } from 'react';
-import { useParams, useHistory } from 'react-router';
+import { useHistory } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import {
 	doGetDocuments,
-	doGetSelectedDocument,
-	doUploadDocuments
+	doGetSelectedDocument
 } from '../../redux/actions/documents';
 
 import Collapsible from 'react-collapsible';
@@ -51,11 +50,9 @@ const Documents: React.FC = () => {
 	const [showModal, setShowModal] = useState(false);
 	const [showPopOver, setShowPopover] = useState(false);
 
-	const { id } = useParams<{ id: string }>();
-
 	useEffect(() => {
-		dispatch(doGetDocuments({ id }));
-	}, [dispatch, id]);
+		dispatch(doGetDocuments());
+	}, [dispatch]);
 
 	let selectedD: any = selectedDocument ? selectedDocument : { metadata: {} };
 
@@ -70,18 +67,11 @@ const Documents: React.FC = () => {
 		setShowModal(false);
 	}
 
-	function setFileData(file: any) {
-		console.log('file', file);
-		dispatch(doUploadDocuments(file));
-	}
-
 	function trigger(name: string) {
 		return (
 			<button className="no-button grey-button document-trigger">
 				<IonIcon icon={documentsIcon} />
-				<span>
-					{name} {id ? `(${id})` : ''}
-				</span>
+				<span>{name}</span>
 			</button>
 		);
 	}
