@@ -82,7 +82,10 @@ export const doCreateAgreement = (payload: {
 		const manager = BlockchainFactory.getWalletManager();
 		const storage = manager.getKeyStorage();
 		const rawWallet = await storage.find<KeyStorageModel>(unlockedWallet._id);
-		const web3 = BlockchainFactory.getWeb3Instance(rawWallet.keypairs);
+		const web3 = BlockchainFactory.getWeb3Instance(
+			unlockedWallet.address,
+			rawWallet.keypairs
+		);
 		const contract = ContractFactory.getAgrementContract(web3);
 		const agreement = await contract.methods
 			.create(signatoryA, signatoryB, validUntil, formId, form)
@@ -118,7 +121,10 @@ export const doGetDocuments = () => async (
 		const manager = BlockchainFactory.getWalletManager();
 		const storage = manager.getKeyStorage();
 		const rawWallet = await storage.find<KeyStorageModel>(unlockedWallet._id);
-		const web3 = BlockchainFactory.getWeb3Instance(rawWallet.keypairs);
+		const web3 = BlockchainFactory.getWeb3Instance(
+			unlockedWallet.address,
+			rawWallet.keypairs
+		);
 
 		const contract = ContractFactory.getAgrementContract(web3);
 		const events = await contract.getPastEvents('AgreementCreated', {
