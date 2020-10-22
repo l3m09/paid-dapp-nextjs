@@ -11,7 +11,7 @@ import {
 	IonTitle
 } from '@ionic/react';
 
-import React, {useEffect} from 'react';
+import React from 'react';
 import { useLocation } from 'react-router-dom';
 import {
 	// archiveOutline,
@@ -45,9 +45,6 @@ const Menu: React.FC = () => {
 
 	const { unlockedWallet } = wallet;
 
-	useEffect(() => {
-		console.log('unlockedWallet', unlockedWallet);
-	}, []);
 	const appPages: AppPage[] = [
 		{
 			title: 'Wallets',
