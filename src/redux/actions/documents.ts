@@ -1,9 +1,12 @@
 import { DocumentsActionTypes } from '../actionTypes/documents';
-import { ethers } from 'ethers';
-import { KeyStorageModel } from 'cea-crypto-wallet/dist/key-storage/KeyStorageModel';
-import { BlockchainFactory } from '../../utils/blockchainFactory';
-import { ContractFactory } from '../../utils/contractFactory';
-import { signAndSendRawTransaction } from '../../utils/signAndSendTransaction';
+import { ContractTransaction, ethers } from 'ethers';
+import { BlockchainFactory, GETH_URL } from '../../utils/blockchainFactory';
+import {
+	AGREEMENT_ADDRESS,
+	ContractFactory
+} from '../../utils/contractFactory';
+import Web3 from 'web3';
+import Agreement from '../../contracts/Agreement.json';
 
 const createAgreementFormPayload = (obj: any) => {
 	const types: string[] = [];
@@ -54,6 +57,7 @@ const createAgreement = () => {
 };
 
 // ACTIONS
+
 export const doCreateAgreement = (payload: {
 	signatoryA: string;
 	signatoryB: string;
@@ -79,31 +83,25 @@ export const doCreateAgreement = (payload: {
 			throw new Error('Not unlocked wallet found');
 		}
 
-		const manager = BlockchainFactory.getWalletManager();
-		const storage = manager.getKeyStorage();
-		const rawWallet = await storage.find<KeyStorageModel>(unlockedWallet._id);
-		const web3 = BlockchainFactory.getWeb3Instance(
-			unlockedWallet.address,
-			rawWallet.keypairs
+		const ethersWallet = await BlockchainFactory.getWallet(unlockedWallet._id);
+		const contract = ContractFactory.getAgrementContract(ethersWallet);
+		const balance = await ethersWallet.provider.getBalance(
+			unlockedWallet.address
 		);
-		const privateKey = BlockchainFactory.getPrivateKey(rawWallet.keypairs);
-		const contract = ContractFactory.getAgrementContract(web3);
-
-		const encodedFunctionCall = contract.methods
-			.create(signatoryA, signatoryB, validUntil, formId, form)
-			.encodeABI();
-		const transactonReceipt = await signAndSendRawTransaction(
-			web3,
-			privateKey,
-			contract.options.address,
-			null,
-			null,
-			encodedFunctionCall
+		console.log(`Balance of ${unlockedWallet.address} is ${balance}`);
+		const agreementTransaction: ContractTransaction = await contract.create(
+			signatoryA,
+			signatoryB,
+			validUntil,
+			formId,
+			form
 		);
-		if (transactonReceipt?.status) {
+		const receipt = await agreementTransaction.wait();
+		console.log('Transaction receipt', receipt);
+		if (receipt.status === 1) {
 			dispatch(createAgreement());
 		} else {
-			throw new Error('Transaction not success');
+			throw new Error('Transaction failed');
 		}
 	} catch (err) {
 		console.log(err);
@@ -123,30 +121,22 @@ export const doGetDocuments = () => async (
 		const { wallet } = getState();
 		const { unlockedWallet, currentWallet } = wallet;
 		if (!unlockedWallet) {
-			throw new Error('Not unlocked wallet found');
+			// throw new Error('Not unlocked wallet found');
 		}
 
 		if (!currentWallet) {
-			throw new Error('Not current wallet found');
+			// throw new Error('Not current wallet found');
 		}
 
-		const { address } = currentWallet;
+		// const { address } = currentWallet;
+		const web3 = new Web3(GETH_URL);
 
-		const manager = BlockchainFactory.getWalletManager();
-		const storage = manager.getKeyStorage();
-		const rawWallet = await storage.find<KeyStorageModel>(unlockedWallet._id);
-		const web3 = BlockchainFactory.getWeb3Instance(
-			unlockedWallet.address,
-			rawWallet.keypairs
+		const contract = new web3.eth.Contract(
+			Agreement.abi as any,
+			AGREEMENT_ADDRESS
 		);
-
-		const contract = ContractFactory.getAgrementContract(web3);
-		const events = await contract.getPastEvents('AgreementCreated', {
-			filter: { from: [address], to: [address] },
-			fromBlock: 0,
-			toBlock: 'latest'
-		});
-
+		const events = await contract.getPastEvents('AgreementCreated');
+		console.log('events', events);
 		const agreements = events.map((data) => {
 			const {
 				returnValues,

@@ -8,7 +8,7 @@ import {
 } from '@ionic/react';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {doSetCurrentWallet, doUnlockWallet} from '../redux/actions/wallet';
+import { doUnlockWallet } from '../redux/actions/wallet';
 
 interface Props {
 	show: boolean;
@@ -21,7 +21,12 @@ interface UnlockForm {
 	filled: boolean;
 }
 
-const UnlockWallet: React.FC<Props> = ({selectedWallet, show, dismissible, dismiss}) => {
+const UnlockWallet: React.FC<Props> = ({
+	selectedWallet,
+	show,
+	dismissible,
+	dismiss
+}) => {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
@@ -41,7 +46,6 @@ const UnlockWallet: React.FC<Props> = ({selectedWallet, show, dismissible, dismi
 	);
 	const { unlockingWallet, error, unlockedWallet } = wallet;
 
-
 	let unlockForm: UnlockForm = {
 		filled: false,
 		password: ''
@@ -58,14 +62,23 @@ const UnlockWallet: React.FC<Props> = ({selectedWallet, show, dismissible, dismi
 
 	const onSubmit = () => {
 		// e.preventDefault();
-		dispatch(doUnlockWallet({
-			walletId: selectedWallet._id,
-			password: unlockForm.password
-		}))
+		dispatch(
+			doUnlockWallet({
+				walletId: selectedWallet._id,
+				password: unlockForm.password
+			})
+		);
 	};
 
 	return (
-		<IonModal onDidDismiss={() => {dismiss()}} backdropDismiss={dismissible} isOpen={show} cssClass="agreement-content phrase-name-password unlock-modal">
+		<IonModal
+			onDidDismiss={() => {
+				dismiss();
+			}}
+			backdropDismiss={dismissible}
+			isOpen={show}
+			cssClass="agreement-content phrase-name-password unlock-modal"
+		>
 			<h5>
 				<IonTitle>Unlock Wallet</IonTitle>
 			</h5>

@@ -1,48 +1,26 @@
 import {
 	AlgorithmType,
 	createWalletManager,
-	KeyModel,
 	WalletManager
 } from 'cea-crypto-wallet';
-import Web3 from 'web3';
+import { KeyStorageModel } from 'cea-crypto-wallet/dist/key-storage/KeyStorageModel';
+import { ethers, Wallet } from 'ethers';
 
-const GETH_URL =
-	'https://rinkeby.infura.io/v3/92ed13edfad140409ac24457a9c4e22d';
+export const GETH_URL =
+	'wss://goofy-austin:tyke-racing-reload-curing-fade-tricky@ws-nd-645-752-688.p2pify.com';
 
 export class BlockchainFactory {
-	private static _web3: Web3 | null = null;
+	private static _provider: ethers.providers.WebSocketProvider;
 	private static _walletManager: WalletManager | null = null;
 
-	public static getWeb3Instance = (address: string, keyModel: KeyModel) => {
-		if (!BlockchainFactory._web3) {
-			BlockchainFactory._web3 = new Web3(GETH_URL);
-		}
-
-		const privateKey = BlockchainFactory.getPrivateKey(keyModel);
-		if (privateKey) {
-			BlockchainFactory._web3.eth.accounts.wallet.add({
-				privateKey,
-				address
-			});
-		}
-
-		BlockchainFactory._web3.eth.defaultAccount = address;
-
-		return BlockchainFactory._web3;
-	};
-
-	public static getPrivateKey(keyModel: KeyModel) {
-		const keyService = BlockchainFactory._walletManager?.getKeyService();
-		if (keyService) {
-			const privateKey = keyService.getPrivateKey(
-				AlgorithmType.ES256K,
-				keyModel
+	public static getProvider = () => {
+		if (!BlockchainFactory._provider) {
+			BlockchainFactory._provider = new ethers.providers.WebSocketProvider(
+				GETH_URL
 			);
-			return privateKey;
 		}
-
-		return '';
-	}
+		return BlockchainFactory._provider;
+	};
 
 	public static getWalletManager = () => {
 		if (!BlockchainFactory._walletManager) {
@@ -50,5 +28,19 @@ export class BlockchainFactory {
 		}
 
 		return BlockchainFactory._walletManager;
+	};
+
+	public static getWallet = async (walletId: string) => {
+		const manager = BlockchainFactory.getWalletManager();
+		const storage = manager.getKeyStorage();
+		const rawWallet = await storage.find<KeyStorageModel>(walletId);
+		const provider = BlockchainFactory.getProvider();
+
+		const privateKey =
+			manager
+				.getKeyService()
+				?.getPrivateKey(AlgorithmType.ES256K, rawWallet.keypairs) || '';
+		const wallet = new Wallet(privateKey, provider);
+		return wallet;
 	};
 }

@@ -1,17 +1,16 @@
-import Web3 from 'web3';
-import { Contract } from 'web3-eth-contract';
+import { Contract, Wallet } from 'ethers';
 import Agreement from '../contracts/Agreement.json';
-
-const AGREEMENT_ADDRESS = '0x91Df554FA6Abc7f42b3ad2465f4969EE1658Dd4f';
+export const AGREEMENT_ADDRESS = '0x949440afDc1714e3277abbbf96A9b4A66583c7fd';
 
 export class ContractFactory {
 	private static _agreementContract: Contract | null = null;
 
-	public static getAgrementContract = (web3: Web3) => {
+	public static getAgrementContract = (wallet: Wallet) => {
 		if (!ContractFactory._agreementContract) {
-			ContractFactory._agreementContract = new web3.eth.Contract(
-				Agreement.abi as any,
-				AGREEMENT_ADDRESS
+			ContractFactory._agreementContract = new Contract(
+				AGREEMENT_ADDRESS,
+				Agreement.abi,
+				wallet
 			);
 		}
 		return ContractFactory._agreementContract;

@@ -104,27 +104,29 @@ const Documents: React.FC = () => {
 								return (
 									<Collapsible
 										contentInnerClassName="document-container"
-										trigger={trigger(document.metadata.name)}
+										trigger={trigger(document.id)}
 										key={index}
 									>
 										<div className="document-titles">
 											{document.documents
-												? document.documents.map((file: any, i: number) => {
-														return (
-															<div key={i} className="document-title-wrapper">
-																<div
-																	className="document-title"
-																	onClick={() => {
-																		showDocument(file);
-																	}}
-																>
-																	<IonIcon icon={documentIcon} />
-																	<span>{file.metadata.name}</span>
+												? document.documents.map(
+														(agreement: any, i: number) => {
+															return (
+																<div key={i} className="document-title-wrapper">
+																	<div
+																		className="document-title"
+																		onClick={() => {
+																			showDocument(agreement);
+																		}}
+																	>
+																		<IonIcon icon={documentIcon} />
+																		<span>{agreement.id}</span>
+																	</div>
+																	<hr />
 																</div>
-																<hr />
-															</div>
-														);
-												  })
+															);
+														}
+												  )
 												: null}
 										</div>
 									</Collapsible>
