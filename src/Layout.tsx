@@ -1,7 +1,7 @@
 import Login from './pages/auth/Login';
 // import SignUp from './pages/auth/SignUp';
 import Landing from './pages/Landing';
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { IonContent } from '@ionic/react';
 
 import { Route } from 'react-router-dom';
@@ -31,9 +31,9 @@ import './theme/main.scss';
 import Wallets from './pages/wallet/Wallets';
 import Documents from './pages/documents/Documents';
 import Agreements from './pages/documents/agreements/Agreements';
-import {useHistory} from "react-router";
-import {useDispatch, useSelector} from "react-redux";
-import {doGetCurrentWallet, doGetWallets} from "./redux/actions/wallet";
+import { useHistory } from 'react-router';
+import { useDispatch, useSelector } from 'react-redux';
+import { doGetCurrentWallet, doGetWallets } from './redux/actions/wallet';
 
 import UnlockWallet from './components/UnlockWallet';
 
@@ -41,13 +41,13 @@ const Layout: React.FC = () => {
 	const history = useHistory();
 	const dispatch = useDispatch();
 	const wallet = useSelector((state: any) => state.wallet);
-	const { wallets, loadingWallets, currentWallet, unlockedWallet, unlockingWallet } = wallet;
+	const { wallets, currentWallet, unlockedWallet } = wallet;
 
 	const [showUnlockWalletModal, setShowUnlockWalletModal] = useState(false);
 
 	useEffect(() => {
 		dispatch(doGetWallets());
-		dispatch(doGetCurrentWallet())
+		dispatch(doGetCurrentWallet());
 	}, [dispatch]);
 
 	useEffect(() => {
@@ -57,14 +57,13 @@ const Layout: React.FC = () => {
 		} else if (currentWallet !== null) {
 			setShowUnlockWalletModal(true);
 		} else if (wallets.length > 0) {
-			history.push('/wallets')
+			history.push('/wallets');
 			setShowUnlockWalletModal(false);
 		} else {
 			setShowUnlockWalletModal(false);
-			history.push('/')
+			history.push('/');
 		}
-
-	}, [currentWallet, wallets, unlockedWallet]);
+	}, [currentWallet, wallets, unlockedWallet, history]);
 
 	return (
 		<IonContent>
@@ -73,7 +72,9 @@ const Layout: React.FC = () => {
 			<Route path="/wallets" component={Wallets} exact />
 			<Route path="/documents/:id?" component={Documents} exact />
 			<Route path="/agreements/:type" component={Agreements} exact />
-			{ currentWallet !== null ? <UnlockWallet show={showUnlockWalletModal}/> : null}
+			{currentWallet !== null ? (
+				<UnlockWallet show={showUnlockWalletModal} />
+			) : null}
 		</IonContent>
 	);
 };
