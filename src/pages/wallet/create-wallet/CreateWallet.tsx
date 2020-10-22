@@ -12,7 +12,7 @@ import {
 } from '@ionic/react';
 import Instructions from './Instructions';
 import SeedPhrase from './SeedPhrase';
-import Completed from './Completed';
+// import Completed from './Completed';
 import ConfirmPhrase from './ConfirmPhrase';
 import NamePassword from './NamePassword';
 
@@ -78,9 +78,9 @@ const CreateWallet: React.FC<CreateWalletProps> = ({ show, dismiss }) => {
 					<IonSlide>
 						<NamePassword current={slidesRef.current} />
 					</IonSlide>
-					<IonSlide>
-						<Completed current={slidesRef.current} dismiss={doDismiss} />
-					</IonSlide>
+					{/*<IonSlide>*/}
+					{/*	<Completed current={slidesRef.current} dismiss={doDismiss} />*/}
+					{/*</IonSlide>*/}
 				</IonSlides>
 			</IonContent>
 		</IonModal>

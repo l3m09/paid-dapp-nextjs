@@ -120,3 +120,7 @@ ion-input {
   background-color: $brand-secondary;
   --ion-color-base: $brand-secondary !important;
 }
+
+.item-interactive.item-has-focus {
+  --highlight-background: none !important;
+}

@@ -1,34 +1,75 @@
 import {
-    IonIcon,
     IonContent,
     IonHeader,
-    IonPage,
     IonLabel,
     IonTitle,
     IonItem,
     IonButton,
-    IonRouterLink,
     IonTextarea,
     IonText,
-    IonList,
-    IonPopover
+    IonModal,
+    IonToolbar,
+    IonButtons,
+    IonInput
 } from '@ionic/react';
-import React, {useState} from 'react';
-import { arrowBackOutline } from 'ionicons/icons';
-import { useSelector } from 'react-redux';
+import React from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {doImportWallet} from "../../redux/actions/wallet";
 
-const Import: React.FC = () => {
+interface Props {
+    show: boolean;
+    dismissible?: boolean;
+    dismiss: () => void;
+}
+
+interface WalletInfo {
+    name: string;
+    password: string;
+    mnemonic: string;
+    verified: boolean;
+}
+
+
+const ImportWallet: React.FC<Props> = ({show, dismiss}) => {
+    const dispatch = useDispatch();
     const wallet = useSelector((state: any) => state.wallet);
-    const { loading } = wallet;
-    const [showPopover, setShowPopover] = useState(false);
+    const { importingWallet } = wallet;
 
+    let walletInfo: WalletInfo = { name: '', password: '', verified: false, mnemonic: '' };
+
+    function verifyInfo() {
+        if (walletInfo.name.length > 0 && walletInfo.password.length > 3 && walletInfo.mnemonic.length > 12) {
+            walletInfo.verified = true;
+        }
+    }
+    
+    function nameChanged(e: any) {
+        walletInfo.name = e.target.value;
+        verifyInfo();
+    }
+    function passwordChanged(e: any) {
+        walletInfo.password = e.target.value;
+        verifyInfo();
+    }
+    function mnemonicChanged(e: any) {
+        walletInfo.mnemonic = e.target.value;
+        verifyInfo();
+    }
+    function onSubmit() {
+        dispatch(doImportWallet(walletInfo))
+    }
+    
     return (
-        <IonPage >
-            <IonHeader class="backarrow-header">
-                <IonRouterLink routerLink="/">
-                    <IonIcon icon={arrowBackOutline}/>
-                </IonRouterLink>
-                <IonTitle>Import Wallet</IonTitle>
+        <IonModal isOpen={show} onDidDismiss={() => {dismiss()}}>
+            <IonHeader translucent>
+                <IonToolbar>
+                    <IonTitle>Import a Wallet</IonTitle>
+                    <IonButtons slot="end">
+                        <IonButton disabled={importingWallet} buttonType="" fill="clear" onClick={() => dismiss()}>
+                            Cancel
+                        </IonButton>
+                    </IonButtons>
+                </IonToolbar>
             </IonHeader>
 
             <IonContent fullscreen class="import-content wallet-content">
@@ -39,11 +80,37 @@ const Import: React.FC = () => {
                 </IonItem>
 
                 <form action="" className="import-form">
-
+                    <IonItem>
+                        <IonLabel position="stacked">Wallet Name</IonLabel>
+                        <IonInput
+                            title="Label"
+                            type="text"
+                            placeholder="Enter a name for this wallet"
+                            value={walletInfo.name}
+                            onInput={(e) => {
+                                nameChanged(e);
+                            }}
+                        />
+                    </IonItem>
+                    <IonItem>
+                        <IonLabel position="stacked">Password</IonLabel>
+                        <IonInput
+                            title="password"
+                            type="password"
+                            placeholder="Enter a password for this wallet"
+                            value={walletInfo.password}
+                            onInput={passwordChanged}
+                        />
+                    </IonItem>
                     <IonItem>
                         <IonLabel position="stacked">Phrase</IonLabel>
-                        <IonTextarea title="Phrase" placeholder="Enter your seed phrase"></IonTextarea>
-                        <IonText>
+                        <IonTextarea 
+                            title="Phrase" 
+                            placeholder="Enter your seed phrase"
+                            value={walletInfo.mnemonic}
+                            onInput={mnemonicChanged}
+                        />
+                        <IonText className="textarea-hint">
                             <small>
                                 Typically 12 (sometimes 24) words separeted by single spaces
                             </small>
@@ -51,34 +118,18 @@ const Import: React.FC = () => {
                     </IonItem>
                     <IonItem class="form-options">
                         <IonButton
-                            routerLink="/wallets"
+                            onClick={() => {onSubmit()}}
                             class="purple-button import-button"
                             color="8500FF"
-                            disabled={loading}
+                            disabled={importingWallet}
                         >
-                            {loading ? 'Loading..' : 'Import'}
+                            {importingWallet ? 'Loading..' : 'Import'}
                         </IonButton>
                     </IonItem>
                 </form>
-                <IonItem class="">
-                    <span className="what-is"><IonRouterLink onClick={() => setShowPopover(true)}>What is a Recovery Phrase?</IonRouterLink></span>
-                    <IonPopover
-                        isOpen={showPopover}
-                        cssClass='my-custom-class'
-                        onDidDismiss={e => setShowPopover(false)}
-                    >
-                        <IonList>
-                           <IonItem>
-                               Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                               Consectetur consequatur cumque deserunt libero
-                               pariatur perspiciatis praesentium quos! Ab aliquam cumque,
-                           </IonItem>
-                        </IonList>
-                    </IonPopover>
-                </IonItem>
             </IonContent>
-        </IonPage>
+        </IonModal>
     );
 };
 
-export default Import;
+export default ImportWallet;

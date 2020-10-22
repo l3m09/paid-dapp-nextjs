@@ -9,7 +9,7 @@ import {
 	IonTitle,
 	IonToolbar,
 	IonButton,
-	IonIcon
+	IonIcon, IonItemDivider
 } from '@ionic/react';
 import { checkmarkCircle } from 'ionicons/icons';
 
@@ -18,19 +18,27 @@ import { useDispatch, useSelector } from 'react-redux';
 import {doSetSelectedWallet} from '../../redux/actions/wallet';
 import CreateWallet from './create-wallet/CreateWallet';
 import UnlockWallet from '../../components/UnlockWallet';
+import ImportWallet from "./ImportWallet";
 
 const Wallets: React.FC = () => {
 	const dispatch = useDispatch();
 	const wallet = useSelector((state: any) => state.wallet);
 	const [showCreateModal, setShowCreateModal] = useState(false);
 	const [showUnlockWalletModal, setShowUnlockWalletModal] = useState(false);
+	const [showImportWalletModal, setShowImportWalletModal] = useState(false);
 
-	const dismissModal = () => {
+	const { wallets, unlockedWallet, selectedWallet } = wallet;
+
+	const dismissCreateModal = () => {
 		setShowCreateModal(false);
+	};
+	const dismissUnlockWalletModal = () => {
 		setShowUnlockWalletModal(false);
 		dispatch(doSetSelectedWallet(null))
 	};
-	const { wallets, unlockedWallet, selectedWallet } = wallet;;
+	const dismissImportModal = () => {
+		setShowImportWalletModal(false)
+	}
 
 	function openUnlockWallet(wallet: any) {
 		dispatch(doSetSelectedWallet(wallet))
@@ -84,6 +92,7 @@ const Wallets: React.FC = () => {
 						}
 					})}
 				</IonItemGroup>
+				<IonItemDivider/>
 				<IonItemGroup>
 					<IonItem class="form-options">
 						<IonButton
@@ -91,15 +100,22 @@ const Wallets: React.FC = () => {
 							class=""
 							color="primary"
 						>
-							Add
+							Create Wallet
 						</IonButton>
-						{/*<IonButton routerLink="/wallet/import" class="" color="secondary">*/}
-						{/*	Import*/}
-						{/*</IonButton>*/}
+					</IonItem>
+					<IonItem class="form-options">
+						<IonButton
+							onClick={() => setShowImportWalletModal(true)}
+							class=""
+							color="primary"
+						>
+							Import Wallet
+						</IonButton>
 					</IonItem>
 				</IonItemGroup>
-				<CreateWallet show={showCreateModal} dismiss={dismissModal} />
-				{ selectedWallet !== null ? <UnlockWallet show={showUnlockWalletModal} dismissible={true} dismiss={dismissModal} selectedWallet={selectedWallet}/> : null}
+				<CreateWallet show={showCreateModal} dismiss={dismissCreateModal} />
+				<ImportWallet show={showImportWalletModal} dismiss={dismissImportModal} />
+				{ selectedWallet !== null ? <UnlockWallet show={showUnlockWalletModal} dismissible={true} dismiss={dismissUnlockWalletModal} selectedWallet={selectedWallet}/> : null}
 			</IonContent>
 		</IonPage>
 	);
