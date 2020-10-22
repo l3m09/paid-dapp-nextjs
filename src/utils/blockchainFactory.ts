@@ -13,19 +13,36 @@ export class BlockchainFactory {
 	private static _web3: Web3 | null = null;
 	private static _walletManager: WalletManager | null = null;
 
-	public static getWeb3Instance = (keyModel: KeyModel) => {
+	public static getWeb3Instance = (address: string, keyModel: KeyModel) => {
 		if (!BlockchainFactory._web3) {
 			BlockchainFactory._web3 = new Web3(GETH_URL);
 		}
 
-		const keyService = BlockchainFactory._walletManager?.getKeyService();
-		if (keyService) {
-			const pk = keyService.getPrivateKey(AlgorithmType.ES256K, keyModel);
-			BlockchainFactory._web3.eth.accounts.wallet.clear().add(pk);
+		const privateKey = BlockchainFactory.getPrivateKey(keyModel);
+		if (privateKey) {
+			BlockchainFactory._web3.eth.accounts.wallet.add({
+				privateKey,
+				address
+			});
 		}
+
+		BlockchainFactory._web3.eth.defaultAccount = address;
 
 		return BlockchainFactory._web3;
 	};
+
+	public static getPrivateKey(keyModel: KeyModel) {
+		const keyService = BlockchainFactory._walletManager?.getKeyService();
+		if (keyService) {
+			const privateKey = keyService.getPrivateKey(
+				AlgorithmType.ES256K,
+				keyModel
+			);
+			return privateKey;
+		}
+
+		return '';
+	}
 
 	public static getWalletManager = () => {
 		if (!BlockchainFactory._walletManager) {

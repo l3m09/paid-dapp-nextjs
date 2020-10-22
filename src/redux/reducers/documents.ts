@@ -40,6 +40,17 @@ export const DocumentsReducer = function (state = initialState, action: any) {
 			return { ...state, agreementFormInfo: payload };
 		}
 
+		case DocumentsActionTypes.CREATE_AGREEMENT_LOADING: {
+			return { ...state, loading: true };
+		}
+
+		case DocumentsActionTypes.CREATE_AGREEMENT_SUCCESS: {
+			return { ...state, loading: false };
+		}
+
+		case DocumentsActionTypes.CREATE_AGREEMENT_FAILURE:
+			return { ...state, error: payload, loading: false };
+
 		default:
 			return state;
 	}
