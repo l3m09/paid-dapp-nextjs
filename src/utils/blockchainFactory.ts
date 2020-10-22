@@ -18,12 +18,8 @@ export class BlockchainFactory {
 			BlockchainFactory._web3 = new Web3(GETH_URL);
 		}
 
-		const keyService = BlockchainFactory._walletManager?.getKeyService();
-		if (keyService) {
-			const privateKey = keyService.getPrivateKey(
-				AlgorithmType.ES256K,
-				keyModel
-			);
+		const privateKey = BlockchainFactory.getPrivateKey(keyModel);
+		if (privateKey) {
 			BlockchainFactory._web3.eth.accounts.wallet.add({
 				privateKey,
 				address
@@ -34,6 +30,19 @@ export class BlockchainFactory {
 
 		return BlockchainFactory._web3;
 	};
+
+	public static getPrivateKey(keyModel: KeyModel) {
+		const keyService = BlockchainFactory._walletManager?.getKeyService();
+		if (keyService) {
+			const privateKey = keyService.getPrivateKey(
+				AlgorithmType.ES256K,
+				keyModel
+			);
+			return privateKey;
+		}
+
+		return '';
+	}
 
 	public static getWalletManager = () => {
 		if (!BlockchainFactory._walletManager) {

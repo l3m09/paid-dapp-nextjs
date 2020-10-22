@@ -3,6 +3,7 @@ import { ethers } from 'ethers';
 import { KeyStorageModel } from 'cea-crypto-wallet/dist/key-storage/KeyStorageModel';
 import { BlockchainFactory } from '../../utils/blockchainFactory';
 import { ContractFactory } from '../../utils/contractFactory';
+import { signAndSendRawTransaction } from '../../utils/signAndSendTransaction';
 
 const createAgreementFormPayload = (obj: any) => {
 	const types: string[] = [];
@@ -46,10 +47,9 @@ const setAgreementFormInfo = (formInfo: any) => {
 	};
 };
 
-const createAgreement = (agreementId: string) => {
+const createAgreement = () => {
 	return {
-		type: DocumentsActionTypes.CREATE_AGREEMENT_SUCCESS,
-		payload: agreementId
+		type: DocumentsActionTypes.CREATE_AGREEMENT_SUCCESS
 	};
 };
 
@@ -86,11 +86,25 @@ export const doCreateAgreement = (payload: {
 			unlockedWallet.address,
 			rawWallet.keypairs
 		);
+		const privateKey = BlockchainFactory.getPrivateKey(rawWallet.keypairs);
 		const contract = ContractFactory.getAgrementContract(web3);
-		const agreement = await contract.methods
+
+		const encodedFunctionCall = contract.methods
 			.create(signatoryA, signatoryB, validUntil, formId, form)
-			.send({ from: unlockedWallet.address });
-		dispatch(createAgreement(agreement));
+			.encodeABI();
+		const transactonReceipt = await signAndSendRawTransaction(
+			web3,
+			privateKey,
+			contract.options.address,
+			null,
+			null,
+			encodedFunctionCall
+		);
+		if (transactonReceipt?.status) {
+			dispatch(createAgreement());
+		} else {
+			throw new Error('Transaction not success');
+		}
 	} catch (err) {
 		console.log(err);
 		dispatch({
