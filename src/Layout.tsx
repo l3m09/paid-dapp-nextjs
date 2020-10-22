@@ -50,18 +50,22 @@ const Layout: React.FC = () => {
 		dispatch(doGetCurrentWallet());
 	}, [dispatch]);
 
+	const dismissModal = () => {
+		setShowUnlockWalletModal(false);
+	};
+
 	useEffect(() => {
 		if (unlockedWallet !== null) {
 			history.push('/documents/' + unlockedWallet.name);
-			setShowUnlockWalletModal(false);
+			dismissModal();
 		} else if (currentWallet !== null) {
-			setShowUnlockWalletModal(true);
+			setShowUnlockWalletModal(false);
 		} else if (wallets.length > 0) {
-			history.push('/wallets');
-			setShowUnlockWalletModal(false);
+			history.push('/wallets')
+			dismissModal();
 		} else {
-			setShowUnlockWalletModal(false);
-			history.push('/');
+			dismissModal();
+			history.push('/')
 		}
 	}, [currentWallet, wallets, unlockedWallet, history]);
 
@@ -72,9 +76,7 @@ const Layout: React.FC = () => {
 			<Route path="/wallets" component={Wallets} exact />
 			<Route path="/documents/:id?" component={Documents} exact />
 			<Route path="/agreements/:type" component={Agreements} exact />
-			{currentWallet !== null ? (
-				<UnlockWallet show={showUnlockWalletModal} />
-			) : null}
+			{ currentWallet !== null ? <UnlockWallet selectedWallet={currentWallet} show={showUnlockWalletModal} dismiss={dismissModal}/> : null}
 		</IonContent>
 	);
 };
