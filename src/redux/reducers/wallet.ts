@@ -11,6 +11,7 @@ const initialState = {
 	confirmedSeedPhrase: [],
 	wallets: [],
 	currentWallet: null,
+	selectedWallet: null,
 	settingCurrentWallet: false,
 	gettingCurrentWallet: false,
 	unlockingWallet: false,
@@ -101,7 +102,10 @@ export const WalletReducer = function (state = initialState, action: any) {
 			return {
 				...state,
 				wallets: [...state.wallets, payload],
-				importingWallet: false
+				importingWallet: false,
+				seedPhrase: [],
+				permanentSeedPhrase: [],
+				confirmedSeedPhrase: []
 			};
 
 		case WalletActionTypes.IMPORT_WALLET_FAILURE:
@@ -138,11 +142,21 @@ export const WalletReducer = function (state = initialState, action: any) {
 			return { ...state, unlockingWallet: true };
 
 		case WalletActionTypes.UNLOCK_WALLET_SUCCESS:
-			return { ...state, unlockedWallet: payload, unlockingWallet: false, error: null };
+			return {
+				...state,
+				unlockedWallet: payload,
+				unlockingWallet: false,
+				error: null,
+				seedPhrase: [],
+				permanentSeedPhrase: [],
+				confirmedSeedPhrase: []
+			};
 
 		case WalletActionTypes.UNLOCK_WALLET_FAILURE:
 			return { ...state, error: payload, unlockingWallet: false };
 
+		case WalletActionTypes.SET_SELECTED_WALLET_SUCCESS:
+			return { ...state, selectedWallet: payload, error: null };
 		default:
 			return state;
 	}

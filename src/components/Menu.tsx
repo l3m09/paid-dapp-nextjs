@@ -96,7 +96,7 @@ const Menu: React.FC = () => {
 	const location = useLocation();
 
 	return (
-		<IonMenu contentId="main" type="push">
+		<IonMenu contentId="main" type="push" swipeGesture={false}>
 			<IonContent>
 				<IonList id="inbox-list">
 					<IonListHeader>Menu</IonListHeader>

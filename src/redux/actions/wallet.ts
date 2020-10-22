@@ -43,6 +43,13 @@ const getCurrentWallet = (payload: any) => {
 	};
 };
 
+const setSelectedWallet = (payload: any) => {
+	return {
+		type: WalletActionTypes.SET_SELECTED_WALLET_SUCCESS,
+		payload
+	};
+};
+
 const createWallet = (payload: any) => {
 	return {
 		type: WalletActionTypes.CREATE_WALLET_SUCCESS,
@@ -250,4 +257,8 @@ export const doExportWallet = (payload: any) => async (dispatch: any) => {
 			payload: err.msg
 		});
 	}
+};
+
+export const doSetSelectedWallet = (wallet: any) => async (dispatch: any) => {
+		dispatch(setSelectedWallet(wallet));
 };
