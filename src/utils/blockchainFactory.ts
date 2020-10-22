@@ -2,7 +2,6 @@ import {
 	AlgorithmType,
 	createWalletManager,
 	KeyModel,
-	Wallet,
 	WalletManager
 } from 'cea-crypto-wallet';
 import Web3 from 'web3';

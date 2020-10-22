@@ -25,27 +25,33 @@ const UnlockWallet: React.FC<Props> = ({selectedWallet, show, dismissible, dismi
 	const dispatch = useDispatch();
 
 	useEffect(() => {
+		console.log('dismissible', dismissible);
 	}, [dismissible]);
 
 	// const { type } = useParams<{ type: string }>();
 	const wallet = useSelector(
-		(state: { wallet: { currentWallet: any, unlockingWallet: boolean, error: any, unlockedWallet: any } }) => state.wallet
+		(state: {
+			wallet: {
+				currentWallet: any;
+				unlockingWallet: boolean;
+				error: any;
+				unlockedWallet: any;
+			};
+		}) => state.wallet
 	);
 	const { unlockingWallet, error, unlockedWallet } = wallet;
 
 
 	let unlockForm: UnlockForm = {
 		filled: false,
-		password: '',
+		password: ''
 	};
 	function passwordChanged(e: any) {
 		unlockForm.password = e.target.value;
 		verifyInfo();
 	}
 	function verifyInfo() {
-		if (
-			unlockForm.password.length > 0
-		) {
+		if (unlockForm.password.length > 0) {
 			unlockForm.filled = true;
 		}
 	}
@@ -83,9 +89,12 @@ const UnlockWallet: React.FC<Props> = ({selectedWallet, show, dismissible, dismi
 							passwordChanged(e);
 						}}
 					/>
-
 				</IonItem>
-				<IonItem><IonLabel position="stacked" className="text-error">{error}</IonLabel></IonItem>
+				<IonItem>
+					<IonLabel position="stacked" className="text-error">
+						{error}
+					</IonLabel>
+				</IonItem>
 				<IonItem class="form-options">
 					<IonButton
 						// routerLink="/phrase/instructions"
@@ -98,7 +107,7 @@ const UnlockWallet: React.FC<Props> = ({selectedWallet, show, dismissible, dismi
 					>
 						{unlockingWallet ? 'Loading..' : 'Unlock'}
 					</IonButton>
-					{unlockedWallet ?
+					{unlockedWallet ? (
 						<IonButton
 							// routerLink="/phrase/instructions"
 							onClick={() => {
@@ -107,8 +116,7 @@ const UnlockWallet: React.FC<Props> = ({selectedWallet, show, dismissible, dismi
 						>
 							Cancel
 						</IonButton>
-					: null
-					}
+					) : null}
 				</IonItem>
 			</form>
 		</IonModal>

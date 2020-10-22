@@ -4,17 +4,15 @@ import {
 	IonItem,
 	IonInput,
 	IonButton,
-	IonTitle,
-	IonTextarea
+	IonTitle
 } from '@ionic/react';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
 	doCreateAgreement,
 	doSetAgreementFormInfo
 } from '../../../../redux/actions/documents';
 import { useParams } from 'react-router';
-import { doGetCurrentWallet } from '../../../../redux/actions/wallet';
 
 interface AgreementFormProps {
 	current: any;
@@ -94,7 +92,7 @@ const VehicleForm: React.FC<AgreementFormProps> = ({ current }) => {
 				agreementForm: agreementInfo
 			})
 		);
-		slideNext().then((r) => {});
+		slideNext().then(() => {});
 	};
 
 	return (

@@ -1,14 +1,14 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import {
 	IonButton,
-	IonModal,
 	IonTitle,
 	IonContent,
 	IonHeader,
 	IonButtons,
 	IonToolbar,
 	IonSlide,
-	IonSlides, IonPage
+	IonSlides,
+	IonPage
 } from '@ionic/react';
 import { useParams, useHistory } from 'react-router';
 
@@ -19,52 +19,52 @@ import VehicleCompleted from './vehicle/VehicleCompleted';
 import RentalDescription from './rental/RentalDescription';
 import RentalForm from './rental/RentalForm';
 import RentalCompleted from './rental/RentalCompleted';
-import {useDispatch} from "react-redux";
-import {doSetAgreementFormInfo} from "../../../redux/actions/documents";
+import { useDispatch } from 'react-redux';
+import { doSetAgreementFormInfo } from '../../../redux/actions/documents';
 
 interface AgreementsProps {
 	show: boolean;
 	dismiss: () => void;
 }
 
-const Agreements: React.FC<AgreementsProps> = ({ show, dismiss }) => {
+const Agreements: React.FC<AgreementsProps> = () => {
 	const dispatch = useDispatch();
 	const history = useHistory();
-	const { type } = useParams<{ type: string; }>();
+	const { type } = useParams<{ type: string }>();
 
 	const slidesRef = useRef<HTMLIonSlidesElement | null>(null);
 	const slideOpts = {
 		initialSlide: 0,
 		speed: 400,
-		slidesPerView: 1,
+		slidesPerView: 1
 	};
 
 	const vehicleTemplate: any = (
 		<IonSlides pager={false} options={slideOpts} ref={slidesRef}>
 			<IonSlide>
-				<VehicleDescription current={slidesRef.current}/>
+				<VehicleDescription current={slidesRef.current} />
 			</IonSlide>
 			<IonSlide>
-				<VehicleForm current={slidesRef.current}/>
+				<VehicleForm current={slidesRef.current} />
 			</IonSlide>
 			<IonSlide>
-				<VehicleCompleted current={slidesRef.current}/>
+				<VehicleCompleted current={slidesRef.current} />
 			</IonSlide>
 		</IonSlides>
-	)
+	);
 	const rentalTemplate: any = (
 		<IonSlides pager={false} options={slideOpts} ref={slidesRef}>
 			<IonSlide>
-				<RentalDescription current={slidesRef.current}/>
+				<RentalDescription current={slidesRef.current} />
 			</IonSlide>
 			<IonSlide>
-				<RentalForm current={slidesRef.current}/>
+				<RentalForm current={slidesRef.current} />
 			</IonSlide>
 			<IonSlide>
-				<RentalCompleted current={slidesRef.current}/>
+				<RentalCompleted current={slidesRef.current} />
 			</IonSlide>
 		</IonSlides>
-	)
+	);
 
 	async function lockSwipes() {
 		await slidesRef.current?.slideTo(0);
@@ -72,17 +72,15 @@ const Agreements: React.FC<AgreementsProps> = ({ show, dismiss }) => {
 		await slidesRef.current?.lockSwipeToNext(true);
 	}
 
-	lockSwipes().then(r => {})
+	lockSwipes().then(() => {});
 
 	async function toDocuments() {
 		dispatch(doSetAgreementFormInfo({}));
 		await slidesRef.current?.lockSwipeToPrev(false);
 		await slidesRef.current?.lockSwipeToNext(false);
-		await slidesRef.current?.slideTo(0).then(
-			() => {
-				history.push('/documents')
-			}
-		)
+		await slidesRef.current?.slideTo(0).then(() => {
+			history.push('/documents');
+		});
 	}
 	return (
 		<IonPage className="agreements-page">
@@ -90,7 +88,13 @@ const Agreements: React.FC<AgreementsProps> = ({ show, dismiss }) => {
 				<IonToolbar>
 					<IonTitle>Agreement</IonTitle>
 					<IonButtons slot="end">
-						<IonButton buttonType="" fill="clear" onClick={() => {toDocuments()}}>
+						<IonButton
+							buttonType=""
+							fill="clear"
+							onClick={() => {
+								toDocuments();
+							}}
+						>
 							Cancel
 						</IonButton>
 					</IonButtons>

@@ -1,5 +1,4 @@
 import { WalletActionTypes } from '../actionTypes/wallet';
-import { createWalletManager } from 'cea-crypto-wallet';
 import { Plugins } from '@capacitor/core';
 import { BlockchainFactory } from '../../utils/blockchainFactory';
 const { Storage } = Plugins;

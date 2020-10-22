@@ -1,6 +1,5 @@
 import { DocumentsActionTypes } from '../actionTypes/documents';
 import { ethers } from 'ethers';
-import { Wallet } from 'cea-crypto-wallet';
 import { KeyStorageModel } from 'cea-crypto-wallet/dist/key-storage/KeyStorageModel';
 import { BlockchainFactory } from '../../utils/blockchainFactory';
 import { ContractFactory } from '../../utils/contractFactory';
@@ -87,7 +86,7 @@ export const doCreateAgreement = (payload: {
 		const contract = ContractFactory.getAgrementContract(web3);
 		const agreement = await contract.methods
 			.create(signatoryA, signatoryB, validUntil, formId, form)
-			.send();
+			.send({ from: unlockedWallet.address });
 		dispatch(createAgreement(agreement));
 	} catch (err) {
 		console.log(err);
@@ -98,18 +97,23 @@ export const doCreateAgreement = (payload: {
 	}
 };
 
-export const doGetDocuments = (currentWallet: any) => async (
+export const doGetDocuments = () => async (
 	dispatch: any,
 	getState: () => { wallet: any }
 ) => {
 	dispatch({ type: DocumentsActionTypes.GET_DOCUMENTS_LOADING });
 	try {
-		const { address } = currentWallet;
 		const { wallet } = getState();
-		const { unlockedWallet } = wallet;
+		const { unlockedWallet, currentWallet } = wallet;
 		if (!unlockedWallet) {
 			throw new Error('Not unlocked wallet found');
 		}
+
+		if (!currentWallet) {
+			throw new Error('Not current wallet found');
+		}
+
+		const { address } = currentWallet;
 
 		const manager = BlockchainFactory.getWalletManager();
 		const storage = manager.getKeyStorage();
@@ -180,10 +184,7 @@ export const doUploadDocuments = (file: any) => async (dispatch: any) => {
 	}
 };
 
-export const doGetSelectedDocument = (document: any) => (
-	dispatch: any,
-	payload: any
-) => {
+export const doGetSelectedDocument = (document: any) => (dispatch: any) => {
 	dispatch(getSelectedDocument({ document }));
 };
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
 	IonButton,
 	IonModal,
@@ -44,11 +44,9 @@ const CreateWallet: React.FC<CreateWalletProps> = ({ show, dismiss }) => {
 	async function doDismiss() {
 		await slidesRef.current?.lockSwipeToPrev(false);
 		await slidesRef.current?.lockSwipeToNext(false);
-		await slidesRef.current?.slideTo(0).then(
-			() => {
-				dismiss()
-			}
-		)
+		await slidesRef.current?.slideTo(0).then(() => {
+			dismiss();
+		});
 	}
 	return (
 		<IonModal

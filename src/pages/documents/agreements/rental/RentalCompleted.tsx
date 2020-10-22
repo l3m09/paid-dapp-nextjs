@@ -4,33 +4,31 @@ import {
 	IonItem,
 	IonButton,
 	IonText,
-	IonModal,
+	IonModal
 } from '@ionic/react';
 import React, { useState } from 'react';
-import {useHistory} from 'react-router';
-import {useDispatch, useSelector} from "react-redux";
-import {doSetAgreementFormInfo} from "../../../../redux/actions/documents";
+import { useHistory } from 'react-router';
+import { useDispatch, useSelector } from 'react-redux';
+import { doSetAgreementFormInfo } from '../../../../redux/actions/documents';
 
 interface RentalCompletedProps {
 	current: any;
 }
 
-const RentalCompleted: React.FC<RentalCompletedProps> = ({current}) => {
+const RentalCompleted: React.FC<RentalCompletedProps> = ({ current }) => {
 	const history = useHistory();
 	const dispatch = useDispatch();
 	const [showModal, setShowModal] = useState(false);
 	const documentsState = useSelector((state: any) => state.documents);
-	const {loading, agreementFormInfo } = documentsState;
+	const { agreementFormInfo } = documentsState;
 	async function toDocuments() {
 		dispatch(doSetAgreementFormInfo({}));
 
 		await current.lockSwipeToPrev(false);
 		await current.lockSwipeToNext(false);
-		await current.slideTo(0).then(
-			() => {
-				history.push('/documents')
-			}
-		)
+		await current.slideTo(0).then(() => {
+			history.push('/documents');
+		});
 	}
 
 	return (
@@ -42,24 +40,31 @@ const RentalCompleted: React.FC<RentalCompletedProps> = ({current}) => {
 			</IonItem>
 			<IonItem>
 				<IonText class="phrase-content-sub-text phrase-completed-sub-text">
-					Have agreed with the conclusion of this transaction on <span className="text-primary">{agreementFormInfo.createdAt}</span>
+					Have agreed with the conclusion of this transaction on{' '}
+					<span className="text-primary">{agreementFormInfo.createdAt}</span>
 				</IonText>
 			</IonItem>
 			<IonItem>
 				<IonText class="phrase-content-sub-text phrase-completed-sub-text">
-					And accepted transference of the currency to (SELLER) wallet address <span className="text-primary">{agreementFormInfo.destinationWallet}</span>
+					And accepted transference of the currency to (SELLER) wallet address{' '}
+					<span className="text-primary">
+						{agreementFormInfo.destinationWallet}
+					</span>
 				</IonText>
 			</IonItem>
 			<IonItem>
 				<IonText class="phrase-content-sub-text phrase-completed-sub-text">
-					This offer to purchase is valid for Nine Days from date of offer and will not be valid if there are any
-					changes to the value of the vehicle due to physical or mechanical issues upon delivery to (SELLER)
+					This offer to purchase is valid for Nine Days from date of offer and
+					will not be valid if there are any changes to the value of the vehicle
+					due to physical or mechanical issues upon delivery to (SELLER)
 				</IonText>
 			</IonItem>
 
 			<IonItem class="form-options">
 				<IonButton
-					onClick={() => {toDocuments()}}
+					onClick={() => {
+						toDocuments();
+					}}
 					class="purple-button done-button"
 					color="8500FF"
 				>

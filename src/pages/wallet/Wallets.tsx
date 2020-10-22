@@ -8,7 +8,8 @@ import {
 	IonPage,
 	IonTitle,
 	IonToolbar,
-	IonButton, IonIcon
+	IonButton,
+	IonIcon
 } from '@ionic/react';
 import { checkmarkCircle } from 'ionicons/icons';
 
