@@ -221,6 +221,7 @@ export const doImportWallet = (payload: {
 		const { name, password, mnemonic } = payload;
 		const walletManager = BlockchainFactory.getWalletManager();
 		const ks = await walletManager.createWallet(password, mnemonic);
+		BlockchainFactory.setKeystore(ks);
 		const { _id, created } = ks;
 		const address = ethers.Wallet.fromMnemonic(ks.mnemonic).address;
 		dispatch(
