@@ -227,7 +227,21 @@ export const doImportWallet = (payload: {
 				address,
 				name
 			})
-		);
+		)
+		const importedWallet = {
+			_id,
+			address,
+			name
+		};
+		const stored = await Storage.get({ key: 'WALLETS' });
+		const encodedList = stored.value ? stored.value : `[]`;
+		const wallets: any[] = JSON.parse(encodedList);
+		wallets.push(importedWallet);
+		const encodedWallets = JSON.stringify(wallets);
+		await Storage.set({ key: 'WALLETS', value: encodedWallets });
+
+		dispatch(doSetCurrentWallet(importedWallet));
+		dispatch(unlockWallet({...importedWallet, mnemonic}));
 	} catch (err) {
 		dispatch({
 			type: WalletActionTypes.IMPORT_WALLET_FAILURE,
