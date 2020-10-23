@@ -29,6 +29,7 @@ import {
 	// giftSharp,
 	// giftOutline
 } from 'ionicons/icons';
+import {useSelector} from 'react-redux';
 
 interface AppPage {
 	url: string;
@@ -38,65 +39,31 @@ interface AppPage {
 	disabled: boolean;
 }
 
-const appPages: AppPage[] = [
-	{
-		title: 'Wallets',
-		url: '/wallets',
-		iosIcon: mailOutline,
-		mdIcon: mailSharp,
-		disabled: false
-	},
-	{
-		title: 'Agreements',
-		url: '/documents',
-		iosIcon: paperPlaneOutline,
-		mdIcon: paperPlaneSharp,
-		disabled: false
-	},
-	// {
-	// 	title: 'Settings',
-	// 	url: '/page/settings',
-	// 	iosIcon: heartOutline,
-	// 	mdIcon: heartSharp,
-	// 	disabled: true
-	// },
-	// {
-	// 	title: 'Help',
-	// 	url: '/page/help',
-	// 	iosIcon: archiveOutline,
-	// 	mdIcon: archiveSharp,
-	// 	disabled: true
-	// }
-];
-const labels: AppPage[] = [
-	// {
-	// 	title: 'Contacts',
-	// 	url: '/page/contacts',
-	// 	iosIcon: personAddSharp,
-	// 	mdIcon: personAddOutline,
-	// 	disabled: true
-	// },
-	// {
-	// 	title: 'View signing phrase',
-	// 	url: '/page/phrase',
-	// 	iosIcon: bookOutline,
-	// 	mdIcon: bookSharp,
-	// 	disabled: true
-	// },
-	// {
-	// 	title: 'Account',
-	// 	url: '/page/account',
-	// 	iosIcon: giftOutline,
-	// 	mdIcon: giftSharp,
-	// 	disabled: true
-	// }
-];
-
 const Menu: React.FC = () => {
 	const location = useLocation();
+	const wallet = useSelector((state: any) => state.wallet);
+
+	const { unlockedWallet } = wallet;
+
+	const appPages: AppPage[] = [
+		{
+			title: 'Wallets',
+			url: '/wallets',
+			iosIcon: mailOutline,
+			mdIcon: mailSharp,
+			disabled: false
+		},
+		{
+			title: 'Agreements',
+			url: '/documents',
+			iosIcon: paperPlaneOutline,
+			mdIcon: paperPlaneSharp,
+			disabled: false
+		},
+	];
 
 	return (
-		<IonMenu contentId="main" type="push" swipeGesture={false}>
+		<IonMenu contentId="main" type="push" swipeGesture={false} disabled={unlockedWallet === null}>
 			<IonContent>
 				<IonList id="inbox-list">
 					<IonListHeader>Menu</IonListHeader>
@@ -126,31 +93,31 @@ const Menu: React.FC = () => {
 					})}
 				</IonList>
 
-				<IonList id="labels-list">
-					{labels.map((appPage, index) => {
-						return (
-							<IonMenuToggle key={index} autoHide={false}>
-								<IonItem
-									disabled={appPage.disabled}
-									className={
-										location.pathname === appPage.url ? 'selected' : ''
-									}
-									routerLink={appPage.url}
-									routerDirection="none"
-									lines="none"
-									detail={false}
-								>
-									<IonIcon
-										slot="start"
-										ios={appPage.iosIcon}
-										md={appPage.mdIcon}
-									/>
-									<IonLabel>{appPage.title}</IonLabel>
-								</IonItem>
-							</IonMenuToggle>
-						);
-					})}
-				</IonList>
+				{/*<IonList id="labels-list">*/}
+				{/*	{labels.map((appPage, index) => {*/}
+				{/*		return (*/}
+				{/*			<IonMenuToggle key={index} autoHide={false}>*/}
+				{/*				<IonItem*/}
+				{/*					disabled={appPage.disabled}*/}
+				{/*					className={*/}
+				{/*						location.pathname === appPage.url ? 'selected' : ''*/}
+				{/*					}*/}
+				{/*					routerLink={appPage.url}*/}
+				{/*					routerDirection="none"*/}
+				{/*					lines="none"*/}
+				{/*					detail={false}*/}
+				{/*				>*/}
+				{/*					<IonIcon*/}
+				{/*						slot="start"*/}
+				{/*						ios={appPage.iosIcon}*/}
+				{/*						md={appPage.mdIcon}*/}
+				{/*					/>*/}
+				{/*					<IonLabel>{appPage.title}</IonLabel>*/}
+				{/*				</IonItem>*/}
+				{/*			</IonMenuToggle>*/}
+				{/*		);*/}
+				{/*	})}*/}
+				{/*</IonList>*/}
 				<IonItem>
 					{/*<IonImg class="avatar" src="/assets/images/avatar-placeholder.png" />*/}
 					<IonItem>

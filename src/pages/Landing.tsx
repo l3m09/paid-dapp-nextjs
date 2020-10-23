@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Terms from '../components/Terms';
 import { doGetWallets } from '../redux/actions/wallet';
 import CreateWallet from './wallet/create-wallet/CreateWallet';
+import ImportWallet from "./wallet/ImportWallet";
 
 const Landing: React.FC = () => {
 	const wallet = useSelector(
@@ -23,8 +24,11 @@ const Landing: React.FC = () => {
 	}, [dispatch]);
 	const { wallets, loadingWallets } = wallet;
 	const [showCreateModal, setShowCreateModal] = useState(false);
+	const [showImportWalletModal, setShowImportWalletModal] = useState(false);
+
 	const dismissModal = () => {
 		setShowCreateModal(false);
+		setShowImportWalletModal(false);
 	};
 
 	return (
@@ -50,14 +54,15 @@ const Landing: React.FC = () => {
 							Create New Wallet
 						</IonButton>
 						<IonButton
-							routerLink="/wallet/import"
+							onClick={() => setShowImportWalletModal(true)}
 							class="purple-button "
 							color="8500FF"
-							disabled
 						>
 							Import a Wallet
 						</IonButton>
 						<CreateWallet show={showCreateModal} dismiss={dismissModal} />
+						<ImportWallet show={showImportWalletModal} dismiss={dismissModal} />
+
 					</div>
 				) : (
 					<div className="landing-actions">

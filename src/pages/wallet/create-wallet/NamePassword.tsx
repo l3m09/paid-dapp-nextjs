@@ -66,7 +66,7 @@ const NamePassword: React.FC<NamePasswordProps> = ({ current }) => {
 				mnemonic: mnemonic
 			})
 		);
-		slideNext().then(() => {});
+		// slideNext().then(() => {});
 	};
 
 	return (
