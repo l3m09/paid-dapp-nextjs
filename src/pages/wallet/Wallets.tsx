@@ -9,16 +9,17 @@ import {
 	IonTitle,
 	IonToolbar,
 	IonButton,
-	IonIcon, IonItemDivider
+	IonIcon,
+	IonItemDivider
 } from '@ionic/react';
 import { checkmarkCircle } from 'ionicons/icons';
 
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {doSetSelectedWallet} from '../../redux/actions/wallet';
+import { doSetSelectedWallet } from '../../redux/actions/wallet';
 import CreateWallet from './create-wallet/CreateWallet';
 import UnlockWallet from '../../components/UnlockWallet';
-import ImportWallet from "./ImportWallet";
+import ImportWallet from './ImportWallet';
 
 const Wallets: React.FC = () => {
 	const dispatch = useDispatch();
@@ -34,14 +35,14 @@ const Wallets: React.FC = () => {
 	};
 	const dismissUnlockWalletModal = () => {
 		setShowUnlockWalletModal(false);
-		dispatch(doSetSelectedWallet(null))
+		dispatch(doSetSelectedWallet(null));
 	};
 	const dismissImportModal = () => {
-		setShowImportWalletModal(false)
-	}
+		setShowImportWalletModal(false);
+	};
 
 	function openUnlockWallet(wallet: any) {
-		dispatch(doSetSelectedWallet(wallet))
+		dispatch(doSetSelectedWallet(wallet));
 		setShowUnlockWalletModal(true);
 	}
 
@@ -62,20 +63,20 @@ const Wallets: React.FC = () => {
 				</IonItem>
 				<IonItemGroup class="wallets-container">
 					{wallets.map((item: any, index: any) => {
-						if (unlockedWallet?._id === item._id) {
+						if (unlockedWallet === item.address) {
 							return (
-								<IonItem
-									class="wallet-wrapper selected-wallet"
-									key={index}
-								>
+								<IonItem class="wallet-wrapper selected-wallet" key={index}>
 									<div className="wallet-container">
-										{unlockedWallet?._id === item._id ? <IonIcon icon={checkmarkCircle} className="current-tag"/> : ''}
+										{unlockedWallet === item.address ? (
+											<IonIcon icon={checkmarkCircle} className="current-tag" />
+										) : (
+											''
+										)}
 										<span className="label">{item.name}</span>
 										<span className="address">{item.address}</span>
 									</div>
 								</IonItem>
-							)
-
+							);
 						} else {
 							return (
 								<IonItem
@@ -88,11 +89,11 @@ const Wallets: React.FC = () => {
 										<span className="address">{item.address}</span>
 									</div>
 								</IonItem>
-							)
+							);
 						}
 					})}
 				</IonItemGroup>
-				<IonItemDivider/>
+				<IonItemDivider />
 				<IonItemGroup>
 					<IonItem class="form-options">
 						<IonButton
@@ -114,8 +115,18 @@ const Wallets: React.FC = () => {
 					</IonItem>
 				</IonItemGroup>
 				<CreateWallet show={showCreateModal} dismiss={dismissCreateModal} />
-				<ImportWallet show={showImportWalletModal} dismiss={dismissImportModal} />
-				{ selectedWallet !== null ? <UnlockWallet show={showUnlockWalletModal} dismissible={true} dismiss={dismissUnlockWalletModal} selectedWallet={selectedWallet}/> : null}
+				<ImportWallet
+					show={showImportWalletModal}
+					dismiss={dismissImportModal}
+				/>
+				{selectedWallet !== null ? (
+					<UnlockWallet
+						show={showUnlockWalletModal}
+						dismissible={true}
+						dismiss={dismissUnlockWalletModal}
+						selectedWallet={selectedWallet}
+					/>
+				) : null}
 			</IonContent>
 		</IonPage>
 	);

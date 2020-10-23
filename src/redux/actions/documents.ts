@@ -77,18 +77,16 @@ export const doCreateAgreement = (payload: {
 
 		const formId = ethers.utils.formatBytes32String(agreementFormTemplateId);
 		const form = createAgreementFormPayload(agreementForm);
-		const { wallet } = getState();
-		const { unlockedWallet } = wallet;
-		if (!unlockedWallet) {
+
+		const ethersWallet = await BlockchainFactory.getWallet();
+		if (!ethersWallet) {
 			throw new Error('Not unlocked wallet found');
 		}
-
-		const ethersWallet = await BlockchainFactory.getWallet(unlockedWallet._id);
 		const contract = ContractFactory.getAgrementContract(ethersWallet);
 		const balance = await ethersWallet.provider.getBalance(
-			unlockedWallet.address
+			ethersWallet.address
 		);
-		console.log(`Balance of ${unlockedWallet.address} is ${balance}`);
+		console.log(`Balance of ${ethersWallet.address} is ${balance}`);
 		const agreementTransaction: ContractTransaction = await contract.create(
 			signatoryA,
 			signatoryB,
@@ -118,17 +116,6 @@ export const doGetDocuments = () => async (
 ) => {
 	dispatch({ type: DocumentsActionTypes.GET_DOCUMENTS_LOADING });
 	try {
-		const { wallet } = getState();
-		const { unlockedWallet, currentWallet } = wallet;
-		if (!unlockedWallet) {
-			// throw new Error('Not unlocked wallet found');
-		}
-
-		if (!currentWallet) {
-			// throw new Error('Not current wallet found');
-		}
-
-		// const { address } = currentWallet;
 		const web3 = new Web3(GETH_URL);
 
 		const contract = new web3.eth.Contract(

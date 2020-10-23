@@ -40,7 +40,7 @@ const UnlockWallet: React.FC<Props> = ({
 				currentWallet: any;
 				unlockingWallet: boolean;
 				error: any;
-				unlockedWallet: any;
+				unlockedWallet: string;
 			};
 		}) => state.wallet
 	);

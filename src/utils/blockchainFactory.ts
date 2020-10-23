@@ -6,41 +6,44 @@ import {
 import { KeyStorageModel } from 'cea-crypto-wallet/dist/key-storage/KeyStorageModel';
 import { ethers, Wallet } from 'ethers';
 
-export const GETH_URL =
-	'wss://goofy-austin:tyke-racing-reload-curing-fade-tricky@ws-nd-645-752-688.p2pify.com';
+export const GETH_URL = 'http://localhost:8545';
 
 export class BlockchainFactory {
-	private static _provider: ethers.providers.WebSocketProvider;
+	private static _provider: ethers.providers.JsonRpcProvider;
 	private static _walletManager: WalletManager | null = null;
+	private static _keystore: KeyStorageModel;
 
-	public static getProvider = () => {
+	public static getProvider(): ethers.providers.JsonRpcProvider {
 		if (!BlockchainFactory._provider) {
-			BlockchainFactory._provider = new ethers.providers.WebSocketProvider(
+			BlockchainFactory._provider = new ethers.providers.JsonRpcProvider(
 				GETH_URL
 			);
 		}
 		return BlockchainFactory._provider;
-	};
+	}
 
-	public static getWalletManager = () => {
+	public static getWalletManager(): WalletManager {
 		if (!BlockchainFactory._walletManager) {
 			BlockchainFactory._walletManager = createWalletManager();
 		}
 
 		return BlockchainFactory._walletManager;
-	};
+	}
 
-	public static getWallet = async (walletId: string) => {
-		const manager = BlockchainFactory.getWalletManager();
-		const storage = manager.getKeyStorage();
-		const rawWallet = await storage.find<KeyStorageModel>(walletId);
+	public static setKeystore(keystore: KeyStorageModel): void {
+		BlockchainFactory._keystore = keystore;
+	}
+	public static async getWallet(): Promise<Wallet | null> {
+		if (!BlockchainFactory._keystore) {
+			return null;
+		}
+		const { keypairs } = BlockchainFactory._keystore;
 		const provider = BlockchainFactory.getProvider();
-
+		const manager = BlockchainFactory.getWalletManager();
 		const privateKey =
-			manager
-				.getKeyService()
-				?.getPrivateKey(AlgorithmType.ES256K, rawWallet.keypairs) || '';
+			manager.getKeyService()?.getPrivateKey(AlgorithmType.ES256K, keypairs) ||
+			'';
 		const wallet = new Wallet(privateKey, provider);
 		return wallet;
-	};
+	}
 }

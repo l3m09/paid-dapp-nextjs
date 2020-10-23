@@ -1,6 +1,6 @@
 import { Contract, Wallet } from 'ethers';
 import Agreement from '../contracts/Agreement.json';
-export const AGREEMENT_ADDRESS = '0x949440afDc1714e3277abbbf96A9b4A66583c7fd';
+export const AGREEMENT_ADDRESS = '0x83a1CAEa7bC9247E3755451F361d53c7b1640Dbb';
 
 export class ContractFactory {
 	private static _agreementContract: Contract | null = null;
