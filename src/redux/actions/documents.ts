@@ -39,7 +39,7 @@ const uploadDocuments = () => {
 const getSelectedDocument = (document: any) => {
 	return {
 		type: DocumentsActionTypes.GET_SELECTED_DOCUMENT_SUCCESS,
-		payload: document || { metadata: {} }
+		payload: document
 	};
 };
 
@@ -117,14 +117,23 @@ export const doGetDocuments = () => async (
 	dispatch({ type: DocumentsActionTypes.GET_DOCUMENTS_LOADING });
 	try {
 		const web3 = new Web3(GETH_URL);
-
+		const { wallet } = getState();
+		const { currentWallet } = wallet;
+		if (!currentWallet) {
+			return;
+		}
+		const { address } = currentWallet;
 		const contract = new web3.eth.Contract(
 			Agreement.abi as any,
 			AGREEMENT_ADDRESS
 		);
-		const events = await contract.getPastEvents('AgreementCreated');
+		const events = await contract.getPastEvents('AgreementCreated', {
+			filter: { from: address },
+			fromBlock: 0,
+			toBlock: 'latest'
+		});
 		console.log('events', events);
-		const agreements = events.map((data) => {
+		const promises = events.map((event) => {
 			const {
 				returnValues,
 				signature,
@@ -134,19 +143,35 @@ export const doGetDocuments = () => async (
 				blockHash,
 				blockNumber,
 				address
-			} = data;
+			} = event;
 
-			return {
-				...returnValues,
-				signature,
-				logIndex,
-				transactionIndex,
-				transactionHash,
-				blockHash,
-				blockNumber,
-				address
-			};
+			const { id, from, to, agreementFormTemplateId } = returnValues;
+
+			return new Promise(async (resolve) => {
+				const agreement = await contract.methods.agreements(id).call();
+				resolve({
+					meta: {
+						signature,
+						logIndex,
+						transactionIndex,
+						transactionHash,
+						blockHash,
+						blockNumber,
+						address
+					},
+					event: {
+						id,
+						from,
+						to,
+						agreementFormTemplateId
+					},
+					data: {
+						...agreement
+					}
+				});
+			});
 		});
+		const agreements = await Promise.all(promises);
 
 		dispatch(getDocuments(agreements));
 	} catch (err) {
@@ -182,7 +207,7 @@ export const doUploadDocuments = (file: any) => async (dispatch: any) => {
 };
 
 export const doGetSelectedDocument = (document: any) => (dispatch: any) => {
-	dispatch(getSelectedDocument({ document }));
+	dispatch(getSelectedDocument(document));
 };
 
 export const doSetAgreementFormInfo = (formInfo: any) => async (

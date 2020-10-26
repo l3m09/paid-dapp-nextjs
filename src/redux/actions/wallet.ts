@@ -224,19 +224,14 @@ export const doImportWallet = (payload: {
 		BlockchainFactory.setKeystore(ks);
 		const { _id, created } = ks;
 		const address = ethers.Wallet.fromMnemonic(ks.mnemonic).address;
-		dispatch(
-			importWallet({
-				_id,
-				address,
-				name,
-				created: created.toString()
-			})
-		);
 		const importedWallet = {
 			_id,
 			address,
-			name
+			name,
+			created: created.toString()
 		};
+
+		dispatch(importWallet(importedWallet));
 		const stored = await Storage.get({ key: 'WALLETS' });
 		const encodedList = stored.value ? stored.value : `[]`;
 		const wallets: any[] = JSON.parse(encodedList);
