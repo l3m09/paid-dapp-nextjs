@@ -1,54 +1,51 @@
 import {
 	AlgorithmType,
 	createWalletManager,
-	KeyModel,
 	WalletManager
 } from 'cea-crypto-wallet';
-import Web3 from 'web3';
+import { KeyStorageModel } from 'cea-crypto-wallet/dist/key-storage/KeyStorageModel';
+import { ethers, providers, Wallet } from 'ethers';
 
-const GETH_URL =
-	'https://rinkeby.infura.io/v3/92ed13edfad140409ac24457a9c4e22d';
+export const GETH_URL =
+	'https://rinkeby.infura.io/v3/0a835d9e13884254b834bff39b67dfdb';
 
 export class BlockchainFactory {
-	private static _web3: Web3 | null = null;
+	private static _provider: ethers.providers.JsonRpcProvider;
 	private static _walletManager: WalletManager | null = null;
+	private static _keystore: KeyStorageModel;
 
-	public static getWeb3Instance = (address: string, keyModel: KeyModel) => {
-		if (!BlockchainFactory._web3) {
-			BlockchainFactory._web3 = new Web3(GETH_URL);
-		}
-
-		const privateKey = BlockchainFactory.getPrivateKey(keyModel);
-		if (privateKey) {
-			BlockchainFactory._web3.eth.accounts.wallet.add({
-				privateKey,
-				address
-			});
-		}
-
-		BlockchainFactory._web3.eth.defaultAccount = address;
-
-		return BlockchainFactory._web3;
-	};
-
-	public static getPrivateKey(keyModel: KeyModel) {
-		const keyService = BlockchainFactory._walletManager?.getKeyService();
-		if (keyService) {
-			const privateKey = keyService.getPrivateKey(
-				AlgorithmType.ES256K,
-				keyModel
+	public static getProvider(): ethers.providers.JsonRpcProvider {
+		if (!BlockchainFactory._provider) {
+			BlockchainFactory._provider = new ethers.providers.JsonRpcProvider(
+				GETH_URL
 			);
-			return privateKey;
 		}
-
-		return '';
+		return BlockchainFactory._provider;
 	}
 
-	public static getWalletManager = () => {
+	public static getWalletManager(): WalletManager {
 		if (!BlockchainFactory._walletManager) {
 			BlockchainFactory._walletManager = createWalletManager();
 		}
 
 		return BlockchainFactory._walletManager;
-	};
+	}
+
+	public static setKeystore(keystore: KeyStorageModel): void {
+		BlockchainFactory._keystore = keystore;
+	}
+
+	public static async getWallet(): Promise<Wallet | null> {
+		if (!BlockchainFactory._keystore) {
+			return null;
+		}
+		const { mnemonic } = BlockchainFactory._keystore;
+		const provider = BlockchainFactory.getProvider();
+		// const manager = BlockchainFactory.getWalletManager();
+		// const privateKey =
+		// 	manager.getKeyService()?.getPrivateKey(AlgorithmType.ES256K, keypairs) ||
+		// 	'';
+		const wallet = Wallet.fromMnemonic(mnemonic);
+		return wallet.connect(provider);
+	}
 }

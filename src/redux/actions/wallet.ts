@@ -1,6 +1,7 @@
 import { WalletActionTypes } from '../actionTypes/wallet';
 import { Plugins } from '@capacitor/core';
 import { BlockchainFactory } from '../../utils/blockchainFactory';
+import { ethers } from 'ethers';
 const { Storage } = Plugins;
 
 // CREATORS
@@ -85,14 +86,16 @@ export const doUnlockWallet = (payload: {
 	try {
 		const { walletId, password } = payload;
 		const walletManager = BlockchainFactory.getWalletManager();
-		const wallet = await walletManager.unlockWallet(walletId, password);
-		if (!wallet) {
+		const ks = await walletManager.unlockWallet(walletId, password);
+		if (!ks) {
 			dispatch({
 				type: WalletActionTypes.UNLOCK_WALLET_FAILURE,
 				payload: 'Unlock wallet failure, check password and wallet'
 			});
 		} else {
-			dispatch(unlockWallet(wallet));
+			const address = ethers.Wallet.fromMnemonic(ks.mnemonic).address;
+			BlockchainFactory.setKeystore(ks);
+			dispatch(unlockWallet(address));
 		}
 	} catch (err) {
 		dispatch({
@@ -177,8 +180,10 @@ export const doCreateWallet = (payload: {
 	try {
 		const { name, password, mnemonic } = payload;
 		const walletManager = BlockchainFactory.getWalletManager();
-		const wallet = await walletManager.createWallet(password, mnemonic);
-		const { _id, address, created } = wallet;
+		const ks = await walletManager.createWallet(password, mnemonic);
+		BlockchainFactory.setKeystore(ks);
+		const { _id, created } = ks;
+		const address = ethers.Wallet.fromMnemonic(ks.mnemonic).address;
 
 		const referenceWallet = {
 			_id,
@@ -187,10 +192,6 @@ export const doCreateWallet = (payload: {
 			created: created.toString()
 		};
 
-		const createdWallet = {
-			...referenceWallet,
-			mnemonic
-		};
 		const encoded = JSON.stringify(referenceWallet);
 		await Storage.set({ key: 'CURRENT_WALLET', value: encoded });
 		const stored = await Storage.get({ key: 'WALLETS' });
@@ -201,7 +202,7 @@ export const doCreateWallet = (payload: {
 		await Storage.set({ key: 'WALLETS', value: encodedWallets });
 
 		dispatch(createWallet(referenceWallet));
-		dispatch(unlockWallet(createdWallet));
+		dispatch(unlockWallet(address));
 	} catch (err) {
 		dispatch({
 			type: WalletActionTypes.CREATE_WALLET_FAILURE,
@@ -219,20 +220,18 @@ export const doImportWallet = (payload: {
 	try {
 		const { name, password, mnemonic } = payload;
 		const walletManager = BlockchainFactory.getWalletManager();
-		const wallet = await walletManager.createWallet(password, mnemonic);
-		const { _id, address } = wallet;
-		dispatch(
-			importWallet({
-				_id,
-				address,
-				name
-			})
-		)
+		const ks = await walletManager.createWallet(password, mnemonic);
+		BlockchainFactory.setKeystore(ks);
+		const { _id, created } = ks;
+		const address = ethers.Wallet.fromMnemonic(ks.mnemonic).address;
 		const importedWallet = {
 			_id,
 			address,
-			name
+			name,
+			created: created.toString()
 		};
+
+		dispatch(importWallet(importedWallet));
 		const stored = await Storage.get({ key: 'WALLETS' });
 		const encodedList = stored.value ? stored.value : `[]`;
 		const wallets: any[] = JSON.parse(encodedList);
@@ -241,7 +240,7 @@ export const doImportWallet = (payload: {
 		await Storage.set({ key: 'WALLETS', value: encodedWallets });
 
 		dispatch(doSetCurrentWallet(importedWallet));
-		dispatch(unlockWallet({...importedWallet, mnemonic}));
+		dispatch(unlockWallet(address));
 	} catch (err) {
 		dispatch({
 			type: WalletActionTypes.IMPORT_WALLET_FAILURE,
@@ -274,5 +273,5 @@ export const doExportWallet = (payload: any) => async (dispatch: any) => {
 };
 
 export const doSetSelectedWallet = (wallet: any) => async (dispatch: any) => {
-		dispatch(setSelectedWallet(wallet));
+	dispatch(setSelectedWallet(wallet));
 };

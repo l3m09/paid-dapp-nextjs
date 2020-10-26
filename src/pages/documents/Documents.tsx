@@ -37,6 +37,80 @@ import {
 
 import Collapsible from 'react-collapsible';
 
+function SelectedDocument(payload: {
+	show: boolean;
+	selectedDocument: any;
+	closeShowDocument: () => void;
+}) {
+	const { show, selectedDocument, closeShowDocument } = payload;
+	if (!selectedDocument) {
+		return null;
+	}
+	return (
+		<div id="modal-container">
+			<IonModal isOpen={show} cssClass="document-modal">
+				<IonCard>
+					<IonCardHeader>
+						<IonCardTitle>
+							Document Id: {selectedDocument.event.id}
+						</IonCardTitle>
+						<IonCardSubtitle>
+							Valid until: {selectedDocument.data.validUntil}
+						</IonCardSubtitle>
+					</IonCardHeader>
+					<IonCardContent>
+						<h2>Details</h2>
+						<div className="details-wrapper">
+							<IonItem>
+								<IonLabel position="stacked">Signatory A</IonLabel>
+								<span>{selectedDocument.event.from}</span>
+							</IonItem>
+							<IonItem>
+								<IonLabel position="stacked">Signatory B</IonLabel>
+								<span>{selectedDocument.event.to}</span>
+							</IonItem>
+							<IonItem>
+								<IonLabel position="stacked">Size</IonLabel>
+								<span>{selectedDocument.size}</span>
+							</IonItem>
+							<IonItem>
+								<IonLabel position="stacked">Last Modified</IonLabel>
+								<span>{selectedDocument.modified_at}</span>
+							</IonItem>
+							<IonItem>
+								<IonLabel position="stacked">Created</IonLabel>
+								<span>{selectedDocument.created_at}</span>
+							</IonItem>
+							<IonItem>
+								<IonLabel position="stacked">Transaction Hash</IonLabel>
+								<span>{selectedDocument.meta.transactionHash}</span>
+							</IonItem>
+						</div>
+					</IonCardContent>
+				</IonCard>
+				<hr />
+				<IonItem className="modal-actions">
+					<IonButton
+						download={selectedDocument.link}
+						className="download-button"
+					>
+						<IonIcon icon={downloadOutline} />
+						<span>Download</span>
+					</IonButton>
+					<IonButton
+						buttonType="danger"
+						className="close-button"
+						onClick={() => {
+							closeShowDocument();
+						}}
+					>
+						<span>Close</span>
+					</IonButton>
+				</IonItem>
+			</IonModal>
+		</div>
+	);
+}
 const Documents: React.FC = () => {
 	const history = useHistory();
 	const dispatch = useDispatch();
@@ -54,16 +128,13 @@ const Documents: React.FC = () => {
 		dispatch(doGetDocuments());
 	}, [dispatch]);
 
-	let selectedD: any = selectedDocument ? selectedDocument : { metadata: {} };
-
 	function showDocument(item: any) {
-		// selectedDocument = item;
 		dispatch(doGetSelectedDocument(item));
 		setShowModal(true);
 	}
 
 	function closeShowDocument() {
-		dispatch(doGetSelectedDocument({}));
+		dispatch(doGetSelectedDocument(null));
 		setShowModal(false);
 	}
 
@@ -101,31 +172,27 @@ const Documents: React.FC = () => {
 				<div className="documents-container">
 					{documents
 						? documents.map((document: any, index: number) => {
+								const { data, meta, event } = document;
 								return (
 									<Collapsible
 										contentInnerClassName="document-container"
-										trigger={trigger(document.metadata.name)}
+										trigger={trigger(`${event.id} - ${event.from}`)}
 										key={index}
 									>
 										<div className="document-titles">
-											{document.documents
-												? document.documents.map((file: any, i: number) => {
-														return (
-															<div key={i} className="document-title-wrapper">
-																<div
-																	className="document-title"
-																	onClick={() => {
-																		showDocument(file);
-																	}}
-																>
-																	<IonIcon icon={documentIcon} />
-																	<span>{file.metadata.name}</span>
-																</div>
-																<hr />
-															</div>
-														);
-												  })
-												: null}
+											<div className="document-title-wrapper">
+												<div
+													className="document-title"
+													onClick={() => {
+														showDocument({ data, meta, event });
+													}}
+												>
+													<IonIcon icon={documentIcon} />
+													<span>{event.id}</span>
+													<span>From: {event.from}</span>
+												</div>
+												<hr />
+											</div>
 										</div>
 									</Collapsible>
 								);
@@ -165,57 +232,11 @@ const Documents: React.FC = () => {
                         }}
                     />*/}
 				</IonButton>
-				<div id="modal-container">
-					<IonModal isOpen={showModal} cssClass="document-modal">
-						<IonCard>
-							<IonCardHeader>
-								<IonCardTitle>{selectedD.metadata.name}</IonCardTitle>
-								<IonCardSubtitle>{selectedD.type}</IonCardSubtitle>
-							</IonCardHeader>
-							<IonCardContent>
-								<h2>Details</h2>
-								<div className="details-wrapper">
-									<IonItem>
-										<IonLabel position="stacked">Hash</IonLabel>
-										<span>{selectedD.ipfs_pin_hash}</span>
-									</IonItem>
-									<IonItem>
-										<IonLabel position="stacked">Signature</IonLabel>
-										<span>{selectedD.signature}</span>
-									</IonItem>
-									<IonItem>
-										<IonLabel position="stacked">Size</IonLabel>
-										<span>{selectedD.size}</span>
-									</IonItem>
-									<IonItem>
-										<IonLabel position="stacked">Last Modified</IonLabel>
-										<span>{selectedD.modified_at}</span>
-									</IonItem>
-									<IonItem>
-										<IonLabel position="stacked">Created</IonLabel>
-										<span>{selectedD.created_at}</span>
-									</IonItem>
-								</div>
-							</IonCardContent>
-						</IonCard>
-						<hr />
-						<IonItem className="modal-actions">
-							<IonButton download={selectedD.link} className="download-button">
-								<IonIcon icon={downloadOutline} />
-								<span>Download</span>
-							</IonButton>
-							<IonButton
-								buttonType="danger"
-								className="close-button"
-								onClick={() => {
-									closeShowDocument();
-								}}
-							>
-								<span>Close</span>
-							</IonButton>
-						</IonItem>
-					</IonModal>
-				</div>
+				<SelectedDocument
+					show={showModal}
+					selectedDocument={selectedDocument}
+					closeShowDocument={closeShowDocument}
+				/>
 			</IonContent>
 		</IonPage>
 	);

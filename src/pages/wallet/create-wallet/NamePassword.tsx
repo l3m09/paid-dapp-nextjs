@@ -49,13 +49,6 @@ const NamePassword: React.FC<NamePasswordProps> = ({ current }) => {
 		}
 	}
 
-	async function slideNext() {
-		console.log('NamePassword', await current.getActiveIndex());
-		await current.lockSwipeToNext(false);
-		current.slideNext();
-		await current.lockSwipeToNext(true);
-	}
-
 	const onSubmit = () => {
 		// e.preventDefault();
 		let mnemonic = confirmedSeedPhrase.join(' ');

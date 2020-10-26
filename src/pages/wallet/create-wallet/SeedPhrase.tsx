@@ -23,7 +23,7 @@ const SeedPhrase: React.FC<SeedPhraseProps> = ({ current }) => {
 	const { seedPhrase } = wallet;
 
 	async function slideNext() {
-		console.log('SeddPhrase', await current.getActiveIndex());
+		console.log('SeedPhrase', await current.getActiveIndex());
 		await current.lockSwipeToNext(false);
 		current.slideNext();
 		await current.lockSwipeToNext(true);

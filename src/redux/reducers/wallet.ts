@@ -124,7 +124,12 @@ export const WalletReducer = function (state = initialState, action: any) {
 			return { ...state, settingCurrentWallet: true };
 
 		case WalletActionTypes.SET_CURRENT_WALLET_SUCCESS:
-			return { ...state, currentWallet: payload, unlockedWallet: null, settingCurrentWallet: false };
+			return {
+				...state,
+				currentWallet: payload,
+				unlockedWallet: null,
+				settingCurrentWallet: false
+			};
 
 		case WalletActionTypes.SET_CURRENT_WALLET_FAILURE:
 			return { ...state, error: payload, gettingCurrentWallet: false };
