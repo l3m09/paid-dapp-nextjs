@@ -65,7 +65,7 @@ const ImportWallet: React.FC<Props> = ({show, dismiss}) => {
                 <IonToolbar>
                     <IonTitle>Import a Wallet</IonTitle>
                     <IonButtons slot="end">
-                        <IonButton disabled={importingWallet} buttonType="" fill="clear" onClick={() => dismiss()}>
+                        <IonButton color="secondary" shape="round" disabled={importingWallet} onClick={() => dismiss()}>
                             Cancel
                         </IonButton>
                     </IonButtons>
@@ -75,7 +75,7 @@ const ImportWallet: React.FC<Props> = ({show, dismiss}) => {
             <IonContent fullscreen class="import-content wallet-content">
                 <IonItem>
                     <IonText class="import-information">
-                        You would need to enter your Recovery Phrase to import your wallet
+                        You would need to enter your <span className="text-secondary">Recovery Phrase</span> to import your wallet
                     </IonText>
                 </IonItem>
 
@@ -119,8 +119,9 @@ const ImportWallet: React.FC<Props> = ({show, dismiss}) => {
                     <IonItem class="form-options">
                         <IonButton
                             onClick={() => {onSubmit()}}
-                            class="purple-button import-button"
-                            color="8500FF"
+                            class="import-button"
+                            color="gradient"
+                            shape="round"
                             disabled={importingWallet}
                         >
                             {importingWallet ? 'Loading..' : 'Import'}

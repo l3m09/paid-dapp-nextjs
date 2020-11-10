@@ -95,7 +95,7 @@ const RentalForm: React.FC<AgreementFormProps> = ({ current }) => {
 	};
 
 	return (
-		<IonContent fullscreen class="agreement-content phrase-name-password">
+		<IonContent fullscreen class="agreement-content">
 			<h5>
 				<IonTitle>Information</IonTitle>
 			</h5>
@@ -153,8 +153,8 @@ const RentalForm: React.FC<AgreementFormProps> = ({ current }) => {
 						onClick={() => {
 							onSubmit();
 						}}
-						class="purple-button "
-						color="8500FF"
+						color="gradient"
+						shape="round"
 						disabled={loading}
 					>
 						{loading ? 'Loading..' : 'Confirm'}

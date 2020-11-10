@@ -1,11 +1,34 @@
+ion-app {
+  //--ion-background-color: $brand-bg;
+  //background-color: $brand-bg;
+  //--background: var(--ion-background-color);
+  //color: $text-default !important;
+}
+
+.menu-content-push {
+  transition: all .2s;
+  box-shadow: 1px 1px 50px 10px #000 !important;
+  z-index: 9999;
+
+  &.menu-content-open {
+    margin-top: 1.5vh;
+    //margin-left: 10px;
+    height: 97vh;
+    border-radius: 20px;
+    margin-left: 0;
+    box-shadow: 1px 1px 50px 10px #000;
+
+  }
+
+}
+
 ion-modal {
   position: absolute;
 
   .modal-wrapper {
-    height: 95vh !important;
+    height: 93vh !important;
     width: 95% !important;
     margin: auto;
-    background-color: white !important;
 
   }
 }
@@ -27,15 +50,10 @@ ion-button {
   font-size: 0.9em;
   font-weight: 600;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-  border-radius: 4px;
+  border-radius: 50px !important;
 
   &.red-button {
-    background-color: $brand-red;
-
-  }
-
-  &.purple-button {
-    background-color: $brand-primary;
+    background: $brand-red;
 
   }
 
@@ -61,7 +79,6 @@ ion-button {
   display: flex;
   flex-direction: row;
   height: 47px;
-  background-color: $brand-bg;
   align-items: center;
   text-align: center;
 
@@ -95,30 +112,12 @@ ion-header {
   color: $green-success;
 }
 
-ion-app {
-  --ion-background-color: $brand-bg;
-  background-color: $brand-bg;
-}
-
 ion-router-link {
   color: $brand-secondary;
 }
 
-ion-input {
-  background-color: white;
-  --ion-background-color: white;
-
-}
-
-
-.ion-color-primary {
-  background-color: $brand-primary;
-  --ion-color-base: $brand-primary !important;
-}
-
-.ion-color-secondary {
-  background-color: $brand-secondary;
-  --ion-color-base: $brand-secondary !important;
+ion-input, ion-textarea {
+  border: $grey-border;
 }
 
 .item-interactive.item-has-focus {

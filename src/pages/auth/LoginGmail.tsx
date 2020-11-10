@@ -10,12 +10,13 @@ import {
     IonImg,
     IonText
 } from '@ionic/react';
-import React from 'react';
+import React, {useState} from 'react';
 // import '../../theme/views/_menu.scss'
 import { arrowBackOutline } from 'ionicons/icons';
 import Terms from '../../components/Terms';
 
 const LoginGmail: React.FC = () => {
+    const [showTermsModal, setShowTermsModal] = useState(false);
 
     return (
         <IonPage >
@@ -53,8 +54,9 @@ const LoginGmail: React.FC = () => {
                     </IonRouterLink>
                 </IonItem>
                 <IonItem>
-                    <Terms/>
+                    <Terms show={showTermsModal} dismiss={() => {setShowTermsModal(false)}} />
                 </IonItem>
+
                 <IonItem>
                     <div className="terms">
                         To learn more about how <a href="https://www.paidnetwork.com" target="_blank" rel="noopener noreferrer">Paid</a> collects, uses, shares

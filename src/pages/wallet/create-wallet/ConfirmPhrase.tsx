@@ -122,8 +122,9 @@ const ConfirmPhrase: React.FC<ConfirmPhraseProps> = ({ current }) => {
 									slideNext();
 								}}
 								disabled={!confirmed}
-								class="purple-button complete-button"
-								color="8500FF"
+								class="complete-button"
+								color="gradient"
+								shape="round"
 							>
 								Complete Backup
 							</IonButton>

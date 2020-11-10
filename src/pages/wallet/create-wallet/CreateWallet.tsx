@@ -58,7 +58,7 @@ const CreateWallet: React.FC<CreateWalletProps> = ({ show, dismiss }) => {
 				<IonToolbar>
 					<IonTitle>Create a New Wallet</IonTitle>
 					<IonButtons slot="end">
-						<IonButton buttonType="" fill="clear" onClick={() => doDismiss()}>
+						<IonButton color="secondary" type="button" onClick={() => doDismiss()}>
 							Cancel
 						</IonButton>
 					</IonButtons>

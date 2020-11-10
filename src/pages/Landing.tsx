@@ -2,8 +2,8 @@ import {
 	IonButton,
 	IonContent,
 	IonImg,
-	IonLoading,
-	IonPage
+	IonLoading, IonModal,
+	IonPage, IonRouterLink
 } from '@ionic/react';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -18,6 +18,7 @@ const Landing: React.FC = () => {
 			state.wallet
 	);
 	const dispatch = useDispatch();
+	const [showTermsModal, setShowTermsModal] = useState(false);
 
 	useEffect(() => {
 		dispatch(doGetWallets());
@@ -48,15 +49,16 @@ const Landing: React.FC = () => {
 					<div className="landing-actions">
 						<IonButton
 							onClick={() => setShowCreateModal(true)}
-							class="red-button "
-							color="FF4300"
+							color="secondary"
+							shape="round"
 						>
 							Create New Wallet
 						</IonButton>
 						<IonButton
 							onClick={() => setShowImportWalletModal(true)}
-							class="purple-button "
-							color="8500FF"
+							color="gradient"
+							shape="round"
+
 						>
 							Import a Wallet
 						</IonButton>
@@ -66,12 +68,18 @@ const Landing: React.FC = () => {
 					</div>
 				) : (
 					<div className="landing-actions">
-						<IonButton routerLink="/wallets" class="red-button " color="FF4300">
+						<IonButton color="gradient" shape="round" routerLink="/wallets" class="red-button ">
 							Login with your wallet
 						</IonButton>
 					</div>
 				)}
-				<Terms />
+				<div className="terms">
+					By continuing you agree to our <IonRouterLink onClick={() => setShowTermsModal(true)}>T&Cs.</IonRouterLink>
+					We use your data to offer you a personalized experience.
+					<IonRouterLink onClick={() => setShowTermsModal(true)}>Find out more.</IonRouterLink>
+					<Terms show={showTermsModal} dismiss={() => {setShowTermsModal(false)}} />
+
+				</div>
 			</IonContent>
 		</IonPage>
 	);

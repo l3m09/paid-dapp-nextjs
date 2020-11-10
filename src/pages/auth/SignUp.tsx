@@ -1,10 +1,11 @@
 import {IonRouterLink, IonIcon, IonContent, IonHeader, IonPage, IonLabel, IonTitle, IonItem, IonInput, IonButton} from '@ionic/react';
-import React from 'react';
+import React, {useState} from 'react';
 // import '../../theme/views/_menu.scss'
 import { arrowBackOutline } from 'ionicons/icons';
 import Terms from "../../components/Terms";
 
 const SignUp: React.FC = () => {
+    const [showTermsModal, setShowTermsModal] = useState(false);
 
     return (
         <IonPage >
@@ -29,7 +30,7 @@ const SignUp: React.FC = () => {
                         <IonInput type="password" placeholder="Confirm your password"></IonInput>
                     </IonItem>
                     <IonItem>
-                        <Terms/>
+                        <Terms show={showTermsModal} dismiss={() => {setShowTermsModal(false)}} />
                     </IonItem>
                     <IonItem class="form-options">
                         <IonButton routerLink="/wallets" class="purple-button " color="8500FF">Sign up</IonButton>

@@ -10,14 +10,21 @@
 
   }
 
+  //ion-item-group,
+  //ion-item-divider {
+  //  width: 95%;
+  //  margin-left: 2.5%;
+  //}
   .wallets-container {
     margin-top: 1vh;
+    width: 95%;
+    margin-left: 2.5%;
 
     .wallet-wrapper {
       margin-bottom: 1vh;
 
       .wallet-container {
-        background-color: aliceblue;
+        background: $brand-secondary;
         width: 100%;
         border-radius: 10px;
         padding: 10px;
@@ -26,7 +33,7 @@
         justify-content: center;
         align-items: center;
         flex-direction: column;
-        box-shadow: 1px 1px 1px #cdcdcd;
+        box-shadow: 1px 1px 1px $brand-secondary;
 
         &:hover {
           background-color: $brand-primary;
@@ -67,7 +74,7 @@
         position: relative;
 
         .wallet-container {
-          background-color: $brand-primary;
+          background: $bg-gradient;
           color: white;
           touch-action: none;
 
@@ -123,8 +130,21 @@
       padding-bottom: 5vh;
     }
 
+    ion-input {
+      border: 1px solid #8880A8;
+      border-radius: 5px;
+      font-size: 0.9em;
+
+      input {
+        padding: 5px 10px !important;
+        height: 45px;
+
+      }
+
+    }
+
     ion-textarea {
-      border: 2px solid $brand-primary;
+      border: 2px solid #8880A8;
       border-radius: 10px;
       min-height: 80px;
       padding: 10px 20px;

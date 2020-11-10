@@ -65,8 +65,8 @@ const VehicleCompleted: React.FC<VehicleCompletedProps> = ({ current }) => {
 					onClick={() => {
 						toDocuments();
 					}}
-					class="purple-button done-button"
-					color="8500FF"
+					color="gradient"
+					shape="round"
 				>
 					Done
 				</IonButton>
