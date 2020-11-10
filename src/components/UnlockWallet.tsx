@@ -4,7 +4,7 @@ import {
 	IonInput,
 	IonButton,
 	IonTitle,
-	IonModal
+	IonModal, IonToolbar, IonButtons, IonHeader
 } from '@ionic/react';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -60,8 +60,8 @@ const UnlockWallet: React.FC<Props> = ({
 		}
 	}
 
-	const onSubmit = () => {
-		// e.preventDefault();
+	const onSubmit = (e: any) => {
+		e.preventDefault();
 		dispatch(
 			doUnlockWallet({
 				walletId: selectedWallet._id,
@@ -77,11 +77,21 @@ const UnlockWallet: React.FC<Props> = ({
 			}}
 			backdropDismiss={dismissible}
 			isOpen={show}
-			cssClass="agreement-content phrase-name-password unlock-modal"
+			cssClass="unlock-modal"
 		>
-			<h5>
-				<IonTitle>Unlock Wallet</IonTitle>
-			</h5>
+			<IonHeader translucent>
+				<IonToolbar>
+					<IonTitle>Unlock Wallet</IonTitle>
+					{unlockedWallet ?
+						<IonButtons slot="end">
+							<IonButton color="secondary" shape="round" onClick={() => dismiss()}>
+								Cancel
+							</IonButton>
+						</IonButtons>
+						: null
+					}
+				</IonToolbar>
+			</IonHeader>
 			<IonItem>
 				<IonLabel position="stacked">Name:</IonLabel>
 				<span>{selectedWallet.name}</span>
@@ -90,7 +100,7 @@ const UnlockWallet: React.FC<Props> = ({
 				<IonLabel position="stacked">Address:</IonLabel>
 				<span>{selectedWallet.address}</span>
 			</IonItem>
-			<form action="" className="name-password-form">
+			<form onSubmit={onSubmit} className="name-password-form">
 				<IonItem>
 					<IonLabel position="stacked">Password</IonLabel>
 					<IonInput
@@ -111,25 +121,25 @@ const UnlockWallet: React.FC<Props> = ({
 				<IonItem class="form-options">
 					<IonButton
 						// routerLink="/phrase/instructions"
-						onClick={() => {
-							onSubmit();
-						}}
-						class="purple-button "
-						color="8500FF"
+						type="submit"
+						color="gradient"
+						shape="round"
 						disabled={unlockingWallet}
 					>
 						{unlockingWallet ? 'Loading..' : 'Unlock'}
 					</IonButton>
-					{unlockedWallet ? (
-						<IonButton
-							// routerLink="/phrase/instructions"
-							onClick={() => {
-								dismiss();
-							}}
-						>
-							Cancel
-						</IonButton>
-					) : null}
+					{/*{unlockedWallet ? (*/}
+					{/*	<IonButton*/}
+					{/*		color="secondary"*/}
+					{/*		shape="round"*/}
+					{/*		// routerLink="/phrase/instructions"*/}
+					{/*		onClick={() => {*/}
+					{/*			dismiss();*/}
+					{/*		}}*/}
+					{/*	>*/}
+					{/*		Cancel*/}
+					{/*	</IonButton>*/}
+					{/*) : null}*/}
 				</IonItem>
 			</form>
 		</IonModal>

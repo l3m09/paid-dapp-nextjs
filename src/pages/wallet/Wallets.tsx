@@ -99,7 +99,8 @@ const Wallets: React.FC = () => {
 						<IonButton
 							onClick={() => setShowCreateModal(true)}
 							class=""
-							color="primary"
+							color="secondary"
+							shape="round"
 						>
 							Create Wallet
 						</IonButton>
@@ -108,7 +109,8 @@ const Wallets: React.FC = () => {
 						<IonButton
 							onClick={() => setShowImportWalletModal(true)}
 							class=""
-							color="primary"
+							color="gradient"
+							shape="round"
 						>
 							Import Wallet
 						</IonButton>

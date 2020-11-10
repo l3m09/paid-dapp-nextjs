@@ -41,13 +41,13 @@ const RentalCompleted: React.FC<RentalCompletedProps> = ({ current }) => {
 			<IonItem>
 				<IonText class="phrase-content-sub-text phrase-completed-sub-text">
 					Have agreed with the conclusion of this transaction on{' '}
-					<span className="text-primary">{agreementFormInfo.createdAt}</span>
+					<span className="text-orange">{agreementFormInfo.createdAt}</span>
 				</IonText>
 			</IonItem>
 			<IonItem>
 				<IonText class="phrase-content-sub-text phrase-completed-sub-text">
 					And accepted transference of the currency to (SELLER) wallet address{' '}
-					<span className="text-primary">
+					<span className="text-orange">
 						{agreementFormInfo.destinationWallet}
 					</span>
 				</IonText>
@@ -65,8 +65,8 @@ const RentalCompleted: React.FC<RentalCompletedProps> = ({ current }) => {
 					onClick={() => {
 						toDocuments();
 					}}
-					class="purple-button done-button"
-					color="8500FF"
+					color="gradient"
+					shape="round"
 				>
 					Done
 				</IonButton>

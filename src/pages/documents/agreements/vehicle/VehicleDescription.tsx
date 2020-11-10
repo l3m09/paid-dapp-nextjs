@@ -30,7 +30,7 @@ const VehicleDescription: React.FC<DescriptionProps> = ({ current }) => {
 			<IonItem>
 				<div className="instructions">
 					<IonTitle class="instructions-title first">Vehicle</IonTitle>
-					<IonText class="instructions-sub-text first">
+					<IonText color="secondary" class="instructions-sub-text first">
 						This document will serve as an official document for (SELLER) to
 						agree to purchase sellers vehicle subject to the following terms and
 						conditions:
@@ -54,7 +54,7 @@ const VehicleDescription: React.FC<DescriptionProps> = ({ current }) => {
 							will be executed within one hour of the delivery.
 						</li>
 					</ul>
-					<IonTitle class="instructions-title third">
+					<IonTitle color="secondary" class="instructions-title third">
 						Other terms and conditions:
 					</IonTitle>
 					<ul className="instructions-list first">
@@ -84,8 +84,8 @@ const VehicleDescription: React.FC<DescriptionProps> = ({ current }) => {
 						onClick={() => {
 							slideNext();
 						}}
-						class="purple-button start-button"
-						color="8500FF"
+						color="gradient"
+						shape="round"
 					>
 						I Agree
 					</IonButton>

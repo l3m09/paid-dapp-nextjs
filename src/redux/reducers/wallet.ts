@@ -5,7 +5,7 @@ const initialState = {
 	creatingWallet: false,
 	importingWallet: false,
 	exportingWallet: false,
-	confirmed: false,
+	confirmed: null,
 	permanentSeedPhrase: [],
 	seedPhrase: [],
 	confirmedSeedPhrase: [],

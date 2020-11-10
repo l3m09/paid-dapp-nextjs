@@ -37,7 +37,7 @@ const SeedPhrase: React.FC<SeedPhraseProps> = ({ current }) => {
 		<IonContent fullscreen class="phrase-content seed-phrase">
 			<IonItem>
 				<span className="phrase-lock-icon">
-					<IonIcon ios={lockClosedOutline} md={lockClosedOutline} />
+					<IonIcon color="secondary" ios={lockClosedOutline} md={lockClosedOutline} />
 				</span>
 			</IonItem>
 			<IonItem>
@@ -69,7 +69,8 @@ const SeedPhrase: React.FC<SeedPhraseProps> = ({ current }) => {
 						slideNext();
 					}}
 					class="purple-button create-button"
-					color="8500FF"
+					color="gradient"
+					shape="round"
 				>
 					Continue
 				</IonButton>

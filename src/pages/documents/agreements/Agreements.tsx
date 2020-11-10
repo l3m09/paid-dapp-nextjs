@@ -89,8 +89,8 @@ const Agreements: React.FC<AgreementsProps> = () => {
 					<IonTitle>Agreement</IonTitle>
 					<IonButtons slot="end">
 						<IonButton
-							buttonType=""
-							fill="clear"
+							color="secondary"
+							shape="round"
 							onClick={() => {
 								toDocuments();
 							}}

@@ -10,6 +10,7 @@ import {
 } from '@ionic/react';
 import React, { useState } from 'react';
 import { lockClosedOutline, warning } from 'ionicons/icons';
+import Terms from "../../../components/Terms";
 
 interface InstructionsProps {
 	current: HTMLIonSlidesElement | null;
@@ -28,25 +29,26 @@ const Instructions: React.FC<InstructionsProps> = ({ current }) => {
 		<IonContent fullscreen class="phrase-content seed-phrase-instructions">
 			<IonItem>
 				<span className="phrase-lock-icon">
-					<IonIcon ios={lockClosedOutline} md={lockClosedOutline} />
+					<IonIcon color="secondary" ios={lockClosedOutline} md={lockClosedOutline} />
 				</span>
 			</IonItem>
 			<IonItem>
 				<span className="some-text">
 					Secure your wallet’s
-					<span className="text-brand-primary"> seed phrase</span>
+					<IonText color="secondary" className="ion-color-secondary"> seed phrase</IonText>
 				</span>
 			</IonItem>
 			<IonItem>
 				<IonText class="phrase-content-sub-text seed-phrase-instructions-sub-text">
 					<span className="text-brand-primary">
-						<IonIcon ios={warning} md={warning} />
+						<IonIcon color="secondary" ios={warning} md={warning} />
 						<IonRouterLink
-							class="text-brand-primary"
+							color="secondary"
 							onClick={() => setShowModal(true)}
 						>
 							Why is it important?
 						</IonRouterLink>
+						<Terms show={showModal} dismiss={() => {setShowModal(false)}} title="Why is it important?" />
 					</span>
 				</IonText>
 			</IonItem>
@@ -69,47 +71,43 @@ const Instructions: React.FC<InstructionsProps> = ({ current }) => {
 					</div>
 					<IonTitle class="instructions-title second">Risk are:</IonTitle>
 					<ul className="instructions-list first">
-						<li>You lose it</li>
-						<li>You forget where you put it</li>
-						<li>Someone else finds it</li>
+						<li>
+							<span>You lose it</span>
+						</li>
+						<li>
+							<span>You forget where you put it</span>
+						</li>
+						<li>
+							<span>Someone else finds it</span>
+						</li>
 					</ul>
 					<IonText class="instructions-sub-text third">
 						<strong>Other options: </strong> Doesn't have to be on paper
 					</IonText>
 					<IonTitle class="instructions-title third">Tips:</IonTitle>
 					<ul className="instructions-list first">
-						<li>Store in bank vault</li>
-						<li>Store in a safe</li>
-						<li>Store in multiple secret places</li>
+						<li>
+							<span>Store in bank vault</span>
+						</li>
+						<li>
+							<span>Store in a safe</span>
+						</li>
+						<li>
+							<span>Store in multiple secret places</span>
+						</li>
 					</ul>
 					<IonButton
 						onClick={() => {
 							slideNext();
 						}}
-						class="purple-button start-button"
-						color="8500FF"
+						class="start-button"
+						color="gradient"
+						shape="round"
 					>
 						Start
 					</IonButton>
 				</div>
 			</IonItem>
-			<IonModal isOpen={showModal} cssClass="instructions-info-modal">
-				<p>
-					Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deserunt
-					impedit minima nesciunt nihil quos sapiente sequi temporibus.
-					Expedita, maiores, minus! Eaque eius harum laudantium odit quisquam?
-					Aperiam explicabo facere, ipsam ipsum libero odio quia! Adipisci
-					architecto atque cupiditate, expedita officia quis tempore. Adipisci
-					commodi eligendi enim illo quibusdam temporibus unde voluptate
-					voluptatibus. Ab animi dicta et iusto magni perspiciatis ratione sed.
-					Ab accusantium architecto at cumque distinctio dolorem eos, eum
-					exercitationem, explicabo facere fugiat impedit incidunt itaque iure
-					libero, nobis odit officiis quam quis quisquam ratione repellendus
-					saepe sit tempora voluptatem. Consequuntur, dicta distinctio dolorum
-					eveniet incidunt itaque nisi recusandae.
-				</p>
-				<IonButton onClick={() => setShowModal(false)}>Close</IonButton>
-			</IonModal>
 		</IonContent>
 	);
 };

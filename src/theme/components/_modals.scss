@@ -1,0 +1,75 @@
+.terms-modal {
+  .modal-wrapper {
+    min-height: 80vh !important;
+    max-height: 85vh !important;
+    width: 95%;
+    color: var(--ion-text-color);
+
+    .ion-page {
+      padding: 10px;
+      overflow-y: scroll;
+
+      p {
+        text-align: justify;
+
+      }
+
+    }
+
+  }
+
+}
+
+.unlock-modal {
+
+  .modal-wrapper {
+    min-height: 60vh !important;
+    max-height: 65vh !important;
+
+    .ion-page {
+      justify-content: flex-start !important;
+
+      h5 {
+        color: var(--ion-text-color);
+      }
+
+      >ion-item {
+        margin-top: 2vh;
+
+      }
+
+      form {
+        margin-top: 4vh;
+
+        ion-input {
+
+          input {
+            margin-top: 2vh;
+            width: 100%;
+            border: 1px solid $grey-border;
+            border-radius: 5px;
+            height: 48px;
+            padding: 0 5px;
+
+          }
+
+        }
+
+        .form-options {
+          margin-top: 5vh;
+
+        }
+
+        .text-error {
+          color: $brand-red;
+          width: 100%;
+
+        }
+
+      }
+
+    }
+
+  }
+
+}

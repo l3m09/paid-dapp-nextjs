@@ -35,7 +35,7 @@ const WalletListModal: React.FC<WalletListModalProps> = ({
 				<IonToolbar>
 					<IonTitle>Wallets</IonTitle>
 					<IonButtons slot="end">
-						<IonButton buttonType="" fill="clear" onClick={() => dismiss()}>
+						<IonButton color="secondary" shape="round" onClick={() => dismiss()}>
 							Cancel
 						</IonButton>
 					</IonButtons>

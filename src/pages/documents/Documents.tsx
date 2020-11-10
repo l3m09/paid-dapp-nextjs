@@ -18,7 +18,7 @@ import {
 	IonCardHeader,
 	IonCard,
 	IonPopover,
-	IonItemDivider
+	IonItemDivider, IonFabButton, IonFab
 } from '@ionic/react';
 import {
 	add,
@@ -199,7 +199,7 @@ const Documents: React.FC = () => {
 						  })
 						: null}
 				</div>
-				<IonPopover isOpen={showPopOver} cssClass="agreements-popover">
+				<IonPopover isOpen={showPopOver} cssClass="agreements-popover" onDidDismiss={() => {setShowPopover(false)}}>
 					<IonItemDivider>
 						<IonItem>Select Agreement type</IonItem>
 					</IonItemDivider>
@@ -216,27 +216,18 @@ const Documents: React.FC = () => {
 						);
 					})}
 				</IonPopover>
-				<IonButton
-					className="add-document-button"
-					onClick={() => {
-						setShowPopover(true);
-					}}
-				>
-					<IonIcon icon={add} />
-					{/*<input
-                        className="upload-input"
-                        type="file"
-                        accept="pdf"
-                        onChange={(e: any) => {
-                            setFileData(e.target.files[0]);
-                        }}
-                    />*/}
-				</IonButton>
 				<SelectedDocument
 					show={showModal}
 					selectedDocument={selectedDocument}
 					closeShowDocument={closeShowDocument}
 				/>
+				<IonFab vertical="bottom" horizontal="end" slot="fixed">
+					<IonFabButton color="gradient" onClick={() => {
+						setShowPopover(true);
+					}}>
+						<IonIcon icon={add} />
+					</IonFabButton>
+				</IonFab>
 			</IonContent>
 		</IonPage>
 	);

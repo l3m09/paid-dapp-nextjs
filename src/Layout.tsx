@@ -22,7 +22,6 @@ import '@ionic/react/css/flex-utils.css';
 
 import '@ionic/react/css/display.css';
 /* Theme variables */
-import './theme/variables.css';
 import './theme/main.scss';
 
 /* Pages */
@@ -56,7 +55,7 @@ const Layout: React.FC = () => {
 
 	useEffect(() => {
 		if (unlockedWallet !== null) {
-			history.push('/documents/' + unlockedWallet.name);
+			history.push('/documents');
 			dismissModal();
 		} else if (currentWallet !== null) {
 			setShowUnlockWalletModal(false);

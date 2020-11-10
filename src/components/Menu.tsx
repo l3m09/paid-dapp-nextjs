@@ -14,20 +14,9 @@ import {
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import {
-	// archiveOutline,
-	// archiveSharp,
-	// heartOutline,
-	// heartSharp,
-	mailOutline,
-	mailSharp,
 	paperPlaneOutline,
 	paperPlaneSharp,
-	// personAddSharp,
-	// personAddOutline,
-	// bookSharp,
-	// bookOutline,
-	// giftSharp,
-	// giftOutline
+	listCircleOutline
 } from 'ionicons/icons';
 import {useSelector} from 'react-redux';
 
@@ -49,8 +38,8 @@ const Menu: React.FC = () => {
 		{
 			title: 'Wallets',
 			url: '/wallets',
-			iosIcon: mailOutline,
-			mdIcon: mailSharp,
+			iosIcon: listCircleOutline,
+			mdIcon: listCircleOutline,
 			disabled: false
 		},
 		{
@@ -82,11 +71,11 @@ const Menu: React.FC = () => {
 									detail={false}
 								>
 									<IonIcon
-										slot="start"
 										ios={appPage.iosIcon}
 										md={appPage.mdIcon}
+										color="gradient"
 									/>
-									<IonLabel>{appPage.title}</IonLabel>
+									<IonLabel color="gradient">{appPage.title}</IonLabel>
 								</IonItem>
 							</IonMenuToggle>
 						);

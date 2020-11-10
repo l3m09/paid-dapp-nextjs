@@ -93,8 +93,8 @@ const NamePassword: React.FC<NamePasswordProps> = ({ current }) => {
 						onClick={() => {
 							onSubmit();
 						}}
-						class="purple-button "
-						color="8500FF"
+						color="gradient"
+						shape="round"
 						disabled={creatingWallet}
 					>
 						{creatingWallet ? 'Loading..' : 'Confirm'}
