@@ -14,11 +14,14 @@ import { useParams, useHistory } from 'react-router';
 
 import VehicleDescription from './vehicle/VehicleDescription';
 import VehicleForm from './vehicle/VehicleForm';
+import VehicleFormCounterparty from './vehicle/VehicleFormCounterparty';
 import VehicleCompleted from './vehicle/VehicleCompleted';
 
 import RentalDescription from './rental/RentalDescription';
 import RentalForm from './rental/RentalForm';
+import RentalFormCounterparty from './rental/RentalFormCounterparty';
 import RentalCompleted from './rental/RentalCompleted';
+
 import { useDispatch } from 'react-redux';
 import { doSetAgreementFormInfo } from '../../../redux/actions/documents';
 
@@ -48,6 +51,9 @@ const Agreements: React.FC<AgreementsProps> = () => {
 				<VehicleForm current={slidesRef.current} />
 			</IonSlide>
 			<IonSlide>
+				<VehicleFormCounterparty current={slidesRef.current} />
+			</IonSlide>
+			<IonSlide>
 				<VehicleCompleted current={slidesRef.current} />
 			</IonSlide>
 		</IonSlides>
@@ -59,6 +65,9 @@ const Agreements: React.FC<AgreementsProps> = () => {
 			</IonSlide>
 			<IonSlide>
 				<RentalForm current={slidesRef.current} />
+			</IonSlide>
+			<IonSlide>
+				<RentalFormCounterparty current={slidesRef.current} />
 			</IonSlide>
 			<IonSlide>
 				<RentalCompleted current={slidesRef.current} />
@@ -75,7 +84,16 @@ const Agreements: React.FC<AgreementsProps> = () => {
 	lockSwipes().then(() => {});
 
 	async function toDocuments() {
-		dispatch(doSetAgreementFormInfo({}));
+		dispatch(doSetAgreementFormInfo({
+			name: '',
+			address: '',
+			phone: '',
+			counterpartyWallet: '',
+			counterpartyName: '',
+			counterpartyAddress: '',
+			counterpartyPhone: '',
+			createdAt: null
+		}));
 		await slidesRef.current?.lockSwipeToPrev(false);
 		await slidesRef.current?.lockSwipeToNext(false);
 		await slidesRef.current?.slideTo(0).then(() => {

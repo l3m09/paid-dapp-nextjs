@@ -16,7 +16,6 @@ const VehicleDescription: React.FC<DescriptionProps> = ({ current }) => {
 	const [showModal, setShowModal] = useState(false);
 
 	async function slideNext() {
-		console.log('VehicleDescription', await current.getActiveIndex());
 		await current.lockSwipeToNext(false);
 		current.slideNext();
 		await current.lockSwipeToNext(true);

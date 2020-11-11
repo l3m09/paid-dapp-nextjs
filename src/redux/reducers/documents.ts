@@ -5,7 +5,16 @@ const initialState = {
 	documents: [],
 	selectedDocument: null,
 	agreementTypes: ['Vehicle', 'Rental'],
-	agreementFormInfo: {}
+	agreementFormInfo: {
+		name: '',
+		address: '',
+		phone: '',
+		counterpartyWallet: '',
+		counterpartyName: '',
+		counterpartyAddress: '',
+		counterpartyPhone: '',
+		createdAt: null
+	}
 };
 
 export const DocumentsReducer = function (state = initialState, action: any) {
@@ -37,7 +46,11 @@ export const DocumentsReducer = function (state = initialState, action: any) {
 		}
 
 		case DocumentsActionTypes.SET_AGREEMENT_FORM_INFO: {
-			return { ...state, agreementFormInfo: payload };
+			let info = {
+				...state.agreementFormInfo,
+				...payload
+			}
+			return { ...state, agreementFormInfo: info };
 		}
 
 		case DocumentsActionTypes.CREATE_AGREEMENT_LOADING: {

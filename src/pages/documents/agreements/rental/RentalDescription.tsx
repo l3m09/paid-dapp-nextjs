@@ -16,7 +16,6 @@ const RentalDescription: React.FC<DescriptionProps> = ({ current }) => {
 	const [showModal, setShowModal] = useState(false);
 
 	async function slideNext() {
-		console.log('RentalDescription', await current.getActiveIndex());
 		await current.lockSwipeToNext(false);
 		current.slideNext();
 		await current.lockSwipeToNext(true);
@@ -31,12 +30,12 @@ const RentalDescription: React.FC<DescriptionProps> = ({ current }) => {
 					<IonTitle class="instructions-title first">Rental</IonTitle>
 					<IonText color="secondary" class="instructions-sub-text first">
 						This document will serve as an official document for (SELLER) to
-						agree to purchase sellers rental subject to the following terms and
+						agree to purchase sellers vehicle subject to the following terms and
 						conditions:
 					</IonText>
 					<ul className="instructions-list first">
 						<li>
-							That the rental is free and clear of all liens and encumbrances
+							That the vehicle is free and clear of all liens and encumbrances
 							and that the title is clean and not salvage.
 						</li>
 						<li>
@@ -44,11 +43,11 @@ const RentalDescription: React.FC<DescriptionProps> = ({ current }) => {
 							executed the signatures needed to validate the sale.
 						</li>
 						<li>
-							That the rental is in the same condition as it was when the offer
+							That the vehicle is in the same condition as it was when the offer
 							to purchase was executed.
 						</li>
 						<li>
-							The rental was delivered to (SELLER) during normal business hours
+							The vehicle was delivered to (SELLER) during normal business hours
 							and that the seller has all necessary documents, proceeds check
 							will be executed within one hour of the delivery.
 						</li>
@@ -76,7 +75,7 @@ const RentalDescription: React.FC<DescriptionProps> = ({ current }) => {
 						</li>
 						<li>
 							Salvage titles, unknown miles, and child support liens will
-							automatically disqualify the rental from purchase
+							automatically disqualify the vehicle from purchase
 						</li>
 					</ul>
 					<IonButton
