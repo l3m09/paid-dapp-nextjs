@@ -187,11 +187,29 @@
 .agreements-page{
 
   ion-slides {
-    background-color: white;
+    //background-color: white;
+
+
+    @media (min-width: 767px) {
+      max-width: 85%;
+
+      .swiper-wrapper {
+        min-height: 80vh;
+
+        ion-slide {
+          //max-width: 80%;
+          //min-height: 80vh;
+        }
+
+      }
+
+    }
+
   }
 
   .agreement-content {
     position: relative;
+    width: 100%;
 
     .text-primary {
       color: $brand-primary;

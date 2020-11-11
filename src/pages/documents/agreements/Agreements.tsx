@@ -83,26 +83,29 @@ const Agreements: React.FC<AgreementsProps> = () => {
 		});
 	}
 	return (
-		<IonPage className="agreements-page">
-			<IonHeader translucent>
-				<IonToolbar>
-					<IonTitle>Agreement</IonTitle>
-					<IonButtons slot="end">
-						<IonButton
-							color="secondary"
-							shape="round"
-							onClick={() => {
-								toDocuments();
-							}}
-						>
-							Cancel
-						</IonButton>
-					</IonButtons>
-				</IonToolbar>
-			</IonHeader>
+		<IonPage className="agreements-page content-page">
 			<IonContent fullscreen>
-				{type === 'vehicle' ? vehicleTemplate : null}
-				{type === 'rental' ? rentalTemplate : null}
+
+				<IonHeader translucent>
+					<IonToolbar>
+						<IonTitle>Agreement</IonTitle>
+						<IonButtons slot="end">
+							<IonButton
+								color="secondary"
+								shape="round"
+								onClick={() => {
+									toDocuments();
+								}}
+							>
+								Cancel
+							</IonButton>
+						</IonButtons>
+					</IonToolbar>
+				</IonHeader>
+				<div>
+					{type === 'vehicle' ? vehicleTemplate : null}
+					{type === 'rental' ? rentalTemplate : null}
+				</div>
 			</IonContent>
 		</IonPage>
 	);
