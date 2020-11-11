@@ -1,5 +1,4 @@
 import {
-	IonContent,
 	IonTitle,
 	IonItem,
 	IonButton,
@@ -22,7 +21,16 @@ const RentalCompleted: React.FC<RentalCompletedProps> = ({ current }) => {
 	const documentsState = useSelector((state: any) => state.documents);
 	const { agreementFormInfo } = documentsState;
 	async function toDocuments() {
-		dispatch(doSetAgreementFormInfo({}));
+		dispatch(doSetAgreementFormInfo({
+			name: '',
+			address: '',
+			phone: '',
+			counterpartyWallet: '',
+			counterpartyName: '',
+			counterpartyAddress: '',
+			counterpartyPhone: '',
+			createdAt: null
+		}));
 
 		await current.lockSwipeToPrev(false);
 		await current.lockSwipeToNext(false);
@@ -40,23 +48,19 @@ const RentalCompleted: React.FC<RentalCompletedProps> = ({ current }) => {
 			</IonItem>
 			<IonItem>
 				<IonText class="phrase-content-sub-text phrase-completed-sub-text">
-					Have agreed with the conclusion of this transaction on{' '}
-					<span className="text-orange">{agreementFormInfo.createdAt}</span>
+					Have agreed with the conclusion of this transaction on <span className="text-primary">{agreementFormInfo.createdAt}</span>.
 				</IonText>
 			</IonItem>
 			<IonItem>
 				<IonText class="phrase-content-sub-text phrase-completed-sub-text">
-					And accepted transference of the currency to (SELLER) wallet address{' '}
-					<span className="text-orange">
-						{agreementFormInfo.destinationWallet}
-					</span>
+					And accepted transference of the currency to <span className="text-primary">{agreementFormInfo.counterpartyName}</span> wallet address: <span className="text-primary"> {agreementFormInfo.counterpartyWallet}</span>.
 				</IonText>
 			</IonItem>
 			<IonItem>
 				<IonText class="phrase-content-sub-text phrase-completed-sub-text">
 					This offer to purchase is valid for Nine Days from date of offer and
 					will not be valid if there are any changes to the value of the vehicle
-					due to physical or mechanical issues upon delivery to (SELLER)
+					due to physical or mechanical issues upon delivery to <span className="text-primary">{agreementFormInfo.counterpartyName}</span>.
 				</IonText>
 			</IonItem>
 

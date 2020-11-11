@@ -1,74 +1,49 @@
 import {
-	IonContent,
 	IonLabel,
 	IonItem,
 	IonInput,
 	IonButton,
 	IonTitle
 } from '@ionic/react';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-	doCreateAgreement,
-	doSetAgreementFormInfo
-} from '../../../../redux/actions/documents';
-import { useParams } from 'react-router';
+import { doSetAgreementFormInfo } from '../../../../redux/actions/documents';
 
 interface AgreementFormProps {
 	current: any;
 }
-interface AgreementInfo {
-	name: string;
-	address: string;
-	phone: string;
-	destinationWallet: string;
-	createdAt: any;
-	filled: boolean;
-}
+
 
 const RentalForm: React.FC<AgreementFormProps> = ({ current }) => {
-	const dispatch = useDispatch();
-	const { type } = useParams<{ type: string }>();
+	const [filled, setFilled] = useState(false);
 	const documentsState = useSelector((state: any) => state.documents);
-	const wallet = useSelector(
-		(state: { wallet: { currentWallet: any } }) => state.wallet
-	);
+	const dispatch = useDispatch();
 
-	const { currentWallet } = wallet;
-	const { loading } = documentsState;
+	const { loading, agreementFormInfo } = documentsState;
 
-	let agreementInfo: AgreementInfo = {
-		name: '',
-		filled: false,
-		address: '',
-		phone: '',
-		destinationWallet: '',
-		createdAt: ''
-	};
+	useEffect(() => {
+		verifyInfo()
+	}, [agreementFormInfo]);
+
 	function nameChanged(e: any) {
-		agreementInfo.name = e.target.value;
-		verifyInfo();
+		dispatch(doSetAgreementFormInfo({name: e.target.value}));
 	}
 	function addressChanged(e: any) {
-		agreementInfo.address = e.target.value;
-		verifyInfo();
+		dispatch(doSetAgreementFormInfo({address: e.target.value}));
 	}
 	function phoneChanged(e: any) {
-		agreementInfo.phone = e.target.value;
-		verifyInfo();
+		dispatch(doSetAgreementFormInfo({phone: e.target.value}));
 	}
-	function destinationWalletChanged(e: any) {
-		agreementInfo.destinationWallet = e.target.value;
-		verifyInfo();
-	}
+
 	function verifyInfo() {
 		if (
-			agreementInfo.name.length > 0 &&
-			agreementInfo.address.length > 0 &&
-			agreementInfo.destinationWallet.length > 0 &&
-			agreementInfo.phone.length > 0
+			agreementFormInfo.name.length > 4 &&
+			agreementFormInfo.address.length > 10 &&
+			agreementFormInfo.phone.length > 5
 		) {
-			agreementInfo.filled = true;
+			setFilled(true)
+		} else {
+			setFilled(false)
 		}
 	}
 
@@ -79,25 +54,13 @@ const RentalForm: React.FC<AgreementFormProps> = ({ current }) => {
 	}
 
 	const onSubmit = () => {
-		// e.preventDefault();
-		agreementInfo.createdAt = new Date().toDateString();
-		dispatch(doSetAgreementFormInfo(agreementInfo));
-		dispatch(
-			doCreateAgreement({
-				signatoryA: currentWallet.address,
-				signatoryB: agreementInfo.destinationWallet,
-				validUntil: 0,
-				agreementFormTemplateId: type,
-				agreementForm: agreementInfo
-			})
-		);
-		slideNext().then((r) => {});
+		slideNext().then(() => {});
 	};
 
 	return (
 		<div className="agreement-content">
 			<h5>
-				<IonTitle>Information</IonTitle>
+				<IonTitle>My Information</IonTitle>
 			</h5>
 			<form action="" className="name-password-form">
 				<IonItem>
@@ -106,7 +69,6 @@ const RentalForm: React.FC<AgreementFormProps> = ({ current }) => {
 						title="Label"
 						type="text"
 						placeholder="Enter your name"
-						value={agreementInfo.name}
 						onInput={(e) => {
 							nameChanged(e);
 						}}
@@ -118,7 +80,6 @@ const RentalForm: React.FC<AgreementFormProps> = ({ current }) => {
 						title="Label"
 						type="text"
 						placeholder="Enter your billing address"
-						value={agreementInfo.address}
 						onInput={(e) => {
 							addressChanged(e);
 						}}
@@ -130,20 +91,8 @@ const RentalForm: React.FC<AgreementFormProps> = ({ current }) => {
 						title="Label"
 						type="tel"
 						placeholder="Enter your phone number"
-						value={agreementInfo.phone}
 						onInput={(e) => {
 							phoneChanged(e);
-						}}
-					/>
-				</IonItem>
-				<IonItem>
-					<IonLabel position="stacked">Destination Wallet Address</IonLabel>
-					<IonInput
-						title="Label"
-						placeholder="Enter the destination wallet address"
-						value={agreementInfo.destinationWallet}
-						onInput={(e) => {
-							destinationWalletChanged(e);
 						}}
 					/>
 				</IonItem>
@@ -155,7 +104,7 @@ const RentalForm: React.FC<AgreementFormProps> = ({ current }) => {
 						}}
 						color="gradient"
 						shape="round"
-						disabled={loading}
+						disabled={loading || !filled}
 					>
 						{loading ? 'Loading..' : 'Confirm'}
 					</IonButton>
