@@ -123,6 +123,7 @@ export const doGetDocuments = () => async (
 			return;
 		}
 		const { address } = currentWallet;
+		console.log('currentWallet', currentWallet);
 		const contract = new web3.eth.Contract(
 			Agreement.abi as any,
 			AGREEMENT_ADDRESS

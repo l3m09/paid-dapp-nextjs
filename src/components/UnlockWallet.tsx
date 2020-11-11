@@ -4,9 +4,12 @@ import {
 	IonInput,
 	IonButton,
 	IonTitle,
-	IonModal, IonToolbar, IonButtons, IonHeader
+	IonModal,
+	IonToolbar,
+	IonButtons,
+	IonHeader
 } from '@ionic/react';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { doUnlockWallet } from '../redux/actions/wallet';
 
@@ -29,11 +32,6 @@ const UnlockWallet: React.FC<Props> = ({
 }) => {
 	const dispatch = useDispatch();
 
-	useEffect(() => {
-		console.log('dismissible', dismissible);
-	}, [dismissible]);
-
-	// const { type } = useParams<{ type: string }>();
 	const wallet = useSelector(
 		(state: {
 			wallet: {
@@ -50,10 +48,12 @@ const UnlockWallet: React.FC<Props> = ({
 		filled: false,
 		password: ''
 	};
+
 	function passwordChanged(e: any) {
 		unlockForm.password = e.target.value;
 		verifyInfo();
 	}
+
 	function verifyInfo() {
 		if (unlockForm.password.length > 0) {
 			unlockForm.filled = true;
@@ -64,7 +64,7 @@ const UnlockWallet: React.FC<Props> = ({
 		e.preventDefault();
 		dispatch(
 			doUnlockWallet({
-				walletId: selectedWallet._id,
+				wallet: selectedWallet,
 				password: unlockForm.password
 			})
 		);
@@ -82,14 +82,17 @@ const UnlockWallet: React.FC<Props> = ({
 			<IonHeader translucent>
 				<IonToolbar>
 					<IonTitle>Unlock Wallet</IonTitle>
-					{unlockedWallet ?
+					{unlockedWallet ? (
 						<IonButtons slot="end">
-							<IonButton color="secondary" shape="round" onClick={() => dismiss()}>
+							<IonButton
+								color="secondary"
+								shape="round"
+								onClick={() => dismiss()}
+							>
 								Cancel
 							</IonButton>
 						</IonButtons>
-						: null
-					}
+					) : null}
 				</IonToolbar>
 			</IonHeader>
 			<IonItem>
