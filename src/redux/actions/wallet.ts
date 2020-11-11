@@ -79,23 +79,26 @@ const unlockWallet = (payload: any) => {
 
 // ACTIONS
 export const doUnlockWallet = (payload: {
-	walletId: string;
+	wallet: any;
 	password: string;
 }) => async (dispatch: any) => {
 	dispatch({ type: WalletActionTypes.UNLOCK_WALLET_LOADING });
 	try {
-		const { walletId, password } = payload;
+		const { wallet, password } = payload;
 		const walletManager = BlockchainFactory.getWalletManager();
-		const ks = await walletManager.unlockWallet(walletId, password);
+		const ks = await walletManager.unlockWallet(wallet._id, password);
 		if (!ks) {
 			dispatch({
 				type: WalletActionTypes.UNLOCK_WALLET_FAILURE,
 				payload: 'Unlock wallet failure, check password and wallet'
 			});
 		} else {
-			const address = ethers.Wallet.fromMnemonic(ks.mnemonic).address;
+			const { address } = wallet;
 			BlockchainFactory.setKeystore(ks);
+			const value = JSON.stringify(wallet);
+			await Storage.set({ key: 'CURRENT_WALLET', value });
 			dispatch(unlockWallet(address));
+			dispatch(setCurrentWallet(wallet));
 		}
 	} catch (err) {
 		dispatch({
@@ -160,8 +163,10 @@ export const doGetCurrentWallet = () => async (dispatch: any) => {
 export const doSetCurrentWallet = (wallet: any) => async (dispatch: any) => {
 	dispatch({ type: WalletActionTypes.SET_CURRENT_WALLET_LOADING });
 	try {
-		const encoded = JSON.stringify(wallet);
-		await Storage.set({ key: 'CURRENT_WALLET', value: encoded });
+		const value = JSON.stringify(wallet);
+
+		await Storage.set({ key: 'CURRENT_WALLET', value });
+		console.log('CURRENT_WALLET', wallet.address);
 		dispatch(setCurrentWallet(wallet));
 	} catch (err) {
 		dispatch({
