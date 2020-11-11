@@ -23,9 +23,8 @@ const RentalDescription: React.FC<DescriptionProps> = ({ current }) => {
 	}
 
 	return (
-		<IonContent
-			fullscreen
-			class="agreement-content vehicle-agreement-instructions"
+		<div
+			className="agreement-content vehicle-agreement-instructions"
 		>
 			<IonItem>
 				<div className="instructions">
@@ -108,7 +107,7 @@ const RentalDescription: React.FC<DescriptionProps> = ({ current }) => {
 				</p>
 				<IonButton onClick={() => setShowModal(false)}>Close</IonButton>
 			</IonModal>
-		</IonContent>
+		</div>
 	);
 };
 

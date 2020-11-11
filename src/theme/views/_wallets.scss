@@ -1,11 +1,27 @@
 .wallets-page {
 
   .wallets-title {
+    position: relative;
+    padding: 20px 0;
+
+   @media (min-width: 767px) {
+     &:after {
+       content: "";
+       position: absolute;
+       bottom: 0;
+       left: 50%;
+       transform: translateX(-50%);
+       height: 1px;
+       width: 850px;
+       background-color: var(--ion-color-primary);
+
+     }
+   }
 
     h5 {
       width: 100%;
       text-align: center;
-      color: $brand-primary;
+      color: white;
     }
 
   }
@@ -17,8 +33,6 @@
   //}
   .wallets-container {
     margin-top: 1vh;
-    width: 95%;
-    margin-left: 2.5%;
 
     .wallet-wrapper {
       margin-bottom: 1vh;
@@ -95,10 +109,38 @@
 
   }
 
-  ion-item-divider {
-    margin-bottom: 20px;
-    min-height: 20px;
-    border-color: $brand-secondary;
+  .wallets-list-wrapper {
+
+    @media (min-width: 767px) {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+
+      ion-item-group {
+        width: 50%;
+        max-width: 400px;
+        height: 70vh;
+        padding-top: 20px;
+
+        &:first-child{
+          border-right: 1px solid var(--ion-color-primary);
+        }
+
+      }
+
+    }
+
+    ion-item-divider {
+      margin-bottom: 20px;
+      min-height: 20px;
+      border-color: $brand-secondary;
+
+      @media (min-width: 767px) {
+        display: none;
+
+      }
+
+    }
 
   }
 

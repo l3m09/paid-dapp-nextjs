@@ -14,8 +14,9 @@ import {
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import {
-	paperPlaneOutline,
-	paperPlaneSharp,
+	document,
+	documentOutline,
+	documentSharp,
 	listCircleOutline
 } from 'ionicons/icons';
 import {useSelector} from 'react-redux';
@@ -45,8 +46,8 @@ const Menu: React.FC = () => {
 		{
 			title: 'Agreements',
 			url: '/documents',
-			iosIcon: paperPlaneOutline,
-			mdIcon: paperPlaneSharp,
+			iosIcon: documentOutline,
+			mdIcon: documentSharp,
 			disabled: false
 		},
 	];
@@ -70,11 +71,14 @@ const Menu: React.FC = () => {
 									lines="none"
 									detail={false}
 								>
-									<IonIcon
-										ios={appPage.iosIcon}
-										md={appPage.mdIcon}
-										color="gradient"
-									/>
+									<span className="icon-wrapper">
+										<IonIcon
+											ios={appPage.iosIcon}
+											md={appPage.mdIcon}
+											color="gradient"
+										/>
+									</span>
+
 									<IonLabel color="gradient">{appPage.title}</IonLabel>
 								</IonItem>
 							</IonMenuToggle>

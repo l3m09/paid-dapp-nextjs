@@ -9,6 +9,30 @@ ion-menu {
   ion-content {
   }
 
+  .icon-wrapper {
+    height: 35px;
+    width: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2em;
+    border-radius: 50px;
+    padding: 5px;
+
+    ion-icon {
+
+    }
+
+  }
+
+  .selected {
+
+    .icon-wrapper {
+      background: var(--ion-color-gradient);
+    }
+
+  }
+
   &.md {
     ion-content {
       --padding-start: 8px;
@@ -55,15 +79,11 @@ ion-menu {
     }
 
     ion-item.selected ion-icon {
-      &.ion-color {
-        color: $brand-secondary !important;
-      }
+
     }
 
     ion-item ion-icon {
       color: white;
-      font-size: 24px;
-
 
     }
 
@@ -96,7 +116,7 @@ ion-menu {
 
     ion-item ion-icon {
       color: white;
-      font-size: 24px;
+
     }
 
     ion-item .selected ion-icon {
@@ -123,8 +143,6 @@ ion-menu {
   }
 
   ion-item.selected ion-icon {
-    &.ion-color {
-      color: $brand-secondary !important;
-    }
+
   }
 }

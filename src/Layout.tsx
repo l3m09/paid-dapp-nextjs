@@ -69,7 +69,7 @@ const Layout: React.FC = () => {
 	}, [currentWallet, wallets, unlockedWallet, history]);
 
 	return (
-		<IonContent>
+		<IonContent className="main-content">
 			<Route path="/" component={Landing} exact />
 			<Route path="/login" component={Login} exact />
 			<Route path="/wallets" component={Wallets} exact />

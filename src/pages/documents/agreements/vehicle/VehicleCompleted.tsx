@@ -32,7 +32,7 @@ const VehicleCompleted: React.FC<VehicleCompletedProps> = ({ current }) => {
 	}
 
 	return (
-		<IonContent fullscreen class="agreement-content agreement-completed">
+		<div className="agreement-content agreement-completed">
 			<IonItem>
 				<IonTitle class="agreement-content-title agreement-completed-title">
 					You, <span className="text-primary">{agreementFormInfo.name}</span>
@@ -89,7 +89,7 @@ const VehicleCompleted: React.FC<VehicleCompletedProps> = ({ current }) => {
 				</p>
 				<IonButton onClick={() => setShowModal(false)}>Close</IonButton>
 			</IonModal>
-		</IonContent>
+		</div>
 	);
 };
 

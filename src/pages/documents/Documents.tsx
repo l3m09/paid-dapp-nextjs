@@ -18,13 +18,13 @@ import {
 	IonCardHeader,
 	IonCard,
 	IonPopover,
-	IonItemDivider, IonFabButton, IonFab
+	IonItemDivider, IonFabButton, IonFab, IonMenuToggle
 } from '@ionic/react';
 import {
 	add,
 	documentsOutline as documentsIcon,
 	documentOutline as documentIcon,
-	downloadOutline
+	downloadOutline, listCircleOutline, documentOutline, documentSharp
 } from 'ionicons/icons';
 
 import React, { useEffect, useState } from 'react';
@@ -36,6 +36,7 @@ import {
 } from '../../redux/actions/documents';
 
 import Collapsible from 'react-collapsible';
+import {useLocation} from "react-router-dom";
 
 function SelectedDocument(payload: {
 	show: boolean;
@@ -111,6 +112,14 @@ function SelectedDocument(payload: {
 		</div>
 	);
 }
+interface AppPage {
+	url: string;
+	iosIcon: string;
+	mdIcon: string;
+	title: string;
+	disabled: boolean;
+}
+
 const Documents: React.FC = () => {
 	const history = useHistory();
 	const dispatch = useDispatch();
@@ -152,26 +161,72 @@ const Documents: React.FC = () => {
 		history.push('/agreements/' + type.toLowerCase());
 	}
 
+	const location = useLocation();
+	const appPages: AppPage[] = [
+		{
+			title: 'Wallets',
+			url: '/wallets',
+			iosIcon: listCircleOutline,
+			mdIcon: listCircleOutline,
+			disabled: false
+		},
+		{
+			title: 'Agreements',
+			url: '/documents',
+			iosIcon: documentOutline,
+			mdIcon: documentSharp,
+			disabled: false
+		},
+	];
+
+
 	return (
-		<IonPage className="documents-page">
-			<IonHeader>
-				<IonToolbar>
-					<IonButtons slot="start">
-						<IonMenuButton />
-					</IonButtons>
-					<IonTitle>Documents</IonTitle>
-				</IonToolbar>
-			</IonHeader>
-			<IonLoading
-				cssClass="my-custom-class"
-				isOpen={loading}
-				message={'Please wait...'}
-				duration={1000}
-			/>
+		<IonPage className="documents-page content-page">
 			<IonContent fullscreen>
-				<div className="documents-container">
-					{documents
-						? documents.map((document: any, index: number) => {
+				<IonHeader>
+					<IonToolbar>
+						<IonButtons slot="start">
+							<IonMenuButton />
+						</IonButtons>
+						<IonTitle>Documents</IonTitle>
+						<IonButtons className="alternate-menu" slot="end">
+							{appPages.map((appPage, index) => {
+								return (
+										<IonItem
+											key={index}
+											disabled={appPage.disabled}
+											className={
+												location.pathname === appPage.url ? 'selected' : ''
+											}
+											routerLink={appPage.url}
+											routerDirection="none"
+											lines="none"
+											detail={false}
+										>
+											<span className="icon-wrapper">
+												<IonIcon
+													ios={appPage.iosIcon}
+													md={appPage.mdIcon}
+													color="gradient"
+												/>
+											</span>
+											<IonLabel color="gradient">{appPage.title}</IonLabel>
+										</IonItem>
+								);
+							})}
+						</IonButtons>
+					</IonToolbar>
+				</IonHeader>
+				<IonLoading
+					cssClass="my-custom-class"
+					isOpen={loading}
+					message={'Please wait...'}
+					duration={1000}
+				/>
+				<div>
+					<div className="documents-container">
+						{documents
+							? documents.map((document: any, index: number) => {
 								const { data, meta, event } = document;
 								return (
 									<Collapsible
@@ -196,38 +251,39 @@ const Documents: React.FC = () => {
 										</div>
 									</Collapsible>
 								);
-						  })
-						: null}
+							})
+							: null}
+					</div>
+					<IonPopover isOpen={showPopOver} cssClass="agreements-popover" onDidDismiss={() => {setShowPopover(false)}}>
+						<IonItemDivider>
+							<IonItem>Select Agreement type</IonItem>
+						</IonItemDivider>
+						{agreementTypes.map((type: string, index: number) => {
+							return (
+								<IonItem
+									onClick={() => {
+										chooseOption(type);
+									}}
+									key={index}
+								>
+									{type}
+								</IonItem>
+							);
+						})}
+					</IonPopover>
+					<SelectedDocument
+						show={showModal}
+						selectedDocument={selectedDocument}
+						closeShowDocument={closeShowDocument}
+					/>
+					<IonFab vertical="bottom" horizontal="end" slot="fixed">
+						<IonFabButton color="gradient" onClick={() => {
+							setShowPopover(true);
+						}}>
+							<IonIcon icon={add} />
+						</IonFabButton>
+					</IonFab>
 				</div>
-				<IonPopover isOpen={showPopOver} cssClass="agreements-popover" onDidDismiss={() => {setShowPopover(false)}}>
-					<IonItemDivider>
-						<IonItem>Select Agreement type</IonItem>
-					</IonItemDivider>
-					{agreementTypes.map((type: string, index: number) => {
-						return (
-							<IonItem
-								onClick={() => {
-									chooseOption(type);
-								}}
-								key={index}
-							>
-								{type}
-							</IonItem>
-						);
-					})}
-				</IonPopover>
-				<SelectedDocument
-					show={showModal}
-					selectedDocument={selectedDocument}
-					closeShowDocument={closeShowDocument}
-				/>
-				<IonFab vertical="bottom" horizontal="end" slot="fixed">
-					<IonFabButton color="gradient" onClick={() => {
-						setShowPopover(true);
-					}}>
-						<IonIcon icon={add} />
-					</IonFabButton>
-				</IonFab>
 			</IonContent>
 		</IonPage>
 	);

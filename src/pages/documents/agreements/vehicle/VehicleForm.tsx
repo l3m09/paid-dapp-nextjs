@@ -96,7 +96,7 @@ const VehicleForm: React.FC<AgreementFormProps> = ({ current }) => {
 	};
 
 	return (
-		<IonContent fullscreen class="agreement-content">
+		<div className="agreement-content">
 			<h5>
 				<IonTitle>Information</IonTitle>
 			</h5>
@@ -162,7 +162,7 @@ const VehicleForm: React.FC<AgreementFormProps> = ({ current }) => {
 					</IonButton>
 				</IonItem>
 			</form>
-		</IonContent>
+		</div>
 	);
 };
 

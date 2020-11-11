@@ -10,9 +10,9 @@ import {
 	IonToolbar,
 	IonButton,
 	IonIcon,
-	IonItemDivider
+	IonItemDivider, IonLabel
 } from '@ionic/react';
-import { checkmarkCircle } from 'ionicons/icons';
+import {checkmarkCircle, listCircleOutline, documentOutline, documentSharp} from 'ionicons/icons';
 
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -20,6 +20,15 @@ import { doSetSelectedWallet } from '../../redux/actions/wallet';
 import CreateWallet from './create-wallet/CreateWallet';
 import UnlockWallet from '../../components/UnlockWallet';
 import ImportWallet from './ImportWallet';
+import {useLocation} from "react-router-dom";
+
+interface AppPage {
+	url: string;
+	iosIcon: string;
+	mdIcon: string;
+	title: string;
+	disabled: boolean;
+}
 
 const Wallets: React.FC = () => {
 	const dispatch = useDispatch();
@@ -46,89 +55,137 @@ const Wallets: React.FC = () => {
 		setShowUnlockWalletModal(true);
 	}
 
-	return (
-		<IonPage className="wallets-page">
-			<IonHeader>
-				<IonToolbar>
-					<IonButtons slot="start">
-						<IonMenuButton />
-					</IonButtons>
-					<IonTitle>Wallets</IonTitle>
-				</IonToolbar>
-			</IonHeader>
+	const location = useLocation();
+	const appPages: AppPage[] = [
+		{
+			title: 'Wallets',
+			url: '/wallets',
+			iosIcon: listCircleOutline,
+			mdIcon: listCircleOutline,
+			disabled: false
+		},
+		{
+			title: 'Agreements',
+			url: '/documents',
+			iosIcon: documentOutline,
+			mdIcon: documentSharp,
+			disabled: false
+		},
+	];
 
+	return (
+		<IonPage className="wallets-page content-page">
 			<IonContent fullscreen>
-				<IonItem className="wallets-title">
-					<h5>Select default Wallet</h5>
-				</IonItem>
-				<IonItemGroup class="wallets-container">
-					{wallets.map((item: any, index: any) => {
-						if (unlockedWallet === item.address) {
-							return (
-								<IonItem class="wallet-wrapper selected-wallet" key={index}>
-									<div className="wallet-container">
-										{unlockedWallet === item.address ? (
-											<IonIcon icon={checkmarkCircle} className="current-tag" />
-										) : (
-											''
-										)}
-										<span className="label">{item.name}</span>
-										<span className="address">{item.address}</span>
-									</div>
-								</IonItem>
-							);
-						} else {
-							return (
-								<IonItem
-									class="wallet-wrapper"
-									key={index}
-									onClick={() => openUnlockWallet(item)}
+				<IonHeader>
+					<IonToolbar>
+						<IonButtons slot="start">
+							<IonMenuButton />
+						</IonButtons>
+						<IonTitle>Wallets</IonTitle>
+						<IonButtons className="alternate-menu" slot="end">
+							{appPages.map((appPage, index) => {
+								return (
+									<IonItem
+										key={index}
+										disabled={appPage.disabled}
+										className={
+											location.pathname === appPage.url ? 'selected' : ''
+										}
+										routerLink={appPage.url}
+										routerDirection="none"
+										lines="none"
+										detail={false}
+									>
+										<span className="icon-wrapper">
+											<IonIcon
+												ios={appPage.iosIcon}
+												md={appPage.mdIcon}
+												color="gradient"
+											/>
+										</span>
+										<IonLabel color="gradient">{appPage.title}</IonLabel>
+									</IonItem>
+								);
+							})}
+						</IonButtons>
+					</IonToolbar>
+				</IonHeader>
+
+				<div>
+					<IonItem className="wallets-title">
+						<h5>Select default Wallet</h5>
+					</IonItem>
+					<div className="wallets-list-wrapper">
+						<IonItemGroup class="wallets-container">
+							{wallets.map((item: any, index: any) => {
+								if (unlockedWallet === item.address) {
+									return (
+										<IonItem class="wallet-wrapper selected-wallet" key={index}>
+											<div className="wallet-container">
+												{unlockedWallet === item.address ? (
+													<IonIcon icon={checkmarkCircle} className="current-tag" />
+												) : (
+													''
+												)}
+												<span className="label">{item.name}</span>
+												<span className="address">{item.address}</span>
+											</div>
+										</IonItem>
+									);
+								} else {
+									return (
+										<IonItem
+											class="wallet-wrapper"
+											key={index}
+											onClick={() => openUnlockWallet(item)}
+										>
+											<div className="wallet-container">
+												<span className="label">{item.name}</span>
+												<span className="address">{item.address}</span>
+											</div>
+										</IonItem>
+									);
+								}
+							})}
+						</IonItemGroup>
+						<IonItemDivider />
+						<IonItemGroup>
+							<IonItem class="form-options">
+								<IonButton
+									onClick={() => setShowCreateModal(true)}
+									class=""
+									color="secondary"
+									shape="round"
 								>
-									<div className="wallet-container">
-										<span className="label">{item.name}</span>
-										<span className="address">{item.address}</span>
-									</div>
-								</IonItem>
-							);
-						}
-					})}
-				</IonItemGroup>
-				<IonItemDivider />
-				<IonItemGroup>
-					<IonItem class="form-options">
-						<IonButton
-							onClick={() => setShowCreateModal(true)}
-							class=""
-							color="secondary"
-							shape="round"
-						>
-							Create Wallet
-						</IonButton>
-					</IonItem>
-					<IonItem class="form-options">
-						<IonButton
-							onClick={() => setShowImportWalletModal(true)}
-							class=""
-							color="gradient"
-							shape="round"
-						>
-							Import Wallet
-						</IonButton>
-					</IonItem>
-				</IonItemGroup>
-				<CreateWallet show={showCreateModal} dismiss={dismissCreateModal} />
-				<ImportWallet
-					show={showImportWalletModal}
-					dismiss={dismissImportModal}
-				/>
-				{selectedWallet !== null ? (
-					<UnlockWallet
-						show={showUnlockWalletModal}
-						dismissible={true}
-						dismiss={dismissUnlockWalletModal}
-						selectedWallet={selectedWallet}
+									Create Wallet
+								</IonButton>
+							</IonItem>
+							<IonItem class="form-options">
+								<IonButton
+									onClick={() => setShowImportWalletModal(true)}
+									class=""
+									color="gradient"
+									shape="round"
+								>
+									Import Wallet
+								</IonButton>
+							</IonItem>
+						</IonItemGroup>
+					</div>
+					<CreateWallet show={showCreateModal} dismiss={dismissCreateModal} />
+					<ImportWallet
+						show={showImportWalletModal}
+						dismiss={dismissImportModal}
 					/>
-				) : null}
+					{selectedWallet !== null ? (
+						<UnlockWallet
+							show={showUnlockWalletModal}
+							dismissible={true}
+							dismiss={dismissUnlockWalletModal}
+							selectedWallet={selectedWallet}
+						/>
+					) : null}
+				</div>
 			</IonContent>
 		</IonPage>
 	);
