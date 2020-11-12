@@ -24,15 +24,12 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import './theme/main.scss';
 
-/* Pages */
-// import LoginGmail from './pages/auth/LoginGmail';
-// import Menu from './components/Menu';
 import Wallets from './pages/wallet/Wallets';
 import Documents from './pages/documents/Documents';
 import Agreements from './pages/documents/agreements/Agreements';
 import { useHistory } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
-import { doGetCurrentWallet, doGetWallets } from './redux/actions/wallet';
+import { doGetWallets } from './redux/actions/wallet';
 
 import UnlockWallet from './components/UnlockWallet';
 
@@ -46,7 +43,7 @@ const Layout: React.FC = () => {
 
 	useEffect(() => {
 		dispatch(doGetWallets());
-		dispatch(doGetCurrentWallet());
+		// dispatch(doGetCurrentWallet());
 	}, [dispatch]);
 
 	const dismissModal = () => {

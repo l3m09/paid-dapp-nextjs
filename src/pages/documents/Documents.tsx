@@ -26,7 +26,6 @@ import {
 	add,
 	documentsOutline as documentsIcon,
 	documentOutline as documentIcon,
-	downloadOutline, listCircleOutline, documentOutline, documentSharp
 } from 'ionicons/icons';
 
 import React, { useEffect, useState } from 'react';
@@ -38,7 +37,7 @@ import {
 } from '../../redux/actions/documents';
 
 import Collapsible from 'react-collapsible';
-import {useLocation} from "react-router-dom";
+import MenuAlternate from '../../components/MenuAlternate';
 
 function SelectedDocument(payload: {
 	show: boolean;
@@ -72,18 +71,6 @@ function SelectedDocument(payload: {
 								<IonLabel position="stacked">Signatory B</IonLabel>
 								<span>{selectedDocument.event.to}</span>
 							</IonItem>
-							{/*<IonItem>*/}
-							{/*	<IonLabel position="stacked">Size</IonLabel>*/}
-							{/*	<span>{selectedDocument.size}</span>*/}
-							{/*</IonItem>*/}
-							{/*<IonItem>*/}
-							{/*	<IonLabel position="stacked">Last Modified</IonLabel>*/}
-							{/*	<span>{selectedDocument.modified_at}</span>*/}
-							{/*</IonItem>*/}
-							{/*<IonItem>*/}
-							{/*	<IonLabel position="stacked">Created</IonLabel>*/}
-							{/*	<span>{selectedDocument.created_at}</span>*/}
-							{/*</IonItem>*/}
 							<IonItem>
 								<IonLabel position="stacked">Transaction Hash</IonLabel>
 								<span>{selectedDocument.meta.transactionHash}</span>
@@ -93,13 +80,6 @@ function SelectedDocument(payload: {
 				</IonCard>
 				<hr />
 				<IonItem className="modal-actions">
-					{/*<IonButton*/}
-					{/*	download={selectedDocument.link}*/}
-					{/*	className="download-button"*/}
-					{/*>*/}
-					{/*	<IonIcon icon={downloadOutline} />*/}
-					{/*	<span>Download</span>*/}
-					{/*</IonButton>*/}
 					<IonButton
 						color="secondary"
 						shape="round"
@@ -113,13 +93,6 @@ function SelectedDocument(payload: {
 			</IonModal>
 		</div>
 	);
-}
-interface AppPage {
-	url: string;
-	iosIcon: string;
-	mdIcon: string;
-	title: string;
-	disabled: boolean;
 }
 
 const Documents: React.FC = () => {
@@ -163,25 +136,6 @@ const Documents: React.FC = () => {
 		history.push('/agreements/' + type.toLowerCase());
 	}
 
-	const location = useLocation();
-	const appPages: AppPage[] = [
-		{
-			title: 'Wallets',
-			url: '/wallets',
-			iosIcon: listCircleOutline,
-			mdIcon: listCircleOutline,
-			disabled: false
-		},
-		{
-			title: 'Agreements',
-			url: '/documents',
-			iosIcon: documentOutline,
-			mdIcon: documentSharp,
-			disabled: false
-		},
-	];
-
-
 	return (
 		<IonPage className="documents-page content-page">
 			<IonContent fullscreen>
@@ -191,32 +145,7 @@ const Documents: React.FC = () => {
 							<IonMenuButton />
 						</IonButtons>
 						<IonTitle>Documents</IonTitle>
-						<IonButtons className="alternate-menu" slot="end">
-							{appPages.map((appPage, index) => {
-								return (
-										<IonItem
-											key={index}
-											disabled={appPage.disabled}
-											className={
-												location.pathname === appPage.url ? 'selected' : ''
-											}
-											routerLink={appPage.url}
-											routerDirection="none"
-											lines="none"
-											detail={false}
-										>
-											<span className="icon-wrapper">
-												<IonIcon
-													ios={appPage.iosIcon}
-													md={appPage.mdIcon}
-													color="gradient"
-												/>
-											</span>
-											<IonLabel color="gradient">{appPage.title}</IonLabel>
-										</IonItem>
-								);
-							})}
-						</IonButtons>
+						<MenuAlternate/>
 					</IonToolbar>
 				</IonHeader>
 				<IonLoading

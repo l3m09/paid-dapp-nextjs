@@ -50,7 +50,8 @@ ion-modal {
   position: absolute;
 
   .modal-wrapper {
-    height: 93vh !important;
+    //height: 93vh !important;
+    max-height: 900px !important;
     width: 95% !important;
     margin: auto;
     max-width: 500px !important;

@@ -5,7 +5,6 @@ import {
 	IonButton,
 	IonRouterLink,
 	IonText,
-	IonModal,
 	IonContent
 } from '@ionic/react';
 import React, { useState } from 'react';
