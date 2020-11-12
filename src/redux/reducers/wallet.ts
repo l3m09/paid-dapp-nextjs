@@ -150,6 +150,7 @@ export const WalletReducer = function (state = initialState, action: any) {
 			return {
 				...state,
 				unlockedWallet: payload,
+				currentWallet: payload,
 				unlockingWallet: false,
 				error: null,
 				seedPhrase: [],

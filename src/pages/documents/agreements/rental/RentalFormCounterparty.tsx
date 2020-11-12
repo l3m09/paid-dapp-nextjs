@@ -72,7 +72,7 @@ const RentalFormCounterparty: React.FC<AgreementFormProps> = ({ current }) => {
 		dispatch(doSetAgreementFormInfo({createdAt: new Date().toDateString()}))
 		dispatch(
 			doCreateAgreement({
-				signatoryA: currentWallet.address,
+				signatoryA: currentWallet,
 				signatoryB: agreementFormInfo.counterpartyWallet,
 				validUntil: 0,
 				agreementFormTemplateId: type,

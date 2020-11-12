@@ -18,7 +18,9 @@ import {
 	IonCardHeader,
 	IonCard,
 	IonPopover,
-	IonItemDivider, IonFabButton, IonFab, IonMenuToggle
+	IonItemDivider,
+	IonFabButton,
+	IonFab
 } from '@ionic/react';
 import {
 	add,
@@ -49,7 +51,7 @@ function SelectedDocument(payload: {
 	}
 	return (
 		<div id="modal-container">
-			<IonModal isOpen={show} cssClass="document-modal">
+			<IonModal isOpen={show} cssClass="document-modal" onDidDismiss={() => {closeShowDocument()}}>
 				<IonCard>
 					<IonCardHeader>
 						<IonCardTitle>
@@ -70,18 +72,18 @@ function SelectedDocument(payload: {
 								<IonLabel position="stacked">Signatory B</IonLabel>
 								<span>{selectedDocument.event.to}</span>
 							</IonItem>
-							<IonItem>
-								<IonLabel position="stacked">Size</IonLabel>
-								<span>{selectedDocument.size}</span>
-							</IonItem>
-							<IonItem>
-								<IonLabel position="stacked">Last Modified</IonLabel>
-								<span>{selectedDocument.modified_at}</span>
-							</IonItem>
-							<IonItem>
-								<IonLabel position="stacked">Created</IonLabel>
-								<span>{selectedDocument.created_at}</span>
-							</IonItem>
+							{/*<IonItem>*/}
+							{/*	<IonLabel position="stacked">Size</IonLabel>*/}
+							{/*	<span>{selectedDocument.size}</span>*/}
+							{/*</IonItem>*/}
+							{/*<IonItem>*/}
+							{/*	<IonLabel position="stacked">Last Modified</IonLabel>*/}
+							{/*	<span>{selectedDocument.modified_at}</span>*/}
+							{/*</IonItem>*/}
+							{/*<IonItem>*/}
+							{/*	<IonLabel position="stacked">Created</IonLabel>*/}
+							{/*	<span>{selectedDocument.created_at}</span>*/}
+							{/*</IonItem>*/}
 							<IonItem>
 								<IonLabel position="stacked">Transaction Hash</IonLabel>
 								<span>{selectedDocument.meta.transactionHash}</span>
@@ -91,16 +93,16 @@ function SelectedDocument(payload: {
 				</IonCard>
 				<hr />
 				<IonItem className="modal-actions">
+					{/*<IonButton*/}
+					{/*	download={selectedDocument.link}*/}
+					{/*	className="download-button"*/}
+					{/*>*/}
+					{/*	<IonIcon icon={downloadOutline} />*/}
+					{/*	<span>Download</span>*/}
+					{/*</IonButton>*/}
 					<IonButton
-						download={selectedDocument.link}
-						className="download-button"
-					>
-						<IonIcon icon={downloadOutline} />
-						<span>Download</span>
-					</IonButton>
-					<IonButton
-						buttonType="danger"
-						className="close-button"
+						color="secondary"
+						shape="round"
 						onClick={() => {
 							closeShowDocument();
 						}}
@@ -149,7 +151,7 @@ const Documents: React.FC = () => {
 
 	function trigger(name: string) {
 		return (
-			<button className="no-button grey-button document-trigger">
+			<button className="document-trigger">
 				<IonIcon icon={documentsIcon} />
 				<span>{name}</span>
 			</button>
@@ -230,6 +232,7 @@ const Documents: React.FC = () => {
 								const { data, meta, event } = document;
 								return (
 									<Collapsible
+										transitionTime={200}
 										contentInnerClassName="document-container"
 										trigger={trigger(`${event.id} - ${event.from}`)}
 										key={index}
@@ -243,7 +246,8 @@ const Documents: React.FC = () => {
 													}}
 												>
 													<IonIcon icon={documentIcon} />
-													<span>{event.id}</span>
+													<span>Id: {event.id}</span>
+													<span>-</span>
 													<span>From: {event.from}</span>
 												</div>
 												<hr />

@@ -147,7 +147,7 @@ export const doGetCurrentWallet = () => async (dispatch: any) => {
 			dispatch(getCurrentWallet(null));
 		} else {
 			const wallet = JSON.parse(stored.value);
-			dispatch(getCurrentWallet(wallet));
+			dispatch(getCurrentWallet(wallet.address));
 		}
 	} catch (err) {
 		dispatch({
