@@ -234,7 +234,7 @@ const Documents: React.FC = () => {
 									<Collapsible
 										transitionTime={200}
 										contentInnerClassName="document-container"
-										trigger={trigger(`${event.id} - ${event.from}`)}
+										trigger={trigger(`${event.from}`)}
 										key={index}
 									>
 										<div className="document-titles">
@@ -246,8 +246,7 @@ const Documents: React.FC = () => {
 													}}
 												>
 													<IonIcon icon={documentIcon} />
-													<span>Id: {event.id}</span>
-													<span>-</span>
+													<span>{event.id}</span>
 													<span>From: {event.from}</span>
 												</div>
 												<hr />
