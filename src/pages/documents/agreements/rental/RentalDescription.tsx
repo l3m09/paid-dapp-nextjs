@@ -28,7 +28,7 @@ const RentalDescription: React.FC<DescriptionProps> = ({ current }) => {
 				<div className="instructions">
 					<IonTitle class="instructions-title first">Rental</IonTitle>
 					<IonText color="secondary" class="instructions-sub-text first">
-						This document will serve as an official document for (SELLER) to
+						This document will serve as an official document for (BUYER) to
 						agree to purchase sellers vehicle subject to the following terms and
 						conditions:
 					</IonText>
