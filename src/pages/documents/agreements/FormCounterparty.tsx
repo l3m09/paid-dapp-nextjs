@@ -3,9 +3,10 @@ import {
 	IonItem,
 	IonInput,
 	IonButton,
-	IonTitle, IonLoading
+	IonTitle,
+	IonLoading
 } from '@ionic/react';
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
 	doCreateAgreement,
@@ -30,18 +31,17 @@ const FormCounterparty: React.FC<AgreementFormProps> = ({ current }) => {
 
 	const { loading, agreementFormInfo, creatingAgreement } = documentsState;
 
-
 	function nameChanged(e: any) {
-		dispatch(doSetAgreementFormInfo({counterpartyName: e.target.value}))
+		dispatch(doSetAgreementFormInfo({ counterpartyName: e.target.value }));
 	}
 	function addressChanged(e: any) {
-		dispatch(doSetAgreementFormInfo({counterpartyAddress: e.target.value}))
+		dispatch(doSetAgreementFormInfo({ counterpartyAddress: e.target.value }));
 	}
 	function phoneChanged(e: any) {
-		dispatch(doSetAgreementFormInfo({counterpartyPhone: e.target.value}))
+		dispatch(doSetAgreementFormInfo({ counterpartyPhone: e.target.value }));
 	}
 	function walletChanged(e: any) {
-		dispatch(doSetAgreementFormInfo({counterpartyWallet: e.target.value}))
+		dispatch(doSetAgreementFormInfo({ counterpartyWallet: e.target.value }));
 	}
 	function verifyInfo() {
 		if (
@@ -50,16 +50,15 @@ const FormCounterparty: React.FC<AgreementFormProps> = ({ current }) => {
 			agreementFormInfo.counterpartyAddress.length > 3 &&
 			agreementFormInfo.counterpartyPhone.length > 3
 		) {
-			setFilled(true)
+			setFilled(true);
 		} else {
-			setFilled(false)
+			setFilled(false);
 		}
 	}
 
 	useEffect(() => {
-		verifyInfo()
-	}, [agreementFormInfo]);
-
+		verifyInfo();
+	});
 
 	async function slideNext() {
 		await current.lockSwipeToNext(false);
@@ -69,10 +68,10 @@ const FormCounterparty: React.FC<AgreementFormProps> = ({ current }) => {
 
 	const onSubmit = () => {
 		// e.preventDefault();
-		dispatch(doSetAgreementFormInfo({createdAt: new Date().toDateString()}))
+		dispatch(doSetAgreementFormInfo({ createdAt: new Date().toDateString() }));
 		dispatch(
 			doCreateAgreement({
-				signatoryA: currentWallet,
+				signatoryA: currentWallet.address,
 				signatoryB: agreementFormInfo.counterpartyWallet,
 				validUntil: 0,
 				agreementFormTemplateId: type,
