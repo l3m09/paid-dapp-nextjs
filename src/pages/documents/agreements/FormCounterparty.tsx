@@ -139,7 +139,7 @@ const FormCounterparty: React.FC<AgreementFormProps> = ({ current }) => {
 						}}
 						color="gradient"
 						shape="round"
-						disabled={loading || !filled}
+						disabled={!filled}
 					>
 						{loading ? 'Loading..' : 'Confirm'}
 					</IonButton>
@@ -147,7 +147,7 @@ const FormCounterparty: React.FC<AgreementFormProps> = ({ current }) => {
 			</form>
 			<IonLoading
 				cssClass="my-custom-class"
-				isOpen={loading || creatingAgreement}
+				isOpen={creatingAgreement}
 				message={'Please wait...'}
 				duration={1000}
 			/>
