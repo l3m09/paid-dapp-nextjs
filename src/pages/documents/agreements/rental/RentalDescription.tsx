@@ -26,6 +26,7 @@ const RentalDescription: React.FC<DescriptionProps> = ({ current }) => {
 		>
 			<IonItem>
 				<div className="instructions">
+				<div>
 					<IonTitle class="instructions-title first">Rental</IonTitle>
 					<IonText color="secondary" class="instructions-sub-text first">
 						This document will serve as an official document for (BUYER) to
@@ -77,15 +78,18 @@ const RentalDescription: React.FC<DescriptionProps> = ({ current }) => {
 							automatically disqualify the vehicle from purchase
 						</li>
 					</ul>
-					<IonButton
-						onClick={() => {
-							slideNext();
-						}}
-						color="gradient"
-						shape="round"
-					>
-						Continue
-					</IonButton>
+				</div>
+					<div>
+						<IonButton
+							onClick={() => {
+								slideNext();
+							}}
+							color="gradient"
+							shape="round"
+						>
+							Continue
+						</IonButton>
+					</div>
 				</div>
 			</IonItem>
 			<IonModal isOpen={showModal} cssClass="instructions-info-modal">

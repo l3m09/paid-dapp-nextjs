@@ -4,6 +4,31 @@
     max-width: 767px;
     margin: 50px auto 0;
     padding: 0 20px;
+    overflow-y: auto;
+    max-height: 80vh;
+
+    /* width */
+    &::-webkit-scrollbar {
+      width: 3px;
+      &:hover {
+        width: 7px;
+      }
+    }
+
+    /* Track */
+    &::-webkit-scrollbar-track {
+      background: var(--ion-color-secondary);
+    }
+
+    /* Handle */
+    &::-webkit-scrollbar-thumb {
+      background: var(--ion-color-primary);
+    }
+
+    /* Handle on hover */
+    &::-webkit-scrollbar-thumb:hover {
+      background: #555;
+    }
 
     .Collapsible {
       border: 1px solid $grey-border;
@@ -45,7 +70,12 @@
         ion-icon {
           font-size: 1.5em;
           color: var(--ion-color-secondary);
+          min-width: 20px;
 
+        }
+
+        .document-id{
+          min-width: 20px;
         }
 
         span {
