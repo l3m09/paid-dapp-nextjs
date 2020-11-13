@@ -104,7 +104,7 @@ const FormClient: React.FC<AgreementFormProps> = ({ current }) => {
 						}}
 						color="gradient"
 						shape="round"
-						disabled={loading || !filled}
+						disabled={!filled}
 					>
 						{loading ? 'Loading..' : 'Confirm'}
 					</IonButton>
