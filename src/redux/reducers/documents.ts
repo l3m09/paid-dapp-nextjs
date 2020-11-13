@@ -2,6 +2,7 @@ import { DocumentsActionTypes } from '../actionTypes/documents';
 
 const initialState = {
 	loading: false,
+	creatingAgreement: false,
 	documents: [],
 	selectedDocument: null,
 	agreementTypes: ['Vehicle', 'Rental'],
@@ -54,15 +55,15 @@ export const DocumentsReducer = function (state = initialState, action: any) {
 		}
 
 		case DocumentsActionTypes.CREATE_AGREEMENT_LOADING: {
-			return { ...state, loading: true };
+			return { ...state, loading: true, creatingAgreement: true };
 		}
 
 		case DocumentsActionTypes.CREATE_AGREEMENT_SUCCESS: {
-			return { ...state, loading: false };
+			return { ...state, loading: false, creatingAgreement: false };
 		}
 
 		case DocumentsActionTypes.CREATE_AGREEMENT_FAILURE:
-			return { ...state, error: payload, loading: false };
+			return { ...state, error: payload, loading: false, creatingAgreement: false };
 
 		default:
 			return state;

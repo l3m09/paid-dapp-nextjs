@@ -34,6 +34,13 @@
   .wallets-container {
     margin-top: 1vh;
 
+    .no-wallet-selected {
+      margin-bottom: 15px;
+      font-size: 1em;
+      margin-top: -5px;
+
+    }
+
     .wallet-wrapper {
       margin-bottom: 1vh;
 
@@ -50,7 +57,8 @@
         box-shadow: 1px 1px 1px $brand-secondary;
 
         &:hover {
-          background-color: $brand-primary;
+          background: var(--ion-color-gradient);
+          cursor: pointer;
 
         }
 
@@ -99,6 +107,11 @@
             font-size: 0.9em;
 
           }
+
+          &:hover {
+            cursor: initial;
+          }
+
 
         }
 
@@ -245,7 +258,7 @@
   //--background-color: white;
 
   .modal-wrapper {
-    height: 95vh;
+    height: 90%;
     width: 95%;
     margin: auto;
     background-color: white;

@@ -10,9 +10,9 @@ import {
 	IonToolbar,
 	IonButton,
 	IonIcon,
-	IonItemDivider, IonLabel
+	IonItemDivider
 } from '@ionic/react';
-import {checkmarkCircle, listCircleOutline, documentOutline, documentSharp} from 'ionicons/icons';
+import {checkmarkCircle} from 'ionicons/icons';
 
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -20,15 +20,7 @@ import { doSetSelectedWallet } from '../../redux/actions/wallet';
 import CreateWallet from './create-wallet/CreateWallet';
 import UnlockWallet from '../../components/UnlockWallet';
 import ImportWallet from './ImportWallet';
-import {useLocation} from "react-router-dom";
-
-interface AppPage {
-	url: string;
-	iosIcon: string;
-	mdIcon: string;
-	title: string;
-	disabled: boolean;
-}
+import MenuAlternate from '../../components/MenuAlternate';
 
 const Wallets: React.FC = () => {
 	const dispatch = useDispatch();
@@ -55,24 +47,6 @@ const Wallets: React.FC = () => {
 		setShowUnlockWalletModal(true);
 	}
 
-	const location = useLocation();
-	const appPages: AppPage[] = [
-		{
-			title: 'Wallets',
-			url: '/wallets',
-			iosIcon: listCircleOutline,
-			mdIcon: listCircleOutline,
-			disabled: false
-		},
-		{
-			title: 'Agreements',
-			url: '/documents',
-			iosIcon: documentOutline,
-			mdIcon: documentSharp,
-			disabled: false
-		},
-	];
-
 	return (
 		<IonPage className="wallets-page content-page">
 			<IonContent fullscreen>
@@ -82,32 +56,7 @@ const Wallets: React.FC = () => {
 							<IonMenuButton />
 						</IonButtons>
 						<IonTitle>Wallets</IonTitle>
-						<IonButtons className="alternate-menu" slot="end">
-							{appPages.map((appPage, index) => {
-								return (
-									<IonItem
-										key={index}
-										disabled={appPage.disabled}
-										className={
-											location.pathname === appPage.url ? 'selected' : ''
-										}
-										routerLink={appPage.url}
-										routerDirection="none"
-										lines="none"
-										detail={false}
-									>
-										<span className="icon-wrapper">
-											<IonIcon
-												ios={appPage.iosIcon}
-												md={appPage.mdIcon}
-												color="gradient"
-											/>
-										</span>
-										<IonLabel color="gradient">{appPage.title}</IonLabel>
-									</IonItem>
-								);
-							})}
-						</IonButtons>
+						<MenuAlternate/>
 					</IonToolbar>
 				</IonHeader>
 
@@ -117,6 +66,12 @@ const Wallets: React.FC = () => {
 					</IonItem>
 					<div className="wallets-list-wrapper">
 						<IonItemGroup class="wallets-container">
+							{unlockedWallet == null ?
+								<IonTitle color="primary" className="ion-text-center no-wallet-selected">
+									No wallet Selected
+								</IonTitle>
+								: ''
+							}
 							{wallets.map((item: any, index: any) => {
 								if (unlockedWallet === item.address) {
 									return (

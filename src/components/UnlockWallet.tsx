@@ -4,12 +4,9 @@ import {
 	IonInput,
 	IonButton,
 	IonTitle,
-	IonModal,
-	IonToolbar,
-	IonButtons,
-	IonHeader
+	IonModal, IonToolbar, IonButtons, IonHeader, IonContent
 } from '@ionic/react';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { doUnlockWallet } from '../redux/actions/wallet';
 
@@ -32,6 +29,11 @@ const UnlockWallet: React.FC<Props> = ({
 }) => {
 	const dispatch = useDispatch();
 
+	useEffect(() => {
+		console.log('dismissible', dismissible);
+	}, [dismissible]);
+
+	// const { type } = useParams<{ type: string }>();
 	const wallet = useSelector(
 		(state: {
 			wallet: {
@@ -42,18 +44,16 @@ const UnlockWallet: React.FC<Props> = ({
 			};
 		}) => state.wallet
 	);
-	const { unlockingWallet, error, unlockedWallet } = wallet;
+	const { unlockingWallet, error } = wallet;
 
 	let unlockForm: UnlockForm = {
 		filled: false,
 		password: ''
 	};
-
 	function passwordChanged(e: any) {
 		unlockForm.password = e.target.value;
 		verifyInfo();
 	}
-
 	function verifyInfo() {
 		if (unlockForm.password.length > 0) {
 			unlockForm.filled = true;
@@ -82,69 +82,65 @@ const UnlockWallet: React.FC<Props> = ({
 			<IonHeader translucent>
 				<IonToolbar>
 					<IonTitle>Unlock Wallet</IonTitle>
-					{unlockedWallet ? (
 						<IonButtons slot="end">
-							<IonButton
-								color="secondary"
-								shape="round"
-								onClick={() => dismiss()}
-							>
+							<IonButton color="secondary" shape="round" onClick={() => dismiss()}>
 								Cancel
 							</IonButton>
 						</IonButtons>
-					) : null}
 				</IonToolbar>
 			</IonHeader>
-			<IonItem>
-				<IonLabel position="stacked">Name:</IonLabel>
-				<span>{selectedWallet.name}</span>
-			</IonItem>
-			<IonItem>
-				<IonLabel position="stacked">Address:</IonLabel>
-				<span>{selectedWallet.address}</span>
-			</IonItem>
-			<form onSubmit={onSubmit} className="name-password-form">
+			<IonContent fullscreen>
 				<IonItem>
-					<IonLabel position="stacked">Password</IonLabel>
-					<IonInput
-						title="Label"
-						type="password"
-						placeholder="Enter your password"
-						value={unlockForm.password}
-						onInput={(e) => {
-							passwordChanged(e);
-						}}
-					/>
+					<IonLabel position="stacked">Name:</IonLabel>
+					<span>{selectedWallet.name}</span>
 				</IonItem>
 				<IonItem>
-					<IonLabel position="stacked" className="text-error">
-						{error}
-					</IonLabel>
+					<IonLabel position="stacked">Address:</IonLabel>
+					<span>{selectedWallet.address}</span>
 				</IonItem>
-				<IonItem class="form-options">
-					<IonButton
-						// routerLink="/phrase/instructions"
-						type="submit"
-						color="gradient"
-						shape="round"
-						disabled={unlockingWallet}
-					>
-						{unlockingWallet ? 'Loading..' : 'Unlock'}
-					</IonButton>
-					{/*{unlockedWallet ? (*/}
-					{/*	<IonButton*/}
-					{/*		color="secondary"*/}
-					{/*		shape="round"*/}
-					{/*		// routerLink="/phrase/instructions"*/}
-					{/*		onClick={() => {*/}
-					{/*			dismiss();*/}
-					{/*		}}*/}
-					{/*	>*/}
-					{/*		Cancel*/}
-					{/*	</IonButton>*/}
-					{/*) : null}*/}
-				</IonItem>
-			</form>
+				<form onSubmit={onSubmit} className="name-password-form">
+					<IonItem>
+						<IonLabel position="stacked">Password</IonLabel>
+						<IonInput
+							title="Label"
+							type="password"
+							placeholder="Enter your password"
+							value={unlockForm.password}
+							onInput={(e) => {
+								passwordChanged(e);
+							}}
+						/>
+					</IonItem>
+					<IonItem>
+						<IonLabel position="stacked" className="text-error">
+							{error}
+						</IonLabel>
+					</IonItem>
+					<IonItem class="form-options">
+						<IonButton
+							// routerLink="/phrase/instructions"
+							type="submit"
+							color="gradient"
+							shape="round"
+							disabled={unlockingWallet}
+						>
+							{unlockingWallet ? 'Loading..' : 'Unlock'}
+						</IonButton>
+						{/*{unlockedWallet ? (*/}
+						{/*	<IonButton*/}
+						{/*		color="secondary"*/}
+						{/*		shape="round"*/}
+						{/*		// routerLink="/phrase/instructions"*/}
+						{/*		onClick={() => {*/}
+						{/*			dismiss();*/}
+						{/*		}}*/}
+						{/*	>*/}
+						{/*		Cancel*/}
+						{/*	</IonButton>*/}
+						{/*) : null}*/}
+					</IonItem>
+				</form>
+			</IonContent>
 		</IonModal>
 	);
 };

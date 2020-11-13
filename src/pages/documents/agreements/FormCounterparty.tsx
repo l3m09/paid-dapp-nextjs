@@ -1,24 +1,23 @@
 import {
-	IonContent,
 	IonLabel,
 	IonItem,
 	IonInput,
 	IonButton,
-	IonTitle
+	IonTitle, IonLoading
 } from '@ionic/react';
 import React, {useEffect, useState} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
 	doCreateAgreement,
 	doSetAgreementFormInfo
-} from '../../../../redux/actions/documents';
+} from '../../../redux/actions/documents';
 import { useParams } from 'react-router';
 
 interface AgreementFormProps {
 	current: any;
 }
 
-const RentalFormCounterparty: React.FC<AgreementFormProps> = ({ current }) => {
+const FormCounterparty: React.FC<AgreementFormProps> = ({ current }) => {
 	const dispatch = useDispatch();
 	const [filled, setFilled] = useState(false);
 
@@ -29,11 +28,7 @@ const RentalFormCounterparty: React.FC<AgreementFormProps> = ({ current }) => {
 	);
 	const { currentWallet } = wallet;
 
-	const { loading, agreementFormInfo } = documentsState;
-
-	useEffect(() => {
-		verifyInfo()
-	}, [agreementFormInfo]);
+	const { loading, agreementFormInfo, creatingAgreement } = documentsState;
 
 
 	function nameChanged(e: any) {
@@ -50,16 +45,21 @@ const RentalFormCounterparty: React.FC<AgreementFormProps> = ({ current }) => {
 	}
 	function verifyInfo() {
 		if (
-			agreementFormInfo.counterpartyWallet.length > 8 &&
-			agreementFormInfo.counterpartyName.length > 4 &&
-			agreementFormInfo.counterpartyAddress.length > 10 &&
-			agreementFormInfo.counterpartyPhone.length > 5
+			agreementFormInfo.counterpartyWallet.length > 3 &&
+			agreementFormInfo.counterpartyName.length > 3 &&
+			agreementFormInfo.counterpartyAddress.length > 3 &&
+			agreementFormInfo.counterpartyPhone.length > 3
 		) {
 			setFilled(true)
 		} else {
 			setFilled(false)
 		}
 	}
+
+	useEffect(() => {
+		verifyInfo()
+	}, [agreementFormInfo]);
+
 
 	async function slideNext() {
 		await current.lockSwipeToNext(false);
@@ -72,7 +72,7 @@ const RentalFormCounterparty: React.FC<AgreementFormProps> = ({ current }) => {
 		dispatch(doSetAgreementFormInfo({createdAt: new Date().toDateString()}))
 		dispatch(
 			doCreateAgreement({
-				signatoryA: currentWallet.address,
+				signatoryA: currentWallet,
 				signatoryB: agreementFormInfo.counterpartyWallet,
 				validUntil: 0,
 				agreementFormTemplateId: type,
@@ -145,8 +145,14 @@ const RentalFormCounterparty: React.FC<AgreementFormProps> = ({ current }) => {
 					</IonButton>
 				</IonItem>
 			</form>
+			<IonLoading
+				cssClass="my-custom-class"
+				isOpen={loading || creatingAgreement}
+				message={'Please wait...'}
+				duration={1000}
+			/>
 		</div>
 	);
 };
 
-export default RentalFormCounterparty;
+export default FormCounterparty;
