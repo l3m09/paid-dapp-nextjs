@@ -84,7 +84,7 @@ const VehicleDescription: React.FC<DescriptionProps> = ({ current }) => {
 						color="gradient"
 						shape="round"
 					>
-						I Agree
+						Continue
 					</IonButton>
 				</div>
 			</IonItem>
