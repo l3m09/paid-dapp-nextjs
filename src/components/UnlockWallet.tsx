@@ -64,7 +64,7 @@ const UnlockWallet: React.FC<Props> = ({
 		e.preventDefault();
 		dispatch(
 			doUnlockWallet({
-				walletId: selectedWallet._id,
+				wallet: selectedWallet,
 				password: unlockForm.password
 			})
 		);

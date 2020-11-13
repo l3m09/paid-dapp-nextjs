@@ -127,7 +127,6 @@ export const WalletReducer = function (state = initialState, action: any) {
 			return {
 				...state,
 				currentWallet: payload,
-				unlockedWallet: null,
 				settingCurrentWallet: false
 			};
 

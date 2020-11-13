@@ -122,13 +122,13 @@ export const doGetDocuments = () => async (
 		if (!currentWallet) {
 			return;
 		}
-		// const { address } = currentWallet;
+		const { address } = currentWallet;
 		const contract = new web3.eth.Contract(
 			Agreement.abi as any,
 			AGREEMENT_ADDRESS
 		);
 		const events = await contract.getPastEvents('AgreementCreated', {
-			filter: { from: currentWallet },
+			filter: { from: address },
 			fromBlock: 0,
 			toBlock: 'latest'
 		});
