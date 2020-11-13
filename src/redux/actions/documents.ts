@@ -87,6 +87,14 @@ export const doCreateAgreement = (payload: {
 			ethersWallet.address
 		);
 		console.log(`Balance of ${ethersWallet.address} is ${balance}`);
+		const gasPrice = await contract.estimateGas.create(
+			signatoryA,
+			signatoryB,
+			validUntil,
+			formId,
+			form
+		);
+
 		const agreementTransaction: ContractTransaction = await contract.create(
 			signatoryA,
 			signatoryB,
@@ -94,6 +102,8 @@ export const doCreateAgreement = (payload: {
 			formId,
 			form
 		);
+
+		agreementTransaction.gasPrice = gasPrice;
 		const receipt = await agreementTransaction.wait();
 		console.log('Transaction receipt', receipt);
 		if (receipt.status === 1) {
@@ -110,71 +120,63 @@ export const doCreateAgreement = (payload: {
 	}
 };
 
-export const doGetDocuments = () => async (
-	dispatch: any,
-	getState: () => { wallet: any }
-) => {
+export const doGetDocuments = () => async (dispatch: any) => {
 	dispatch({ type: DocumentsActionTypes.GET_DOCUMENTS_LOADING });
 	try {
-		const web3 = new Web3(GETH_URL);
-		const { wallet } = getState();
-		const { currentWallet } = wallet;
-		if (!currentWallet) {
-			return;
+		const ethersWallet = await BlockchainFactory.getWallet();
+		if (!ethersWallet) {
+			throw new Error('Not unlocked wallet found');
 		}
-		const { address } = currentWallet;
-		console.log('currentWallet', currentWallet);
-		const contract = new web3.eth.Contract(
-			Agreement.abi as any,
-			AGREEMENT_ADDRESS
+		const contract = ContractFactory.getAgrementContract(ethersWallet);
+		const filter = contract.filters.AgreementCreated(
+			null,
+			null,
+			ethersWallet.address
 		);
-		const events = await contract.getPastEvents('AgreementCreated', {
-			filter: { from: address },
-			fromBlock: 0,
-			toBlock: 'latest'
-		});
+
+		const events = await contract.queryFilter(filter);
 		console.log('events', events);
-		const promises = events.map((event) => {
-			const {
-				returnValues,
-				signature,
-				logIndex,
-				transactionIndex,
-				transactionHash,
-				blockHash,
-				blockNumber,
-				address
-			} = event;
+		// const promises = events.map((event) => {
+		// 	const {
+		// 		returnValues,
+		// 		signature,
+		// 		logIndex,
+		// 		transactionIndex,
+		// 		transactionHash,
+		// 		blockHash,
+		// 		blockNumber,
+		// 		address
+		// 	} = event;
 
-			const { id, from, to, agreementFormTemplateId } = returnValues;
+		// 	const { id, from, to, agreementFormTemplateId } = returnValues;
 
-			return new Promise(async (resolve) => {
-				const agreement = await contract.methods.agreements(id).call();
-				resolve({
-					meta: {
-						signature,
-						logIndex,
-						transactionIndex,
-						transactionHash,
-						blockHash,
-						blockNumber,
-						address
-					},
-					event: {
-						id,
-						from,
-						to,
-						agreementFormTemplateId
-					},
-					data: {
-						...agreement
-					}
-				});
-			});
-		});
-		const agreements = await Promise.all(promises);
+		// 	return new Promise(async (resolve) => {
+		// 		const agreement = await contract.methods.agreements(id).call();
+		// 		resolve({
+		// 			meta: {
+		// 				signature,
+		// 				logIndex,
+		// 				transactionIndex,
+		// 				transactionHash,
+		// 				blockHash,
+		// 				blockNumber,
+		// 				address
+		// 			},
+		// 			event: {
+		// 				id,
+		// 				from,
+		// 				to,
+		// 				agreementFormTemplateId
+		// 			},
+		// 			data: {
+		// 				...agreement
+		// 			}
+		// 		});
+		// 	});
+		// });
+		// const agreements = await Promise.all(promises);
 
-		dispatch(getDocuments(agreements));
+		// dispatch(getDocuments(agreements));
 	} catch (err) {
 		console.log(err);
 		dispatch({
