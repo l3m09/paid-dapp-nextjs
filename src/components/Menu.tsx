@@ -11,10 +11,9 @@ import {
 	IonTitle
 } from '@ionic/react';
 
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { useLocation } from 'react-router-dom';
 import {
-	document,
 	documentOutline,
 	documentSharp,
 	listCircleOutline
@@ -35,6 +34,15 @@ const Menu: React.FC = () => {
 
 	const { unlockedWallet } = wallet;
 
+	const [disableMenu, setDisableMenu] = useState(true);
+
+
+	useEffect(() => {
+		if (unlockedWallet !== null) {
+			setDisableMenu(false)
+		}
+	}, [unlockedWallet]);
+
 	const appPages: AppPage[] = [
 		{
 			title: 'Wallets',
@@ -53,7 +61,7 @@ const Menu: React.FC = () => {
 	];
 
 	return (
-		<IonMenu contentId="main" type="push" swipeGesture={false} disabled={unlockedWallet === null}>
+		<IonMenu contentId="main" type="push" swipeGesture={false} disabled={disableMenu}>
 			<IonContent>
 				<IonList id="inbox-list">
 					<IonListHeader>Menu</IonListHeader>

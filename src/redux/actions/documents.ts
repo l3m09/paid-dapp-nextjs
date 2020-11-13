@@ -1,12 +1,7 @@
 import { DocumentsActionTypes } from '../actionTypes/documents';
-import { ContractTransaction, ethers } from 'ethers';
-import { BlockchainFactory, GETH_URL } from '../../utils/blockchainFactory';
-import {
-	AGREEMENT_ADDRESS,
-	ContractFactory
-} from '../../utils/contractFactory';
-import Web3 from 'web3';
-import Agreement from '../../contracts/Agreement.json';
+import { BigNumber, ContractTransaction, ethers } from 'ethers';
+import { BlockchainFactory } from '../../utils/blockchainFactory';
+import { ContractFactory } from '../../utils/contractFactory';
 
 const createAgreementFormPayload = (obj: any) => {
 	const types: string[] = [];
@@ -135,48 +130,56 @@ export const doGetDocuments = () => async (dispatch: any) => {
 		);
 
 		const events = await contract.queryFilter(filter);
-		console.log('events', events);
-		// const promises = events.map((event) => {
-		// 	const {
-		// 		returnValues,
-		// 		signature,
-		// 		logIndex,
-		// 		transactionIndex,
-		// 		transactionHash,
-		// 		blockHash,
-		// 		blockNumber,
-		// 		address
-		// 	} = event;
+		const promises = events.map((event) => {
+			const { args } = contract.interface.parseLog(event);
 
-		// 	const { id, from, to, agreementFormTemplateId } = returnValues;
-
-		// 	return new Promise(async (resolve) => {
-		// 		const agreement = await contract.methods.agreements(id).call();
-		// 		resolve({
-		// 			meta: {
-		// 				signature,
-		// 				logIndex,
-		// 				transactionIndex,
-		// 				transactionHash,
-		// 				blockHash,
-		// 				blockNumber,
-		// 				address
-		// 			},
-		// 			event: {
-		// 				id,
-		// 				from,
-		// 				to,
-		// 				agreementFormTemplateId
-		// 			},
-		// 			data: {
-		// 				...agreement
-		// 			}
-		// 		});
-		// 	});
-		// });
-		// const agreements = await Promise.all(promises);
-
-		// dispatch(getDocuments(agreements));
+			const {
+				logIndex,
+				transactionIndex,
+				transactionHash,
+				blockHash,
+				blockNumber,
+				address
+			} = event;
+			const { id, from, to, agreementFormTemplateId } = args;
+			const agreementId = (id as BigNumber).toString();
+			return new Promise(async (resolve) => {
+				const agreement = await contract.agreements(id);
+				const {
+					agreementForm,
+					escrowed,
+					validUntil,
+					toSigner,
+					fromSigner
+				} = agreement;
+				resolve({
+					meta: {
+						logIndex,
+						transactionIndex,
+						transactionHash,
+						blockHash,
+						blockNumber,
+						address
+					},
+					event: {
+						id: agreementId,
+						from,
+						to,
+						agreementFormTemplateId
+					},
+					data: {
+						agreementForm,
+						escrowed,
+						validUntil: (validUntil as BigNumber).toString(),
+						toSigner: toSigner.signatory,
+						fromSigner: fromSigner.signatory
+					}
+				});
+			});
+		});
+		const agreements = await Promise.all(promises);
+		console.log('agreements', agreements);
+		dispatch(getDocuments(agreements));
 	} catch (err) {
 		console.log(err);
 		dispatch({

@@ -12,14 +12,13 @@ import {
 } from '@ionic/react';
 import { useParams, useHistory } from 'react-router';
 
+import FormClient from './FormClient';
+import FormCounterparty from './FormCounterparty';
+
 import VehicleDescription from './vehicle/VehicleDescription';
-import VehicleForm from './vehicle/VehicleForm';
-import VehicleFormCounterparty from './vehicle/VehicleFormCounterparty';
 import VehicleCompleted from './vehicle/VehicleCompleted';
 
 import RentalDescription from './rental/RentalDescription';
-import RentalForm from './rental/RentalForm';
-import RentalFormCounterparty from './rental/RentalFormCounterparty';
 import RentalCompleted from './rental/RentalCompleted';
 
 import { useDispatch } from 'react-redux';
@@ -48,10 +47,10 @@ const Agreements: React.FC<AgreementsProps> = () => {
 				<VehicleDescription current={slidesRef.current} />
 			</IonSlide>
 			<IonSlide>
-				<VehicleForm current={slidesRef.current} />
+				<FormClient current={slidesRef.current} />
 			</IonSlide>
 			<IonSlide>
-				<VehicleFormCounterparty current={slidesRef.current} />
+				<FormCounterparty current={slidesRef.current} />
 			</IonSlide>
 			<IonSlide>
 				<VehicleCompleted current={slidesRef.current} />
@@ -64,10 +63,10 @@ const Agreements: React.FC<AgreementsProps> = () => {
 				<RentalDescription current={slidesRef.current} />
 			</IonSlide>
 			<IonSlide>
-				<RentalForm current={slidesRef.current} />
+				<FormClient current={slidesRef.current} />
 			</IonSlide>
 			<IonSlide>
-				<RentalFormCounterparty current={slidesRef.current} />
+				<FormCounterparty current={slidesRef.current} />
 			</IonSlide>
 			<IonSlide>
 				<RentalCompleted current={slidesRef.current} />

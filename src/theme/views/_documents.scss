@@ -1,38 +1,62 @@
 .documents-page {
 
   .documents-container {
-    margin-top: 3vh;
+    max-width: 767px;
+    margin: 50px auto 0;
+    padding: 0 20px;
 
-    .document-trigger {
-      width: 100%;
-      min-height: 48px;
-      text-transform: none;
-      font-size: 0.9em;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      text-align: left;
-      padding: 0 15px;
-      margin-bottom: 1vh;
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      justify-content: flex-start;
+    .Collapsible {
+      border: 1px solid $grey-border;
+      border-radius: 5px;
+      margin-bottom: 20px;
 
-      &:focus,
-      &:hover {
-        outline: none;
+      .is-open {
+        .document-trigger {
+          box-shadow: 0 2px 0 var(--ion-color-primary) !important;
+        }
       }
 
-      ion-icon {
-        font-size: 1.5em;
-        color: $brand-secondary;
+      .document-trigger {
+        width: 100%;
+        min-height: 48px;
+        text-transform: none;
+        font-size: 0.9em;
+        box-shadow: 0 2px 0 var(--ion-color-secondary);
+        text-align: left;
+        padding: 0 15px;
+        //margin-bottom: 1vh;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        background-color: var(--ion-color-base);
+        color: white;
 
-      }
+        &:focus,
+        &:hover {
+          outline: none;
+        }
 
-      span {
-        margin-left: 10px;
+        &:hover {
+          box-shadow: 0 2px 0 var(--ion-color-primary);
+
+        }
+
+        ion-icon {
+          font-size: 1.5em;
+          color: var(--ion-color-secondary);
+
+        }
+
+        span {
+          margin-left: 10px;
+          overflow-wrap: anywhere;
+        }
+
       }
 
     }
+
 
    .document-container {
 
@@ -60,7 +84,6 @@
        .document-title {
          width: 100%;
          min-height: 48px;
-         margin-bottom: 2vh;
          padding: 10px 20px;
          display: flex;
          align-items: center;
@@ -68,17 +91,20 @@
          justify-content: unset;
 
          ion-icon {
-           font-size: 3em;
+           font-size: 2em;
            color: $brand-primary;
          }
 
          span {
            margin-left: 10px;
+           overflow-wrap: anywhere;
 
          }
 
          &:hover {
-           background-color: white;
+           background: var(--ion-color-gradient);
+           cursor: pointer;
+
          }
 
        }
@@ -118,18 +144,31 @@
 .document-modal {
 
   .modal-wrapper {
-    background-color: white;
-    height: 85vh;
+    max-height: 600px;
 
     ion-card {
       padding-bottom: 10px;
       box-shadow: none;
-      overflow: scroll;
+
+      ion-card-header {
+
+        ion-card-title,
+        ion-card-subtitle {
+          color: var(--ion-text-color);
+        }
+
+      }
 
       ion-card-content {
 
+        h2 {
+        color: var(--ion-color-primary);
+        }
+
         ion-label {
           font-weight: 600;
+          margin-bottom: 10px;
+          color: var(--ion-color-secondary)
 
         }
 
@@ -145,24 +184,6 @@
       height: 65px;
       align-items: center;
       display: flex;
-
-      .close-button {
-        background-color: $brand-red;
-        --ion-background-color: $brand-red;
-        color: white;
-
-      }
-
-      .download-button {
-        position: relative;
-
-        ion-icon {
-          //position: absolute;
-          margin-right: 5px;
-
-        }
-
-      }
 
     }
 

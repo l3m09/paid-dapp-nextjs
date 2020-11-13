@@ -93,12 +93,11 @@ export const doUnlockWallet = (payload: {
 				payload: 'Unlock wallet failure, check password and wallet'
 			});
 		} else {
-			const { address } = wallet;
+			// const { address } = wallet;
 			BlockchainFactory.setKeystore(ks);
 			const value = JSON.stringify(wallet);
 			await Storage.set({ key: 'CURRENT_WALLET', value });
-			dispatch(unlockWallet(address));
-			dispatch(setCurrentWallet(wallet));
+			dispatch(unlockWallet(wallet));
 		}
 	} catch (err) {
 		dispatch({
@@ -150,7 +149,7 @@ export const doGetCurrentWallet = () => async (dispatch: any) => {
 			dispatch(getCurrentWallet(null));
 		} else {
 			const wallet = JSON.parse(stored.value);
-			dispatch(getCurrentWallet(wallet));
+			dispatch(getCurrentWallet(wallet.address));
 		}
 	} catch (err) {
 		dispatch({
