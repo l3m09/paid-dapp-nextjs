@@ -59,6 +59,8 @@ export const doCreateAgreement = (payload: {
 	validUntil: number;
 	agreementFormTemplateId: string;
 	agreementForm: any;
+	slideNext: () => Promise<void>
+	slideBack: () => Promise<void>
 }) => async (dispatch: any, getState: () => { wallet: any }) => {
 	dispatch({ type: DocumentsActionTypes.CREATE_AGREEMENT_LOADING });
 	try {
@@ -67,7 +69,9 @@ export const doCreateAgreement = (payload: {
 			signatoryB,
 			validUntil,
 			agreementFormTemplateId,
-			agreementForm
+			agreementForm,
+			slideNext,
+			slideBack
 		} = payload;
 
 		const formId = ethers.utils.formatBytes32String(agreementFormTemplateId);
@@ -75,6 +79,8 @@ export const doCreateAgreement = (payload: {
 
 		const ethersWallet = await BlockchainFactory.getWallet();
 		if (!ethersWallet) {
+			await slideBack()
+			alert('Not unlocked wallet found')
 			throw new Error('Not unlocked wallet found');
 		}
 		const contract = ContractFactory.getAgrementContract(ethersWallet);
@@ -99,14 +105,26 @@ export const doCreateAgreement = (payload: {
 		);
 
 		agreementTransaction.gasPrice = gasPrice;
-		const receipt = await agreementTransaction.wait();
-		console.log('Transaction receipt', receipt);
-		if (receipt.status === 1) {
-			dispatch(createAgreement());
-		} else {
-			throw new Error('Transaction failed');
-		}
+
+		new Promise(async (resolve) => {
+			await agreementTransaction.wait().then((receipt) => {
+				console.log('Transaction receipt', receipt);
+				if (receipt.status === 1) {
+					dispatch(createAgreement());
+					slideNext()
+					resolve();
+				} else {
+					slideBack()
+					alert('Transaction failed')
+					throw new Error('Transaction failed');
+				}
+			});
+
+		});
+
 	} catch (err) {
+		await payload.slideBack()
+		alert('Transaction failed')
 		console.log(err);
 		dispatch({
 			type: DocumentsActionTypes.CREATE_AGREEMENT_FAILURE,

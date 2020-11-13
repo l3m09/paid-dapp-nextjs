@@ -122,10 +122,11 @@ const Documents: React.FC = () => {
 		setShowModal(false);
 	}
 
-	function trigger(name: string) {
+	function trigger(id: string, name: string) {
 		return (
 			<button className="document-trigger">
 				<IonIcon icon={documentsIcon} />
+				<span className="document-id">{id}</span>
 				<span>{name}</span>
 			</button>
 		);
@@ -163,7 +164,7 @@ const Documents: React.FC = () => {
 									<Collapsible
 										transitionTime={200}
 										contentInnerClassName="document-container"
-										trigger={trigger(`${event.from}`)}
+										trigger={trigger(`${event.id}`,`${event.from}`)}
 										key={index}
 									>
 										<div className="document-titles">
@@ -175,8 +176,8 @@ const Documents: React.FC = () => {
 													}}
 												>
 													<IonIcon icon={documentIcon} />
-													<span>{event.id}</span>
-													<span>From: {event.from}</span>
+													{/*<span>{event.id}</span>*/}
+													<span>To: {event.to}</span>
 												</div>
 												<hr />
 											</div>

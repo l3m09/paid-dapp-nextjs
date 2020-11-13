@@ -62,23 +62,29 @@ const FormCounterparty: React.FC<AgreementFormProps> = ({ current }) => {
 
 	async function slideNext() {
 		await current.lockSwipeToNext(false);
-		current.slideNext();
+		await current.slideNext();
 		await current.lockSwipeToNext(true);
 	}
 
-	const onSubmit = () => {
+	async function slideBack() {
+		await current.lockSwipeToPrev(false);
+		await current.slidePrev();
+		await current.lockSwipeToPrev(true);
+	}
+
+	const onSubmit = async () => {
 		// e.preventDefault();
-		dispatch(doSetAgreementFormInfo({ createdAt: new Date().toDateString() }));
-		dispatch(
-			doCreateAgreement({
-				signatoryA: currentWallet.address,
-				signatoryB: agreementFormInfo.counterpartyWallet,
-				validUntil: 0,
-				agreementFormTemplateId: type,
-				agreementForm: agreementFormInfo
-			})
-		);
-		slideNext().then(() => {});
+		dispatch(doSetAgreementFormInfo({createdAt: new Date().toDateString()}));
+		dispatch(doCreateAgreement({
+			signatoryA: currentWallet.address,
+			signatoryB: agreementFormInfo.counterpartyWallet,
+			validUntil: 0,
+			agreementFormTemplateId: type,
+			agreementForm: agreementFormInfo,
+			slideNext: slideNext,
+			slideBack: slideBack
+		}))
+
 	};
 
 	return (
@@ -148,7 +154,6 @@ const FormCounterparty: React.FC<AgreementFormProps> = ({ current }) => {
 				cssClass="my-custom-class"
 				isOpen={creatingAgreement}
 				message={'Please wait...'}
-				duration={1000}
 			/>
 		</div>
 	);
