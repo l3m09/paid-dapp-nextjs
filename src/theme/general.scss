@@ -1,3 +1,21 @@
+body,
+ion-item,
+ion-text,
+div,
+p,
+span,
+h1,
+h2,
+h3,
+h4,
+h5 {
+  -webkit-user-select: text !important;
+  -moz-user-select: text !important;
+  -ms-user-select: text !important;
+  user-select: text !important;
+
+}
+
 .main-content {
 
   >.ion-page {

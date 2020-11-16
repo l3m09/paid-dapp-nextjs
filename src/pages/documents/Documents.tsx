@@ -153,7 +153,6 @@ const Documents: React.FC = () => {
 					cssClass="my-custom-class"
 					isOpen={loading}
 					message={'Please wait...'}
-					duration={1000}
 				/>
 				<div>
 					<div className="documents-container">

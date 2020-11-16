@@ -43,7 +43,6 @@ const Landing: React.FC = () => {
 				<IonLoading
 					isOpen={loadingWallets}
 					message={'Loading wallets...'}
-					duration={5000}
 				/>
 
 				{wallets.length <= 0 ? (
