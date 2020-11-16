@@ -59,7 +59,7 @@ export const doCreateAgreement = (payload: {
 	validUntil: number;
 	agreementFormTemplateId: string;
 	agreementForm: any;
-}) => async (dispatch: any, getState: () => { wallet: any }) => {
+}) => async (dispatch: any) => {
 	dispatch({ type: DocumentsActionTypes.CREATE_AGREEMENT_LOADING });
 	try {
 		const {
@@ -81,7 +81,12 @@ export const doCreateAgreement = (payload: {
 		const balance = await ethersWallet.provider.getBalance(
 			ethersWallet.address
 		);
-		console.log(`Balance of ${ethersWallet.address} is ${balance}`);
+
+		const parsedBalance = BigNumber.from(balance);
+		if (parsedBalance.lte(0)) {
+			throw new Error('The wallet should has balance to send a transaction.');
+		}
+
 		const gasPrice = await contract.estimateGas.create(
 			signatoryA,
 			signatoryB,
@@ -107,7 +112,7 @@ export const doCreateAgreement = (payload: {
 			throw new Error('Transaction failed');
 		}
 	} catch (err) {
-		console.log(err);
+		console.error(err);
 		dispatch({
 			type: DocumentsActionTypes.CREATE_AGREEMENT_FAILURE,
 			payload: err.msg

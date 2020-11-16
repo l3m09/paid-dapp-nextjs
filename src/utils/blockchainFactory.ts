@@ -1,9 +1,5 @@
-import {
-	AlgorithmType,
-	createWalletManager,
-	WalletManager
-} from 'cea-crypto-wallet';
-import { KeyStorageModel } from 'cea-crypto-wallet/dist/key-storage/KeyStorageModel';
+import { createWalletManager, WalletManager } from 'paid-universal-wallet';
+import { KeyStorageModel } from 'paid-universal-wallet/dist/key-storage/KeyStorageModel';
 import { ethers, providers, Wallet } from 'ethers';
 
 export const GETH_URL =
