@@ -36,31 +36,6 @@ const FormCounterparty: React.FC<AgreementFormProps> = ({ current }) => {
 		creatingAgreement
 	} = documentsState;
 
-	const createAgreement = useCallback(async () => {
-		dispatch(doSetAgreementFormInfo({ createdAt: new Date().toDateString() }));
-		dispatch(
-			doCreateAgreement({
-				signatoryA: currentWallet.address,
-				signatoryB: agreementFormInfo.counterpartyWallet,
-				validUntil: 0,
-				agreementFormTemplateId: type,
-				agreementForm: agreementFormInfo
-			})
-		);
-		if (!error) {
-			slideNext().then(() => {});
-		} else {
-			alert(error);
-		}
-	}, [
-		agreementFormInfo,
-		currentWallet.address,
-		dispatch,
-		slideNext,
-		type,
-		error
-	]);
-
 	function nameChanged(e: any) {
 		dispatch(doSetAgreementFormInfo({ counterpartyName: e.target.value }));
 	}
@@ -96,12 +71,30 @@ const FormCounterparty: React.FC<AgreementFormProps> = ({ current }) => {
 
 	async function slideNext() {
 		await current.lockSwipeToNext(false);
-		current.slideNext();
+		await current.slideNext();
 		await current.lockSwipeToNext(true);
 	}
 
+	async function slideBack() {
+		await current.lockSwipeToPrev(false);
+		await current.slidePrev();
+		await current.lockSwipeToPrev(true);
+	}
+
 	const onSubmit = async () => {
-		createAgreement();
+		// e.preventDefault();
+		dispatch(doSetAgreementFormInfo({ createdAt: new Date().toDateString() }));
+		dispatch(
+			doCreateAgreement({
+				signatoryA: currentWallet.address,
+				signatoryB: agreementFormInfo.counterpartyWallet,
+				validUntil: 0,
+				agreementFormTemplateId: type,
+				agreementForm: agreementFormInfo,
+				slideNext: slideNext,
+				slideBack: slideBack
+			})
+		);
 	};
 
 	return (
@@ -171,7 +164,6 @@ const FormCounterparty: React.FC<AgreementFormProps> = ({ current }) => {
 				cssClass="my-custom-class"
 				isOpen={creatingAgreement}
 				message={'Please wait...'}
-				duration={1000}
 			/>
 		</div>
 	);
