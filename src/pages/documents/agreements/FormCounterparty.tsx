@@ -13,9 +13,49 @@ import {
 	doSetAgreementFormInfo
 } from '../../../redux/actions/documents';
 import { useParams } from 'react-router';
+import ReactPDF, { Page, Text, View, Document, StyleSheet, PDFDownloadLink } from '@react-pdf/renderer';
+import ReactDOM from 'react-dom';
 
 interface AgreementFormProps {
 	current: any;
+}
+
+async function createPDF(){
+	// Create styles
+	const styles = StyleSheet.create({
+		page: {
+		flexDirection: 'row',
+		backgroundColor: '#E4E4E4'
+		},
+		section: {
+		margin: 10,
+		padding: 10,
+		flexGrow: 1
+		}
+	});
+	
+	// Create Document Component
+	const MyDocument = () => (
+		<Document>
+		<Page size="A4" style={styles.page}>
+			<View style={styles.section}>
+			<Text>Section #1</Text>
+			</View>
+			<View style={styles.section}>
+			<Text>Section #2</Text>
+			</View>
+		</Page>
+		</Document>
+	);
+
+	const App = () => (
+		<div>
+		  <PDFDownloadLink document={<MyDocument />} fileName="agreement.pdf">
+			{({ blob, url, loading, error }) => (loading ? 'Loading document...' : 'Download now!')}
+		  </PDFDownloadLink>
+		</div>
+	  );
+	return await ReactPDF.renderToStream(<App />);
 }
 
 const FormCounterparty: React.FC<AgreementFormProps> = ({ current }) => {
@@ -92,7 +132,8 @@ const FormCounterparty: React.FC<AgreementFormProps> = ({ current }) => {
 				agreementFormTemplateId: type,
 				agreementForm: agreementFormInfo,
 				slideNext: slideNext,
-				slideBack: slideBack
+				slideBack: slideBack,
+				streamPDF: createPDF()
 			})
 		);
 	};

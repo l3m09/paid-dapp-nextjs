@@ -107,7 +107,7 @@ const Documents: React.FC = () => {
 	} = documentsState;
 	const [showModal, setShowModal] = useState(false);
 	const [showPopOver, setShowPopover] = useState(false);
-
+	
 	useEffect(() => {
 		dispatch(doGetDocuments());
 	}, [dispatch]);

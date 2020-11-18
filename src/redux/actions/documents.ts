@@ -2,6 +2,7 @@ import { DocumentsActionTypes } from '../actionTypes/documents';
 import { BigNumber, ContractTransaction, ethers } from 'ethers';
 import { BlockchainFactory } from '../../utils/blockchainFactory';
 import { ContractFactory } from '../../utils/contractFactory';
+import ipfs from '../wallet/ipfs';
 
 const createAgreementFormPayload = (obj: any) => {
 	const types: string[] = [];
@@ -61,6 +62,7 @@ export const doCreateAgreement = (payload: {
 	agreementForm: any;
 	slideNext: () => Promise<void>;
 	slideBack: () => Promise<void>;
+	streamPDF: 	Promise<NodeJS.ReadableStream>;
 }) => async (dispatch: any, getState: () => { wallet: any }) => {
 	dispatch({ type: DocumentsActionTypes.CREATE_AGREEMENT_LOADING });
 	try {
