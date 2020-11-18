@@ -2,6 +2,7 @@ import { DocumentsActionTypes } from '../actionTypes/documents';
 
 const initialState = {
 	loading: false,
+	error: null,
 	creatingAgreement: false,
 	documents: [],
 	selectedDocument: null,
@@ -50,7 +51,7 @@ export const DocumentsReducer = function (state = initialState, action: any) {
 			let info = {
 				...state.agreementFormInfo,
 				...payload
-			}
+			};
 			return { ...state, agreementFormInfo: info };
 		}
 
@@ -63,7 +64,12 @@ export const DocumentsReducer = function (state = initialState, action: any) {
 		}
 
 		case DocumentsActionTypes.CREATE_AGREEMENT_FAILURE:
-			return { ...state, error: payload, loading: false, creatingAgreement: false };
+			return {
+				...state,
+				error: payload,
+				loading: false,
+				creatingAgreement: false
+			};
 
 		default:
 			return state;
