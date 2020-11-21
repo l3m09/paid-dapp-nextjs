@@ -2,7 +2,14 @@ import { DocumentsActionTypes } from '../actionTypes/documents';
 import { BigNumber, ContractTransaction, ethers } from 'ethers';
 import { BlockchainFactory } from '../../utils/blockchainFactory';
 import { ContractFactory } from '../../utils/contractFactory';
-import ipfs from '../wallet/ipfs';
+import { base64StringToBlob } from 'blob-util';
+import { AlgorithmType, CEASigningService } from 'paid-universal-wallet';
+import { eddsa } from "elliptic";
+
+const uint8ArrayToString = require('uint8arrays/to-string')
+
+const ipfsClient = require('ipfs-http-client');
+const ipfs = ipfsClient({ host: 'ipfs.infura.io', port: '5001', protocol: 'https', apiPath: '/api/v0' });
 
 const createAgreementFormPayload = (obj: any) => {
 	const types: string[] = [];
@@ -51,8 +58,19 @@ const createAgreement = () => {
 		type: DocumentsActionTypes.CREATE_AGREEMENT_SUCCESS
 	};
 };
+declare global {
+	interface Window { web3: any; ethereum: any; }
+}
 
 // ACTIONS
+
+/*
+get account
+get the network
+get smart contract
+get meme hash
+*/
+
 
 export const doCreateAgreement = (payload: {
 	signatoryA: string;
@@ -62,7 +80,6 @@ export const doCreateAgreement = (payload: {
 	agreementForm: any;
 	slideNext: () => Promise<void>;
 	slideBack: () => Promise<void>;
-	streamPDF: 	Promise<NodeJS.ReadableStream>;
 }) => async (dispatch: any, getState: () => { wallet: any }) => {
 	dispatch({ type: DocumentsActionTypes.CREATE_AGREEMENT_LOADING });
 	try {
@@ -76,18 +93,20 @@ export const doCreateAgreement = (payload: {
 			slideBack
 		} = payload;
 
+
 		const formId = ethers.utils.formatBytes32String(agreementFormTemplateId);
 		const form = createAgreementFormPayload(agreementForm);
 
-		const ethersWallet = await BlockchainFactory.getWallet();
+		const ethersWallet = await BlockchainFactory.getWallet2();
+		
 		if (!ethersWallet) {
 			await slideBack();
 			alert('Not unlocked wallet found');
 			throw new Error('Not unlocked wallet found');
 		}
-		const contract = ContractFactory.getAgrementContract(ethersWallet);
-		const balance = await ethersWallet.provider.getBalance(
-			ethersWallet.address
+		const contract = ContractFactory.getAgrementContract(ethersWallet.wallet);
+		const balance = await ethersWallet.wallet.provider.getBalance(
+			ethersWallet.wallet.address
 		);
 
 		const parsedBalance = BigNumber.from(balance);
@@ -112,6 +131,47 @@ export const doCreateAgreement = (payload: {
 		);
 
 		agreementTransaction.gasPrice = gasPrice;
+		
+		// ALICE SIDE
+		const content = '<html>THIS IS A TEST</html>';
+		const blobContent = base64StringToBlob(btoa(content), 'application/pdf');
+		const ceass = new CEASigningService();
+		ceass.useKeyStorage(ethersWallet.keystore);
+		
+		const arrayContent = btoa(content);
+		const bytesContent = ethers.utils.toUtf8Bytes(arrayContent);
+		const digest = ethers.utils.sha256(bytesContent).replace('0x', '');
+		
+		const ec_alice = new eddsa('ed25519');
+
+		const signer = ec_alice.keyFromSecret(ethersWallet.keystore.keypairs.ED25519);
+		const signature = signer
+			.sign(digest)
+			.toHex();
+
+		const pubKey = signer.getPublic();
+		
+		const opts = { create: true, parents: true };
+
+		let ipfsHash = await uploadsIPFS(ipfs, blobContent, opts, digest, signature, pubKey, null);
+		
+		console.log(ipfsHash.toString());
+		//const tx = await simpleContract.set(ipfsHash);
+		
+		///---------------------------------------------------------------------------------------------------
+		// BOB SIDE
+
+		let fetchedContent = '';
+		for await (const chunk of ipfs.cat(ipfsHash.toString())) {
+			fetchedContent = uint8ArrayToString(chunk);
+		}
+		const jsonContent = JSON.parse(fetchedContent);
+		const fetchedPubKey = jsonContent.publicKey;
+
+		const ec_bob = new eddsa('ed25519');
+		
+		const key = ec_bob.keyFromPublic(fetchedPubKey);
+
 
 		new Promise(async (resolve) => {
 			await agreementTransaction.wait().then((receipt) => {
@@ -137,6 +197,21 @@ export const doCreateAgreement = (payload: {
 		});
 	}
 };
+
+export const uploadsIPFS = async (ipfs: any, blobContent: any, opts: any, 
+	_digest: string, sigArray: any, pubKey: any, parent: any = null) => {
+	const createCIDHash = (fileEntry: any) => {
+		return { path: fileEntry.path, cid: fileEntry.cid.toString() }
+	}
+
+	const fileContent = await ipfs.add(blobContent);
+	const fileSignature = await ipfs.add(sigArray);
+	const index = { contentRef: createCIDHash(fileContent), sigRef: createCIDHash(fileSignature), digest: _digest, 
+		publicKey: pubKey, parent: parent };
+
+	const fileIndex = await ipfs.add(JSON.stringify(index));
+	return fileIndex.cid;
+}
 
 export const doGetDocuments = () => async (dispatch: any) => {
 	dispatch({ type: DocumentsActionTypes.GET_DOCUMENTS_LOADING });
