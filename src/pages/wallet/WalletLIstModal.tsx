@@ -31,7 +31,7 @@ const WalletListModal: React.FC<WalletListModalProps> = ({
 			cssClass="create-wallet-modal"
 			onDidDismiss={() => dismiss()}
 		>
-			<IonHeader translucent>
+			<IonHeader translucent={false} mode="md">
 				<IonToolbar>
 					<IonTitle>Wallets</IonTitle>
 					<IonButtons slot="end">

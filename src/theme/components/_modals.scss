@@ -23,7 +23,8 @@
 .unlock-modal {
 
   .modal-wrapper {
-    min-height: 60vh !important;
+    min-height: 50vh !important;
+    max-height: 500px !important;
 
     .ion-page {
       justify-content: flex-start !important;
@@ -68,6 +69,27 @@
       }
 
     }
+
+  }
+
+}
+
+.import-modal {
+
+  .modal-wrapper {
+    min-height: 50vh !important;
+    max-height: 700px !important;
+
+  }
+
+}
+
+.pdf-viewer-modal {
+
+  .modal-wrapper {
+    min-height: 90vh !important;
+    min-width: 95% !important;
+
 
   }
 

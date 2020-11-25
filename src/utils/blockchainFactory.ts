@@ -1,13 +1,10 @@
-import {
-	AlgorithmType,
-	createWalletManager,
-	WalletManager
-} from 'cea-crypto-wallet';
-import { KeyStorageModel } from 'cea-crypto-wallet/dist/key-storage/KeyStorageModel';
+import { createWalletManager, WalletManager } from 'paid-universal-wallet';
+import { KeyStorageModel } from 'paid-universal-wallet/dist/key-storage/KeyStorageModel';
 import { ethers, providers, Wallet } from 'ethers';
 
 export const GETH_URL =
 	'https://rinkeby.infura.io/v3/0a835d9e13884254b834bff39b67dfdb';
+	//'http://127.0.0.1:7545';
 
 export class BlockchainFactory {
 	private static _provider: ethers.providers.JsonRpcProvider;
@@ -47,5 +44,19 @@ export class BlockchainFactory {
 		// 	'';
 		const wallet = Wallet.fromMnemonic(mnemonic);
 		return wallet.connect(provider);
+	}
+
+	public static async getWallet2(): Promise<any | null> {
+		if (!BlockchainFactory._keystore) {
+			return null;
+		}
+		const { mnemonic } = BlockchainFactory._keystore;
+		const provider = BlockchainFactory.getProvider();
+		// const manager = BlockchainFactory.getWalletManager();
+		// const privateKey =
+		// 	manager.getKeyService()?.getPrivateKey(AlgorithmType.ES256K, keypairs) ||
+		// 	'';
+		const wallet = Wallet.fromMnemonic(mnemonic);
+		return { wallet: wallet.connect(provider), keystore: BlockchainFactory._keystore };
 	}
 }

@@ -6,7 +6,7 @@ import {
 	IonTitle,
 	IonLoading
 } from '@ionic/react';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
 	doCreateAgreement,
@@ -29,20 +29,29 @@ const FormCounterparty: React.FC<AgreementFormProps> = ({ current }) => {
 	);
 	const { currentWallet } = wallet;
 
-	const { loading, agreementFormInfo, creatingAgreement } = documentsState;
+	const {
+		loading,
+		error,
+		agreementFormInfo,
+		creatingAgreement
+	} = documentsState;
 
 	function nameChanged(e: any) {
 		dispatch(doSetAgreementFormInfo({ counterpartyName: e.target.value }));
 	}
+
 	function addressChanged(e: any) {
 		dispatch(doSetAgreementFormInfo({ counterpartyAddress: e.target.value }));
 	}
+
 	function phoneChanged(e: any) {
 		dispatch(doSetAgreementFormInfo({ counterpartyPhone: e.target.value }));
 	}
+
 	function walletChanged(e: any) {
 		dispatch(doSetAgreementFormInfo({ counterpartyWallet: e.target.value }));
 	}
+
 	function verifyInfo() {
 		if (
 			agreementFormInfo.counterpartyWallet.length > 3 &&
@@ -74,17 +83,18 @@ const FormCounterparty: React.FC<AgreementFormProps> = ({ current }) => {
 
 	const onSubmit = async () => {
 		// e.preventDefault();
-		dispatch(doSetAgreementFormInfo({createdAt: new Date().toDateString()}));
-		dispatch(doCreateAgreement({
-			signatoryA: currentWallet.address,
-			signatoryB: agreementFormInfo.counterpartyWallet,
-			validUntil: 0,
-			agreementFormTemplateId: type,
-			agreementForm: agreementFormInfo,
-			slideNext: slideNext,
-			slideBack: slideBack
-		}))
-
+		dispatch(doSetAgreementFormInfo({ createdAt: new Date().toDateString() }));
+		dispatch(
+			doCreateAgreement({
+				signatoryA: currentWallet.address,
+				signatoryB: agreementFormInfo.counterpartyWallet,
+				validUntil: 0,
+				agreementFormTemplateId: type,
+				agreementForm: agreementFormInfo,
+				slideNext: slideNext,
+				slideBack: slideBack
+			})
+		);
 	};
 
 	return (
@@ -151,9 +161,10 @@ const FormCounterparty: React.FC<AgreementFormProps> = ({ current }) => {
 				</IonItem>
 			</form>
 			<IonLoading
-				cssClass="my-custom-class"
+				cssClass="loader-spinner"
+				mode="md"
 				isOpen={creatingAgreement}
-				message={'Please wait...'}
+
 			/>
 		</div>
 	);

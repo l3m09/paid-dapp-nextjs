@@ -20,24 +20,25 @@ import {
 	IonPopover,
 	IonItemDivider,
 	IonFabButton,
-	IonFab
+	IonFab,
+	IonSlides,
+	IonSlide
 } from '@ionic/react';
 import {
 	add,
 	documentsOutline as documentsIcon,
-	documentOutline as documentIcon,
 } from 'ionicons/icons';
 
-import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router';
+import React, {useEffect, useRef, useState} from 'react';
+import {useHistory} from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import {
 	doGetDocuments,
 	doGetSelectedDocument
 } from '../../redux/actions/documents';
 
-import Collapsible from 'react-collapsible';
 import MenuAlternate from '../../components/MenuAlternate';
+import DocumentsList from './DocumentsList';
 
 function SelectedDocument(payload: {
 	show: boolean;
@@ -100,16 +101,19 @@ const Documents: React.FC = () => {
 	const dispatch = useDispatch();
 	const documentsState = useSelector((state: any) => state.documents);
 	const {
-		documents,
+		documentsFrom,
+		documentsTo,
 		selectedDocument,
 		loading,
 		agreementTypes
 	} = documentsState;
 	const [showModal, setShowModal] = useState(false);
 	const [showPopOver, setShowPopover] = useState(false);
+	const [currentIndex, setCurrentIndex] = useState(0);
 
 	useEffect(() => {
 		dispatch(doGetDocuments());
+		slidesRef.current?.lockSwipes(true)
 	}, [dispatch]);
 
 	function showDocument(item: any) {
@@ -137,56 +141,75 @@ const Documents: React.FC = () => {
 		history.push('/agreements/' + type.toLowerCase());
 	}
 
+	const slidesRef = useRef<HTMLIonSlidesElement | null>(null);
+	const slideOpts = {
+		initialSlide: 0,
+		speed: 400,
+		height: 500,
+		slidesPerView: 1,
+		navigation: {
+			nextEl: '.swipper-btn',
+			prevEl: '.swipper-btn'
+		}
+	};
+
+	async function slideTo(i: number) {
+		await slidesRef.current?.lockSwipes(false)
+		setCurrentIndex(i)
+		await slidesRef.current?.slideTo(i)
+		await slidesRef.current?.lockSwipes(true)
+
+	}
+
 	return (
 		<IonPage className="documents-page content-page">
 			<IonContent fullscreen>
-				<IonHeader>
+				<IonHeader translucent={false} mode="md">
 					<IonToolbar>
 						<IonButtons slot="start">
-							<IonMenuButton />
+							<IonMenuButton/>
 						</IonButtons>
 						<IonTitle>Documents</IonTitle>
 						<MenuAlternate/>
 					</IonToolbar>
 				</IonHeader>
 				<IonLoading
-					cssClass="my-custom-class"
+					cssClass="loader-spinner"
+					mode="md"
 					isOpen={loading}
-					message={'Please wait...'}
+
 				/>
 				<div>
-					<div className="documents-container">
-						{documents
-							? documents.map((document: any, index: number) => {
-								const { data, meta, event } = document;
-								return (
-									<Collapsible
-										transitionTime={200}
-										contentInnerClassName="document-container"
-										trigger={trigger(`${event.id}`,`${event.from}`)}
-										key={index}
-									>
-										<div className="document-titles">
-											<div className="document-title-wrapper">
-												<div
-													className="document-title"
-													onClick={() => {
-														showDocument({ data, meta, event });
-													}}
-												>
-													<IonIcon icon={documentIcon} />
-													{/*<span>{event.id}</span>*/}
-													<span>To: {event.to}</span>
-												</div>
-												<hr />
-											</div>
-										</div>
-									</Collapsible>
-								);
-							})
-							: null}
-					</div>
-					<IonPopover isOpen={showPopOver} cssClass="agreements-popover" onDidDismiss={() => {setShowPopover(false)}}>
+					<IonItem class="documents-controls">
+						<IonButton
+							type="submit"
+							color="transparent"
+							className={currentIndex === 0 ? 'current-tab document-control document-control-from': 'document-control document-control-from'}
+							onClick={() => {slideTo(0)}}
+						>
+							From
+						</IonButton>
+						<IonButton
+							type="submit"
+							color="transparent"
+							className={currentIndex === 1 ? 'current-tab document-control document-control-to': 'document-control document-control-to'}
+							onClick={() => {slideTo(1)}}
+						>
+							To
+						</IonButton>
+					</IonItem>
+					<IonSlides pager={false} options={slideOpts} ref={slidesRef}>
+						<IonSlide key="documents-from" >
+							<DocumentsList documents={documentsFrom} type="to" counterType="from"/>
+						</IonSlide>
+						<IonSlide key="documents-to">
+							<DocumentsList documents={documentsTo} type="from" counterType="to"/>
+						</IonSlide>
+					</IonSlides>
+
+					<IonPopover isOpen={showPopOver} cssClass="agreements-popover" onDidDismiss={() => {
+						setShowPopover(false)
+					}}>
 						<IonItemDivider>
 							<IonItem>Select Agreement type</IonItem>
 						</IonItemDivider>
@@ -212,7 +235,7 @@ const Documents: React.FC = () => {
 						<IonFabButton color="gradient" onClick={() => {
 							setShowPopover(true);
 						}}>
-							<IonIcon icon={add} />
+							<IonIcon icon={add}/>
 						</IonFabButton>
 					</IonFab>
 				</div>

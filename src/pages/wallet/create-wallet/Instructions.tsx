@@ -9,7 +9,7 @@ import {
 } from '@ionic/react';
 import React, { useState } from 'react';
 import { lockClosedOutline, warning } from 'ionicons/icons';
-import Terms from "../../../components/Terms";
+import Terms from '../../../components/Terms';
 
 interface InstructionsProps {
 	current: HTMLIonSlidesElement | null;
@@ -28,26 +28,36 @@ const Instructions: React.FC<InstructionsProps> = ({ current }) => {
 		<IonContent fullscreen class="phrase-content seed-phrase-instructions">
 			<IonItem>
 				<span className="phrase-lock-icon">
-					<IonIcon color="secondary" ios={lockClosedOutline} md={lockClosedOutline} />
+					<IonIcon
+						color="secondary"
+						ios={lockClosedOutline}
+						md={lockClosedOutline}
+					/>
 				</span>
 			</IonItem>
 			<IonItem>
 				<span className="some-text">
 					Secure your wallet’s
-					<IonText color="secondary" className="ion-color-secondary"> seed phrase</IonText>
+					<IonText color="secondary" className="ion-color-secondary">
+						{' '}
+						seed phrase
+					</IonText>
 				</span>
 			</IonItem>
 			<IonItem>
 				<IonText class="phrase-content-sub-text seed-phrase-instructions-sub-text">
 					<span className="text-brand-primary">
 						<IonIcon color="secondary" ios={warning} md={warning} />
-						<IonRouterLink
-							color="secondary"
-							onClick={() => setShowModal(true)}
-						>
+						<IonRouterLink color="secondary" onClick={() => setShowModal(true)}>
 							Why is it important?
 						</IonRouterLink>
-						<Terms show={showModal} dismiss={() => {setShowModal(false)}} title="Why is it important?" />
+						<Terms
+							show={showModal}
+							dismiss={() => {
+								setShowModal(false);
+							}}
+							title="Why is it important?"
+						/>
 					</span>
 				</IonText>
 			</IonItem>

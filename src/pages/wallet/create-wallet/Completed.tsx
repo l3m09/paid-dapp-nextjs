@@ -32,7 +32,8 @@ const Completed: React.FC<CompletedProps> = ({ dismiss }) => {
 	return (
 		<IonContent fullscreen class="phrase-content phrase-completed">
 			<IonLoading
-				cssClass='loader'
+				cssClass="loader-spinner"
+				mode="md"
 				isOpen={creatingWallet}
 			/>
 			<IonItem>

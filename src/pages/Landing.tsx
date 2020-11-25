@@ -41,8 +41,9 @@ const Landing: React.FC = () => {
 				</div>
 
 				<IonLoading
+					cssClass="loader-spinner"
+					mode="md"
 					isOpen={loadingWallets}
-					message={'Loading wallets...'}
 				/>
 
 				{wallets.length <= 0 ? (

@@ -2,6 +2,7 @@ import { WalletActionTypes } from '../actionTypes/wallet';
 import { Plugins } from '@capacitor/core';
 import { BlockchainFactory } from '../../utils/blockchainFactory';
 import { ethers } from 'ethers';
+import { CEASigningService } from 'paid-universal-wallet';
 const { Storage } = Plugins;
 
 // CREATORS
@@ -86,6 +87,7 @@ export const doUnlockWallet = (payload: {
 	try {
 		const { wallet, password } = payload;
 		const walletManager = BlockchainFactory.getWalletManager();
+
 		const ks = await walletManager.unlockWallet(wallet._id, password);
 		if (!ks) {
 			dispatch({

@@ -50,7 +50,7 @@ const Wallets: React.FC = () => {
 	return (
 		<IonPage className="wallets-page content-page">
 			<IonContent fullscreen>
-				<IonHeader>
+				<IonHeader translucent={false} mode="md">
 					<IonToolbar>
 						<IonButtons slot="start">
 							<IonMenuButton />
