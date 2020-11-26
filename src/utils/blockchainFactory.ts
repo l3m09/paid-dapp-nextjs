@@ -2,11 +2,11 @@ import { createWalletManager, WalletManager } from 'paid-universal-wallet';
 import { KeyStorageModel } from 'paid-universal-wallet/dist/key-storage/KeyStorageModel';
 import { ethers, providers, Wallet } from 'ethers';
 
-export const GETH_URL =
-	'https://rinkeby.infura.io/v3/0a835d9e13884254b834bff39b67dfdb';
-	//'http://127.0.0.1:7545';
 
 export class BlockchainFactory {
+	static GETH_URL =
+		'https://rinkeby.infura.io/v3/6d9efbca18e24cf2ba065b6cc0683c1d';
+		//'http://127.0.0.1:7545';
 	private static _provider: ethers.providers.JsonRpcProvider;
 	private static _walletManager: WalletManager | null = null;
 	private static _keystore: KeyStorageModel;
@@ -14,7 +14,7 @@ export class BlockchainFactory {
 	public static getProvider(): ethers.providers.JsonRpcProvider {
 		if (!BlockchainFactory._provider) {
 			BlockchainFactory._provider = new ethers.providers.JsonRpcProvider(
-				GETH_URL
+				this.GETH_URL
 			);
 		}
 		return BlockchainFactory._provider;

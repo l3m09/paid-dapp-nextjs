@@ -107,6 +107,7 @@ const FormCounterparty: React.FC<AgreementFormProps> = ({ current }) => {
 					<IonLabel position="stacked">Full Name</IonLabel>
 					<IonInput
 						title="Label"
+						value="Fulano de tal"
 						type="text"
 						placeholder="Enter your name"
 						onInput={(e) => {
@@ -119,6 +120,7 @@ const FormCounterparty: React.FC<AgreementFormProps> = ({ current }) => {
 					<IonInput
 						title="Label"
 						type="text"
+						value="Panama"
 						placeholder="Enter your billing address"
 						onInput={(e) => {
 							addressChanged(e);
@@ -130,6 +132,7 @@ const FormCounterparty: React.FC<AgreementFormProps> = ({ current }) => {
 					<IonInput
 						title="Label"
 						type="tel"
+						value="62596977"
 						placeholder="Enter your phone number"
 						onInput={(e) => {
 							phoneChanged(e);
@@ -140,6 +143,7 @@ const FormCounterparty: React.FC<AgreementFormProps> = ({ current }) => {
 					<IonLabel position="stacked">Destination Wallet Address</IonLabel>
 					<IonInput
 						title="Label"
+						value="0x4198258023eD0D6fae5DBCF3Af2aeDaaA363571F"
 						placeholder="Enter the destination wallet address"
 						onInput={(e) => {
 							walletChanged(e);
@@ -154,7 +158,7 @@ const FormCounterparty: React.FC<AgreementFormProps> = ({ current }) => {
 						}}
 						color="gradient"
 						shape="round"
-						disabled={!filled}
+						//disabled={!filled}
 					>
 						{loading ? 'Loading..' : 'Confirm'}
 					</IonButton>

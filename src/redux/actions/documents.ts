@@ -5,11 +5,18 @@ import { ContractFactory } from '../../utils/contractFactory';
 import { base64StringToBlob } from 'blob-util';
 import { AlgorithmType, CEASigningService } from 'paid-universal-wallet';
 import { eddsa } from "elliptic";
+import { jsPDF } from "jspdf";
+import Web3 from 'web3';
+import AgreementJSON from '../../contracts/Agreement.json';
 
+const http = require('http');
+const Web3HttpProvider = require('web3-providers-http');
+const html2PDF = require('jspdf-html2canvas');
 const uint8ArrayToString = require('uint8arrays/to-string')
-
 const ipfsClient = require('ipfs-http-client');
 const ipfs = ipfsClient({ host: 'ipfs.infura.io', port: '5001', protocol: 'https', apiPath: '/api/v0' });
+
+//const { compile } = require('./compile');
 
 const createAgreementFormPayload = (obj: any) => {
 	const types: string[] = [];
@@ -84,8 +91,6 @@ export const doCreateAgreement = (payload: {
 	dispatch({ type: DocumentsActionTypes.CREATE_AGREEMENT_LOADING });
 	try {
 		const {
-			signatoryA,
-			signatoryB,
 			validUntil,
 			agreementFormTemplateId,
 			agreementForm,
@@ -104,36 +109,25 @@ export const doCreateAgreement = (payload: {
 			alert('Not unlocked wallet found');
 			throw new Error('Not unlocked wallet found');
 		}
-		const contract = ContractFactory.getAgrementContract(ethersWallet.wallet);
-		const balance = await ethersWallet.wallet.provider.getBalance(
-			ethersWallet.wallet.address
-		);
-
-		const parsedBalance = BigNumber.from(balance);
-		if (parsedBalance.lte(0)) {
-			throw new Error('The wallet should has balance to send a transaction.');
-		}
-
-		const gasPrice = await contract.estimateGas.create(
-			signatoryA,
-			signatoryB,
-			validUntil,
-			formId,
-			form
-		);
-
-		const agreementTransaction: ContractTransaction = await contract.create(
-			signatoryA,
-			signatoryB,
-			validUntil,
-			formId,
-			form
-		);
-
-		agreementTransaction.gasPrice = gasPrice;
 		
 		// ALICE SIDE
-		const content = '<html>THIS IS A TEST</html>';
+		var today = new Date();
+
+		const content = '<html style="width:1000px; font-size: 10px;"><body style="width:100%"><div>'+
+		'<div>Date: ' + today.toLocaleDateString() + ' ' + today.toLocaleTimeString()+ ' </div>' +
+		'Agreement creator:<br/>' +
+		'<div style="margin-left: 20px;">Name:' + agreementForm.name + '</div>' +
+		'<div style="margin-left: 20px;">Address:' + agreementForm.address + '</div>' +
+		'<div style="margin-left: 20px;">Phone:' + agreementForm.phone + '</div>' +
+		'<div style="margin-left: 20px;">Wallet:' + ethersWallet.wallet.address + '</div>' +
+		'<div>---------------------------------------</div>' +
+		'Agreement counterparty:<br/>' +
+		'<div style="margin-left: 20px;">Name:' + agreementForm.counterpartyName + '</div>' +
+		'<div style="margin-left: 20px;">Address:' + agreementForm.counterpartyAddress + '</div>' +
+		'<div style="margin-left: 20px;">Phone:' + agreementForm.counterpartyPhone + '</div>' +
+		'<div style="margin-left: 20px;">Wallet:' + agreementForm.counterpartyWallet + '</div>' +
+		'</div>' + 
+		'</body></html>';
 		const blobContent = base64StringToBlob(btoa(content), 'application/pdf');
 		const ceass = new CEASigningService();
 		ceass.useKeyStorage(ethersWallet.keystore);
@@ -153,25 +147,110 @@ export const doCreateAgreement = (payload: {
 		
 		const opts = { create: true, parents: true };
 
-		let ipfsHash = await uploadsIPFS(ipfs, blobContent, opts, digest, signature, pubKey, null);
+		let ipfsHash = await uploadsIPFS(ipfs, blobContent, opts, digest, signature, pubKey, formId, null);
 		
-		console.log(ipfsHash.toString());
-		//const tx = await simpleContract.set(ipfsHash);
+		console.log('ipfs hash: ' + ipfsHash.toString());
+
+		window.web3 = new Web3(new Web3.providers.HttpProvider(BlockchainFactory.GETH_URL));
+
+		const accounts = await window.ethereum.request({
+			method: 'eth_requestAccounts'
+		  })
+			.then((res: any) => res).catch((error: any) => {
+			  if (error.code === 4001) {
+				// EIP-1193 userRejectedRequest error
+				console.log('Please connect to MetaMask.');
+			  } else {
+				console.error(error);
+			  }
+		});
+		const agreementContract = await new window.web3.eth.Contract(AgreementJSON.abi, 
+			ContractFactory.contractAddress, 
+			{ from: ethersWallet.wallet.address, gas: '1500000', gasPrice: '1000000000' });			
+	
+		const agreementTransaction: ContractTransaction = agreementContract.methods.partyCreate(
+			validUntil,
+			ipfsHash.toString(),
+			formId,
+			form,
+			'0x' + digest
+		).on('receipt', async function(receipt: any){
+
+			// BOB SIDE
+
+			let fetchedContent = '';
+			for await (const chunk of ipfs.cat(ipfsHash.toString())) {
+				fetchedContent = uint8ArrayToString(chunk);
+			}
+			const jsonContent = JSON.parse(fetchedContent);
+			const contentRef = jsonContent.contentRef;
+			let pdfContent = '';
+			
+			for await (const chunk of ipfs.cat(contentRef.cid)) {
+				pdfContent = uint8ArrayToString(chunk);
+			}
+
+			const doc = new jsPDF('p', 'px','a4',true);
+			doc.html(pdfContent, {
+				callback: function () {
+					doc.save('agreeement-' + receipt.transactionHash.replace('0x','').substring(0,10) + '.pdf');
+				}
+			});
+
+			const fetchedPubKey = jsonContent.publicKey;
+
+			const ec_bob = new eddsa('ed25519');
+			
+			const key = ec_bob.keyFromPublic(fetchedPubKey);
+			const sigRef = jsonContent.sigRef;
+			let sigDocument = '';
+			for await (const chunk of ipfs.cat(sigRef.cid)) {
+				sigDocument = uint8ArrayToString(chunk);
+			}
+
+			console.log(key.verify(jsonContent.digest, sigDocument));
+
+			dispatch(createAgreement());
+			slideNext();
+		})
+		.on('error', function(error: any, receipt: any) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.		
+			slideBack();
+			alert('Transaction failed');
+			throw new Error('Transaction failed');
+		});;
+		/*		
+		const contract = ContractFactory.getAgrementContract(ethersWallet.wallet);
+		const balance = await ethersWallet.wallet.provider.getBalance(
+			ethersWallet.wallet.address
+		);
+
+		const parsedBalance = BigNumber.from(balance);
+		if (parsedBalance.lte(0)) {
+			throw new Error('The wallet should has balance to send a transaction.');
+		}
+		
+		const options = { gasPrice: 1000000000, gasLimit: 85000 };*/
+		/*const gasPrice = await contract.estimateGas.partyCreate(
+			validUntil,
+			ipfsHash.toString(),
+			formId,
+			form,
+			'0x' + digest,
+			options
+		);*/
+
+		/*const agreementTransaction: ContractTransaction = await contract.partyCreate(
+			validUntil,
+			ipfsHash.toString(),
+			formId,
+			form,
+			'0x' + digest,
+			options
+		);
+
+		agreementTransaction.gasPrice = BigNumber.from(options.gasPrice);
 		
 		///---------------------------------------------------------------------------------------------------
-		// BOB SIDE
-
-		let fetchedContent = '';
-		for await (const chunk of ipfs.cat(ipfsHash.toString())) {
-			fetchedContent = uint8ArrayToString(chunk);
-		}
-		const jsonContent = JSON.parse(fetchedContent);
-		const fetchedPubKey = jsonContent.publicKey;
-
-		const ec_bob = new eddsa('ed25519');
-		
-		const key = ec_bob.keyFromPublic(fetchedPubKey);
-
 
 		new Promise(async (resolve) => {
 			await agreementTransaction.wait().then((receipt) => {
@@ -186,7 +265,7 @@ export const doCreateAgreement = (payload: {
 					throw new Error('Transaction failed');
 				}
 			});
-		});
+		});*/
 	} catch (err) {
 		await payload.slideBack();
 		alert(err.message);
@@ -199,7 +278,7 @@ export const doCreateAgreement = (payload: {
 };
 
 export const uploadsIPFS = async (ipfs: any, blobContent: any, opts: any, 
-	_digest: string, sigArray: any, pubKey: any, parent: any = null) => {
+	_digest: string, sigArray: any, pubKey: any, _docId: any, parent: any = null) => {
 	const createCIDHash = (fileEntry: any) => {
 		return { path: fileEntry.path, cid: fileEntry.cid.toString() }
 	}
@@ -207,7 +286,7 @@ export const uploadsIPFS = async (ipfs: any, blobContent: any, opts: any,
 	const fileContent = await ipfs.add(blobContent);
 	const fileSignature = await ipfs.add(sigArray);
 	const index = { contentRef: createCIDHash(fileContent), sigRef: createCIDHash(fileSignature), digest: _digest, 
-		publicKey: pubKey, parent: parent };
+		publicKey: pubKey, parent: parent, docId: _docId };
 
 	const fileIndex = await ipfs.add(JSON.stringify(index));
 	return fileIndex.cid;
@@ -216,19 +295,81 @@ export const uploadsIPFS = async (ipfs: any, blobContent: any, opts: any,
 export const doGetDocuments = () => async (dispatch: any) => {
 	dispatch({ type: DocumentsActionTypes.GET_DOCUMENTS_LOADING });
 	try {
-		const ethersWallet = await BlockchainFactory.getWallet();
+		const ethersWallet = await BlockchainFactory.getWallet2();
 		if (!ethersWallet) {
 			throw new Error('Not unlocked wallet found');
 		}
-		const contract = ContractFactory.getAgrementContract(ethersWallet);
-		const filter = contract.filters.AgreementCreated(
+
+		var options = {
+			keepAlive: true,
+			withCredentials: false,
+			timeout: 20000, // ms
+			headers: [
+				{
+					name: 'Access-Control-Allow-Origin',
+					value: '*'
+				},
+				{
+					
+				}
+			],
+			agent: {
+				http: http.Agent(),
+				baseUrl: ''
+			}
+		};
+		
+		const web3 = new Web3HttpProvider('https://rinkeby.infura.io/ws/v3/6d8bfebd6db24c3cb3f3d50839e1c5be', options);
+		
+		/*const web3 : any = new Web3(
+			new Web3.providers.WebsocketProvider('wss://rinkeby.infura.io/ws/v3/6d8bfebd6db24c3cb3f3d50839e1c5be'));*/
+		console.log(web3);
+		const connected = await web3.currentProvider.connected;
+			console.log('Web3 Proveedor', connected, 'window ethereum', window.ethereum.isConnected());
+			
+		const accounts = await window.ethereum.request({
+			method: 'eth_requestAccounts'
+		  })
+			.then((res: any) => res).catch((error: any) => {
+			  if (error.code === 4001) {
+				// EIP-1193 userRejectedRequest error
+				console.log('Please connect to MetaMask.');
+			  } else {
+				console.error(error);
+			  }
+		});
+		
+		const agreementContract = await new web3.eth.Contract(AgreementJSON.abi, 
+			ContractFactory.contractAddress);
+		agreementContract.events.AgreementPartyCreated({ 
+			filter: { partySource: [accounts[0]] },
+			fromBlock: 0, 
+		}, function(error: any, events: any){ 
+			debugger;
+			if(error){
+				console.error(error);
+				return;
+			}
+			console.log(events); });/*('AgreementPartyCreated', { 
+				filter: { partySource: [accounts[0]] },
+				fromBlock: 0, 
+				toBlock: 'latest'
+			}, function(error: any, events: any){ 
+				debugger;	
+				console.log(events); })*/
+			/*.then(function(events: any){
+				debugger;	
+				console.log(events) // same results as the optional callback above
+			});*/
+		/*const contract = ContractFactory.getAgrementContract(ethersWallet);
+		const filter = contract.filters.AgreementPartyCreated(
 			null,
 			null,
 			ethersWallet.address
 		);
 
-		const events = await contract.queryFilter(filter);
-		const promises = events.map((event) => {
+		const events = await contract.queryFilter(filter);*/
+		const promises: any[] = [];/*events.map((event) => {
 			const { args } = contract.interface.parseLog(event);
 
 			const {
@@ -274,7 +415,7 @@ export const doGetDocuments = () => async (dispatch: any) => {
 					}
 				});
 			});
-		});
+		});*/
 		const agreements = await Promise.all(promises);
 		console.log('agreements', agreements);
 		dispatch(getDocuments(agreements));
