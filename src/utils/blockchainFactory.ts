@@ -1,6 +1,7 @@
 import { createWalletManager, WalletManager } from 'paid-universal-wallet';
 import { KeyStorageModel } from 'paid-universal-wallet/dist/key-storage/KeyStorageModel';
 import { ethers, providers, Wallet } from 'ethers';
+import Web3 from 'web3';
 
 
 export class BlockchainFactory {
@@ -44,6 +45,12 @@ export class BlockchainFactory {
 		// 	'';
 		const wallet = Wallet.fromMnemonic(mnemonic);
 		return wallet.connect(provider);
+	}
+
+	public static websocketProvider(): any | null {
+		return new Web3(
+			new Web3.providers.WebsocketProvider('wss://rinkeby.infura.io/ws/v3/6d9efbca18e24cf2ba065b6cc0683c1d')
+		);
 	}
 
 	public static async getWallet2(): Promise<any | null> {

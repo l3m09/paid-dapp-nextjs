@@ -10,7 +10,6 @@ import Web3 from 'web3';
 import AgreementJSON from '../../contracts/Agreement.json';
 
 const http = require('http');
-const Web3HttpProvider = require('web3-providers-http');
 const html2PDF = require('jspdf-html2canvas');
 const uint8ArrayToString = require('uint8arrays/to-string')
 const ipfsClient = require('ipfs-http-client');
@@ -300,33 +299,31 @@ export const doGetDocuments = () => async (dispatch: any) => {
 			throw new Error('Not unlocked wallet found');
 		}
 
-		var options = {
-			keepAlive: true,
-			withCredentials: false,
-			timeout: 20000, // ms
-			headers: [
-				{
-					name: 'Access-Control-Allow-Origin',
-					value: '*'
-				},
-				{
+		// var options = {
+		// 	keepAlive: true,
+		// 	withCredentials: false,
+		// 	timeout: 20000, // ms
+		// 	headers: [
+		// 		{
+		// 			name: 'Access-Control-Allow-Origin',
+		// 			value: '*'
+		// 		},
+		// 		{
 					
-				}
-			],
-			agent: {
-				http: http.Agent(),
-				baseUrl: ''
-			}
-		};
+		// 		}
+		// 	],
+		// 	agent: {
+		// 		http: http.Agent(),
+		// 		baseUrl: ''
+		// 	}
+		// };
 		
-		const web3 = new Web3HttpProvider('https://rinkeby.infura.io/ws/v3/6d8bfebd6db24c3cb3f3d50839e1c5be', options);
+		// const web3 = new Web3HttpProvider('https://rinkeby.infura.io/ws/v3/6d8bfebd6db24c3cb3f3d50839e1c5be', options);
 		
-		/*const web3 : any = new Web3(
-			new Web3.providers.WebsocketProvider('wss://rinkeby.infura.io/ws/v3/6d8bfebd6db24c3cb3f3d50839e1c5be'));*/
-		console.log(web3);
-		const connected = await web3.currentProvider.connected;
-			console.log('Web3 Proveedor', connected, 'window ethereum', window.ethereum.isConnected());
-			
+		const web3 = BlockchainFactory.websocketProvider();
+		const id = await web3.eth.net.getId();
+		console.log(web3.currentProvider, id);
+		console.log('Web3 Proveedor', web3.currentProvider.connected, 'window ethereum', window.ethereum.isConnected());
 		const accounts = await window.ethereum.request({
 			method: 'eth_requestAccounts'
 		  })
@@ -338,7 +335,7 @@ export const doGetDocuments = () => async (dispatch: any) => {
 				console.error(error);
 			  }
 		});
-		
+
 		const agreementContract = await new web3.eth.Contract(AgreementJSON.abi, 
 			ContractFactory.contractAddress);
 		agreementContract.events.AgreementPartyCreated({ 
