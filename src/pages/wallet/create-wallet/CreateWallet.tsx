@@ -65,7 +65,7 @@ const CreateWallet: React.FC<CreateWalletProps> = ({ show, dismiss }) => {
 				</IonToolbar>
 			</IonHeader>
 			<IonContent fullscreen>
-				<IonSlides pager={false} options={slideOpts} ref={slidesRef}>
+				<IonSlides mode="md" pager={false} options={slideOpts} ref={slidesRef}>
 					<IonSlide>
 						<Instructions current={slidesRef.current} />
 					</IonSlide>

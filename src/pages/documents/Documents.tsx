@@ -198,7 +198,7 @@ const Documents: React.FC = () => {
 							To
 						</IonButton>
 					</IonItem>
-					<IonSlides pager={false} options={slideOpts} ref={slidesRef}>
+					<IonSlides mode="md" pager={false} options={slideOpts} ref={slidesRef}>
 						<IonSlide key="documents-from" >
 							<DocumentsList documents={documentsFrom} type="to" counterType="from"/>
 						</IonSlide>
@@ -207,7 +207,7 @@ const Documents: React.FC = () => {
 						</IonSlide>
 					</IonSlides>
 
-					<IonPopover isOpen={showPopOver} cssClass="agreements-popover" onDidDismiss={() => {
+					<IonPopover mode="md" translucent={false} isOpen={showPopOver} cssClass="agreements-popover" onDidDismiss={() => {
 						setShowPopover(false)
 					}}>
 						<IonItemDivider>

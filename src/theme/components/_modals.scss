@@ -79,6 +79,11 @@
   .modal-wrapper {
     min-height: 50vh !important;
     max-height: 700px !important;
+    
+    @media (min-width: 767px) {
+      min-height: 75vh !important;
+      max-height: 750px !important;
+    }
 
   }
 
