@@ -320,7 +320,7 @@ export const doGetDocuments = () => async (dispatch: any) => {
 		
 		// const web3 = new Web3HttpProvider('https://rinkeby.infura.io/ws/v3/6d8bfebd6db24c3cb3f3d50839e1c5be', options);
 		
-		const web3 = BlockchainFactory.websocketProvider();
+		const web3 = BlockchainFactory.webHttpProvider();
 		const id = await web3.eth.net.getId();
 		console.log(web3.currentProvider, id);
 		console.log('Web3 Proveedor', web3.currentProvider.connected, 'window ethereum', window.ethereum.isConnected());

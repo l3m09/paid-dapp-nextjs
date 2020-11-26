@@ -47,9 +47,9 @@ export class BlockchainFactory {
 		return wallet.connect(provider);
 	}
 
-	public static websocketProvider(): any | null {
+	public static webHttpProvider(): any | null {
 		return new Web3(
-			new Web3.providers.WebsocketProvider('wss://rinkeby.infura.io/ws/v3/6d9efbca18e24cf2ba065b6cc0683c1d')
+			new Web3.providers.HttpProvider('https://rinkeby.infura.io/v3/6d8bfebd6db24c3cb3f3d50839e1c5be')
 		);
 	}
 
