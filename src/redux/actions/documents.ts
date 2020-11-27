@@ -116,7 +116,7 @@ export const doCreateAgreement = (payload: {
 		// ALICE SIDE
 		var today = new Date();
 
-		const content = '<html style="width:1000px; font-size: 10px;"><body style="width:100%"><div>'+
+		const content = '<div>'+
 		'<div>Date: ' + today.toLocaleDateString() + ' ' + today.toLocaleTimeString()+ ' </div>' +
 		'Agreement creator:<br/>' +
 		'<div style="margin-left: 20px;">Name:' + agreementForm.name + '</div>' +
@@ -129,8 +129,7 @@ export const doCreateAgreement = (payload: {
 		'<div style="margin-left: 20px;">Address:' + agreementForm.counterpartyAddress + '</div>' +
 		'<div style="margin-left: 20px;">Phone:' + agreementForm.counterpartyPhone + '</div>' +
 		'<div style="margin-left: 20px;">Wallet:' + agreementForm.counterpartyWallet + '</div>' +
-		'</div>' + 
-		'</body></html>';
+		'</div>';
 		const blobContent = base64StringToBlob(btoa(content), 'application/pdf');
 		const ceass = new CEASigningService();
 		ceass.useKeyStorage(ethersWallet.keystore);
@@ -189,13 +188,13 @@ export const doCreateAgreement = (payload: {
 			}
 			const jsonContent = JSON.parse(fetchedContent);
 			const contentRef = jsonContent.contentRef;
-			let pdfContent = '';
+			let pdfContent:HTMLElement = document.createElement("html");
 			
 			for await (const chunk of ipfs.cat(contentRef.cid)) {
-				pdfContent = uint8ArrayToString(chunk);
+				pdfContent.innerHTML = uint8ArrayToString(chunk);
 			}
 
-			const doc = new jsPDF('p', 'px','a4',true);
+			const doc = new jsPDF('p', 'mm','legal',true);
 			doc.html(pdfContent, {
 				callback: function () {
 					doc.save('agreeement-' + receipt.transactionHash.replace('0x','').substring(0,10) + '.pdf');

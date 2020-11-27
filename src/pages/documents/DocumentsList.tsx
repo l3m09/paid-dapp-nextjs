@@ -26,6 +26,9 @@ import {
 import Collapsible from 'react-collapsible';
 
 import { jsPDF } from "jspdf";
+import { Page, Document, StyleSheet } from '@react-pdf/renderer';
+import ReactPDF from '@react-pdf/renderer';
+
 const uint8ArrayToString = require('uint8arrays/to-string');
 const ipfsClient = require('ipfs-http-client');
 const ipfs = ipfsClient({ host: 'ipfs.infura.io', port: '5001', protocol: 'https', apiPath: '/api/v0' });
@@ -53,8 +56,8 @@ function PdfViewerModal(payload: {
 						</IonButtons>
 					</IonToolbar>
 				</IonHeader>
-				<IonContent fullscreen>
-
+				<IonContent color="primary">
+					<iframe src={url} width="100%" height="100%" frameBorder="0"></iframe>
 				</IonContent>
 			</IonModal>
 		</div>
@@ -68,8 +71,9 @@ function SelectedDocument(payload: {
 	closeShowDocument: () => void;
 	openPdfViewerModal: (cid : string, transactionHash: string) => void;
 	closePdfViewerModal: () => void;
+	agreementsurl: string;
 }) {
-	const { show, selectedDocument, closeShowDocument, showPdfViewerModal, openPdfViewerModal, closePdfViewerModal} = payload;
+	const { show, agreementsurl, selectedDocument, closeShowDocument, showPdfViewerModal, openPdfViewerModal, closePdfViewerModal} = payload;
 	if (!selectedDocument) {
 		return null;
 	}
@@ -109,7 +113,7 @@ function SelectedDocument(payload: {
 					<IonButton
 						color="gradient"
 						shape="round"
-						onClick={() => {
+						onClick={async () => {
 							openPdfViewerModal(selectedDocument.meta.cid, selectedDocument.meta.transactionHash);
 						}}
 					>
@@ -129,7 +133,7 @@ function SelectedDocument(payload: {
 			<PdfViewerModal
 				show={showPdfViewerModal}
 				closePdfViewer={closePdfViewerModal}
-				url="https://pdftron.s3.amazonaws.com/downloads/pl/demo.pdf"
+				url={"https://ipfs.io/ipfs/"+agreementsurl}
 			/>
 		</div>
 	);
@@ -152,6 +156,7 @@ const DocumentsList: React.FC<Props> = ({documents, type, counterType}) => {
 	const [showModal, setShowModal] = useState(false);
 	const [showPopOver, setShowPopover] = useState(false);
 	const [showPdfViewerModal, setPdfViewerModal] = useState(false);
+	const [showAgreementsUrl, setAgreementUrl] = useState('');
 
 	function showDocument(item: any) {
 		dispatch(doGetSelectedDocument(item));
@@ -182,7 +187,7 @@ const DocumentsList: React.FC<Props> = ({documents, type, counterType}) => {
 		setPdfViewerModal(false)
 	}
 	async function openPdfViewer(cid:string, transactionHash: string) {
-		//setPdfViewerModal(true)
+		setPdfViewerModal(true)
 		let fetchedContent = '';
 
 		for await (const chunk of ipfs.cat(cid.toString())) {
@@ -190,19 +195,32 @@ const DocumentsList: React.FC<Props> = ({documents, type, counterType}) => {
 		}
 		const jsonContent = JSON.parse(fetchedContent);
 		const contentRef = jsonContent.contentRef;
-		let pdfContent = '';
-		
-		for await (const chunk of ipfs.cat(contentRef.cid)) {
-			pdfContent = uint8ArrayToString(chunk);
-		}
+		setAgreementUrl(contentRef.cid);
+		let pdfContent:HTMLElement = document.createElement('DIV');
 
-		const doc = new jsPDF('p', 'px','a4',true);
-		doc.html(pdfContent, {
-			callback: function () {
-				doc.save('agreeement-' + transactionHash.replace('0x','').substring(0,10) + '.pdf');
-			}
-		});
-		console.log('showPdfViewerModal', showPdfViewerModal)
+		for await (const chunk of ipfs.cat(contentRef.cid)) {
+			pdfContent.innerHTML = uint8ArrayToString(chunk);
+		}
+		console.info(pdfContent);
+
+		// ReactPDF.render(
+		// 	<Document>
+		// 	  <Page>
+		// 	  	<h2>Texto de prueba</h2>
+		// 	  </Page>
+		// 	</Document>,`${__dirname}/agreeement-${transactionHash.replace('0x','').substring(0,10)}.pdf`);
+
+		// let doc = new jsPDF('p','pt','a4',true);
+		// doc.setDisplayMode('100%', 'single', 'FullScreen');
+		// doc.html(pdfContent, {
+		// 	callback: function () {
+		// 		doc.save('agreeementAL-' + transactionHash.replace('0x','').substring(0,10) + '.pdf');
+		// 		window.open(doc.output('bloburl').toString()); 
+		// 	},
+		// 	x:30,
+		// 	y:30
+		// });
+		console.log('showPdfViewerModal', showPdfViewerModal);
 	}
 
 	return (
@@ -246,6 +264,7 @@ const DocumentsList: React.FC<Props> = ({documents, type, counterType}) => {
 				showPdfViewerModal={showPdfViewerModal}
 				closePdfViewerModal={closePdfViewer}
 				openPdfViewerModal={openPdfViewer}
+				agreementsurl={showAgreementsUrl}
 			/>
 		</div>
 	);
