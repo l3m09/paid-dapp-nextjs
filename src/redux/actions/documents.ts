@@ -9,8 +9,8 @@ import { jsPDF } from "jspdf";
 import Web3 from 'web3';
 import AgreementJSON from '../../contracts/Agreement.json';
 
-const http = require('http');
-const html2PDF = require('jspdf-html2canvas');
+// const http = require('http');
+// const html2PDF = require('jspdf-html2canvas');
 const uint8ArrayToString = require('uint8arrays/to-string')
 const ipfsClient = require('ipfs-http-client');
 const ipfs = ipfsClient({ host: 'ipfs.infura.io', port: '5001', protocol: 'https', apiPath: '/api/v0' });
@@ -150,7 +150,7 @@ export const doCreateAgreement = (payload: {
 		
 		console.log('ipfs hash: ' + ipfsHash.toString());
 
-		window.web3 = new Web3(new Web3.providers.HttpProvider(BlockchainFactory.GETH_URL));
+		const web3 = BlockchainFactory.webSocketProvider();
 
 		const accounts = await window.ethereum.request({
 			method: 'eth_requestAccounts'
@@ -163,7 +163,7 @@ export const doCreateAgreement = (payload: {
 				console.error(error);
 			  }
 		});
-		const agreementContract = await new window.web3.eth.Contract(AgreementJSON.abi, 
+		const agreementContract = await new web3.eth.Contract(AgreementJSON.abi, 
 			ContractFactory.contractAddress, 
 			{ from: ethersWallet.wallet.address, gas: '1500000', gasPrice: '1000000000' });			
 	
@@ -173,9 +173,11 @@ export const doCreateAgreement = (payload: {
 			formId,
 			form,
 			'0x' + digest
+		).send({ from: ethersWallet.wallet.address, gas: '1500000', gasPrice: '1000000000' }
 		).on('receipt', async function(receipt: any){
 
 			// BOB SIDE
+			console.log('receipt of agreements Transaction:', receipt);
 
 			let fetchedContent = '';
 			for await (const chunk of ipfs.cat(ipfsHash.toString())) {
@@ -216,7 +218,8 @@ export const doCreateAgreement = (payload: {
 			slideBack();
 			alert('Transaction failed');
 			throw new Error('Transaction failed');
-		});;
+		});
+		console.info('agreementTransaction:',agreementTransaction);
 		/*		
 		const contract = ContractFactory.getAgrementContract(ethersWallet.wallet);
 		const balance = await ethersWallet.wallet.provider.getBalance(
@@ -299,28 +302,7 @@ export const doGetDocuments = () => async (dispatch: any) => {
 			throw new Error('Not unlocked wallet found');
 		}
 
-		// var options = {
-		// 	keepAlive: true,
-		// 	withCredentials: false,
-		// 	timeout: 20000, // ms
-		// 	headers: [
-		// 		{
-		// 			name: 'Access-Control-Allow-Origin',
-		// 			value: '*'
-		// 		},
-		// 		{
-					
-		// 		}
-		// 	],
-		// 	agent: {
-		// 		http: http.Agent(),
-		// 		baseUrl: ''
-		// 	}
-		// };
-		
-		// const web3 = new Web3HttpProvider('https://rinkeby.infura.io/ws/v3/6d8bfebd6db24c3cb3f3d50839e1c5be', options);
-		
-		const web3 = BlockchainFactory.webHttpProvider();
+		const web3 = BlockchainFactory.webSocketProvider();
 		const id = await web3.eth.net.getId();
 		console.log(web3.currentProvider, id);
 		console.log('Web3 Proveedor', web3.currentProvider.connected, 'window ethereum', window.ethereum.isConnected());
@@ -338,16 +320,24 @@ export const doGetDocuments = () => async (dispatch: any) => {
 
 		const agreementContract = await new web3.eth.Contract(AgreementJSON.abi, 
 			ContractFactory.contractAddress);
-		agreementContract.events.AgreementPartyCreated({ 
-			filter: { partySource: [accounts[0]] },
-			fromBlock: 0, 
-		}, function(error: any, events: any){ 
-			debugger;
-			if(error){
-				console.error(error);
-				return;
-			}
-			console.log(events); });/*('AgreementPartyCreated', { 
+		agreementContract.events.allEvents( function(error:any, event:any){ 
+			console.log('event ppal:', event);
+			console.error('error ppal:', error);
+		})
+		.on("connected", function(subscriptionId:any){
+			console.log('Connected:',subscriptionId);
+		})
+		.on('data', function(event:any){
+			console.log('Data:',event); // same results as the optional callback above
+		})
+		.on('changed', function(event:any){
+			console.info('Changed:',event);// remove event from local database
+		})
+		.on('error', function(error:any, receipt:any) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
+			console.error('Error Function:',error);
+			console.log('Receipt:',receipt);
+		});
+		/*('AgreementPartyCreated', { 
 				filter: { partySource: [accounts[0]] },
 				fromBlock: 0, 
 				toBlock: 'latest'
