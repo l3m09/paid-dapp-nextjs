@@ -187,7 +187,6 @@ const DocumentsList: React.FC<Props> = ({documents, type, counterType}) => {
 		setPdfViewerModal(false)
 	}
 	async function openPdfViewer(cid:string, transactionHash: string) {
-		setPdfViewerModal(true)
 		let fetchedContent = '';
 
 		for await (const chunk of ipfs.cat(cid.toString())) {
@@ -196,6 +195,7 @@ const DocumentsList: React.FC<Props> = ({documents, type, counterType}) => {
 		const jsonContent = JSON.parse(fetchedContent);
 		const contentRef = jsonContent.contentRef;
 		setAgreementUrl(contentRef.cid);
+		setPdfViewerModal(true);
 		let pdfContent:HTMLElement = document.createElement('DIV');
 
 		for await (const chunk of ipfs.cat(contentRef.cid)) {
