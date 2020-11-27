@@ -25,6 +25,11 @@ import {
 
 import Collapsible from 'react-collapsible';
 
+import { jsPDF } from "jspdf";
+const uint8ArrayToString = require('uint8arrays/to-string');
+const ipfsClient = require('ipfs-http-client');
+const ipfs = ipfsClient({ host: 'ipfs.infura.io', port: '5001', protocol: 'https', apiPath: '/api/v0' });
+
 function PdfViewerModal(payload: {
 	show: boolean;
 	closePdfViewer: () => void;
@@ -61,7 +66,7 @@ function SelectedDocument(payload: {
 	showPdfViewerModal: boolean;
 	selectedDocument: any;
 	closeShowDocument: () => void;
-	openPdfViewerModal: () => void;
+	openPdfViewerModal: (cid : string, transactionHash: string) => void;
 	closePdfViewerModal: () => void;
 }) {
 	const { show, selectedDocument, closeShowDocument, showPdfViewerModal, openPdfViewerModal, closePdfViewerModal} = payload;
@@ -105,7 +110,7 @@ function SelectedDocument(payload: {
 						color="gradient"
 						shape="round"
 						onClick={() => {
-							openPdfViewerModal();
+							openPdfViewerModal(selectedDocument.meta.cid, selectedDocument.meta.transactionHash);
 						}}
 					>
 						<span>Open Pdf</span>
@@ -176,8 +181,27 @@ const DocumentsList: React.FC<Props> = ({documents, type, counterType}) => {
 	function closePdfViewer() {
 		setPdfViewerModal(false)
 	}
-	function openPdfViewer() {
-		setPdfViewerModal(true)
+	async function openPdfViewer(cid:string, transactionHash: string) {
+		//setPdfViewerModal(true)
+		let fetchedContent = '';
+
+		for await (const chunk of ipfs.cat(cid.toString())) {
+			fetchedContent = uint8ArrayToString(chunk);
+		}
+		const jsonContent = JSON.parse(fetchedContent);
+		const contentRef = jsonContent.contentRef;
+		let pdfContent = '';
+		
+		for await (const chunk of ipfs.cat(contentRef.cid)) {
+			pdfContent = uint8ArrayToString(chunk);
+		}
+
+		const doc = new jsPDF('p', 'px','a4',true);
+		doc.html(pdfContent, {
+			callback: function () {
+				doc.save('agreeement-' + transactionHash.replace('0x','').substring(0,10) + '.pdf');
+			}
+		});
 		console.log('showPdfViewerModal', showPdfViewerModal)
 	}
 
