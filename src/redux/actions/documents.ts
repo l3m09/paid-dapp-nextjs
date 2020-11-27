@@ -8,6 +8,9 @@ import { eddsa } from "elliptic";
 import { jsPDF } from "jspdf";
 import Web3 from 'web3';
 import AgreementJSON from '../../contracts/Agreement.json';
+//import { data } from "./data/data";
+import {agreementsRef} from "./firebase";
+
 
 // const http = require('http');
 // const html2PDF = require('jspdf-html2canvas');
@@ -154,6 +157,43 @@ export const doCreateAgreement = (payload: {
 		
 		console.log('ipfs hash: ' + ipfsHash.toString());
 
+		let agreementsCount = 0;
+		await agreementsRef.once('value', (snapshot) => {
+			let items = snapshot.val();
+			let counter = 0;
+			for (let item in items) {
+				counter += 1;
+			}
+			agreementsCount = counter + 1;
+		});
+		const item = {
+			meta: {
+				logIndex:'16',
+				transactionIndex:'17',
+				transactionHash:'0x180d4s66d4s6d4e6e4t6d5s4d6ey46j48',
+				blockHash:'19',
+				cid: ipfsHash.toString(),
+				blockNumber:'20',
+				address:'21',
+				status: 'PARTY_INIT'
+			},
+			event: {
+				id: agreementsCount.toString(),
+				from:ethersWallet.wallet.address,
+				to:agreementForm.counterpartyWallet,
+				agreementFormTemplateId:'25'
+			},
+			data: {
+				agreementForm:'26',
+				escrowed:'27',
+				validUntil: '28',
+				toSigner: '29',
+				fromSigner: '30'
+			}
+		};
+		agreementsRef.push(item);
+		//--------------------//
+
 		const web3 = BlockchainFactory.webSocketProvider();
 
 		const accounts = await window.ethereum.request({
@@ -167,7 +207,7 @@ export const doCreateAgreement = (payload: {
 				console.error(error);
 			  }
 		});
-		const agreementContract = await new web3.eth.Contract(AgreementJSON.abi, 
+		/*const agreementContract = await new web3.eth.Contract(AgreementJSON.abi, 
 			ContractFactory.contractAddress, 
 			{ from: ethersWallet.wallet.address, gas: '1500000', gasPrice: '1000000000' });			
 	
@@ -223,7 +263,9 @@ export const doCreateAgreement = (payload: {
 			alert('Transaction failed');
 			throw new Error('Transaction failed');
 		});
-		console.info('agreementTransaction:',agreementTransaction);
+		console.info('agreementTransaction:',agreementTransaction);*/
+			dispatch(createAgreement());
+			slideNext();
 		/*		
 		const contract = ContractFactory.getAgrementContract(ethersWallet.wallet);
 		const balance = await ethersWallet.wallet.provider.getBalance(
@@ -466,81 +508,26 @@ export const doGetDocuments = () => async (dispatch: any) => {
 		const agreementsTo = await Promise.all(promisesTo);
 		*/
 		const agreementsFrom : any = [];
-		agreementsFrom.push({
-			meta: {
-				logIndex:'1',
-				transactionIndex:'2',
-				transactionHash:'0x180d4s6s8ds6d4e6e4t6ee5dd6ey46j48',
-				blockHash:'4',
-				cid: 'QmPSe6J67nWcReBaa435AYEVByVv3VjyUQ2tjhnZAfW8Bv',
-				blockNumber:'5',
-				address:'6'
-			},
-			event: {
-				id: '700',
-				from:ethersWallet.wallet.address,
-				to:'0x9s4d5a6d4w6r4c7c89s61d31a3d22s',
-				agreementFormTemplateId:'10'
-			},
-			data: {
-				agreementForm:'11',
-				escrowed:'12',
-				validUntil: '13',
-				toSigner: '14',
-				fromSigner: '15'
-			}
-		});
-		agreementsFrom.push({
-			meta: {
-				logIndex:'16',
-				transactionIndex:'17',
-				transactionHash:'0x180d4s66d4s6d4e6e4t6d5s4d6ey46j48',
-				blockHash:'19',
-				cid: 'QmPSe6J67nWcReBaa435AYEVByVv3VjyUQ2tjhnZAfW8Bv',
-				blockNumber:'20',
-				address:'21'
-			},
-			event: {
-				id: '220',
-				from:ethersWallet.wallet.address,
-				to:'0x24d5d66s4d5d4w6r6we5c4d5s46df464s',
-				agreementFormTemplateId:'25'
-			},
-			data: {
-				agreementForm:'26',
-				escrowed:'27',
-				validUntil: '28',
-				toSigner: '29',
-				fromSigner: '30'
-			}
-		});
 		const agreementsTo : any = [];
-
-		agreementsTo.push({
-			meta: {
-				logIndex:'31',
-				transactionIndex:'32',
-				transactionHash:'0x180d4s66d4s6dde6eww33e33d7f6ey46j48',
-				blockHash:'34',
-				cid: 'QmPSe6J67nWcReBaa435AYEVByVv3VjyUQ2tjhnZAfW8Bv',
-				blockNumber:'35',
-				address:'36',
-				
-			},
-			event: {
-				id: '37',
-				from:'0x23d45ds64e4r6e4s6d4bb6h646ds4d5es',
-				to:ethersWallet.wallet.address,
-				agreementFormTemplateId:'40'
-			},
-			data: {
-				agreementForm:'41',
-				escrowed:'42',
-				validUntil: '43',
-				toSigner: '44',
-				fromSigner: '45'
+		await agreementsRef.once('value', (snapshot) => {
+			let items = snapshot.val();
+			for (let item in items) {
+			  if(items[item].event.from == ethersWallet.wallet.address){
+				agreementsFrom.push(items[item]);
+			  }
+			  else{
+				agreementsTo.push(items[item]);
+			  }
 			}
-		});
+		  });
+		/*data.map((_data) => {
+			if(_data.event.from == ethersWallet.wallet.address){
+				agreementsFrom.push(_data);
+			}
+			else{
+				agreementsTo.push(_data);
+			}
+		});*/
 		
 		console.log('agreementsFrom', agreementsFrom);
 		console.log('agreementsTo', agreementsTo);

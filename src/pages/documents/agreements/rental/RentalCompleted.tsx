@@ -9,10 +9,14 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { doSetAgreementFormInfo } from '../../../../redux/actions/documents';
+import Button from './button';
 
 interface RentalCompletedProps {
 	current: any;
 }
+export interface OwnProps {
+	style: object;
+  }
 
 const RentalCompleted: React.FC<RentalCompletedProps> = ({ current }) => {
 	const history = useHistory();
@@ -38,7 +42,7 @@ const RentalCompleted: React.FC<RentalCompletedProps> = ({ current }) => {
 			history.push('/documents');
 		});
 	}
-
+	
 	return (
 		<div className="agreement-content agreement-completed">
 			<IonItem>
@@ -62,6 +66,21 @@ const RentalCompleted: React.FC<RentalCompletedProps> = ({ current }) => {
 					will not be valid if there are any changes to the value of the vehicle
 					due to physical or mechanical issues upon delivery to <span className="text-primary">{agreementFormInfo.counterpartyName}</span>.
 				</IonText>
+			</IonItem>
+			<IonItem class="form-options">
+			<Button
+					config={{
+					params: {
+						title: 'Share Agreement',
+						text: 'Share this agreement',
+						url: 'http://localhost:3000',
+					},
+					/* tslint:disable-next-line:no-console */
+					onShareSuccess: () => console.log('Success'),
+					/* tslint:disable-next-line:no-console */
+					onShareError: (error: Error) => console.log('error', error),
+					}}
+				/>
 			</IonItem>
 
 			<IonItem class="form-options">

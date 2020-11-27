@@ -163,12 +163,13 @@ const DocumentsList: React.FC<Props> = ({documents, type, counterType}) => {
 		setShowModal(false);
 	}
 
-	function trigger(id: string, name: string) {
+	function trigger(id: string, name: string, status: string) {
 		return (
 			<button className="document-trigger">
 				<IonIcon icon={documentsIcon} />
 				<span className="document-id">{id}</span>
 				<span>{name}</span>
+				<span>{status == 'PARTY_INIT' ? 'Not signed' : 'Signed'}</span>
 			</button>
 		);
 	}
@@ -215,7 +216,7 @@ const DocumentsList: React.FC<Props> = ({documents, type, counterType}) => {
 							<Collapsible
 								transitionTime={200}
 								contentInnerClassName="document-container"
-								trigger={trigger(`${event.id}`, `${event[counterType]}`)}
+								trigger={trigger(`${event.id}`, `${event[counterType]}`, `${meta.status}`)}
 								key={index}
 							>
 								<div className="document-titles">
