@@ -59,8 +59,8 @@ const FormClient: React.FC<AgreementFormProps> = ({ current }) => {
 
 	return (
 		<div className="agreement-content">
-			<h5>
-				<IonTitle>My Information</IonTitle>
+			<h5 className="agreement-form-title">
+				My Information
 			</h5>
 			<form action="" className="name-password-form">
 				<IonItem>

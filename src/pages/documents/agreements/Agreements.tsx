@@ -103,7 +103,7 @@ const Agreements: React.FC<AgreementsProps> = () => {
 		<IonPage className="agreements-page content-page">
 			<IonContent fullscreen>
 
-				<IonHeader translucent>
+				<IonHeader translucent={false} mode="md">
 					<IonToolbar>
 						<IonTitle>Agreement</IonTitle>
 						<IonButtons slot="end">

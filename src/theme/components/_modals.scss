@@ -23,7 +23,8 @@
 .unlock-modal {
 
   .modal-wrapper {
-    min-height: 60vh !important;
+    min-height: 50vh !important;
+    max-height: 500px !important;
 
     .ion-page {
       justify-content: flex-start !important;
@@ -68,6 +69,45 @@
       }
 
     }
+
+  }
+
+}
+
+.import-modal {
+
+  .modal-wrapper {
+    min-height: 50vh !important;
+    max-height: 700px !important;
+    
+    @media (min-width: 767px) {
+      min-height: 75vh !important;
+      max-height: 750px !important;
+    }
+
+  }
+
+}
+
+.pdf-viewer-modal {
+
+  .modal-wrapper {
+    min-height: 90vh !important;
+    min-width: 95% !important;
+
+
+  }
+
+}
+
+.create-wallet-modal {
+  //--background-color: white;
+
+  .modal-wrapper {
+    height: 90%;
+    width: 95%;
+    margin: auto;
+    background-color: white;
 
   }
 

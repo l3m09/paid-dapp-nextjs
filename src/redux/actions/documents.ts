@@ -34,7 +34,11 @@ const createAgreementFormPayload = (obj: any) => {
 	return ethers.utils.defaultAbiCoder.encode(types, values);
 };
 
-const getDocuments = (payload: any[]) => {
+const getDocuments = (agreementsFrom: any[], agreementsTo: any[]) => {
+	const payload = {
+		from: agreementsFrom,
+		to: agreementsTo
+	}
 	return {
 		type: DocumentsActionTypes.GET_DOCUMENTS_SUCCESS,
 		payload
@@ -358,15 +362,24 @@ export const doGetDocuments = () => async (dispatch: any) => {
 				debugger;	
 				console.log(events) // same results as the optional callback above
 			});*/
-		/*const contract = ContractFactory.getAgrementContract(ethersWallet);
-		const filter = contract.filters.AgreementPartyCreated(
+		/*
+		const contract = ContractFactory.getAgrementContract(ethersWallet);
+		const filterFrom = contract.filters.AgreementCreated(
+			null,
+			null,
+			ethersWallet.address
+		);
+		const filterTo = contract.filters.AgreementCreated(
+			null,
 			null,
 			null,
 			ethersWallet.address
 		);
 
-		const events = await contract.queryFilter(filter);*/
-		const promises: any[] = [];/*events.map((event) => {
+		const eventsFrom = await contract.queryFilter(filterFrom);
+		const eventsTo = await contract.queryFilter(filterTo);*/
+		
+		/*const promisesFrom = eventsFrom.map((event) => {
 			const { args } = contract.interface.parseLog(event);
 
 			const {
@@ -412,10 +425,66 @@ export const doGetDocuments = () => async (dispatch: any) => {
 					}
 				});
 			});
-		});*/
-		const agreements = await Promise.all(promises);
-		console.log('agreements', agreements);
-		dispatch(getDocuments(agreements));
+		});
+		const promisesTo = eventsTo.map((event) => {
+			const { args } = contract.interface.parseLog(event);
+
+			const {
+				logIndex,
+				transactionIndex,
+				transactionHash,
+				blockHash,
+				blockNumber,
+				address
+			} = event;
+			const { id, from, to, agreementFormTemplateId } = args;
+			const agreementId = (id as BigNumber).toString();
+			return new Promise(async (resolve) => {
+				const agreement = await contract.agreements(id);
+				const {
+					agreementForm,
+					escrowed,
+					validUntil,
+					toSigner,
+					fromSigner
+				} = agreement;
+				resolve({
+					meta: {
+						logIndex,
+						transactionIndex,
+						transactionHash,
+						blockHash,
+						blockNumber,
+						address
+					},
+					event: {
+						id: agreementId,
+						from,
+						to,
+						agreementFormTemplateId
+					},
+					data: {
+						agreementForm,
+						escrowed,
+						validUntil: (validUntil as BigNumber).toString(),
+						toSigner: toSigner.signatory,
+						fromSigner: fromSigner.signatory
+					}
+				});
+			});
+		});
+
+		const agreementsFrom = await Promise.all(promisesFrom);
+		const agreementsTo = await Promise.all(promisesTo);
+		*/
+		
+		const agreementsFrom : any = [];
+		const agreementsTo : any = [];
+		console.log('agreementsFrom', agreementsFrom);
+		console.log('agreementsTo', agreementsTo);
+
+		dispatch(getDocuments(agreementsFrom, agreementsTo));
+		
 	} catch (err) {
 		console.log(err);
 		dispatch({

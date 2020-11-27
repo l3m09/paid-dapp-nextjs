@@ -99,8 +99,8 @@ const FormCounterparty: React.FC<AgreementFormProps> = ({ current }) => {
 
 	return (
 		<div className="agreement-content">
-			<h5>
-				<IonTitle>Counterparty Information</IonTitle>
+			<h5 className="agreement-form-title">
+				Counterparty Information
 			</h5>
 			<form action="" className="name-password-form">
 				<IonItem>
@@ -165,9 +165,10 @@ const FormCounterparty: React.FC<AgreementFormProps> = ({ current }) => {
 				</IonItem>
 			</form>
 			<IonLoading
-				cssClass="my-custom-class"
+				cssClass="loader-spinner"
+				mode="md"
 				isOpen={creatingAgreement}
-				message={'Please wait...'}
+
 			/>
 		</div>
 	);

@@ -60,8 +60,8 @@ const ImportWallet: React.FC<Props> = ({show, dismiss}) => {
     }
     
     return (
-        <IonModal isOpen={show} onDidDismiss={() => {dismiss()}}>
-            <IonHeader translucent>
+        <IonModal cssClass="import-modal" isOpen={show} onDidDismiss={() => {dismiss()}}>
+            <IonHeader translucent={false} mode="md">
                 <IonToolbar>
                     <IonTitle>Import a Wallet</IonTitle>
                     <IonButtons slot="end">

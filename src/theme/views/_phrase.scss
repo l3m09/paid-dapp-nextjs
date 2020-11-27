@@ -42,6 +42,9 @@
 
   }
 
+  .phrase-content-title-wrapper {
+    margin-top: 15px;
+  }
   .phrase-content-title {
     font-weight: 700;
     width: 100%;
@@ -49,7 +52,7 @@
     font-size: 1em;
 
     &.confirm-phrase-title {
-      margin-top: 2vh;
+      //margin-top: 2vh;
     }
 
     &.phrase-completed-title{
@@ -67,7 +70,7 @@
     width: 100%;
     text-align: center;
     padding: 0 15px;
-    margin-bottom: 2vh;
+    margin: 0 0 10px;
 
     &.seed-phrase-instructions-sub-text {
 
@@ -242,6 +245,10 @@
 
       &.third {
         margin-bottom: 3vh;
+
+        strong {
+          margin-right: 5px;
+        }
 
       }
 

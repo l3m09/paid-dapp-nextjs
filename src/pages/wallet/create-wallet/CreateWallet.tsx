@@ -54,7 +54,7 @@ const CreateWallet: React.FC<CreateWalletProps> = ({ show, dismiss }) => {
 			cssClass="create-wallet-modal"
 			onDidDismiss={() => doDismiss()}
 		>
-			<IonHeader translucent>
+			<IonHeader translucent={false} mode="md">
 				<IonToolbar>
 					<IonTitle>Create a New Wallet</IonTitle>
 					<IonButtons slot="end">
@@ -65,7 +65,7 @@ const CreateWallet: React.FC<CreateWalletProps> = ({ show, dismiss }) => {
 				</IonToolbar>
 			</IonHeader>
 			<IonContent fullscreen>
-				<IonSlides pager={false} options={slideOpts} ref={slidesRef}>
+				<IonSlides mode="md" pager={false} options={slideOpts} ref={slidesRef}>
 					<IonSlide>
 						<Instructions current={slidesRef.current} />
 					</IonSlide>

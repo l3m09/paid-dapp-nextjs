@@ -27,7 +27,7 @@ const RentalDescription: React.FC<DescriptionProps> = ({ current }) => {
 			<IonItem>
 				<div className="instructions">
 				<div>
-					<IonTitle class="instructions-title first">Rental</IonTitle>
+					<h5 className="instructions-title first">Rental</h5>
 					<IonText color="secondary" class="instructions-sub-text first">
 						This document will serve as an official document for (BUYER) to
 						agree to purchase sellers vehicle subject to the following terms and
@@ -52,9 +52,9 @@ const RentalDescription: React.FC<DescriptionProps> = ({ current }) => {
 							will be executed within one hour of the delivery.
 						</li>
 					</ul>
-					<IonTitle color="secondary" class="instructions-title third">
+					<h5 color="secondary" className="instructions-title third">
 						Other terms and conditions:
-					</IonTitle>
+					</h5>
 					<ul className="instructions-list first">
 						<li>
 							If there are liens or encumbrances, (SELLER) has the right to

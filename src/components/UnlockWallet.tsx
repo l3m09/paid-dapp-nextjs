@@ -79,7 +79,7 @@ const UnlockWallet: React.FC<Props> = ({
 			isOpen={show}
 			cssClass="unlock-modal"
 		>
-			<IonHeader translucent>
+			<IonHeader  translucent={false} mode="md">
 				<IonToolbar>
 					<IonTitle>Unlock Wallet</IonTitle>
 						<IonButtons slot="end">

@@ -9,7 +9,7 @@ const SignUp: React.FC = () => {
 
     return (
         <IonPage >
-            <IonHeader class="backarrow-header">
+            <IonHeader translucent={false} mode="md" class="backarrow-header">
                 <IonRouterLink routerLink="/">
                     <IonIcon icon={arrowBackOutline}/>
                 </IonRouterLink>

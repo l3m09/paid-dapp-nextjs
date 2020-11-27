@@ -74,12 +74,12 @@ const ConfirmPhrase: React.FC<ConfirmPhraseProps> = ({ current }) => {
 
 	return (
 		<IonContent fullscreen class="phrase-content confirm-phrase">
-			<IonItem>
+			<IonItem className="phrase-content-title-wrapper">
 				<IonTitle class="phrase-content-title confirm-phrase-title">
 					Confirm your seed phrase
 				</IonTitle>
 			</IonItem>
-			<IonItem>
+			<IonItem className="phrase-content-sub-text-wrapper">
 				<IonText class="phrase-content-sub-text confirm-phrase-sub-text">
 					Select each word in the order it was presented to you.
 				</IonText>
