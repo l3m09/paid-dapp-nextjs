@@ -105,6 +105,11 @@ function SelectedDocument(payload: {
 								<IonLabel position="stacked">Transaction Hash</IonLabel>
 								<span>{selectedDocument.meta.transactionHash}</span>
 							</IonItem>
+							<IonItem>
+								<IonLabel position="stacked">Signature</IonLabel>
+								<span>{selectedDocument.signature}</span>
+
+							</IonItem>
 						</div>
 					</IonCardContent>
 				</IonCard>
@@ -241,7 +246,7 @@ const DocumentsList: React.FC<Props> = ({documents, type, counterType}) => {
 									<div className="document-title-wrapper">
 										<div
 											className="document-title"
-											onClick={() => {
+											onClick={async () => {
 												showDocument({data, meta, event});
 											}}
 										>

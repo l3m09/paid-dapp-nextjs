@@ -156,6 +156,12 @@ export const doCreateAgreement = (payload: {
 		
 		console.log('ipfs hash: ' + ipfsHash.toString());
 
+		var tHash = "";
+		var possible = "ABCDEFabcdef0123456789";		
+		for (var i = 0; i < 32; i++){
+			tHash += possible.charAt(Math.floor(Math.random() * possible.length));
+		}
+		  
 		let agreementsCount = 0;
 		await agreementsRef.once('value', (snapshot) => {
 			let items = snapshot.val();
@@ -169,7 +175,7 @@ export const doCreateAgreement = (payload: {
 			meta: {
 				logIndex:'16',
 				transactionIndex:'17',
-				transactionHash:'0x180d4s66d4s6d4e6e4t6d5s4d6ey46j48',
+				transactionHash:'0x' + tHash,
 				blockHash:'19',
 				cid: ipfsHash.toString(),
 				blockNumber:'20',
@@ -565,7 +571,24 @@ export const doUploadDocuments = (file: any) => async (dispatch: any) => {
 	}
 };
 
-export const doGetSelectedDocument = (document: any) => (dispatch: any) => {
+export const doGetSelectedDocument = (document: any) => async (dispatch: any) => {
+	let fetchedContent = '';
+	if(document){
+		for await (const chunk of ipfs.cat(document.meta.cid.toString())) {
+			fetchedContent = uint8ArrayToString(chunk);
+		}
+		const jsonContent = JSON.parse(fetchedContent);
+
+		let signatureContent = '';
+
+		for await (const chunk of ipfs.cat(jsonContent.sigRef.cid)) {
+			signatureContent = uint8ArrayToString(chunk);
+		}
+
+		document.signature = signatureContent.substr(0,20) + '...' + 
+			signatureContent.substr(signatureContent.length - 20);
+		console.log(document.signature);
+	}
 	dispatch(getSelectedDocument(document));
 };
 

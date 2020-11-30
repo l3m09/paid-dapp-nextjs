@@ -39,6 +39,8 @@ import {
 
 import MenuAlternate from '../../components/MenuAlternate';
 import DocumentsList from './DocumentsList';
+import { Plugins } from '@capacitor/core';
+const { Storage } = Plugins;
 
 function SelectedDocument(payload: {
 	show: boolean;
@@ -111,11 +113,16 @@ const Documents: React.FC = () => {
 	const [showPopOver, setShowPopover] = useState(false);
 	const [currentIndex, setCurrentIndex] = useState(0);
 
+	async function CurrentWallet() { 
+		const wallet = await Storage.get({ key: 'CURRENT_WALLET' });
+		const walletJson = JSON.parse(wallet.value ?? '');
+		console.log(walletJson.address);
+		return (<div text-center>{walletJson.address}</div>);
+	}
 	useEffect(() => {
 		dispatch(doGetDocuments());
 		slidesRef.current?.lockSwipes(true)
 	}, [dispatch]);
-
 	function showDocument(item: any) {
 		dispatch(doGetSelectedDocument(item));
 		setShowModal(true);
@@ -170,6 +177,7 @@ const Documents: React.FC = () => {
 							<IonMenuButton/>
 						</IonButtons>
 						<IonTitle>Documents</IonTitle>
+						<div text-center>Wallet 0x...</div>
 						<MenuAlternate/>
 					</IonToolbar>
 				</IonHeader>
