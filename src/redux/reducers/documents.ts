@@ -45,6 +45,10 @@ export const DocumentsReducer = function (state = initialState, action: any) {
 		case DocumentsActionTypes.UPLOAD_DOCUMENTS_FAILURE:
 			return { ...state, documentsFrom: [], documentsTo: [], error: payload, loading: false };
 
+		case DocumentsActionTypes.GET_SELECTED_DOCUMENT_LOADING: {
+			return { ...state, loading: true };
+		}
+
 		case DocumentsActionTypes.GET_SELECTED_DOCUMENT_SUCCESS: {
 			return { ...state, selectedDocument: payload, loading: false };
 		}

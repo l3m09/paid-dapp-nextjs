@@ -356,7 +356,7 @@ export const doGetDocuments = () => async (dispatch: any) => {
 		const web3 = BlockchainFactory.webSocketProvider();
 		const id = await web3.eth.net.getId();
 		console.log(web3.currentProvider, id);
-		console.log('Web3 Proveedor', web3.currentProvider.connected, 'window ethereum', window.ethereum.isConnected());
+		// console.log('Web3 Proveedor', web3.currentProvider.connected, 'window ethereum', window.ethereum.isConnected());
 		const accounts = await window.ethereum.request({
 			method: 'eth_requestAccounts'
 		  })
@@ -572,6 +572,7 @@ export const doUploadDocuments = (file: any) => async (dispatch: any) => {
 };
 
 export const doGetSelectedDocument = (document: any) => async (dispatch: any) => {
+	dispatch({ type: DocumentsActionTypes.GET_SELECTED_DOCUMENT_LOADING });
 	let fetchedContent = '';
 	if(document){
 		for await (const chunk of ipfs.cat(document.meta.cid.toString())) {

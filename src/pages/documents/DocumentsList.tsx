@@ -8,7 +8,7 @@ import {
 	IonCardTitle,
 	IonCardSubtitle,
 	IonCardHeader,
-	IonCard, IonTitle, IonHeader, IonToolbar, IonButtons, IonContent,
+	IonCard, IonTitle, IonHeader, IonToolbar, IonButtons, IonContent, IonLoading,
 } from '@ionic/react';
 import {
 	documentsOutline as documentsIcon,
@@ -26,6 +26,7 @@ import {
 import Collapsible from 'react-collapsible';
 
 import { jsPDF } from "jspdf";
+import { IonBadge } from '@ionic/react';
 import { Page, Document, StyleSheet } from '@react-pdf/renderer';
 import ReactPDF from '@react-pdf/renderer';
 
@@ -146,17 +147,19 @@ function SelectedDocument(payload: {
 
 
 interface Props {
-	documents: [];
+	documentsTo: [];
+	documentsFrom: [];
 	type: string;
 	counterType: string
 }
 
-const DocumentsList: React.FC<Props> = ({documents, type, counterType}) => {
+const DocumentsList: React.FC<Props> = ({documentsTo, documentsFrom, type, counterType}) => {
 	const history = useHistory();
 	const dispatch = useDispatch();
 	const documentsState = useSelector((state: any) => state.documents);
 	const {
 		selectedDocument,
+		loading
 	} = documentsState;
 	const [showModal, setShowModal] = useState(false);
 	const [showPopOver, setShowPopover] = useState(false);
@@ -231,36 +234,51 @@ const DocumentsList: React.FC<Props> = ({documents, type, counterType}) => {
 
 	return (
 		<div>
+				<IonLoading
+					cssClass="loader-spinner"
+					mode="md"
+					isOpen={loading}
+
+				/>
 			<div className="documents-container">
-				{documents.length
-					? documents.map((document: any, index: number) => {
+				<div className="table-header">
+					<div className="col">Transaction Hash</div>
+					<div className="col">Valid</div>
+					<div className="col">Wallet From</div>
+					<div className="col">Wallet To</div>
+					<div className="col"></div>
+				</div>
+				{documentsFrom.length
+					? documentsFrom.map((document: any, index: number) => {
 						const {data, meta, event} = document;
 						return (
-							<Collapsible
-								transitionTime={200}
-								contentInnerClassName="document-container"
-								trigger={trigger(`${event.id}`, `${event[counterType]}`, `${meta.status}`)}
-								key={index}
-							>
-								<div className="document-titles">
-									<div className="document-title-wrapper">
-										<div
-											className="document-title"
-											onClick={async () => {
-												showDocument({data, meta, event});
-											}}
-										>
-											<IonIcon icon={documentIcon}/>
-											{/*<span>{event.id}</span>*/}
-											<span>{event[type]}</span>
-										</div>
-										<hr/>
-									</div>
-								</div>
-							</Collapsible>
+							<div className="table-body" onClick={async () => {showDocument({data, meta, event})}}>
+								<div className="col">{meta.transactionHash.slice(0,15)}...</div>
+								<div className="col">{data.validUntil}</div>
+								<div className="col">{event.from.slice(0,15)}...</div>
+								<div className="col">{event.to.slice(0,15)}...</div>
+								<div className="col in"><IonBadge color="primary">IN</IonBadge></div>
+							</div>
 						);
 					})
-					: <IonTitle color="primary">No documents found</IonTitle>}
+					: null
+					}
+					{documentsTo.length
+					? documentsTo.map((document: any, index: number) => {
+						const {data, meta, event} = document;
+						return (
+							<div className="table-body" onClick={async () => {showDocument({data, meta, event})}}>
+								<div className="col">{meta.transactionHash.slice(0,15)}...</div>
+								<div className="col">{data.validUntil}</div>
+								<div className="col">{event.from.slice(0,15)}...</div>
+								<div className="col">{event.to.slice(0,15)}...</div>
+								<div className="col out"><IonBadge color="secondary">OUT</IonBadge></div>
+							</div>
+						);
+					})
+					: null
+					}
+					{(!documentsFrom.length && !documentsTo.length ? <IonTitle color="primary">No documents found</IonTitle> : null)}
 			</div>
 
 			<SelectedDocument

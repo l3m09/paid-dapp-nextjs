@@ -39,6 +39,7 @@ import {
 
 import MenuAlternate from '../../components/MenuAlternate';
 import DocumentsList from './DocumentsList';
+import { IonText } from '@ionic/react';
 import { Plugins } from '@capacitor/core';
 const { Storage } = Plugins;
 
@@ -102,6 +103,7 @@ const Documents: React.FC = () => {
 	const history = useHistory();
 	const dispatch = useDispatch();
 	const documentsState = useSelector((state: any) => state.documents);
+	const walletsState = useSelector((state: any) => state.wallet);
 	const {
 		documentsFrom,
 		documentsTo,
@@ -109,6 +111,7 @@ const Documents: React.FC = () => {
 		loading,
 		agreementTypes
 	} = documentsState;
+	const { currentWallet } = walletsState;
 	const [showModal, setShowModal] = useState(false);
 	const [showPopOver, setShowPopover] = useState(false);
 	const [currentIndex, setCurrentIndex] = useState(0);
@@ -117,7 +120,7 @@ const Documents: React.FC = () => {
 		const wallet = await Storage.get({ key: 'CURRENT_WALLET' });
 		const walletJson = JSON.parse(wallet.value ?? '');
 		console.log(walletJson.address);
-		return (<div text-center>{walletJson.address}</div>);
+		return (<div>{walletJson.address}</div>);
 	}
 	useEffect(() => {
 		dispatch(doGetDocuments());
@@ -176,8 +179,7 @@ const Documents: React.FC = () => {
 						<IonButtons slot="start">
 							<IonMenuButton/>
 						</IonButtons>
-						<IonTitle>Documents</IonTitle>
-						<div text-center>Wallet 0x...</div>
+						<IonTitle>Documents | <IonText color="primary"> {currentWallet?.address.slice(0,10)}...</IonText></IonTitle>
 						<MenuAlternate/>
 					</IonToolbar>
 				</IonHeader>
@@ -188,32 +190,8 @@ const Documents: React.FC = () => {
 
 				/>
 				<div>
-					<IonItem class="documents-controls">
-						<IonButton
-							type="submit"
-							color="transparent"
-							className={currentIndex === 0 ? 'current-tab document-control document-control-from': 'document-control document-control-from'}
-							onClick={() => {slideTo(0)}}
-						>
-							From
-						</IonButton>
-						<IonButton
-							type="submit"
-							color="transparent"
-							className={currentIndex === 1 ? 'current-tab document-control document-control-to': 'document-control document-control-to'}
-							onClick={() => {slideTo(1)}}
-						>
-							To
-						</IonButton>
-					</IonItem>
-					<IonSlides mode="md" pager={false} options={slideOpts} ref={slidesRef}>
-						<IonSlide key="documents-from" >
-							<DocumentsList documents={documentsFrom} type="to" counterType="from"/>
-						</IonSlide>
-						<IonSlide key="documents-to">
-							<DocumentsList documents={documentsTo} type="from" counterType="to"/>
-						</IonSlide>
-					</IonSlides>
+					
+					<DocumentsList documentsTo={documentsTo} documentsFrom={documentsFrom} type="from" counterType="to"/>
 
 					<IonPopover mode="md" translucent={false} isOpen={showPopOver} cssClass="agreements-popover" onDidDismiss={() => {
 						setShowPopover(false)
