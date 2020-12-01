@@ -1,14 +1,17 @@
+import { KeyStorageModel } from 'paid-universal-wallet/dist/key-storage/KeyStorageModel';
 import { DocumentsActionTypes } from '../actionTypes/documents';
-import { BigNumber, ContractTransaction, ethers } from 'ethers';
+import { BigNumber, ethers, Wallet } from 'ethers';
+// import { Contract } from 'web3-eth-contract';
 import { BlockchainFactory } from '../../utils/blockchainFactory';
 import { ContractFactory } from '../../utils/contractFactory';
 import { base64StringToBlob } from 'blob-util';
-import { AlgorithmType, CEASigningService } from 'paid-universal-wallet';
+import { AlgorithmType, CEASigningService, WalletManager } from 'paid-universal-wallet';
 import { eddsa } from "elliptic";
 import { jsPDF } from "jspdf";
-import Web3 from 'web3';
-import AgreementJSON from '../../contracts/Agreement.json';
-
+// import Web3 from 'web3';
+// import AgreementJSON from '../../contracts/Agreement.json';
+// import Agreements from '../../pages/documents/agreements/Agreements';
+import { doGetCurrentWallet } from './wallet';
 // const http = require('http');
 // const html2PDF = require('jspdf-html2canvas');
 const uint8ArrayToString = require('uint8arrays/to-string')
@@ -33,17 +36,22 @@ const createAgreementFormPayload = (obj: any) => {
 	});
 	return ethers.utils.defaultAbiCoder.encode(types, values);
 };
-
-const getDocuments = (agreementsFrom: any[], agreementsTo: any[]) => {
-	const payload = {
-		from: agreementsFrom,
-		to: agreementsTo
-	}
+const getDocuments = (payload: any[]) => {
 	return {
 		type: DocumentsActionTypes.GET_DOCUMENTS_SUCCESS,
 		payload
 	};
 };
+// const getDocuments = (agreementsFrom: any[], agreementsTo: any[]) => {
+// 	const payload = {
+// 		from: agreementsFrom,
+// 		to: agreementsTo
+// 	}
+// 	return {
+// 		type: DocumentsActionTypes.GET_DOCUMENTS_SUCCESS,
+// 		payload
+// 	};
+// };
 const uploadDocuments = () => {
 	return {
 		type: DocumentsActionTypes.UPLOAD_DOCUMENTS_SUCCESS
@@ -104,17 +112,20 @@ export const doCreateAgreement = (payload: {
 
 		const formId = ethers.utils.formatBytes32String(agreementFormTemplateId);
 		const form = createAgreementFormPayload(agreementForm);
-
-		const ethersWallet = await BlockchainFactory.getWallet2();
-		
-		if (!ethersWallet) {
-			await slideBack();
-			alert('Not unlocked wallet found');
+		const { wallet } = getState();
+		const { unlockedWallet } = wallet;
+		if (!unlockedWallet) {
 			throw new Error('Not unlocked wallet found');
 		}
-		
-		// ALICE SIDE
-		var today = new Date();
+
+		const manager = BlockchainFactory.getWalletManager();
+		const storage = manager.getKeyStorage();
+		const rawWallet = await storage.find<KeyStorageModel>(unlockedWallet._id);
+
+		const address = manager.getWalletAddress(rawWallet.mnemonic);
+	
+		// ALICE SIDE 
+		const today = new Date();
 
 		const content = '<div>'+
 		'<div>Date: ' + today.toLocaleDateString() + ' ' + today.toLocaleTimeString()+ ' </div>' +
@@ -122,7 +133,7 @@ export const doCreateAgreement = (payload: {
 		'<div style="margin-left: 20px;">Name:' + agreementForm.name + '</div>' +
 		'<div style="margin-left: 20px;">Address:' + agreementForm.address + '</div>' +
 		'<div style="margin-left: 20px;">Phone:' + agreementForm.phone + '</div>' +
-		'<div style="margin-left: 20px;">Wallet:' + ethersWallet.wallet.address + '</div>' +
+		'<div style="margin-left: 20px;">Wallet:' + address + '</div>' +
 		'<div>---------------------------------------</div>' +
 		'Agreement counterparty:<br/>' +
 		'<div style="margin-left: 20px;">Name:' + agreementForm.counterpartyName + '</div>' +
@@ -132,7 +143,7 @@ export const doCreateAgreement = (payload: {
 		'</div>';
 		const blobContent = base64StringToBlob(btoa(content), 'application/pdf');
 		const ceass = new CEASigningService();
-		ceass.useKeyStorage(ethersWallet.keystore);
+		ceass.useKeyStorage(rawWallet);
 		
 		const arrayContent = btoa(content);
 		const bytesContent = ethers.utils.toUtf8Bytes(arrayContent);
@@ -140,7 +151,7 @@ export const doCreateAgreement = (payload: {
 		
 		const ec_alice = new eddsa('ed25519');
 
-		const signer = ec_alice.keyFromSecret(ethersWallet.keystore.keypairs.ED25519);
+		const signer = ec_alice.keyFromSecret(rawWallet.keypairs.ED25519);
 		const signature = signer
 			.sign(digest)
 			.toHex();
@@ -153,31 +164,22 @@ export const doCreateAgreement = (payload: {
 		
 		console.log('ipfs hash: ' + ipfsHash.toString());
 
-		const web3 = BlockchainFactory.webSocketProvider();
+		// Transaction for Created Agreements
+		const web3 = BlockchainFactory.getWeb3Instance(rawWallet.keypairs);
+		const agreementContract = ContractFactory.getAgreementContract(web3);
 
-		const accounts = await window.ethereum.request({
-			method: 'eth_requestAccounts'
-		  })
-			.then((res: any) => res).catch((error: any) => {
-			  if (error.code === 4001) {
-				// EIP-1193 userRejectedRequest error
-				console.log('Please connect to MetaMask.');
-			  } else {
-				console.error(error);
-			  }
-		});
-		const agreementContract = await new web3.eth.Contract(AgreementJSON.abi, 
-			ContractFactory.contractAddress, 
-			{ from: ethersWallet.wallet.address, gas: '1500000', gasPrice: '1000000000' });			
-	
-		const agreementTransaction: ContractTransaction = agreementContract.methods.partyCreate(
+		// const agreementContract = await new web3.eth.Contract(AgreementJSON.abi,
+		// 	ContractFactory._contractAddress,
+		// 	{ from: address, gas: '1500000', gasPrice: '1000000000' });
+		// console.log('Crear Transacciones:',agreementContract)
+		const agreementTransaction = agreementContract.methods.partyCreate(
 			validUntil,
 			ipfsHash.toString(),
 			formId,
 			form,
-			'0x' + digest
-		).send({ from: ethersWallet.wallet.address, gas: '1500000', gasPrice: '1000000000' }
-		).on('receipt', async function(receipt: any){
+			'0x' + digest)
+		.send({ from: address, gas: '1500000', gasPrice: '1000000000' })
+		.on('receipt', async function(receipt: any){
 
 			// BOB SIDE
 			console.log('receipt of agreements Transaction:', receipt);
@@ -189,7 +191,7 @@ export const doCreateAgreement = (payload: {
 			const jsonContent = JSON.parse(fetchedContent);
 			const contentRef = jsonContent.contentRef;
 			let pdfContent:HTMLElement = document.createElement("html");
-			
+
 			for await (const chunk of ipfs.cat(contentRef.cid)) {
 				pdfContent.innerHTML = uint8ArrayToString(chunk);
 			}
@@ -197,7 +199,7 @@ export const doCreateAgreement = (payload: {
 			const doc = new jsPDF('p', 'mm','legal',true);
 			doc.html(pdfContent, {
 				callback: function () {
-					doc.save('agreeement-' + receipt.transactionHash.replace('0x','').substring(0,10) + '.pdf');
+					doc.save('Agreement-' + receipt.transactionHash.replace('0x','').substring(0,10) + '.pdf');
 				}
 			});
 
@@ -224,7 +226,7 @@ export const doCreateAgreement = (payload: {
 		});
 		console.info('agreementTransaction:',agreementTransaction);
 		/*		
-		const contract = ContractFactory.getAgrementContract(ethersWallet.wallet);
+		const contract = ContractFactory.getAgreementContract(ethersWallet.wallet);
 		const balance = await ethersWallet.wallet.provider.getBalance(
 			ethersWallet.wallet.address
 		);
@@ -274,7 +276,7 @@ export const doCreateAgreement = (payload: {
 	} catch (err) {
 		await payload.slideBack();
 		alert(err.message);
-		console.log(err);
+		console.log('ln284',err);
 		dispatch({
 			type: DocumentsActionTypes.CREATE_AGREEMENT_FAILURE,
 			payload: err.msg
@@ -297,49 +299,47 @@ export const uploadsIPFS = async (ipfs: any, blobContent: any, opts: any,
 	return fileIndex.cid;
 }
 
-export const doGetDocuments = () => async (dispatch: any) => {
+export const doGetDocuments = (currentWallet: any) => async (
+	dispatch: any,
+	getState: () => { wallet: any }
+) => {
 	dispatch({ type: DocumentsActionTypes.GET_DOCUMENTS_LOADING });
 	try {
-		const ethersWallet = await BlockchainFactory.getWallet2();
-		if (!ethersWallet) {
+		const { address } = currentWallet;
+		const { wallet } = getState();
+		const { unlockedWallet } = wallet;
+		if (!unlockedWallet) {
 			throw new Error('Not unlocked wallet found');
 		}
 
-		const web3 = BlockchainFactory.webSocketProvider();
-		const id = await web3.eth.net.getId();
-		console.log(web3.currentProvider, id);
-		console.log('Web3 Proveedor', web3.currentProvider.connected, 'window ethereum', window.ethereum.isConnected());
-		const accounts = await window.ethereum.request({
-			method: 'eth_requestAccounts'
-		  })
-			.then((res: any) => res).catch((error: any) => {
-			  if (error.code === 4001) {
-				// EIP-1193 userRejectedRequest error
-				console.log('Please connect to MetaMask.');
-			  } else {
-				console.error(error);
-			  }
+		const manager = BlockchainFactory.getWalletManager();
+		const storage = manager.getKeyStorage();
+		const rawWallet = await storage.find<KeyStorageModel>(unlockedWallet._id);
+		const web3 = BlockchainFactory.getWeb3Instance(rawWallet.keypairs);
+
+		const agreementContract = ContractFactory.getAgreementContract(web3);
+		const address_Contract = agreementContract.options.address;
+		console.info('Address of the Contract',address_Contract,'Load Agreements:',agreementContract);
+		const events = await agreementContract.getPastEvents('AgreementPartyCreated', {
+			filter: { from: [address], to: [address] },
+			fromBlock: 0,
+			toBlock: 'latest'
 		});
 
-		const agreementContract = await new web3.eth.Contract(AgreementJSON.abi, 
-			ContractFactory.contractAddress);
-		agreementContract.events.allEvents( function(error:any, event:any){ 
-			console.log('event ppal:', event);
-			console.error('error ppal:', error);
-		})
-		.on("connected", function(subscriptionId:any){
-			console.log('Connected:',subscriptionId);
-		})
-		.on('data', function(event:any){
-			console.log('Data:',event); // same results as the optional callback above
-		})
-		.on('changed', function(event:any){
-			console.info('Changed:',event);// remove event from local database
-		})
-		.on('error', function(error:any, receipt:any) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
-			console.error('Error Function:',error);
-			console.log('Receipt:',receipt);
-		});
+
+		// .on("connected", function(subscriptionId:any){
+		// 	console.log('Connected:',subscriptionId);
+		// })
+		// .on('data', function(event:any){
+		// 	console.log('Data:',event); // same results as the optional callback above
+		// })
+		// .on('changed', function(event:any){
+		// 	console.info('Changed:',event);// remove event from local database
+		// })
+		// .on('error', function(error:any, receipt:any) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
+		// 	console.error('Error Function:',error);
+		// 	console.log('Receipt:',receipt);
+		// });
 		/*('AgreementPartyCreated', { 
 				filter: { partySource: [accounts[0]] },
 				fromBlock: 0, 
@@ -350,7 +350,7 @@ export const doGetDocuments = () => async (dispatch: any) => {
 				console.log(events) // same results as the optional callback above
 			});*/
 		/*
-		const contract = ContractFactory.getAgrementContract(ethersWallet);
+		const contract = ContractFactory.getAgreementContract(ethersWallet);
 		const filterFrom = contract.filters.AgreementCreated(
 			null,
 			null,
@@ -365,7 +365,53 @@ export const doGetDocuments = () => async (dispatch: any) => {
 
 		const eventsFrom = await contract.queryFilter(filterFrom);
 		const eventsTo = await contract.queryFilter(filterTo);*/
-		
+		const promises = events.map((event) => {
+			const args = event.returnValues;
+
+			const {
+				logIndex,
+				transactionIndex,
+				transactionHash,
+				blockHash,
+				blockNumber,
+				address
+			} = event;
+			const { id, from, to, agreementFormTemplateId } = args;
+			const agreementId = (id as BigNumber).toString();
+			return new Promise(async (resolve) => {
+				const agreement = await agreementContract.methods.agreements(id).call();
+				const {
+					agreementForm,
+					escrowed,
+					validUntil,
+					toSigner,
+					fromSigner
+				} = agreement;
+				resolve({
+					meta: {
+						logIndex,
+						transactionIndex,
+						transactionHash,
+						blockHash,
+						blockNumber,
+						address
+					},
+					event: {
+						id: agreementId,
+						from,
+						to,
+						agreementFormTemplateId
+					},
+					data: {
+						agreementForm,
+						escrowed,
+						validUntil: (validUntil as BigNumber).toString(),
+						toSigner: toSigner.signatory,
+						fromSigner: fromSigner.signatory
+					}
+				});
+			});
+		});
 		/*const promisesFrom = eventsFrom.map((event) => {
 			const { args } = contract.interface.parseLog(event);
 
@@ -464,90 +510,91 @@ export const doGetDocuments = () => async (dispatch: any) => {
 		const agreementsFrom = await Promise.all(promisesFrom);
 		const agreementsTo = await Promise.all(promisesTo);
 		*/
-		const agreementsFrom : any = [];
-		agreementsFrom.push({
-			meta: {
-				logIndex:'1',
-				transactionIndex:'2',
-				transactionHash:'0x180d4s6s8ds6d4e6e4t6ee5dd6ey46j48',
-				blockHash:'4',
-				cid: 'QmPSe6J67nWcReBaa435AYEVByVv3VjyUQ2tjhnZAfW8Bv',
-				blockNumber:'5',
-				address:'6'
-			},
-			event: {
-				id: '700',
-				from:ethersWallet.wallet.address,
-				to:'0x9s4d5a6d4w6r4c7c89s61d31a3d22s',
-				agreementFormTemplateId:'10'
-			},
-			data: {
-				agreementForm:'11',
-				escrowed:'12',
-				validUntil: '13',
-				toSigner: '14',
-				fromSigner: '15'
-			}
-		});
-		agreementsFrom.push({
-			meta: {
-				logIndex:'16',
-				transactionIndex:'17',
-				transactionHash:'0x180d4s66d4s6d4e6e4t6d5s4d6ey46j48',
-				blockHash:'19',
-				cid: 'QmPSe6J67nWcReBaa435AYEVByVv3VjyUQ2tjhnZAfW8Bv',
-				blockNumber:'20',
-				address:'21'
-			},
-			event: {
-				id: '220',
-				from:ethersWallet.wallet.address,
-				to:'0x24d5d66s4d5d4w6r6we5c4d5s46df464s',
-				agreementFormTemplateId:'25'
-			},
-			data: {
-				agreementForm:'26',
-				escrowed:'27',
-				validUntil: '28',
-				toSigner: '29',
-				fromSigner: '30'
-			}
-		});
-		const agreementsTo : any = [];
+		// const agreementsFrom : any = [];
+		// agreementsFrom.push({
+		// 	meta: {
+		// 		logIndex:'1',
+		// 		transactionIndex:'2',
+		// 		transactionHash:'0x180d4s6s8ds6d4e6e4t6ee5dd6ey46j48',
+		// 		blockHash:'4',
+		// 		cid: 'QmPSe6J67nWcReBaa435AYEVByVv3VjyUQ2tjhnZAfW8Bv',
+		// 		blockNumber:'5',
+		// 		address:'6'
+		// 	},
+		// 	event: {
+		// 		id: '700',
+		// 		from:ethersWallet.wallet.address,
+		// 		to:'0x9s4d5a6d4w6r4c7c89s61d31a3d22s',
+		// 		agreementFormTemplateId:'10'
+		// 	},
+		// 	data: {
+		// 		agreementForm:'11',
+		// 		escrowed:'12',
+		// 		validUntil: '13',
+		// 		toSigner: '14',
+		// 		fromSigner: '15'
+		// 	}
+		// });
+		// agreementsFrom.push({
+		// 	meta: {
+		// 		logIndex:'16',
+		// 		transactionIndex:'17',
+		// 		transactionHash:'0x180d4s66d4s6d4e6e4t6d5s4d6ey46j48',
+		// 		blockHash:'19',
+		// 		cid: 'QmPSe6J67nWcReBaa435AYEVByVv3VjyUQ2tjhnZAfW8Bv',
+		// 		blockNumber:'20',
+		// 		address:'21'
+		// 	},
+		// 	event: {
+		// 		id: '220',
+		// 		from:ethersWallet.wallet.address,
+		// 		to:'0x24d5d66s4d5d4w6r6we5c4d5s46df464s',
+		// 		agreementFormTemplateId:'25'
+		// 	},
+		// 	data: {
+		// 		agreementForm:'26',
+		// 		escrowed:'27',
+		// 		validUntil: '28',
+		// 		toSigner: '29',
+		// 		fromSigner: '30'
+		// 	}
+		// });
+		// const agreementsTo : any = [];
 
-		agreementsTo.push({
-			meta: {
-				logIndex:'31',
-				transactionIndex:'32',
-				transactionHash:'0x180d4s66d4s6dde6eww33e33d7f6ey46j48',
-				blockHash:'34',
-				cid: 'QmPSe6J67nWcReBaa435AYEVByVv3VjyUQ2tjhnZAfW8Bv',
-				blockNumber:'35',
-				address:'36',
-				
-			},
-			event: {
-				id: '37',
-				from:'0x23d45ds64e4r6e4s6d4bb6h646ds4d5es',
-				to:ethersWallet.wallet.address,
-				agreementFormTemplateId:'40'
-			},
-			data: {
-				agreementForm:'41',
-				escrowed:'42',
-				validUntil: '43',
-				toSigner: '44',
-				fromSigner: '45'
-			}
-		});
-		
-		console.log('agreementsFrom', agreementsFrom);
-		console.log('agreementsTo', agreementsTo);
+		// agreementsTo.push({
+		// 	meta: {
+		// 		logIndex:'31',
+		// 		transactionIndex:'32',
+		// 		transactionHash:'0x180d4s66d4s6dde6eww33e33d7f6ey46j48',
+		// 		blockHash:'34',
+		// 		cid: 'QmPSe6J67nWcReBaa435AYEVByVv3VjyUQ2tjhnZAfW8Bv',
+		// 		blockNumber:'35',
+		// 		address:'36',
 
-		dispatch(getDocuments(agreementsFrom, agreementsTo));
-		
+		// 	},
+		// 	event: {
+		// 		id: '37',
+		// 		from:'0x23d45ds64e4r6e4s6d4bb6h646ds4d5es',
+		// 		to:ethersWallet.wallet.address,
+		// 		agreementFormTemplateId:'40'
+		// 	},
+		// 	data: {
+		// 		agreementForm:'41',
+		// 		escrowed:'42',
+		// 		validUntil: '43',
+		// 		toSigner: '44',
+		// 		fromSigner: '45'
+		// 	}
+		// });
+
+		// console.log('agreements', agreementsFrom);
+		const agreements = await Promise.all(promises);
+		console.log('agreements', agreements);
+
+		dispatch(getDocuments(agreements));
+
 	} catch (err) {
-		console.log(err);
+		console.log('ln564',err);
 		dispatch({
 			type: DocumentsActionTypes.GET_DOCUMENTS_FAILURE,
 			payload: err.msg

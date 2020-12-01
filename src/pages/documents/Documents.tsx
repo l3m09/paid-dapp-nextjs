@@ -30,7 +30,7 @@ import {
 } from 'ionicons/icons';
 
 import React, {useEffect, useRef, useState} from 'react';
-import {useHistory} from 'react-router';
+import { useParams, useHistory} from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import {
 	doGetDocuments,
@@ -111,10 +111,12 @@ const Documents: React.FC = () => {
 	const [showPopOver, setShowPopover] = useState(false);
 	const [currentIndex, setCurrentIndex] = useState(0);
 
+	const { id } = useParams<{ id: string }>();
+
 	useEffect(() => {
-		dispatch(doGetDocuments());
+		dispatch(doGetDocuments({ id }));
 		slidesRef.current?.lockSwipes(true)
-	}, [dispatch]);
+	}, [dispatch, id]);
 
 	function showDocument(item: any) {
 		dispatch(doGetSelectedDocument(item));
