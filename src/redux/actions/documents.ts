@@ -126,7 +126,7 @@ export const doCreateAgreement = (payload: {
 		const address = manager.getWalletAddress(rawWallet.mnemonic);
 		console.log('Current_Wallet_Documents', address,'agreementForm', agreementForm);
 
-		// ALICE SIDE 
+		// ALICE SIDE
 		const today = new Date();
 
 		const content = '<div>'+
@@ -147,11 +147,10 @@ export const doCreateAgreement = (payload: {
 		const blobContent = base64StringToBlob(btoa(content), 'application/pdf');
 		const ceass = new CEASigningService();
 		ceass.useKeyStorage(rawWallet);
-		
+
 		const arrayContent = btoa(content);
 		const bytesContent = ethers.utils.toUtf8Bytes(arrayContent);
 		const digest = ethers.utils.sha256(bytesContent).replace('0x', '');
-		
 		const ec_alice = new eddsa('ed25519');
 
 		const signer = ec_alice.keyFromSecret(rawWallet.keypairs.ED25519);
