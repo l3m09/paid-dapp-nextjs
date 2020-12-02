@@ -38,7 +38,7 @@ const createAgreementFormPayload = (obj: any) => {
 		from: agreementsFrom,
 		to: agreementsTo
 	}*/
-	
+
 const getDocuments = (agreements: any[]) => {
 	const payload = {
 		from: agreements
@@ -219,7 +219,7 @@ export const doCreateAgreement = (payload: {
 			alert('Transaction failed');
 			throw new Error('Transaction failed');
 		});
-		
+
 		console.info('agreementTransaction:',agreementTransaction);
 		/*
 		const contract = ContractFactory.getAgreementContract(ethersWallet.wallet);
@@ -252,7 +252,7 @@ export const doCreateAgreement = (payload: {
 		);
 
 		agreementTransaction.gasPrice = BigNumber.from(options.gasPrice);
-		
+
 		///---------------------------------------------------------------------------------------------------
 
 		new Promise(async (resolve) => {
@@ -318,12 +318,11 @@ export const doGetDocuments = (currentWallet: any) => async (
 		// console.log('Address of the Contract',address_Contract,'Load Agreements:',agreementContract);
 		console.log('Address Wallet Events:', address, 'web3 accounts wallet', web3.eth.accounts.wallet);
 		const events = await agreementContract.getPastEvents('AgreementPartyCreated', {
-			filter: { from: [address], to: [address] },
-			fromBlock: 0,
+			filter: { partySource: address.toString() },
+			fromBlock: 7600000,
 			toBlock: 'latest'
 		});
-
-
+		console.table(events);
 		// .on("connected", function(subscriptionId:any){
 		// 	console.log('Connected:',subscriptionId);
 		// })
