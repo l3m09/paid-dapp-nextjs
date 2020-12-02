@@ -168,7 +168,7 @@ export const doCreateAgreement = (payload: {
 
 		const opts = { create: true, parents: true };
 
-		let ipfsHash = await uploadsIPFS(ipfs, blobContent, opts, digest, signature, pubKey, formId, null);
+		let ipfsHash = await uploadsIPFS(ipfs, blobContent, opts, digest, signature, pubKey, formId, agreementForm.counterpartyAddress, null);
 
 		console.log('ipfs hash: ' + ipfsHash.toString());
 
@@ -180,6 +180,7 @@ export const doCreateAgreement = (payload: {
 		// 	ContractFactory._contractAddress,
 		// 	{ from: address, gas: '1500000', gasPrice: '1000000000' });
 		// console.log('Crear Transacciones:',agreementContract)
+		
 		const agreementTransaction = await agreementContract.methods['partyCreate(uint256,string,bytes32,bytes,bytes)'](
 			validUntil,
 			ipfsHash.toString(),
@@ -282,7 +283,7 @@ export const doCreateAgreement = (payload: {
 };
 
 export const uploadsIPFS = async (ipfs: any, blobContent: any, opts: any, 
-	_digest: string, sigArray: any, pubKey: any, _docId: any, parent: any = null) => {
+	_digest: string, sigArray: any, pubKey: any, _docId: any, counterpartyAddress: string, parent: any = null) => {
 	const createCIDHash = (fileEntry: any) => {
 		return { path: fileEntry.path, cid: fileEntry.cid.toString() }
 	}
@@ -290,7 +291,7 @@ export const uploadsIPFS = async (ipfs: any, blobContent: any, opts: any,
 	const fileContent = await ipfs.add(blobContent);
 	const fileSignature = await ipfs.add(sigArray);
 	const index = { contentRef: createCIDHash(fileContent), sigRef: createCIDHash(fileSignature), digest: _digest, 
-		publicKey: pubKey, parent: parent, docId: _docId };
+		publicKey: pubKey, parent: parent, docId: _docId, cpartyAddress: counterpartyAddress };
 
 	const fileIndex = await ipfs.add(JSON.stringify(index));
 	return fileIndex.cid;
@@ -319,7 +320,7 @@ export const doGetDocuments = (currentWallet: any) => async (
 		// console.log('Address of the Contract',address_Contract,'Load Agreements:',agreementContract);
 		console.log('Address Wallet Events:', address, 'web3 accounts wallet', web3.eth.accounts.wallet);
 		const events = await agreementContract.getPastEvents('AgreementPartyCreated', {
-			filter: { from: [address], to: [address] },
+			filter: { partySource: address, partyDestination: address },
 			fromBlock: 0,
 			toBlock: 'latest'
 		});
@@ -363,7 +364,7 @@ export const doGetDocuments = (currentWallet: any) => async (
 
 		const eventsFrom = await contract.queryFilter(filterFrom);
 		const eventsTo = await contract.queryFilter(filterTo);*/
-		const promises = events.map((event) => {
+		const promises = events.map(async (event) => {
 			const args = event.returnValues;
 			const {
 				logIndex,
@@ -375,6 +376,14 @@ export const doGetDocuments = (currentWallet: any) => async (
 			} = event;
 			const { id, partySource, partyDestination, formTemplateId, agreementStoredReference } = args;
 			const agreementId = (id as BigNumber).toString();
+
+			let fetchedContent = '';
+			for await (const chunk of ipfs.cat(agreementStoredReference.toString())) {
+				fetchedContent = uint8ArrayToString(chunk);
+			}
+
+			const jsonContent = JSON.parse(fetchedContent);
+			
 			return new Promise(async (resolve) => {
 				const agreement = await agreementContract.methods.agreements(id).call();
 				const {
@@ -384,6 +393,7 @@ export const doGetDocuments = (currentWallet: any) => async (
 					toSigner,
 					fromSigner
 				} = agreement;
+
 				resolve({
 					meta: {
 						logIndex,
@@ -396,7 +406,7 @@ export const doGetDocuments = (currentWallet: any) => async (
 					event: {
 						id: agreementId,
 						from: partySource,
-						to:partyDestination,
+						to:jsonContent.cpartyAddress,
 						agreementFormTemplateId: formTemplateId,
 						cid: agreementStoredReference
 					},

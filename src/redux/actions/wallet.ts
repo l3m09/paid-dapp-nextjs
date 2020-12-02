@@ -229,8 +229,28 @@ export const doImportWallet = (payload: {
 		const { name, password, mnemonic } = payload;
 		const walletManager = BlockchainFactory.getWalletManager();
 		const wallet = await walletManager.createWallet(password, mnemonic);
-		const { _id } = wallet;
+		const { _id, created } = wallet;
 		const address = walletManager.getWalletAddress(mnemonic);
+
+		const referenceWallet = {
+			_id,
+			address,
+			name,
+			created: created.toString()
+		};
+
+		const stored = await Storage.get({ key: 'WALLETS' });
+		const encodedList = stored.value ? stored.value : `[]`;
+		const wallets: any[] = JSON.parse(encodedList);
+		wallets.push(referenceWallet);
+		const encodedWallets = JSON.stringify(wallets);
+		await Storage.set({ key: 'WALLETS', value: encodedWallets });
+
+		const createdWallet = {
+			...referenceWallet,
+			mnemonic
+		};
+		
 		dispatch(
 			importWallet({
 				_id,
@@ -238,6 +258,7 @@ export const doImportWallet = (payload: {
 				name
 			})
 		);
+		dispatch(unlockWallet(createdWallet));
 	} catch (err) {
 		dispatch({
 			type: WalletActionTypes.IMPORT_WALLET_FAILURE,
