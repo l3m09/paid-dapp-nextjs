@@ -1,0 +1,884 @@
+{
+  "contractName": "WorkflowStep",
+  "abi": [
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "recipient",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "next",
+          "type": "uint256"
+        },
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "actorId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "documentId",
+          "type": "uint256"
+        }
+      ],
+      "name": "WorkflowStepCompleted",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "sender",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "current",
+          "type": "uint256"
+        },
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "actorId",
+          "type": "uint256"
+        }
+      ],
+      "name": "WorkflowStepStart",
+      "type": "event"
+    }
+  ],
+  "metadata": "{\"compiler\":{\"version\":\"0.6.10+commit.00c0fcaf\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"recipient\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"next\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"actorId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"documentId\",\"type\":\"uint256\"}],\"name\":\"WorkflowStepCompleted\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"current\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"actorId\",\"type\":\"uint256\"}],\"name\":\"WorkflowStepStart\",\"type\":\"event\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/home/alfredolopez80/PAID/paid-contracts/contracts/WorkflowStep.sol\":\"WorkflowStep\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"details\":{\"constantOptimizer\":true,\"cse\":false,\"deduplicate\":false,\"jumpdestRemover\":true,\"orderLiterals\":false,\"peephole\":true,\"yul\":true,\"yulDetails\":{\"optimizerSteps\":\"dhfoDgvulfnTUtnIf[xarrscLMcCTUtTOntnfDIulLculVcul jjeulxarulrulxarrcLgvifCTUcarrLsTOtfDncarrIulc]jmuljuljul VcTOcul jmul\",\"stackAllocation\":true}},\"runs\":200},\"remappings\":[]},\"sources\":{\"/home/alfredolopez80/PAID/paid-contracts/contracts/WorkflowStep.sol\":{\"keccak256\":\"0x5f83b8236c086f81d89e3ec9a4563f317be645344fc5d45080dfaa812e9cb415\",\"urls\":[\"bzz-raw://c8594fd13ba4406452208dd1032e5c6dde58a22d1cbd4ae5a5f2eaf075964c01\",\"dweb:/ipfs/QmVJSen2FaYLL28qSyCmVtb7j6bHva7dK7kp1TJ4wNtBJL\"]}},\"version\":1}",
+  "bytecode": "0x6080604052348015600f57600080fd5b50603f80601d6000396000f3fe6080604052600080fdfea2646970667358221220cb4588cdfd660f80d575d6acb0e86dfda070d9af4f218e6dce5dcd79eb5c880764736f6c634300060a0033",
+  "deployedBytecode": "0x6080604052600080fdfea2646970667358221220cb4588cdfd660f80d575d6acb0e86dfda070d9af4f218e6dce5dcd79eb5c880764736f6c634300060a0033",
+  "immutableReferences": {},
+  "sourceMap": "26:528:7:-:0;;;;;;;;;;;;;;;;;;;",
+  "deployedSourceMap": "26:528:7:-:0;;;;;",
+  "source": "pragma solidity ^0.6.10;\n\ncontract WorkflowStep {\n\n\n    event WorkflowStepStart(\n        address indexed sender, \n        uint indexed current, \n        uint indexed actorId\n    );\n    event WorkflowStepCompleted(\n        address indexed recipient, \n        uint indexed next, \n        uint indexed actorId, \n        uint  documentId\n    );\n\n    struct Step {\n        // Alice or Bob\n        uint partyActor;\n        // Current step\n        uint currentStep;\n        // Next step\n        uint nextStep;\n        // Fork step\n        uint forkStep;\n    }\n}",
+  "sourcePath": "/home/alfredolopez80/PAID/paid-contracts/contracts/WorkflowStep.sol",
+  "ast": {
+    "absolutePath": "/home/alfredolopez80/PAID/paid-contracts/contracts/WorkflowStep.sol",
+    "exportedSymbols": {
+      "WorkflowStep": [
+        537
+      ]
+    },
+    "id": 538,
+    "license": null,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 509,
+        "literals": [
+          "solidity",
+          "^",
+          "0.6",
+          ".10"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:7"
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 537,
+        "linearizedBaseContracts": [
+          537
+        ],
+        "name": "WorkflowStep",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "anonymous": false,
+            "documentation": null,
+            "id": 517,
+            "name": "WorkflowStepStart",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 516,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 511,
+                  "indexed": true,
+                  "mutability": "mutable",
+                  "name": "sender",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 517,
+                  "src": "89:22:7",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 510,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "89:7:7",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 513,
+                  "indexed": true,
+                  "mutability": "mutable",
+                  "name": "current",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 517,
+                  "src": "122:20:7",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 512,
+                    "name": "uint",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "122:4:7",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 515,
+                  "indexed": true,
+                  "mutability": "mutable",
+                  "name": "actorId",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 517,
+                  "src": "153:20:7",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 514,
+                    "name": "uint",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "153:4:7",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "79:100:7"
+            },
+            "src": "56:124:7"
+          },
+          {
+            "anonymous": false,
+            "documentation": null,
+            "id": 527,
+            "name": "WorkflowStepCompleted",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 526,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 519,
+                  "indexed": true,
+                  "mutability": "mutable",
+                  "name": "recipient",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 527,
+                  "src": "222:25:7",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 518,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "222:7:7",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 521,
+                  "indexed": true,
+                  "mutability": "mutable",
+                  "name": "next",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 527,
+                  "src": "258:17:7",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 520,
+                    "name": "uint",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "258:4:7",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 523,
+                  "indexed": true,
+                  "mutability": "mutable",
+                  "name": "actorId",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 527,
+                  "src": "286:20:7",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 522,
+                    "name": "uint",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "286:4:7",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 525,
+                  "indexed": false,
+                  "mutability": "mutable",
+                  "name": "documentId",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 527,
+                  "src": "317:16:7",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 524,
+                    "name": "uint",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "317:4:7",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "212:127:7"
+            },
+            "src": "185:155:7"
+          },
+          {
+            "canonicalName": "WorkflowStep.Step",
+            "id": 536,
+            "members": [
+              {
+                "constant": false,
+                "id": 529,
+                "mutability": "mutable",
+                "name": "partyActor",
+                "nodeType": "VariableDeclaration",
+                "overrides": null,
+                "scope": 536,
+                "src": "392:15:7",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 528,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "392:4:7",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 531,
+                "mutability": "mutable",
+                "name": "currentStep",
+                "nodeType": "VariableDeclaration",
+                "overrides": null,
+                "scope": 536,
+                "src": "441:16:7",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 530,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "441:4:7",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 533,
+                "mutability": "mutable",
+                "name": "nextStep",
+                "nodeType": "VariableDeclaration",
+                "overrides": null,
+                "scope": 536,
+                "src": "488:13:7",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 532,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "488:4:7",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 535,
+                "mutability": "mutable",
+                "name": "forkStep",
+                "nodeType": "VariableDeclaration",
+                "overrides": null,
+                "scope": 536,
+                "src": "532:13:7",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 534,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "532:4:7",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              }
+            ],
+            "name": "Step",
+            "nodeType": "StructDefinition",
+            "scope": 537,
+            "src": "346:206:7",
+            "visibility": "public"
+          }
+        ],
+        "scope": 538,
+        "src": "26:528:7"
+      }
+    ],
+    "src": "0:554:7"
+  },
+  "legacyAST": {
+    "absolutePath": "/home/alfredolopez80/PAID/paid-contracts/contracts/WorkflowStep.sol",
+    "exportedSymbols": {
+      "WorkflowStep": [
+        537
+      ]
+    },
+    "id": 538,
+    "license": null,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 509,
+        "literals": [
+          "solidity",
+          "^",
+          "0.6",
+          ".10"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:7"
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 537,
+        "linearizedBaseContracts": [
+          537
+        ],
+        "name": "WorkflowStep",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "anonymous": false,
+            "documentation": null,
+            "id": 517,
+            "name": "WorkflowStepStart",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 516,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 511,
+                  "indexed": true,
+                  "mutability": "mutable",
+                  "name": "sender",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 517,
+                  "src": "89:22:7",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 510,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "89:7:7",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 513,
+                  "indexed": true,
+                  "mutability": "mutable",
+                  "name": "current",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 517,
+                  "src": "122:20:7",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 512,
+                    "name": "uint",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "122:4:7",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 515,
+                  "indexed": true,
+                  "mutability": "mutable",
+                  "name": "actorId",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 517,
+                  "src": "153:20:7",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 514,
+                    "name": "uint",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "153:4:7",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "79:100:7"
+            },
+            "src": "56:124:7"
+          },
+          {
+            "anonymous": false,
+            "documentation": null,
+            "id": 527,
+            "name": "WorkflowStepCompleted",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 526,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 519,
+                  "indexed": true,
+                  "mutability": "mutable",
+                  "name": "recipient",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 527,
+                  "src": "222:25:7",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 518,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "222:7:7",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 521,
+                  "indexed": true,
+                  "mutability": "mutable",
+                  "name": "next",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 527,
+                  "src": "258:17:7",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 520,
+                    "name": "uint",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "258:4:7",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 523,
+                  "indexed": true,
+                  "mutability": "mutable",
+                  "name": "actorId",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 527,
+                  "src": "286:20:7",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 522,
+                    "name": "uint",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "286:4:7",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 525,
+                  "indexed": false,
+                  "mutability": "mutable",
+                  "name": "documentId",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 527,
+                  "src": "317:16:7",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 524,
+                    "name": "uint",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "317:4:7",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "212:127:7"
+            },
+            "src": "185:155:7"
+          },
+          {
+            "canonicalName": "WorkflowStep.Step",
+            "id": 536,
+            "members": [
+              {
+                "constant": false,
+                "id": 529,
+                "mutability": "mutable",
+                "name": "partyActor",
+                "nodeType": "VariableDeclaration",
+                "overrides": null,
+                "scope": 536,
+                "src": "392:15:7",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 528,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "392:4:7",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 531,
+                "mutability": "mutable",
+                "name": "currentStep",
+                "nodeType": "VariableDeclaration",
+                "overrides": null,
+                "scope": 536,
+                "src": "441:16:7",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 530,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "441:4:7",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 533,
+                "mutability": "mutable",
+                "name": "nextStep",
+                "nodeType": "VariableDeclaration",
+                "overrides": null,
+                "scope": 536,
+                "src": "488:13:7",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 532,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "488:4:7",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 535,
+                "mutability": "mutable",
+                "name": "forkStep",
+                "nodeType": "VariableDeclaration",
+                "overrides": null,
+                "scope": 536,
+                "src": "532:13:7",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 534,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "532:4:7",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              }
+            ],
+            "name": "Step",
+            "nodeType": "StructDefinition",
+            "scope": 537,
+            "src": "346:206:7",
+            "visibility": "public"
+          }
+        ],
+        "scope": 538,
+        "src": "26:528:7"
+      }
+    ],
+    "src": "0:554:7"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.6.10+commit.00c0fcaf.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.3.2",
+  "updatedAt": "2020-11-26T20:23:17.731Z",
+  "devdoc": {
+    "methods": {}
+  },
+  "userdoc": {
+    "methods": {}
+  }
+}

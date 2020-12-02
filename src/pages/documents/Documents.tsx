@@ -28,7 +28,7 @@ import {
 } from 'ionicons/icons';
 
 import React, {useEffect, useRef, useState} from 'react';
-import {useHistory} from 'react-router';
+import { useParams, useHistory} from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import {
 	doGetDocuments,
@@ -108,13 +108,13 @@ const Documents: React.FC = () => {
 		loading,
 		agreementTypes
 	} = documentsState;
-	const { currentWallet } = walletsState;
+	const wallet = useSelector((state: any) => state.wallet);
+	const { currentWallet } = wallet;
 	const [showModal, setShowModal] = useState(false);
 	const [showPopOver, setShowPopover] = useState(false);
 	const [currentIndex, setCurrentIndex] = useState(0);
-	
 	useEffect(() => {
-		dispatch(doGetDocuments());
+		dispatch(doGetDocuments(currentWallet));
 		slidesRef.current?.lockSwipes(true)
 	}, [dispatch]);
 	function showDocument(item: any) {
@@ -181,7 +181,6 @@ const Documents: React.FC = () => {
 
 				/>
 				<div>
-					
 					<DocumentsList documents={documents} type="from" counterType="to"/>
 
 					<IonPopover mode="md" translucent={false} isOpen={showPopOver} cssClass="agreements-popover" onDidDismiss={() => {
