@@ -143,7 +143,6 @@ export const doCreateAgreement = (payload: {
 		'<div style="margin-left: 20px;">Phone:' + agreementForm.counterpartyPhone + '</div>' +
 		'<div style="margin-left: 20px;">Wallet:' + agreementForm.counterpartyWallet + '</div>' +
 		'</div>';
-		console.info('content address:',content);
 		const blobContent = base64StringToBlob(btoa(content), 'application/pdf');
 		const ceass = new CEASigningService();
 		ceass.useKeyStorage(rawWallet);
