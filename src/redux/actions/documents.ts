@@ -1,3 +1,4 @@
+import { agreementsRef } from './firebase';
 import { KeyStorageModel } from 'paid-universal-wallet/dist/key-storage/KeyStorageModel';
 import { DocumentsActionTypes } from '../actionTypes/documents';
 import { BigNumber, ethers, Wallet } from 'ethers';
@@ -9,6 +10,7 @@ import { AlgorithmType, CEASigningService, WalletManager } from 'paid-universal-
 import { eddsa } from "elliptic";
 import { doGetCurrentWallet } from './wallet';
 import { jsPDF } from "jspdf";
+import agreement from '../../contracts/agreement';
 // const http = require('http');
 // const html2PDF = require('jspdf-html2canvas');
 const uint8ArrayToString = require('uint8arrays/to-string')
@@ -317,51 +319,19 @@ export const doGetDocuments = (currentWallet: any) => async (
 		const address_Contract = agreementContract.options.address;
 		// console.log('Address of the Contract',address_Contract,'Load Agreements:',agreementContract);
 		console.log('Address Wallet Events:', address, 'web3 accounts wallet', web3.eth.accounts.wallet);
-		const events = await agreementContract.getPastEvents('AgreementPartyCreated', {
+		const eventsSource = await agreementContract.getPastEvents('AgreementPartyCreated', {
 			filter: { partySource: address.toString() },
 			fromBlock: 7600000,
 			toBlock: 'latest'
 		});
-		console.table(events);
-		// .on("connected", function(subscriptionId:any){
-		// 	console.log('Connected:',subscriptionId);
-		// })
-		// .on('data', function(event:any){
-		// 	console.log('Data:',event); // same results as the optional callback above
-		// })
-		// .on('changed', function(event:any){
-		// 	console.info('Changed:',event);// remove event from local database
-		// })
-		// .on('error', function(error:any, receipt:any) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
-		// 	console.error('Error Function:',error);
-		// 	console.log('Receipt:',receipt);
-		// });
-		/*('AgreementPartyCreated', { 
-				filter: { partySource: [accounts[0]] },
-				fromBlock: 0, 
-				toBlock: 'latest'
-			}, function(error: any, events: any){ 
-				console.log(events); })*/
-			/*.then(function(events: any){
-				console.log(events) // same results as the optional callback above
-			});*/
-		/*
-		const contract = ContractFactory.getAgreementContract(ethersWallet);
-		const filterFrom = contract.filters.AgreementCreated(
-			null,
-			null,
-			ethersWallet.address
-		);
-		const filterTo = contract.filters.AgreementCreated(
-			null,
-			null,
-			null,
-			ethersWallet.address
-		);
-
-		const eventsFrom = await contract.queryFilter(filterFrom);
-		const eventsTo = await contract.queryFilter(filterTo);*/
-		const promises = events.map((event) => {
+		console.table(eventsSource);
+		const eventsDestination = await agreementContract.getPastEvents('AgreementPartyCreated', {
+			filter: { partyDestination: address.toString() },
+			fromBlock: 7600000,
+			toBlock: 'latest'
+		});
+		console.table(eventsDestination);
+		const promisesFrom = eventsSource.map((event) => {
 			const args = event.returnValues;
 			const {
 				logIndex,
@@ -408,9 +378,8 @@ export const doGetDocuments = (currentWallet: any) => async (
 				});
 			});
 		});
-		/*const promisesFrom = eventsFrom.map((event) => {
-			const { args } = contract.interface.parseLog(event);
-
+		const promisesTo = eventsDestination.map((event) => {
+			const args = event.returnValues;
 			const {
 				logIndex,
 				transactionIndex,
@@ -419,10 +388,10 @@ export const doGetDocuments = (currentWallet: any) => async (
 				blockNumber,
 				address
 			} = event;
-			const { id, from, to, agreementFormTemplateId } = args;
+			const { id, partySource, partyDestination, formTemplateId, agreementStoredReference } = args;
 			const agreementId = (id as BigNumber).toString();
 			return new Promise(async (resolve) => {
-				const agreement = await contract.agreements(id);
+				const agreement = await agreementContract.methods.agreements(id).call();
 				const {
 					agreementForm,
 					escrowed,
@@ -441,9 +410,10 @@ export const doGetDocuments = (currentWallet: any) => async (
 					},
 					event: {
 						id: agreementId,
-						from,
-						to,
-						agreementFormTemplateId
+						from: partySource,
+						to:partyDestination,
+						agreementFormTemplateId: formTemplateId,
+						cid: agreementStoredReference
 					},
 					data: {
 						agreementForm,
@@ -455,136 +425,9 @@ export const doGetDocuments = (currentWallet: any) => async (
 				});
 			});
 		});
-		const promisesTo = eventsTo.map((event) => {
-			const { args } = contract.interface.parseLog(event);
-
-			const {
-				logIndex,
-				transactionIndex,
-				transactionHash,
-				blockHash,
-				blockNumber,
-				address
-			} = event;
-			const { id, from, to, agreementFormTemplateId } = args;
-			const agreementId = (id as BigNumber).toString();
-			return new Promise(async (resolve) => {
-				const agreement = await contract.agreements(id);
-				const {
-					agreementForm,
-					escrowed,
-					validUntil,
-					toSigner,
-					fromSigner
-				} = agreement;
-				resolve({
-					meta: {
-						logIndex,
-						transactionIndex,
-						transactionHash,
-						blockHash,
-						blockNumber,
-						address
-					},
-					event: {
-						id: agreementId,
-						from,
-						to,
-						agreementFormTemplateId
-					},
-					data: {
-						agreementForm,
-						escrowed,
-						validUntil: (validUntil as BigNumber).toString(),
-						toSigner: toSigner.signatory,
-						fromSigner: fromSigner.signatory
-					}
-				});
-			});
-		});
-
-		const agreementsFrom = await Promise.all(promisesFrom);
-		const agreementsTo = await Promise.all(promisesTo);
-		*/
-		// const agreementsFrom : any = [];
-		// agreementsFrom.push({
-		// 	meta: {
-		// 		logIndex:'1',
-		// 		transactionIndex:'2',
-		// 		transactionHash:'0x180d4s6s8ds6d4e6e4t6ee5dd6ey46j48',
-		// 		blockHash:'4',
-		// 		cid: 'QmPSe6J67nWcReBaa435AYEVByVv3VjyUQ2tjhnZAfW8Bv',
-		// 		blockNumber:'5',
-		// 		address:'6'
-		// 	},
-		// 	event: {
-		// 		id: '700',
-		// 		from:ethersWallet.wallet.address,
-		// 		to:'0x9s4d5a6d4w6r4c7c89s61d31a3d22s',
-		// 		agreementFormTemplateId:'10'
-		// 	},
-		// 	data: {
-		// 		agreementForm:'11',
-		// 		escrowed:'12',
-		// 		validUntil: '13',
-		// 		toSigner: '14',
-		// 		fromSigner: '15'
-		// 	}
-		// });
-		// agreementsFrom.push({
-		// 	meta: {
-		// 		logIndex:'16',
-		// 		transactionIndex:'17',
-		// 		transactionHash:'0x180d4s66d4s6d4e6e4t6d5s4d6ey46j48',
-		// 		blockHash:'19',
-		// 		cid: 'QmPSe6J67nWcReBaa435AYEVByVv3VjyUQ2tjhnZAfW8Bv',
-		// 		blockNumber:'20',
-		// 		address:'21'
-		// 	},
-		// 	event: {
-		// 		id: '220',
-		// 		from:ethersWallet.wallet.address,
-		// 		to:'0x24d5d66s4d5d4w6r6we5c4d5s46df464s',
-		// 		agreementFormTemplateId:'25'
-		// 	},
-		// 	data: {
-		// 		agreementForm:'26',
-		// 		escrowed:'27',
-		// 		validUntil: '28',
-		// 		toSigner: '29',
-		// 		fromSigner: '30'
-		// 	}
-		// });
-		// const agreementsTo : any = [];
-
-		// agreementsTo.push({
-		// 	meta: {
-		// 		logIndex:'31',
-		// 		transactionIndex:'32',
-		// 		transactionHash:'0x180d4s66d4s6dde6eww33e33d7f6ey46j48',
-		// 		blockHash:'34',
-		// 		cid: 'QmPSe6J67nWcReBaa435AYEVByVv3VjyUQ2tjhnZAfW8Bv',
-		// 		blockNumber:'35',
-		// 		address:'36',
-
-		// 	},
-		// 	event: {
-		// 		id: '37',
-		// 		from:'0x23d45ds64e4r6e4s6d4bb6h646ds4d5es',
-		// 		to:ethersWallet.wallet.address,
-		// 		agreementFormTemplateId:'40'
-		// 	},
-		// 	data: {
-		// 		agreementForm:'41',
-		// 		escrowed:'42',
-		// 		validUntil: '43',
-		// 		toSigner: '44',
-		// 		fromSigner: '45'
-		// 	}
-		// });
-
-		// console.log('agreements', agreementsFrom);
-		const agreements = await Promise.all(promises);
+		const agreementsSource = await Promise.all(promisesFrom);
+		const agreementsDestination = await Promise.all(promisesTo);
+		const agreements= agreementsDestination.concat(agreementsSource);
 		console.log('agreements', agreements);
 
 		dispatch(getDocuments(agreements));
