@@ -2,7 +2,6 @@ import { WalletActionTypes } from '../actionTypes/wallet';
 import { Plugins } from '@capacitor/core';
 import { BlockchainFactory } from '../../utils/blockchainFactory';
 import { ethers } from 'ethers';
-import { CEASigningService } from 'paid-universal-wallet';
 const { Storage } = Plugins;
 
 // CREATORS

@@ -153,6 +153,24 @@
                 }
             }
             .details-wrapper {}
+            .float-left-wrapper{
+                float: left;
+                margin: 0px 15px 0px 0px;
+            }
+            .circle-container{
+                border-radius: 50%;
+                width: 20px;
+            }
+            .red-alert{
+                background-color: red;
+            }
+            .green-alert{
+                background-color: green;
+            }
+            .none-background{
+                background-color: #00000000;
+            }
+
         }
         .modal-actions {
             height: 65px;

@@ -2,7 +2,6 @@ import {
 	IonItem,
 	IonLabel,
 	IonButton,
-	IonIcon,
 	IonModal,
 	IonCardContent,
 	IonCardTitle,
@@ -10,25 +9,16 @@ import {
 	IonCardHeader,
 	IonCard, IonTitle, IonHeader, IonToolbar, IonButtons, IonContent, IonLoading,
 } from '@ionic/react';
-import {
-	documentsOutline as documentsIcon,
-	documentOutline as documentIcon,
-} from 'ionicons/icons';
 
 import React, { useEffect, useState } from 'react';
-import {useHistory} from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-	doGetDocuments,
 	doGetSelectedDocument
 } from '../../redux/actions/documents';
 
-import Collapsible from 'react-collapsible';
-
-import { jsPDF } from "jspdf";
 import { IonBadge } from '@ionic/react';
-import { Page, Document, StyleSheet } from '@react-pdf/renderer';
-import ReactPDF from '@react-pdf/renderer';
+import { Plugins } from '@capacitor/core';
+const { Storage } = Plugins;
 
 const uint8ArrayToString = require('uint8arrays/to-string');
 const ipfsClient = require('ipfs-http-client');
@@ -85,7 +75,29 @@ function SelectedDocument(payload: {
 				<IonCard>
 					<IonCardHeader>
 						<IonCardTitle>
-							Document Id: {selectedDocument.event.id}
+							<div className="float-left-wrapper">
+								Document Id: {selectedDocument.event.id}
+							</div>
+							<div>
+								
+								{selectedDocument.verified == true ? 
+								<IonLabel>
+									<IonBadge className="circle-container green-alert">
+										&nbsp;
+									</IonBadge>
+									<IonBadge className="none-background">
+										Verified
+									</IonBadge>
+								</IonLabel> : 
+								<IonLabel>
+									<IonBadge className="circle-container red-alert">
+										&nbsp;
+									</IonBadge>
+									<IonBadge className="none-background">
+										Not verified
+									</IonBadge>
+								</IonLabel>}
+							</div>
 						</IonCardTitle>
 						<IonCardSubtitle>
 							Valid until: {selectedDocument.data.validUntil}
@@ -109,7 +121,6 @@ function SelectedDocument(payload: {
 							<IonItem>
 								<IonLabel position="stacked">Signature</IonLabel>
 								<span>{selectedDocument.signature}</span>
-
 							</IonItem>
 						</div>
 					</IonCardContent>
@@ -147,14 +158,12 @@ function SelectedDocument(payload: {
 
 
 interface Props {
-	documentsTo: [];
-	documentsFrom: [];
+	documents: [];
 	type: string;
 	counterType: string
 }
 
-const DocumentsList: React.FC<Props> = ({documentsTo, documentsFrom, type, counterType}) => {
-	const history = useHistory();
+const DocumentsList: React.FC<Props> = ({documents, type, counterType}) => {
 	const dispatch = useDispatch();
 	const documentsState = useSelector((state: any) => state.documents);
 	const {
@@ -162,10 +171,12 @@ const DocumentsList: React.FC<Props> = ({documentsTo, documentsFrom, type, count
 		loading
 	} = documentsState;
 	const [showModal, setShowModal] = useState(false);
-	const [showPopOver, setShowPopover] = useState(false);
 	const [showPdfViewerModal, setPdfViewerModal] = useState(false);
 	const [showAgreementsUrl, setAgreementUrl] = useState('');
-
+	const wallet = useSelector(
+		(state: { wallet: { currentWallet: any } }) => state.wallet
+	);
+	const { currentWallet } = wallet;
 	function showDocument(item: any) {
 		dispatch(doGetSelectedDocument(item));
 		setShowModal(true);
@@ -174,22 +185,6 @@ const DocumentsList: React.FC<Props> = ({documentsTo, documentsFrom, type, count
 	function closeShowDocument() {
 		dispatch(doGetSelectedDocument(null));
 		setShowModal(false);
-	}
-
-	function trigger(id: string, name: string, status: string) {
-		return (
-			<button className="document-trigger">
-				<IonIcon icon={documentsIcon} />
-				<span className="document-id">{id}</span>
-				<span>{name}</span>
-				<span>{status == 'PARTY_INIT' ? 'Not signed' : 'Signed'}</span>
-			</button>
-		);
-	}
-
-	function chooseOption(type: string) {
-		setShowPopover(false);
-		history.push('/agreements/' + type.toLowerCase());
 	}
 
 	function closePdfViewer() {
@@ -248,8 +243,8 @@ const DocumentsList: React.FC<Props> = ({documentsTo, documentsFrom, type, count
 					<div className="col">Wallet To</div>
 					<div className="col"></div>
 				</div>
-				{documentsFrom.length
-					? documentsFrom.map((document: any, index: number) => {
+				{documents.length
+					? documents.map((document: any, index: number) => {
 						const {data, meta, event} = document;
 						return (
 							<div className="table-body" onClick={async () => {showDocument({data, meta, event})}}>
@@ -257,28 +252,22 @@ const DocumentsList: React.FC<Props> = ({documentsTo, documentsFrom, type, count
 								<div className="col">{data.validUntil}</div>
 								<div className="col">{event.from.slice(0,15)}...</div>
 								<div className="col">{event.to.slice(0,15)}...</div>
-								<div className="col in"><IonBadge color="primary">IN</IonBadge></div>
+								<div className="col in">
+									{event.from == currentWallet?.address ?
+									<IonBadge color="secondary">
+										OUT
+									</IonBadge>
+									: 
+									<IonBadge color="primary">
+										IN
+									</IonBadge>}
+								</div>
 							</div>
 						);
 					})
 					: null
 					}
-					{documentsTo.length
-					? documentsTo.map((document: any, index: number) => {
-						const {data, meta, event} = document;
-						return (
-							<div className="table-body" onClick={async () => {showDocument({data, meta, event})}}>
-								<div className="col">{meta.transactionHash.slice(0,15)}...</div>
-								<div className="col">{data.validUntil}</div>
-								<div className="col">{event.from.slice(0,15)}...</div>
-								<div className="col">{event.to.slice(0,15)}...</div>
-								<div className="col out"><IonBadge color="secondary">OUT</IonBadge></div>
-							</div>
-						);
-					})
-					: null
-					}
-					{(!documentsFrom.length && !documentsTo.length ? <IonTitle color="primary">No documents found</IonTitle> : null)}
+					{(!documents.length ? <IonTitle color="primary">No documents found</IonTitle> : null)}
 			</div>
 
 			<SelectedDocument

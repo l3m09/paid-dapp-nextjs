@@ -9,7 +9,7 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { doSetAgreementFormInfo } from '../../../../redux/actions/documents';
-import Button from './button';
+import MobileShare from './button';
 
 interface VehicleCompletedProps {
 	current: any;
@@ -66,19 +66,7 @@ const VehicleCompleted: React.FC<VehicleCompletedProps> = ({ current }) => {
 			</IonItem>
 
 			<IonItem class="form-options">
-			<Button
-					config={{
-					params: {
-						title: 'Share Agreement',
-						text: 'Share this agreement',
-						url: 'http://localhost:3000',
-					},
-					/* tslint:disable-next-line:no-console */
-					onShareSuccess: () => console.log('Success'),
-					/* tslint:disable-next-line:no-console */
-					onShareError: (error: Error) => console.log('error', error),
-					}}
-				/>
+			<MobileShare/>
 			</IonItem>
 			<IonItem class="form-options">
 				<IonButton

@@ -1,14 +1,30 @@
-import * as React from 'react';
-import webShare, { WebShareInterface } from 'react-web-share-api';
+import React from 'react';
+const MobileShare = () => {
+  const postTitle = 'post title';
+  const siteTitle = 'site title';
+  const win_nav = window.navigator as any;
+  const handleOnClick = () => {
+    if (win_nav.share) {
+      win_nav
+        .share({
+          title: "`${postTitle} | ${siteTitle}`",
+          text: `Check out ${postTitle} on ${siteTitle}`,
+          url: document.location.href,
+        })
+        .then(() => {
+          console.log('Successfully shared');
+        })
+        .catch((error : any) => {
+          console.error('Something went wrong sharing the blog', error);
+        });
+    }
+  };
 
-export interface OwnProps {
-  style: object;
-}
+  return (
+    <div className='share-icon' onClick={handleOnClick}>
+      Share
+    </div>
+  );
+};
 
-const Button: React.FunctionComponent<WebShareInterface & OwnProps> = ({
-  share, isSupported, style,
-}) => isSupported
-  ? <button onClick={share} style={style}>Share now!</button>
-  : <span>Web Share not supported</span>;
-
-export default webShare<OwnProps>()(Button);
+export default MobileShare;

@@ -20,9 +20,7 @@ import {
 	IonPopover,
 	IonItemDivider,
 	IonFabButton,
-	IonFab,
-	IonSlides,
-	IonSlide
+	IonFab
 } from '@ionic/react';
 import {
 	add,
@@ -105,8 +103,7 @@ const Documents: React.FC = () => {
 	const documentsState = useSelector((state: any) => state.documents);
 	const walletsState = useSelector((state: any) => state.wallet);
 	const {
-		documentsFrom,
-		documentsTo,
+		documents,
 		selectedDocument,
 		loading,
 		agreementTypes
@@ -115,13 +112,7 @@ const Documents: React.FC = () => {
 	const [showModal, setShowModal] = useState(false);
 	const [showPopOver, setShowPopover] = useState(false);
 	const [currentIndex, setCurrentIndex] = useState(0);
-
-	async function CurrentWallet() { 
-		const wallet = await Storage.get({ key: 'CURRENT_WALLET' });
-		const walletJson = JSON.parse(wallet.value ?? '');
-		console.log(walletJson.address);
-		return (<div>{walletJson.address}</div>);
-	}
+	
 	useEffect(() => {
 		dispatch(doGetDocuments());
 		slidesRef.current?.lockSwipes(true)
@@ -170,7 +161,7 @@ const Documents: React.FC = () => {
 		await slidesRef.current?.lockSwipes(true)
 
 	}
-
+	
 	return (
 		<IonPage className="documents-page content-page">
 			<IonContent fullscreen>
@@ -191,7 +182,7 @@ const Documents: React.FC = () => {
 				/>
 				<div>
 					
-					<DocumentsList documentsTo={documentsTo} documentsFrom={documentsFrom} type="from" counterType="to"/>
+					<DocumentsList documents={documents} type="from" counterType="to"/>
 
 					<IonPopover mode="md" translucent={false} isOpen={showPopOver} cssClass="agreements-popover" onDidDismiss={() => {
 						setShowPopover(false)

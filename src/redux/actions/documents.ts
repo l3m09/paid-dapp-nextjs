@@ -37,7 +37,7 @@ const createAgreementFormPayload = (obj: any) => {
 	return ethers.utils.defaultAbiCoder.encode(types, values);
 };
 
-const getDocuments = (agreementsFrom: any[], agreementsTo: any[]) => {
+const getDocuments = (agreements: any[], agreementsFrom: any[], agreementsTo: any[]) => {
 	const payload = {
 		from: agreementsFrom,
 		to: agreementsTo
@@ -514,15 +514,11 @@ export const doGetDocuments = () => async (dispatch: any) => {
 		*/
 		const agreementsFrom : any = [];
 		const agreementsTo : any = [];
+		const agreements : any = [];
 		await agreementsRef.once('value', (snapshot) => {
 			let items = snapshot.val();
 			for (let item in items) {
-			  if(items[item].event.from == ethersWallet.wallet.address){
 				agreementsFrom.push(items[item]);
-			  }
-			  else{
-				agreementsTo.push(items[item]);
-			  }
 			}
 		  });
 		/*data.map((_data) => {
@@ -537,7 +533,7 @@ export const doGetDocuments = () => async (dispatch: any) => {
 		console.log('agreementsFrom', agreementsFrom);
 		console.log('agreementsTo', agreementsTo);
 
-		dispatch(getDocuments(agreementsFrom, agreementsTo));
+		dispatch(getDocuments(agreements, agreementsFrom, agreementsTo));
 		
 	} catch (err) {
 		console.log(err);
@@ -588,7 +584,20 @@ export const doGetSelectedDocument = (document: any) => async (dispatch: any) =>
 
 		document.signature = signatureContent.substr(0,20) + '...' + 
 			signatureContent.substr(signatureContent.length - 20);
-		console.log(document.signature);
+
+		// verify signature
+
+		const fetchedPubKey = jsonContent.publicKey;
+
+		const ec = new eddsa('ed25519');
+		const key = ec.keyFromPublic(fetchedPubKey);
+		const sigRef = jsonContent.sigRef;
+		let sigDocument = '';
+		for await (const chunk of ipfs.cat(sigRef.cid)) {
+			sigDocument = uint8ArrayToString(chunk);
+		}
+		
+		document.verified = key.verify(jsonContent.digest, sigDocument);
 	}
 	dispatch(getSelectedDocument(document));
 };
