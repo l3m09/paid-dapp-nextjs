@@ -124,8 +124,7 @@ export const doCreateAgreement = (payload: {
 		const rawWallet = await storage.find<KeyStorageModel>(unlockedWallet._id);
 
 		const address = manager.getWalletAddress(rawWallet.mnemonic);
-		const addressLower = address.toLowerCase();
-		console.log('Current_Wallet_Documents', addressLower);
+		console.log('Current_Wallet_Documents', address,'agreementForm', agreementForm);
 
 		// ALICE SIDE 
 		const today = new Date();
@@ -144,6 +143,7 @@ export const doCreateAgreement = (payload: {
 		'<div style="margin-left: 20px;">Phone:' + agreementForm.counterpartyPhone + '</div>' +
 		'<div style="margin-left: 20px;">Wallet:' + agreementForm.counterpartyWallet + '</div>' +
 		'</div>';
+		console.info('content address:',content);
 		const blobContent = base64StringToBlob(btoa(content), 'application/pdf');
 		const ceass = new CEASigningService();
 		ceass.useKeyStorage(rawWallet);
@@ -160,30 +160,28 @@ export const doCreateAgreement = (payload: {
 			.toHex();
 
 		const pubKey = signer.getPublic();
-		
+
 		const opts = { create: true, parents: true };
 
 		let ipfsHash = await uploadsIPFS(ipfs, blobContent, opts, digest, signature, pubKey, formId, null);
-		
+
 		console.log('ipfs hash: ' + ipfsHash.toString());
 
 		// Transaction for Created Agreements
-		const web3 = BlockchainFactory.getWeb3Instance(rawWallet.keypairs);
+		const web3 = BlockchainFactory.getWeb3Instance(rawWallet.keypairs, rawWallet.mnemonic);
 		const agreementContract = ContractFactory.getAgreementContract(web3);
-		const addressContract = agreementContract.options.address;
-		web3.eth.defaultAccount = addressLower;
-		console.log('Contract',addressContract,'address',addressLower);
+		console.log(web3.eth.accounts.wallet);
 		// const agreementContract = await new web3.eth.Contract(AgreementJSON.abi,
 		// 	ContractFactory._contractAddress,
 		// 	{ from: address, gas: '1500000', gasPrice: '1000000000' });
 		// console.log('Crear Transacciones:',agreementContract)
-		const agreementTransaction = agreementContract.methods.partyCreate(
+		const agreementTransaction = await agreementContract.methods['partyCreate(uint256,string,bytes32,bytes,bytes)'](
 			validUntil,
 			ipfsHash.toString(),
 			formId,
 			form,
 			'0x' + digest)
-		.send({ from: web3.eth.defaultAccount, gas: '1500000', gasPrice: '1000000000' })
+		.send({ from: address,  gas: '1500000', gasPrice: '1000000000'})
 		.on('receipt', async function(receipt: any){
 
 			// BOB SIDE
@@ -201,7 +199,7 @@ export const doCreateAgreement = (payload: {
 				pdfContent.innerHTML = uint8ArrayToString(chunk);
 			}
 
-			const doc = new jsPDF('p', 'mm','legal',true);
+			const doc = new jsPDF('p', 'px','a4');
 			doc.html(pdfContent, {
 				callback: function () {
 					doc.save('Agreement-' + receipt.transactionHash.replace('0x','').substring(0,10) + '.pdf');
@@ -211,7 +209,7 @@ export const doCreateAgreement = (payload: {
 			const fetchedPubKey = jsonContent.publicKey;
 
 			const ec_bob = new eddsa('ed25519');
-			
+
 			const key = ec_bob.keyFromPublic(fetchedPubKey);
 			const sigRef = jsonContent.sigRef;
 			let sigDocument = '';
@@ -231,7 +229,7 @@ export const doCreateAgreement = (payload: {
 			throw new Error('Transaction failed');
 		});
 		console.info('agreementTransaction:',agreementTransaction);
-		/*		
+		/*
 		const contract = ContractFactory.getAgreementContract(ethersWallet.wallet);
 		const balance = await ethersWallet.wallet.provider.getBalance(
 			ethersWallet.wallet.address
@@ -241,7 +239,7 @@ export const doCreateAgreement = (payload: {
 		if (parsedBalance.lte(0)) {
 			throw new Error('The wallet should has balance to send a transaction.');
 		}
-		
+
 		const options = { gasPrice: 1000000000, gasLimit: 85000 };*/
 		/*const gasPrice = await contract.estimateGas.partyCreate(
 			validUntil,
@@ -321,12 +319,12 @@ export const doGetDocuments = (currentWallet: any) => async (
 		const manager = BlockchainFactory.getWalletManager();
 		const storage = manager.getKeyStorage();
 		const rawWallet = await storage.find<KeyStorageModel>(unlockedWallet._id);
-		const web3 = BlockchainFactory.getWeb3Instance(rawWallet.keypairs);
+		const web3 = BlockchainFactory.getWeb3Instance(rawWallet.keypairs,rawWallet.mnemonic);
 
 		const agreementContract = ContractFactory.getAgreementContract(web3);
 		const address_Contract = agreementContract.options.address;
 		// console.log('Address of the Contract',address_Contract,'Load Agreements:',agreementContract);
-		console.log('Address Wallet Events:', address);
+		console.log('Address Wallet Events:', address, 'web3 accounts wallet', web3.eth.accounts.wallet);
 		const events = await agreementContract.getPastEvents('AgreementPartyCreated', {
 			filter: { from: [address], to: [address] },
 			fromBlock: 0,
@@ -374,7 +372,6 @@ export const doGetDocuments = (currentWallet: any) => async (
 		const eventsTo = await contract.queryFilter(filterTo);*/
 		const promises = events.map((event) => {
 			const args = event.returnValues;
-
 			const {
 				logIndex,
 				transactionIndex,
@@ -383,7 +380,7 @@ export const doGetDocuments = (currentWallet: any) => async (
 				blockNumber,
 				address
 			} = event;
-			const { id, from, to, agreementFormTemplateId } = args;
+			const { id, partySource, partyDestination, formTemplateId, agreementStoredReference } = args;
 			const agreementId = (id as BigNumber).toString();
 			return new Promise(async (resolve) => {
 				const agreement = await agreementContract.methods.agreements(id).call();
@@ -405,9 +402,10 @@ export const doGetDocuments = (currentWallet: any) => async (
 					},
 					event: {
 						id: agreementId,
-						from,
-						to,
-						agreementFormTemplateId
+						from: partySource,
+						to:partyDestination,
+						agreementFormTemplateId: formTemplateId,
+						cid: agreementStoredReference
 					},
 					data: {
 						agreementForm,
@@ -632,7 +630,24 @@ export const doUploadDocuments = (file: any) => async (dispatch: any) => {
 	}
 };
 
-export const doGetSelectedDocument = (document: any) => (dispatch: any) => {
+export const doGetSelectedDocument = (document: any) => async (dispatch: any) => {
+	let fetchedContent = '';
+	if(document){
+		for await (const chunk of ipfs.cat(document.event.cid.toString())) {
+			fetchedContent = uint8ArrayToString(chunk);
+		}
+		const jsonContent = JSON.parse(fetchedContent);
+
+		let signatureContent = '';
+
+		for await (const chunk of ipfs.cat(jsonContent.sigRef.cid)) {
+			signatureContent = uint8ArrayToString(chunk);
+		}
+
+		document.signature = signatureContent.substr(0,20) + '...' + 
+			signatureContent.substr(signatureContent.length - 20);
+		console.log(document.signature);
+	}
 	dispatch(getSelectedDocument(document));
 };
 

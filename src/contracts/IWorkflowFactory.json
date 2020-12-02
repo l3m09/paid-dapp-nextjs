@@ -1,0 +1,333 @@
+{
+  "contractName": "IWorkflowFactory",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "owner",
+          "type": "address"
+        }
+      ],
+      "name": "createWorkflow",
+      "outputs": [
+        {
+          "internalType": "contract BaseWorkflow",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "metadata": "{\"compiler\":{\"version\":\"0.6.10+commit.00c0fcaf\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"}],\"name\":\"createWorkflow\",\"outputs\":[{\"internalType\":\"contract BaseWorkflow\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/home/alfredolopez80/PAID/paid-contracts/contracts/workflow/IWorkflowFactory.sol\":\"IWorkflowFactory\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/home/alfredolopez80/PAID/paid-contracts/contracts/workflow/BaseWorkflow.sol\":{\"keccak256\":\"0xa9efdff51e8f249f62d79e03bbae1cb157c4f9040b16b51eee29ba09cf1d7353\",\"urls\":[\"bzz-raw://98e727111faf9e477574ae0c06b7b68207f6bd2b021234655496d38aff17e75f\",\"dweb:/ipfs/QmYqHUe41pYS5c5oKkvdrNmAVJzeVCURn9SkB5nrBM14NZ\"]},\"/home/alfredolopez80/PAID/paid-contracts/contracts/workflow/IWorkflowFactory.sol\":{\"keccak256\":\"0x33b5efb2677e1104cf3d7a24fd055598b1ddc7d47b50ae2ba6668aa20e426855\",\"urls\":[\"bzz-raw://ff720817232fad4b4d58b0327e742f1825098b02d113fc161c6bd4ade1a47e9a\",\"dweb:/ipfs/QmeG5M3EwVTTurKQhR55wSm5oRKhYPLuWt3F8bE5Q8mA8j\"]},\"/home/alfredolopez80/PAID/paid-contracts/contracts/workflow/StepTransition.sol\":{\"keccak256\":\"0x142d98656d8690332642ea2a29ed239e5e390d0c885601fb332a574f92358dab\",\"urls\":[\"bzz-raw://729be3350a4e72fb0f19b4eeb42471f1ae1a3d0983d9a6982ff35f50fd29f148\",\"dweb:/ipfs/QmRqMNtEu7WkQrrjvnJiewwtTYwNhVMMBx8zNX2gxxqkRJ\"]}},\"version\":1}",
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "immutableReferences": {},
+  "sourceMap": "",
+  "deployedSourceMap": "",
+  "source": "pragma solidity ^0.6.10;\n\nimport \"./BaseWorkflow.sol\";\n\nabstract contract IWorkflowFactory {\n    function createWorkflow(address owner) \n    public virtual returns (BaseWorkflow);\n}",
+  "sourcePath": "/home/alfredolopez80/PAID/paid-contracts/contracts/workflow/IWorkflowFactory.sol",
+  "ast": {
+    "absolutePath": "/home/alfredolopez80/PAID/paid-contracts/contracts/workflow/IWorkflowFactory.sol",
+    "exportedSymbols": {
+      "IWorkflowFactory": [
+        736
+      ]
+    },
+    "id": 737,
+    "license": null,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 727,
+        "literals": [
+          "solidity",
+          "^",
+          "0.6",
+          ".10"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:8"
+      },
+      {
+        "absolutePath": "/home/alfredolopez80/PAID/paid-contracts/contracts/workflow/BaseWorkflow.sol",
+        "file": "./BaseWorkflow.sol",
+        "id": 728,
+        "nodeType": "ImportDirective",
+        "scope": 737,
+        "sourceUnit": 726,
+        "src": "26:28:8",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "abstract": true,
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": false,
+        "id": 736,
+        "linearizedBaseContracts": [
+          736
+        ],
+        "name": "IWorkflowFactory",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "body": null,
+            "documentation": null,
+            "functionSelector": "9b7932d5",
+            "id": 735,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "createWorkflow",
+            "nodeType": "FunctionDefinition",
+            "overrides": null,
+            "parameters": {
+              "id": 731,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 730,
+                  "mutability": "mutable",
+                  "name": "owner",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 735,
+                  "src": "121:13:8",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 729,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "121:7:8",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "120:15:8"
+            },
+            "returnParameters": {
+              "id": 734,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 733,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 735,
+                  "src": "165:12:8",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_contract$_BaseWorkflow_$725",
+                    "typeString": "contract BaseWorkflow"
+                  },
+                  "typeName": {
+                    "contractScope": null,
+                    "id": 732,
+                    "name": "BaseWorkflow",
+                    "nodeType": "UserDefinedTypeName",
+                    "referencedDeclaration": 725,
+                    "src": "165:12:8",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_BaseWorkflow_$725",
+                      "typeString": "contract BaseWorkflow"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "164:14:8"
+            },
+            "scope": 736,
+            "src": "97:82:8",
+            "stateMutability": "nonpayable",
+            "virtual": true,
+            "visibility": "public"
+          }
+        ],
+        "scope": 737,
+        "src": "56:125:8"
+      }
+    ],
+    "src": "0:181:8"
+  },
+  "legacyAST": {
+    "absolutePath": "/home/alfredolopez80/PAID/paid-contracts/contracts/workflow/IWorkflowFactory.sol",
+    "exportedSymbols": {
+      "IWorkflowFactory": [
+        736
+      ]
+    },
+    "id": 737,
+    "license": null,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 727,
+        "literals": [
+          "solidity",
+          "^",
+          "0.6",
+          ".10"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:8"
+      },
+      {
+        "absolutePath": "/home/alfredolopez80/PAID/paid-contracts/contracts/workflow/BaseWorkflow.sol",
+        "file": "./BaseWorkflow.sol",
+        "id": 728,
+        "nodeType": "ImportDirective",
+        "scope": 737,
+        "sourceUnit": 726,
+        "src": "26:28:8",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "abstract": true,
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": false,
+        "id": 736,
+        "linearizedBaseContracts": [
+          736
+        ],
+        "name": "IWorkflowFactory",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "body": null,
+            "documentation": null,
+            "functionSelector": "9b7932d5",
+            "id": 735,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "createWorkflow",
+            "nodeType": "FunctionDefinition",
+            "overrides": null,
+            "parameters": {
+              "id": 731,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 730,
+                  "mutability": "mutable",
+                  "name": "owner",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 735,
+                  "src": "121:13:8",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 729,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "121:7:8",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "120:15:8"
+            },
+            "returnParameters": {
+              "id": 734,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 733,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 735,
+                  "src": "165:12:8",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_contract$_BaseWorkflow_$725",
+                    "typeString": "contract BaseWorkflow"
+                  },
+                  "typeName": {
+                    "contractScope": null,
+                    "id": 732,
+                    "name": "BaseWorkflow",
+                    "nodeType": "UserDefinedTypeName",
+                    "referencedDeclaration": 725,
+                    "src": "165:12:8",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_BaseWorkflow_$725",
+                      "typeString": "contract BaseWorkflow"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "164:14:8"
+            },
+            "scope": 736,
+            "src": "97:82:8",
+            "stateMutability": "nonpayable",
+            "virtual": true,
+            "visibility": "public"
+          }
+        ],
+        "scope": 737,
+        "src": "56:125:8"
+      }
+    ],
+    "src": "0:181:8"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.6.10+commit.00c0fcaf.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.3.2",
+  "updatedAt": "2020-11-19T14:04:29.326Z",
+  "devdoc": {
+    "methods": {}
+  },
+  "userdoc": {
+    "methods": {}
+  }
+}

@@ -114,7 +114,7 @@ function SelectedDocument(payload: {
 						color="gradient"
 						shape="round"
 						onClick={async () => {
-							openPdfViewerModal(selectedDocument.meta.cid, selectedDocument.meta.transactionHash);
+							openPdfViewerModal(selectedDocument.event.cid, selectedDocument.meta.transactionHash);
 						}}
 					>
 						<span>Open Pdf</span>
