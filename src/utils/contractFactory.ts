@@ -1,4 +1,5 @@
 // import { Contract, Wallet } from 'ethers';
+import { options } from 'ionicons/icons';
 import Web3 from 'web3';
 import { Contract } from 'web3-eth-contract';
 const Agreement = require('../contracts/Agreement.json');
@@ -13,6 +14,10 @@ const networks = {
 	kovan: 42
 }
 
+// const ContractOptions = {
+// 	from: '0xaCf5ABBB75c4B5bA7609De6f89a4d0466483225a'
+// }
+
 export class ContractFactory {
 
 	private static _agreementContract: Contract | null = null;
@@ -25,9 +30,9 @@ export class ContractFactory {
 				Agreement.abi as any,
 				ContractFactory._contractAddress
 			);
-			console.log(ContractFactory._contractAddress, ContractFactory._agreementContract);
+			// console.log(ContractFactory._contractAddress, ContractFactory._agreementContract);
 		}
-		console.log(ContractFactory._agreementContract);
+		// console.log(ContractFactory._agreementContract);
 		return ContractFactory._agreementContract;
 	};
 }

@@ -112,6 +112,7 @@ export const doCreateAgreement = (payload: {
 
 		const formId = ethers.utils.formatBytes32String(agreementFormTemplateId);
 		const form = createAgreementFormPayload(agreementForm);
+
 		const { wallet } = getState();
 		const { unlockedWallet } = wallet;
 		if (!unlockedWallet) {
@@ -123,7 +124,9 @@ export const doCreateAgreement = (payload: {
 		const rawWallet = await storage.find<KeyStorageModel>(unlockedWallet._id);
 
 		const address = manager.getWalletAddress(rawWallet.mnemonic);
-	
+		const addressLower = address.toLowerCase();
+		console.log('Current_Wallet_Documents', addressLower);
+
 		// ALICE SIDE 
 		const today = new Date();
 
@@ -167,7 +170,9 @@ export const doCreateAgreement = (payload: {
 		// Transaction for Created Agreements
 		const web3 = BlockchainFactory.getWeb3Instance(rawWallet.keypairs);
 		const agreementContract = ContractFactory.getAgreementContract(web3);
-
+		const addressContract = agreementContract.options.address;
+		web3.eth.defaultAccount = addressLower;
+		console.log('Contract',addressContract,'address',addressLower);
 		// const agreementContract = await new web3.eth.Contract(AgreementJSON.abi,
 		// 	ContractFactory._contractAddress,
 		// 	{ from: address, gas: '1500000', gasPrice: '1000000000' });
@@ -178,7 +183,7 @@ export const doCreateAgreement = (payload: {
 			formId,
 			form,
 			'0x' + digest)
-		.send({ from: address, gas: '1500000', gasPrice: '1000000000' })
+		.send({ from: web3.eth.defaultAccount, gas: '1500000', gasPrice: '1000000000' })
 		.on('receipt', async function(receipt: any){
 
 			// BOB SIDE
@@ -221,6 +226,7 @@ export const doCreateAgreement = (payload: {
 		})
 		.on('error', function(error: any, receipt: any) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.		
 			slideBack();
+			console.log(error, error.message, 'receipt:', receipt);
 			alert('Transaction failed');
 			throw new Error('Transaction failed');
 		});
@@ -319,7 +325,8 @@ export const doGetDocuments = (currentWallet: any) => async (
 
 		const agreementContract = ContractFactory.getAgreementContract(web3);
 		const address_Contract = agreementContract.options.address;
-		console.info('Address of the Contract',address_Contract,'Load Agreements:',agreementContract);
+		// console.log('Address of the Contract',address_Contract,'Load Agreements:',agreementContract);
+		console.log('Address Wallet Events:', address);
 		const events = await agreementContract.getPastEvents('AgreementPartyCreated', {
 			filter: { from: [address], to: [address] },
 			fromBlock: 0,

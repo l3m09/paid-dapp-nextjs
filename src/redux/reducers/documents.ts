@@ -28,7 +28,7 @@ export const DocumentsReducer = function (state = initialState, action: any) {
 			return { ...state, loading: true };
 
 		case DocumentsActionTypes.GET_DOCUMENTS_SUCCESS:
-			return { ...state, documents: payload , loading: false };
+			return { ...state, documentsFrom: payload , documentsTo: [],  loading: false };
 
 		case DocumentsActionTypes.GET_DOCUMENTS_FAILURE:
 			return { ...state, documentsFrom: [], documentsTo: [], error: payload, loading: false };

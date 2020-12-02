@@ -98,6 +98,7 @@ export const doUnlockWallet = (payload: {
 			// const { address } = wallet;
 			BlockchainFactory.setKeystore(ks);
 			const value = JSON.stringify(wallet);
+			console.log('CURRENT_WALLET_ACTIONS', value);
 			await Storage.set({ key: 'CURRENT_WALLET', value });
 			dispatch(unlockWallet(wallet));
 		}

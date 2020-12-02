@@ -107,16 +107,17 @@ const Documents: React.FC = () => {
 		loading,
 		agreementTypes
 	} = documentsState;
+	const wallet = useSelector((state: any) => state.wallet);
+	const { currentWallet } = wallet;
 	const [showModal, setShowModal] = useState(false);
 	const [showPopOver, setShowPopover] = useState(false);
 	const [currentIndex, setCurrentIndex] = useState(0);
 
-	const { id } = useParams<{ id: string }>();
 
 	useEffect(() => {
-		dispatch(doGetDocuments({ id }));
+		dispatch(doGetDocuments(currentWallet));
 		slidesRef.current?.lockSwipes(true)
-	}, [dispatch, id]);
+	}, [dispatch]);
 
 	function showDocument(item: any) {
 		dispatch(doGetSelectedDocument(item));
@@ -205,7 +206,7 @@ const Documents: React.FC = () => {
 							<DocumentsList documents={documentsFrom} type="to" counterType="from"/>
 						</IonSlide>
 						<IonSlide key="documents-to">
-							<DocumentsList documents={documentsTo} type="from" counterType="to"/>
+							<DocumentsList documents={documentsFrom} type="from" counterType="to"/>
 						</IonSlide>
 					</IonSlides>
 
