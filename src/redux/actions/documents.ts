@@ -7,11 +7,8 @@ import { ContractFactory } from '../../utils/contractFactory';
 import { base64StringToBlob } from 'blob-util';
 import { AlgorithmType, CEASigningService, WalletManager } from 'paid-universal-wallet';
 import { eddsa } from "elliptic";
-import { jsPDF } from "jspdf";
-// import Web3 from 'web3';
-// import AgreementJSON from '../../contracts/Agreement.json';
-// import Agreements from '../../pages/documents/agreements/Agreements';
 import { doGetCurrentWallet } from './wallet';
+import { jsPDF } from "jspdf";
 // const http = require('http');
 // const html2PDF = require('jspdf-html2canvas');
 const uint8ArrayToString = require('uint8arrays/to-string')
@@ -36,7 +33,16 @@ const createAgreementFormPayload = (obj: any) => {
 	});
 	return ethers.utils.defaultAbiCoder.encode(types, values);
 };
-const getDocuments = (payload: any[]) => {
+/*const getDocuments = (agreements: any[], agreementsFrom: any[], agreementsTo: any[]) => {
+	const payload = {
+		from: agreementsFrom,
+		to: agreementsTo
+	}*/
+	
+const getDocuments = (agreements: any[]) => {
+	const payload = {
+		from: agreements
+	}
 	return {
 		type: DocumentsActionTypes.GET_DOCUMENTS_SUCCESS,
 		payload
@@ -204,19 +210,6 @@ export const doCreateAgreement = (payload: {
 				}
 			});
 
-			const fetchedPubKey = jsonContent.publicKey;
-
-			const ec_bob = new eddsa('ed25519');
-
-			const key = ec_bob.keyFromPublic(fetchedPubKey);
-			const sigRef = jsonContent.sigRef;
-			let sigDocument = '';
-			for await (const chunk of ipfs.cat(sigRef.cid)) {
-				sigDocument = uint8ArrayToString(chunk);
-			}
-
-			console.log(key.verify(jsonContent.digest, sigDocument));
-
 			dispatch(createAgreement());
 			slideNext();
 		})
@@ -226,6 +219,7 @@ export const doCreateAgreement = (payload: {
 			alert('Transaction failed');
 			throw new Error('Transaction failed');
 		});
+		
 		console.info('agreementTransaction:',agreementTransaction);
 		/*
 		const contract = ContractFactory.getAgreementContract(ethersWallet.wallet);
@@ -595,7 +589,6 @@ export const doGetDocuments = (currentWallet: any) => async (
 		console.log('agreements', agreements);
 
 		dispatch(getDocuments(agreements));
-
 	} catch (err) {
 		console.log('ln564',err);
 		dispatch({
@@ -629,6 +622,7 @@ export const doUploadDocuments = (file: any) => async (dispatch: any) => {
 };
 
 export const doGetSelectedDocument = (document: any) => async (dispatch: any) => {
+	dispatch({ type: DocumentsActionTypes.GET_SELECTED_DOCUMENT_LOADING });
 	let fetchedContent = '';
 	if(document){
 		for await (const chunk of ipfs.cat(document.event.cid.toString())) {
@@ -644,6 +638,20 @@ export const doGetSelectedDocument = (document: any) => async (dispatch: any) =>
 
 		document.signature = signatureContent.substr(0,20) + '...' + 
 			signatureContent.substr(signatureContent.length - 20);
+
+		// verify signature
+
+		const fetchedPubKey = jsonContent.publicKey;
+
+		const ec = new eddsa('ed25519');
+		const key = ec.keyFromPublic(fetchedPubKey);
+		const sigRef = jsonContent.sigRef;
+		let sigDocument = '';
+		for await (const chunk of ipfs.cat(sigRef.cid)) {
+			sigDocument = uint8ArrayToString(chunk);
+		}
+		
+		document.verified = key.verify(jsonContent.digest, sigDocument);
 		console.log(document.signature);
 	}
 	dispatch(getSelectedDocument(document));

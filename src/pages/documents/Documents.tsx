@@ -20,9 +20,7 @@ import {
 	IonPopover,
 	IonItemDivider,
 	IonFabButton,
-	IonFab,
-	IonSlides,
-	IonSlide
+	IonFab
 } from '@ionic/react';
 import {
 	add,
@@ -39,6 +37,9 @@ import {
 
 import MenuAlternate from '../../components/MenuAlternate';
 import DocumentsList from './DocumentsList';
+import { IonText } from '@ionic/react';
+import { Plugins } from '@capacitor/core';
+const { Storage } = Plugins;
 
 function SelectedDocument(payload: {
 	show: boolean;
@@ -100,9 +101,9 @@ const Documents: React.FC = () => {
 	const history = useHistory();
 	const dispatch = useDispatch();
 	const documentsState = useSelector((state: any) => state.documents);
+	const walletsState = useSelector((state: any) => state.wallet);
 	const {
-		documentsFrom,
-		documentsTo,
+		documents,
 		selectedDocument,
 		loading,
 		agreementTypes
@@ -112,13 +113,10 @@ const Documents: React.FC = () => {
 	const [showModal, setShowModal] = useState(false);
 	const [showPopOver, setShowPopover] = useState(false);
 	const [currentIndex, setCurrentIndex] = useState(0);
-
-
 	useEffect(() => {
 		dispatch(doGetDocuments(currentWallet));
 		slidesRef.current?.lockSwipes(true)
 	}, [dispatch]);
-
 	function showDocument(item: any) {
 		dispatch(doGetSelectedDocument(item));
 		setShowModal(true);
@@ -163,7 +161,7 @@ const Documents: React.FC = () => {
 		await slidesRef.current?.lockSwipes(true)
 
 	}
-
+	
 	return (
 		<IonPage className="documents-page content-page">
 			<IonContent fullscreen>
@@ -172,7 +170,7 @@ const Documents: React.FC = () => {
 						<IonButtons slot="start">
 							<IonMenuButton/>
 						</IonButtons>
-						<IonTitle>Documents</IonTitle>
+						<IonTitle>Documents | <IonText color="primary"> {currentWallet?.address.slice(0,10)}...</IonText></IonTitle>
 						<MenuAlternate/>
 					</IonToolbar>
 				</IonHeader>
@@ -183,32 +181,7 @@ const Documents: React.FC = () => {
 
 				/>
 				<div>
-					<IonItem class="documents-controls">
-						<IonButton
-							type="submit"
-							color="transparent"
-							className={currentIndex === 0 ? 'current-tab document-control document-control-from': 'document-control document-control-from'}
-							onClick={() => {slideTo(0)}}
-						>
-							From
-						</IonButton>
-						<IonButton
-							type="submit"
-							color="transparent"
-							className={currentIndex === 1 ? 'current-tab document-control document-control-to': 'document-control document-control-to'}
-							onClick={() => {slideTo(1)}}
-						>
-							To
-						</IonButton>
-					</IonItem>
-					<IonSlides mode="md" pager={false} options={slideOpts} ref={slidesRef}>
-						<IonSlide key="documents-from" >
-							<DocumentsList documents={documentsFrom} type="to" counterType="from"/>
-						</IonSlide>
-						<IonSlide key="documents-to">
-							<DocumentsList documents={documentsFrom} type="from" counterType="to"/>
-						</IonSlide>
-					</IonSlides>
+					<DocumentsList documents={documents} type="from" counterType="to"/>
 
 					<IonPopover mode="md" translucent={false} isOpen={showPopOver} cssClass="agreements-popover" onDidDismiss={() => {
 						setShowPopover(false)

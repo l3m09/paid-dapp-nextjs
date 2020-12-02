@@ -9,6 +9,7 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { doSetAgreementFormInfo } from '../../../../redux/actions/documents';
+import MobileShare from './button';
 
 interface VehicleCompletedProps {
 	current: any;
@@ -65,6 +66,9 @@ const VehicleCompleted: React.FC<VehicleCompletedProps> = ({ current }) => {
 			</IonItem>
 
 			<IonItem class="form-options">
+			<MobileShare/>
+			</IonItem>
+			<IonItem class="form-options">
 				<IonButton
 					onClick={() => {
 						toDocuments();
@@ -75,7 +79,6 @@ const VehicleCompleted: React.FC<VehicleCompletedProps> = ({ current }) => {
 					Done
 				</IonButton>
 			</IonItem>
-
 			<IonModal isOpen={showModal} cssClass="terms-modal">
 				<p>
 					Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deserunt

@@ -1,5 +1,4 @@
 import {
-	IonTitle,
 	IonItem,
 	IonButton,
 	IonText,

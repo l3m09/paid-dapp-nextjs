@@ -2,32 +2,23 @@ import {
 	IonItem,
 	IonLabel,
 	IonButton,
-	IonIcon,
 	IonModal,
 	IonCardContent,
 	IonCardTitle,
 	IonCardSubtitle,
 	IonCardHeader,
-	IonCard, IonTitle, IonHeader, IonToolbar, IonButtons, IonContent,
+	IonCard, IonTitle, IonHeader, IonToolbar, IonButtons, IonContent, IonLoading,
 } from '@ionic/react';
-import {
-	documentsOutline as documentsIcon,
-	documentOutline as documentIcon,
-} from 'ionicons/icons';
 
 import React, { useEffect, useState } from 'react';
-import {useHistory} from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-	doGetDocuments,
 	doGetSelectedDocument
 } from '../../redux/actions/documents';
 
-import Collapsible from 'react-collapsible';
-
-import { jsPDF } from "jspdf";
-import { Page, Document, StyleSheet } from '@react-pdf/renderer';
-import ReactPDF from '@react-pdf/renderer';
+import { IonBadge } from '@ionic/react';
+import { Plugins } from '@capacitor/core';
+const { Storage } = Plugins;
 
 const uint8ArrayToString = require('uint8arrays/to-string');
 const ipfsClient = require('ipfs-http-client');
@@ -84,7 +75,29 @@ function SelectedDocument(payload: {
 				<IonCard>
 					<IonCardHeader>
 						<IonCardTitle>
-							Document Id: {selectedDocument.event.id}
+							<div className="float-left-wrapper">
+								Document Id: {selectedDocument.event.id}
+							</div>
+							<div>
+								
+								{selectedDocument.verified == true ? 
+								<IonLabel>
+									<IonBadge className="circle-container green-alert">
+										&nbsp;
+									</IonBadge>
+									<IonBadge className="none-background">
+										Verified
+									</IonBadge>
+								</IonLabel> : 
+								<IonLabel>
+									<IonBadge className="circle-container red-alert">
+										&nbsp;
+									</IonBadge>
+									<IonBadge className="none-background">
+										Not verified
+									</IonBadge>
+								</IonLabel>}
+							</div>
 						</IonCardTitle>
 						<IonCardSubtitle>
 							Valid until: {selectedDocument.data.validUntil}
@@ -104,6 +117,10 @@ function SelectedDocument(payload: {
 							<IonItem>
 								<IonLabel position="stacked">Transaction Hash</IonLabel>
 								<span>{selectedDocument.meta.transactionHash}</span>
+							</IonItem>
+							<IonItem>
+								<IonLabel position="stacked">Signature</IonLabel>
+								<span>{selectedDocument.signature}</span>
 							</IonItem>
 						</div>
 					</IonCardContent>
@@ -147,17 +164,19 @@ interface Props {
 }
 
 const DocumentsList: React.FC<Props> = ({documents, type, counterType}) => {
-	const history = useHistory();
 	const dispatch = useDispatch();
 	const documentsState = useSelector((state: any) => state.documents);
 	const {
 		selectedDocument,
+		loading
 	} = documentsState;
 	const [showModal, setShowModal] = useState(false);
-	const [showPopOver, setShowPopover] = useState(false);
 	const [showPdfViewerModal, setPdfViewerModal] = useState(false);
 	const [showAgreementsUrl, setAgreementUrl] = useState('');
-
+	const wallet = useSelector(
+		(state: { wallet: { currentWallet: any } }) => state.wallet
+	);
+	const { currentWallet } = wallet;
 	function showDocument(item: any) {
 		dispatch(doGetSelectedDocument(item));
 		setShowModal(true);
@@ -166,21 +185,6 @@ const DocumentsList: React.FC<Props> = ({documents, type, counterType}) => {
 	function closeShowDocument() {
 		dispatch(doGetSelectedDocument(null));
 		setShowModal(false);
-	}
-
-	function trigger(id: string, name: string) {
-		return (
-			<button className="document-trigger">
-				<IonIcon icon={documentsIcon} />
-				<span className="document-id">{id}</span>
-				<span>{name}</span>
-			</button>
-		);
-	}
-
-	function chooseOption(type: string) {
-		setShowPopover(false);
-		history.push('/agreements/' + type.toLowerCase());
 	}
 
 	function closePdfViewer() {
@@ -225,36 +229,45 @@ const DocumentsList: React.FC<Props> = ({documents, type, counterType}) => {
 
 	return (
 		<div>
+				<IonLoading
+					cssClass="loader-spinner"
+					mode="md"
+					isOpen={loading}
+
+				/>
 			<div className="documents-container">
+				<div className="table-header">
+					<div className="col">Transaction Hash</div>
+					<div className="col">Valid</div>
+					<div className="col">Wallet From</div>
+					<div className="col">Wallet To</div>
+					<div className="col"></div>
+				</div>
 				{documents.length
 					? documents.map((document: any, index: number) => {
 						const {data, meta, event} = document;
 						return (
-							<Collapsible
-								transitionTime={200}
-								contentInnerClassName="document-container"
-								trigger={trigger(`${event.id}`, `${event[counterType]}`)}
-								key={index}
-							>
-								<div className="document-titles">
-									<div className="document-title-wrapper">
-										<div
-											className="document-title"
-											onClick={() => {
-												showDocument({data, meta, event});
-											}}
-										>
-											<IonIcon icon={documentIcon}/>
-											{/*<span>{event.id}</span>*/}
-											<span>{event[type]}</span>
-										</div>
-										<hr/>
-									</div>
+							<div className="table-body" onClick={async () => {showDocument({data, meta, event})}}>
+								<div className="col">{meta.transactionHash.slice(0,15)}...</div>
+								<div className="col">{data.validUntil}</div>
+								<div className="col">{event.from.slice(0,15)}...</div>
+								<div className="col">{event.to.slice(0,15)}...</div>
+								<div className="col in">
+									{event.from == currentWallet?.address ?
+									<IonBadge color="secondary">
+										OUT
+									</IonBadge>
+									: 
+									<IonBadge color="primary">
+										IN
+									</IonBadge>}
 								</div>
-							</Collapsible>
+							</div>
 						);
 					})
-					: <IonTitle color="primary">No documents found</IonTitle>}
+					: null
+					}
+					{(!documents.length ? <IonTitle color="primary">No documents found</IonTitle> : null)}
 			</div>
 
 			<SelectedDocument

@@ -3,10 +3,9 @@ import {
 	IonItem,
 	IonInput,
 	IonButton,
-	IonTitle,
 	IonLoading
 } from '@ionic/react';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
 	doCreateAgreement,
@@ -31,7 +30,6 @@ const FormCounterparty: React.FC<AgreementFormProps> = ({ current }) => {
 
 	const {
 		loading,
-		error,
 		agreementFormInfo,
 		creatingAgreement
 	} = documentsState;
