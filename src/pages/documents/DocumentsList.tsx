@@ -252,8 +252,13 @@ const DocumentsList: React.FC<Props> = ({documents, type, counterType}) => {
 								<div className="col">{data.validUntil}</div>
 								<div className="col">{event.from.slice(0,15)}...</div>
 								<div className="col">{event.to.slice(0,15)}...</div>
-								<div className="col in">
-									{event.from == currentWallet?.address ?
+								<div className="col">
+									{event.pending ?
+									<IonBadge className="pending-color">
+										PENDING
+									</IonBadge>
+									:
+									event.from == currentWallet?.address ?
 									<IonBadge color="secondary">
 										OUT
 									</IonBadge>

@@ -1,3 +1,4 @@
+import { agreementsRef } from './firebase';
 import { KeyStorageModel } from 'paid-universal-wallet/dist/key-storage/KeyStorageModel';
 import { DocumentsActionTypes } from '../actionTypes/documents';
 import { BigNumber, ethers, Wallet } from 'ethers';
@@ -7,8 +8,6 @@ import { ContractFactory } from '../../utils/contractFactory';
 import { base64StringToBlob } from 'blob-util';
 import { AlgorithmType, CEASigningService, WalletManager } from 'paid-universal-wallet';
 import { eddsa } from "elliptic";
-import { doGetCurrentWallet } from './wallet';
-import { jsPDF } from "jspdf";
 // const http = require('http');
 // const html2PDF = require('jspdf-html2canvas');
 const uint8ArrayToString = require('uint8arrays/to-string')
@@ -38,7 +37,7 @@ const createAgreementFormPayload = (obj: any) => {
 		from: agreementsFrom,
 		to: agreementsTo
 	}*/
-	
+
 const getDocuments = (agreements: any[]) => {
 	const payload = {
 		from: agreements
@@ -149,7 +148,6 @@ export const doCreateAgreement = (payload: {
 		'<div style="margin-left: 20px;">Phone:' + agreementForm.counterpartyPhone + '</div>' +
 		'<div style="margin-left: 20px;">Wallet:' + agreementForm.counterpartyWallet + '</div>' +
 		'</div>';
-		console.info('content address:',content);
 		const blobContent = base64StringToBlob(btoa(content), 'application/pdf');
 		const ceass = new CEASigningService();
 		ceass.useKeyStorage(rawWallet);
@@ -168,7 +166,7 @@ export const doCreateAgreement = (payload: {
 
 		const opts = { create: true, parents: true };
 
-		let ipfsHash = await uploadsIPFS(ipfs, blobContent, opts, digest, signature, pubKey, formId, agreementForm.counterpartyAddress, null);
+		let ipfsHash = await uploadsIPFS(ipfs, blobContent, opts, digest, signature, pubKey, formId, agreementForm.counterpartyWallet, null);
 
 		console.log('ipfs hash: ' + ipfsHash.toString());
 
@@ -176,10 +174,6 @@ export const doCreateAgreement = (payload: {
 		const web3 = BlockchainFactory.getWeb3Instance(rawWallet.keypairs, rawWallet.mnemonic);
 		const agreementContract = ContractFactory.getAgreementContract(web3);
 		console.log(web3.eth.accounts.wallet);
-		// const agreementContract = await new web3.eth.Contract(AgreementJSON.abi,
-		// 	ContractFactory._contractAddress,
-		// 	{ from: address, gas: '1500000', gasPrice: '1000000000' });
-		// console.log('Crear Transacciones:',agreementContract)
 		
 		const agreementTransaction = await agreementContract.methods['partyCreate(uint256,string,bytes32,bytes,bytes)'](
 			validUntil,
@@ -205,13 +199,6 @@ export const doCreateAgreement = (payload: {
 				pdfContent.innerHTML = uint8ArrayToString(chunk);
 			}
 
-			const doc = new jsPDF('p', 'px','a4');
-			doc.html(pdfContent, {
-				callback: function () {
-					doc.save('Agreement-' + receipt.transactionHash.replace('0x','').substring(0,10) + '.pdf');
-				}
-			});
-
 			dispatch(createAgreement());
 			slideNext();
 		})
@@ -221,56 +208,8 @@ export const doCreateAgreement = (payload: {
 			alert('Transaction failed');
 			throw new Error('Transaction failed');
 		});
-		
+
 		console.info('agreementTransaction:',agreementTransaction);
-		/*
-		const contract = ContractFactory.getAgreementContract(ethersWallet.wallet);
-		const balance = await ethersWallet.wallet.provider.getBalance(
-			ethersWallet.wallet.address
-		);
-
-		const parsedBalance = BigNumber.from(balance);
-		if (parsedBalance.lte(0)) {
-			throw new Error('The wallet should has balance to send a transaction.');
-		}
-
-		const options = { gasPrice: 1000000000, gasLimit: 85000 };*/
-		/*const gasPrice = await contract.estimateGas.partyCreate(
-			validUntil,
-			ipfsHash.toString(),
-			formId,
-			form,
-			'0x' + digest,
-			options
-		);*/
-
-		/*const agreementTransaction: ContractTransaction = await contract.partyCreate(
-			validUntil,
-			ipfsHash.toString(),
-			formId,
-			form,
-			'0x' + digest,
-			options
-		);
-
-		agreementTransaction.gasPrice = BigNumber.from(options.gasPrice);
-		
-		///---------------------------------------------------------------------------------------------------
-
-		new Promise(async (resolve) => {
-			await agreementTransaction.wait().then((receipt) => {
-				console.log('Transaction receipt', receipt);
-				if (receipt.status === 1) {
-					dispatch(createAgreement());
-					slideNext();
-					resolve();
-				} else {
-					slideBack();
-					alert('Transaction failed');
-					throw new Error('Transaction failed');
-				}
-			});
-		});*/
 	} catch (err) {
 		await payload.slideBack();
 		alert(err.message);
@@ -317,54 +256,21 @@ export const doGetDocuments = (currentWallet: any) => async (
 
 		const agreementContract = ContractFactory.getAgreementContract(web3);
 		const address_Contract = agreementContract.options.address;
-		// console.log('Address of the Contract',address_Contract,'Load Agreements:',agreementContract);
 		console.log('Address Wallet Events:', address, 'web3 accounts wallet', web3.eth.accounts.wallet);
-		const events = await agreementContract.getPastEvents('AgreementPartyCreated', {
-			filter: { partySource: address, partyDestination: address },
-			fromBlock: 0,
+
+		const eventsSource = await agreementContract.getPastEvents('AgreementPartyCreated', {
+			filter: { partySource: address.toString() },
+			fromBlock: 7600000,
 			toBlock: 'latest'
 		});
-
-
-		// .on("connected", function(subscriptionId:any){
-		// 	console.log('Connected:',subscriptionId);
-		// })
-		// .on('data', function(event:any){
-		// 	console.log('Data:',event); // same results as the optional callback above
-		// })
-		// .on('changed', function(event:any){
-		// 	console.info('Changed:',event);// remove event from local database
-		// })
-		// .on('error', function(error:any, receipt:any) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
-		// 	console.error('Error Function:',error);
-		// 	console.log('Receipt:',receipt);
-		// });
-		/*('AgreementPartyCreated', { 
-				filter: { partySource: [accounts[0]] },
-				fromBlock: 0, 
-				toBlock: 'latest'
-			}, function(error: any, events: any){ 
-				console.log(events); })*/
-			/*.then(function(events: any){
-				console.log(events) // same results as the optional callback above
-			});*/
-		/*
-		const contract = ContractFactory.getAgreementContract(ethersWallet);
-		const filterFrom = contract.filters.AgreementCreated(
-			null,
-			null,
-			ethersWallet.address
-		);
-		const filterTo = contract.filters.AgreementCreated(
-			null,
-			null,
-			null,
-			ethersWallet.address
-		);
-
-		const eventsFrom = await contract.queryFilter(filterFrom);
-		const eventsTo = await contract.queryFilter(filterTo);*/
-		const promises = events.map(async (event) => {
+		console.table(eventsSource);
+		const eventsDestination = await agreementContract.getPastEvents('AgreementPartyCreated', {
+			filter: { partyDestination: address.toString() },
+			fromBlock: 7600000,
+			toBlock: 'latest'
+		});
+		console.table(eventsDestination);
+		const promisesFrom = eventsSource.map(async (event) => {
 			const args = event.returnValues;
 			const {
 				logIndex,
@@ -408,6 +314,54 @@ export const doGetDocuments = (currentWallet: any) => async (
 						from: partySource,
 						to:jsonContent.cpartyAddress,
 						agreementFormTemplateId: formTemplateId,
+						cid: agreementStoredReference,
+						pending: partyDestination.substring(0, 7) === '0x00000'
+					},
+					data: {
+						agreementForm,
+						escrowed,
+						validUntil: (validUntil as BigNumber).toString(),
+						toSigner: toSigner.signatory,
+						fromSigner: fromSigner.signatory
+					}
+				});
+			});
+		});
+		const promisesTo = eventsDestination.map((event) => {
+			const args = event.returnValues;
+			const {
+				logIndex,
+				transactionIndex,
+				transactionHash,
+				blockHash,
+				blockNumber,
+				address
+			} = event;
+			const { id, partySource, partyDestination, formTemplateId, agreementStoredReference } = args;
+			const agreementId = (id as BigNumber).toString();
+			return new Promise(async (resolve) => {
+				const agreement = await agreementContract.methods.agreements(id).call();
+				const {
+					agreementForm,
+					escrowed,
+					validUntil,
+					toSigner,
+					fromSigner
+				} = agreement;
+				resolve({
+					meta: {
+						logIndex,
+						transactionIndex,
+						transactionHash,
+						blockHash,
+						blockNumber,
+						address
+					},
+					event: {
+						id: agreementId,
+						from: partySource,
+						to:partyDestination,
+						agreementFormTemplateId: formTemplateId,
 						cid: agreementStoredReference
 					},
 					data: {
@@ -420,183 +374,9 @@ export const doGetDocuments = (currentWallet: any) => async (
 				});
 			});
 		});
-		/*const promisesFrom = eventsFrom.map((event) => {
-			const { args } = contract.interface.parseLog(event);
-
-			const {
-				logIndex,
-				transactionIndex,
-				transactionHash,
-				blockHash,
-				blockNumber,
-				address
-			} = event;
-			const { id, from, to, agreementFormTemplateId } = args;
-			const agreementId = (id as BigNumber).toString();
-			return new Promise(async (resolve) => {
-				const agreement = await contract.agreements(id);
-				const {
-					agreementForm,
-					escrowed,
-					validUntil,
-					toSigner,
-					fromSigner
-				} = agreement;
-				resolve({
-					meta: {
-						logIndex,
-						transactionIndex,
-						transactionHash,
-						blockHash,
-						blockNumber,
-						address
-					},
-					event: {
-						id: agreementId,
-						from,
-						to,
-						agreementFormTemplateId
-					},
-					data: {
-						agreementForm,
-						escrowed,
-						validUntil: (validUntil as BigNumber).toString(),
-						toSigner: toSigner.signatory,
-						fromSigner: fromSigner.signatory
-					}
-				});
-			});
-		});
-		const promisesTo = eventsTo.map((event) => {
-			const { args } = contract.interface.parseLog(event);
-
-			const {
-				logIndex,
-				transactionIndex,
-				transactionHash,
-				blockHash,
-				blockNumber,
-				address
-			} = event;
-			const { id, from, to, agreementFormTemplateId } = args;
-			const agreementId = (id as BigNumber).toString();
-			return new Promise(async (resolve) => {
-				const agreement = await contract.agreements(id);
-				const {
-					agreementForm,
-					escrowed,
-					validUntil,
-					toSigner,
-					fromSigner
-				} = agreement;
-				resolve({
-					meta: {
-						logIndex,
-						transactionIndex,
-						transactionHash,
-						blockHash,
-						blockNumber,
-						address
-					},
-					event: {
-						id: agreementId,
-						from,
-						to,
-						agreementFormTemplateId
-					},
-					data: {
-						agreementForm,
-						escrowed,
-						validUntil: (validUntil as BigNumber).toString(),
-						toSigner: toSigner.signatory,
-						fromSigner: fromSigner.signatory
-					}
-				});
-			});
-		});
-
-		const agreementsFrom = await Promise.all(promisesFrom);
-		const agreementsTo = await Promise.all(promisesTo);
-		*/
-		// const agreementsFrom : any = [];
-		// agreementsFrom.push({
-		// 	meta: {
-		// 		logIndex:'1',
-		// 		transactionIndex:'2',
-		// 		transactionHash:'0x180d4s6s8ds6d4e6e4t6ee5dd6ey46j48',
-		// 		blockHash:'4',
-		// 		cid: 'QmPSe6J67nWcReBaa435AYEVByVv3VjyUQ2tjhnZAfW8Bv',
-		// 		blockNumber:'5',
-		// 		address:'6'
-		// 	},
-		// 	event: {
-		// 		id: '700',
-		// 		from:ethersWallet.wallet.address,
-		// 		to:'0x9s4d5a6d4w6r4c7c89s61d31a3d22s',
-		// 		agreementFormTemplateId:'10'
-		// 	},
-		// 	data: {
-		// 		agreementForm:'11',
-		// 		escrowed:'12',
-		// 		validUntil: '13',
-		// 		toSigner: '14',
-		// 		fromSigner: '15'
-		// 	}
-		// });
-		// agreementsFrom.push({
-		// 	meta: {
-		// 		logIndex:'16',
-		// 		transactionIndex:'17',
-		// 		transactionHash:'0x180d4s66d4s6d4e6e4t6d5s4d6ey46j48',
-		// 		blockHash:'19',
-		// 		cid: 'QmPSe6J67nWcReBaa435AYEVByVv3VjyUQ2tjhnZAfW8Bv',
-		// 		blockNumber:'20',
-		// 		address:'21'
-		// 	},
-		// 	event: {
-		// 		id: '220',
-		// 		from:ethersWallet.wallet.address,
-		// 		to:'0x24d5d66s4d5d4w6r6we5c4d5s46df464s',
-		// 		agreementFormTemplateId:'25'
-		// 	},
-		// 	data: {
-		// 		agreementForm:'26',
-		// 		escrowed:'27',
-		// 		validUntil: '28',
-		// 		toSigner: '29',
-		// 		fromSigner: '30'
-		// 	}
-		// });
-		// const agreementsTo : any = [];
-
-		// agreementsTo.push({
-		// 	meta: {
-		// 		logIndex:'31',
-		// 		transactionIndex:'32',
-		// 		transactionHash:'0x180d4s66d4s6dde6eww33e33d7f6ey46j48',
-		// 		blockHash:'34',
-		// 		cid: 'QmPSe6J67nWcReBaa435AYEVByVv3VjyUQ2tjhnZAfW8Bv',
-		// 		blockNumber:'35',
-		// 		address:'36',
-
-		// 	},
-		// 	event: {
-		// 		id: '37',
-		// 		from:'0x23d45ds64e4r6e4s6d4bb6h646ds4d5es',
-		// 		to:ethersWallet.wallet.address,
-		// 		agreementFormTemplateId:'40'
-		// 	},
-		// 	data: {
-		// 		agreementForm:'41',
-		// 		escrowed:'42',
-		// 		validUntil: '43',
-		// 		toSigner: '44',
-		// 		fromSigner: '45'
-		// 	}
-		// });
-
-		// console.log('agreements', agreementsFrom);
-		const agreements = await Promise.all(promises);
+		const agreementsSource = await Promise.all(promisesFrom);
+		const agreementsDestination = await Promise.all(promisesTo);
+		const agreements= agreementsDestination.concat(agreementsSource);
 		console.log('agreements', agreements);
 
 		dispatch(getDocuments(agreements));
