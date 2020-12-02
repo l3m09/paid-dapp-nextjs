@@ -1,15 +1,11 @@
-import { agreementsRef } from './firebase';
 import { KeyStorageModel } from 'paid-universal-wallet/dist/key-storage/KeyStorageModel';
 import { DocumentsActionTypes } from '../actionTypes/documents';
 import { BigNumber, ethers, Wallet } from 'ethers';
-// import { Contract } from 'web3-eth-contract';
 import { BlockchainFactory } from '../../utils/blockchainFactory';
 import { ContractFactory } from '../../utils/contractFactory';
 import { base64StringToBlob } from 'blob-util';
 import { AlgorithmType, CEASigningService, WalletManager } from 'paid-universal-wallet';
 import { eddsa } from "elliptic";
-// const http = require('http');
-// const html2PDF = require('jspdf-html2canvas');
 const uint8ArrayToString = require('uint8arrays/to-string')
 const ipfsClient = require('ipfs-http-client');
 const ipfs = ipfsClient({ host: 'ipfs.infura.io', port: '5001', protocol: 'https', apiPath: '/api/v0' });
@@ -32,11 +28,6 @@ const createAgreementFormPayload = (obj: any) => {
 	});
 	return ethers.utils.defaultAbiCoder.encode(types, values);
 };
-/*const getDocuments = (agreements: any[], agreementsFrom: any[], agreementsTo: any[]) => {
-	const payload = {
-		from: agreementsFrom,
-		to: agreementsTo
-	}*/
 
 const getDocuments = (agreements: any[]) => {
 	const payload = {
@@ -47,16 +38,6 @@ const getDocuments = (agreements: any[]) => {
 		payload
 	};
 };
-// const getDocuments = (agreementsFrom: any[], agreementsTo: any[]) => {
-// 	const payload = {
-// 		from: agreementsFrom,
-// 		to: agreementsTo
-// 	}
-// 	return {
-// 		type: DocumentsActionTypes.GET_DOCUMENTS_SUCCESS,
-// 		payload
-// 	};
-// };
 const uploadDocuments = () => {
 	return {
 		type: DocumentsActionTypes.UPLOAD_DOCUMENTS_SUCCESS
