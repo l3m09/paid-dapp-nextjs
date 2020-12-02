@@ -8,6 +8,7 @@ import { base64StringToBlob } from 'blob-util';
 import { AlgorithmType, CEASigningService, WalletManager } from 'paid-universal-wallet';
 import { eddsa } from "elliptic";
 import { doGetCurrentWallet } from './wallet';
+import { jsPDF } from "jspdf";
 // const http = require('http');
 // const html2PDF = require('jspdf-html2canvas');
 const uint8ArrayToString = require('uint8arrays/to-string')
@@ -38,7 +39,10 @@ const createAgreementFormPayload = (obj: any) => {
 		to: agreementsTo
 	}*/
 	
-const getDocuments = (payload: any[]) => {
+const getDocuments = (agreements: any[]) => {
+	const payload = {
+		from: agreements
+	}
 	return {
 		type: DocumentsActionTypes.GET_DOCUMENTS_SUCCESS,
 		payload
@@ -206,19 +210,6 @@ export const doCreateAgreement = (payload: {
 					doc.save('Agreement-' + receipt.transactionHash.replace('0x','').substring(0,10) + '.pdf');
 				}
 			});
-
-			const fetchedPubKey = jsonContent.publicKey;
-
-			const ec_bob = new eddsa('ed25519');
-
-			const key = ec_bob.keyFromPublic(fetchedPubKey);
-			const sigRef = jsonContent.sigRef;
-			let sigDocument = '';
-			for await (const chunk of ipfs.cat(sigRef.cid)) {
-				sigDocument = uint8ArrayToString(chunk);
-			}
-
-			console.log(key.verify(jsonContent.digest, sigDocument));
 
 			dispatch(createAgreement());
 			slideNext();
