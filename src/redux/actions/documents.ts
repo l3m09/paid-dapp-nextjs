@@ -108,8 +108,18 @@ export const doCreateAgreement = (payload: {
 		const manager = BlockchainFactory.getWalletManager();
 		const storage = manager.getKeyStorage();
 		const rawWallet = await storage.find<KeyStorageModel>(unlockedWallet._id);
-
 		const address = manager.getWalletAddress(rawWallet.mnemonic);
+
+
+		const web3 = BlockchainFactory.getWeb3Instance(rawWallet.keypairs, rawWallet.mnemonic);
+		const balancewei = await web3.eth.getBalance(address);
+		const balance = web3.utils.fromWei(balancewei);
+
+		const parsedBalance = BigNumber.from(balance);
+		if (parsedBalance.lte(0)) {
+			throw new Error('The wallet should has balance to send a transaction.');
+		}
+
 		console.log('Current_Wallet_Documents', address,'agreementForm', agreementForm);
 
 		// ALICE SIDE
@@ -152,7 +162,6 @@ export const doCreateAgreement = (payload: {
 		console.log('ipfs hash: ' + ipfsHash.toString());
 
 		// Transaction for Created Agreements
-		const web3 = BlockchainFactory.getWeb3Instance(rawWallet.keypairs, rawWallet.mnemonic);
 		const agreementContract = ContractFactory.getAgreementContract(web3);
 		console.log(web3.eth.accounts.wallet);
 		
@@ -167,18 +176,6 @@ export const doCreateAgreement = (payload: {
 
 			// BOB SIDE
 			console.log('receipt of agreements Transaction:', receipt);
-
-			let fetchedContent = '';
-			for await (const chunk of ipfs.cat(ipfsHash.toString())) {
-				fetchedContent = uint8ArrayToString(chunk);
-			}
-			const jsonContent = JSON.parse(fetchedContent);
-			const contentRef = jsonContent.contentRef;
-			let pdfContent:HTMLElement = document.createElement("html");
-
-			for await (const chunk of ipfs.cat(contentRef.cid)) {
-				pdfContent.innerHTML = uint8ArrayToString(chunk);
-			}
 
 			dispatch(createAgreement());
 			slideNext();
@@ -293,7 +290,7 @@ export const doGetDocuments = (currentWallet: any) => async (
 					event: {
 						id: agreementId,
 						from: partySource,
-						to:jsonContent.cpartyAddress,
+						to:jsonContent.cpartyAddress ?? '',
 						agreementFormTemplateId: formTemplateId,
 						cid: agreementStoredReference,
 						pending: partyDestination.substring(0, 7) === '0x00000'

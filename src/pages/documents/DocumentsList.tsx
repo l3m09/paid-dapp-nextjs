@@ -206,24 +206,6 @@ const DocumentsList: React.FC<Props> = ({documents, type, counterType}) => {
 			pdfContent.innerHTML = uint8ArrayToString(chunk);
 		}
 		console.info(pdfContent);
-
-		// ReactPDF.render(
-		// 	<Document>
-		// 	  <Page>
-		// 	  	<h2>Texto de prueba</h2>
-		// 	  </Page>
-		// 	</Document>,`${__dirname}/agreeement-${transactionHash.replace('0x','').substring(0,10)}.pdf`);
-
-		// let doc = new jsPDF('p','pt','a4',true);
-		// doc.setDisplayMode('100%', 'single', 'FullScreen');
-		// doc.html(pdfContent, {
-		// 	callback: function () {
-		// 		doc.save('agreeementAL-' + transactionHash.replace('0x','').substring(0,10) + '.pdf');
-		// 		window.open(doc.output('bloburl').toString()); 
-		// 	},
-		// 	x:30,
-		// 	y:30
-		// });
 		console.log('showPdfViewerModal', showPdfViewerModal);
 	}
 
@@ -254,7 +236,7 @@ const DocumentsList: React.FC<Props> = ({documents, type, counterType}) => {
 								<div className="col">{event.to.slice(0,15)}...</div>
 								<div className="col">
 									{event.pending ?
-									<IonBadge className="pending-color">
+									<IonBadge className="pending-container">
 										PENDING
 									</IonBadge>
 									:
