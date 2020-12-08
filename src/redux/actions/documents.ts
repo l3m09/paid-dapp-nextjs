@@ -6,8 +6,17 @@ import { ContractFactory } from '../../utils/contractFactory';
 import { base64StringToBlob } from 'blob-util';
 import { AlgorithmType, CEASigningService, WalletManager } from 'paid-universal-wallet';
 import { eddsa } from "elliptic";
+import { SolidoContract, SolidoProvider, SolidoModule, IMethodOrEventCall, Read, Write, EventFilterOptions, GetEvents } from '@decent-bet/solido';
+import { Web3Plugin, Web3Settings, Web3SolidoTopic } from '@decent-bet/solido-provider-web3';
+import { AgreementContract } from './../../contracts/agreement';
+import Web3 from 'web3';
+
+
 const uint8ArrayToString = require('uint8arrays/to-string')
 const ipfsClient = require('ipfs-http-client');
+const Web3 = require('web3');
+
+// TODO: Fix
 const ipfs = ipfsClient({ host: 'ipfs.infura.io', port: '5001', protocol: 'https', apiPath: '/api/v0' });
 
 //const { compile } = require('./compile');
@@ -74,7 +83,38 @@ get the network
 get smart contract
 get meme hash
 */
+export const setupSolido = (
+	defaultAccount: string,
+	network: string,
+	web3: Web3,
+) => {
+	const module = new SolidoModule([
+		{
+			name: 'AgreementContract',
+			import: AgreementContract,
+			enableDynamicStubs: true,
+			provider: Web3Plugin
+		}
+	]);
 
+	// Bind contracts
+	const contracts = module.bindContracts({
+		'web3': {
+			provider: web3,
+			options: {
+				web3,
+				defaultAccount,
+				network
+			}
+		}
+	}).connect();
+
+
+	return {
+		...contracts
+	};
+
+}
 
 export const doCreateAgreement = (payload: {
 	signatoryA: string;
@@ -95,8 +135,9 @@ export const doCreateAgreement = (payload: {
 			slideBack
 		} = payload;
 
-
+		// form id
 		const formId = ethers.utils.formatBytes32String(agreementFormTemplateId);
+		// form
 		const form = createAgreementFormPayload(agreementForm);
 
 		const { wallet } = getState();
@@ -108,11 +149,21 @@ export const doCreateAgreement = (payload: {
 		const manager = BlockchainFactory.getWalletManager();
 		const storage = manager.getKeyStorage();
 		const rawWallet = await storage.find<KeyStorageModel>(unlockedWallet._id);
-		const address = manager.getWalletAddress(rawWallet.mnemonic);
+		const onchainWalletAddress = window.ethereum.selectedAddress;
 
 
-		const web3 = BlockchainFactory.getWeb3Instance(rawWallet.keypairs, rawWallet.mnemonic);
-		const balancewei = await web3.eth.getBalance(address);
+		// Solido Contract Bootstrap
+		await window.ethereum.enable();
+		const web3 = window.ethereum;
+		const contracts = await setupSolido(
+			window.ethereum.selectedAddress,
+			window.ethereum.network,
+			window.ethereum
+		);
+		const AgreementContract = contracts.AgreementContract as Web3Plugin | SolidoContract;
+
+		// TODO: Encapsulate
+		const balancewei = await web3.eth.getBalance(onchainWalletAddress);
 		const balance = web3.utils.fromWei(balancewei);
 
 		const parsedBalance = BigNumber.from(balance);
@@ -120,78 +171,72 @@ export const doCreateAgreement = (payload: {
 			throw new Error('The wallet should has balance to send a transaction.');
 		}
 
-		console.log('Current_Wallet_Documents', address,'agreementForm', agreementForm);
 
-		// ALICE SIDE
+		// TODO: Mejorar!!!
 		const today = new Date();
 
-		const content = '<div>'+
-		'<div>Date: ' + today.toLocaleDateString() + ' ' + today.toLocaleTimeString()+ ' </div>' +
-		'Agreement creator:<br/>' +
-		'<div style="margin-left: 20px;">Name:' + agreementForm.name + '</div>' +
-		'<div style="margin-left: 20px;">Address:' + agreementForm.address + '</div>' +
-		'<div style="margin-left: 20px;">Phone:' + agreementForm.phone + '</div>' +
-		'<div style="margin-left: 20px;">Wallet:' + address + '</div>' +
-		'<div>---------------------------------------</div>' +
-		'Agreement counterparty:<br/>' +
-		'<div style="margin-left: 20px;">Name:' + agreementForm.counterpartyName + '</div>' +
-		'<div style="margin-left: 20px;">Address:' + agreementForm.counterpartyAddress + '</div>' +
-		'<div style="margin-left: 20px;">Phone:' + agreementForm.counterpartyPhone + '</div>' +
-		'<div style="margin-left: 20px;">Wallet:' + agreementForm.counterpartyWallet + '</div>' +
-		'</div>';
+		const content = '<div>' +
+			'<div>Date: ' + today.toLocaleDateString() + ' ' + today.toLocaleTimeString() + ' </div>' +
+			'Agreement creator:<br/>' +
+			'<div style="margin-left: 20px;">Name:' + agreementForm.name + '</div>' +
+			'<div style="margin-left: 20px;">Address:' + agreementForm.address + '</div>' +
+			'<div style="margin-left: 20px;">Phone:' + agreementForm.phone + '</div>' +
+			'<div style="margin-left: 20px;">Wallet:' + onchainWalletAddress + '</div>' +
+			'<div>---------------------------------------</div>' +
+			'Agreement counterparty:<br/>' +
+			'<div style="margin-left: 20px;">Name:' + agreementForm.counterpartyName + '</div>' +
+			'<div style="margin-left: 20px;">Address:' + agreementForm.counterpartyAddress + '</div>' +
+			'<div style="margin-left: 20px;">Phone:' + agreementForm.counterpartyPhone + '</div>' +
+			'<div style="margin-left: 20px;">Wallet:' + agreementForm.counterpartyWallet + '</div>' +
+			'</div>';
 		const blobContent = base64StringToBlob(btoa(content), 'application/pdf');
+
+		// TODO: Encapsulate -------------------------------
 		const ceass = new CEASigningService();
 		ceass.useKeyStorage(rawWallet);
-
 		const arrayContent = btoa(content);
 		const bytesContent = ethers.utils.toUtf8Bytes(arrayContent);
 		const digest = ethers.utils.sha256(bytesContent).replace('0x', '');
 		const ec_alice = new eddsa('ed25519');
-
 		const signer = ec_alice.keyFromSecret(rawWallet.keypairs.ED25519);
 		const signature = signer
 			.sign(digest)
 			.toHex();
-
 		const pubKey = signer.getPublic();
-
 		const opts = { create: true, parents: true };
-
 		let ipfsHash = await uploadsIPFS(ipfs, blobContent, opts, digest, signature, pubKey, formId, agreementForm.counterpartyWallet, null);
+		// -----------------------------------------------------
 
-		console.log('ipfs hash: ' + ipfsHash.toString());
-
-		// Transaction for Created Agreements
-		const agreementContract = ContractFactory.getAgreementContract(web3);
-		console.log(web3.eth.accounts.wallet);
-		
-		const agreementTransaction = await agreementContract.methods['partyCreate(uint256,string,bytes32,bytes,bytes)'](
+		// Estimate gas,  TODO encapsulate 
+		const methodFn = AgreementContract.instance.methods.partyCreate(
 			validUntil,
 			ipfsHash.toString(),
 			formId,
 			form,
-			'0x' + digest)
-		.send({ from: address,  gas: '1500000', gasPrice: '1000000000'})
-		.on('receipt', async function(receipt: any){
+			'0x' + digest);
 
-			// BOB SIDE
-			console.log('receipt of agreements Transaction:', receipt);
+		const gas = await
+		    methodFn 
+			.estimateGas();
 
-			dispatch(createAgreement());
-			slideNext();
-		})
-		.on('error', function(error: any, receipt: any) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.		
-			slideBack();
-			console.log(error, error.message, 'receipt:', receipt);
-			alert('Transaction failed');
-			throw new Error('Transaction failed');
-		});
+		const agreementTransaction = await 
+		     methodFn
+			.send({  gas, gasPrice: 50e9 })
+			.on('receipt', async function (receipt: any) {
+				dispatch(createAgreement());
+				slideNext();
+			})
+			.on('error', function (error: any, receipt: any) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.		
+				slideBack();
+				alert('Transaction failed');
+				throw new Error('Transaction failed');
+			});
 
-		console.info('agreementTransaction:',agreementTransaction);
+		console.info('agreementTransaction:', agreementTransaction);
 	} catch (err) {
 		await payload.slideBack();
 		alert(err.message);
-		console.log('ln284',err);
+		console.log('ln284', err);
 		dispatch({
 			type: DocumentsActionTypes.CREATE_AGREEMENT_FAILURE,
 			payload: err.msg
@@ -199,7 +244,7 @@ export const doCreateAgreement = (payload: {
 	}
 };
 
-export const uploadsIPFS = async (ipfs: any, blobContent: any, opts: any, 
+export const uploadsIPFS = async (ipfs: any, blobContent: any, opts: any,
 	_digest: string, sigArray: any, pubKey: any, _docId: any, counterpartyAddress: string, parent: any = null) => {
 	const createCIDHash = (fileEntry: any) => {
 		return { path: fileEntry.path, cid: fileEntry.cid.toString() }
@@ -207,8 +252,10 @@ export const uploadsIPFS = async (ipfs: any, blobContent: any, opts: any,
 
 	const fileContent = await ipfs.add(blobContent);
 	const fileSignature = await ipfs.add(sigArray);
-	const index = { contentRef: createCIDHash(fileContent), sigRef: createCIDHash(fileSignature), digest: _digest, 
-		publicKey: pubKey, parent: parent, docId: _docId, cpartyAddress: counterpartyAddress };
+	const index = {
+		contentRef: createCIDHash(fileContent), sigRef: createCIDHash(fileSignature), digest: _digest,
+		publicKey: pubKey, parent: parent, docId: _docId, cpartyAddress: counterpartyAddress
+	};
 
 	const fileIndex = await ipfs.add(JSON.stringify(index));
 	return fileIndex.cid;
@@ -230,7 +277,7 @@ export const doGetDocuments = (currentWallet: any) => async (
 		const manager = BlockchainFactory.getWalletManager();
 		const storage = manager.getKeyStorage();
 		const rawWallet = await storage.find<KeyStorageModel>(unlockedWallet._id);
-		const web3 = BlockchainFactory.getWeb3Instance(rawWallet.keypairs,rawWallet.mnemonic);
+		const web3 = BlockchainFactory.getWeb3Instance(rawWallet.keypairs, rawWallet.mnemonic);
 
 		const agreementContract = ContractFactory.getAgreementContract(web3);
 		const address_Contract = agreementContract.options.address;
@@ -267,7 +314,7 @@ export const doGetDocuments = (currentWallet: any) => async (
 			}
 
 			const jsonContent = JSON.parse(fetchedContent);
-			
+
 			return new Promise(async (resolve) => {
 				const agreement = await agreementContract.methods.agreements(id).call();
 				const {
@@ -290,7 +337,7 @@ export const doGetDocuments = (currentWallet: any) => async (
 					event: {
 						id: agreementId,
 						from: partySource,
-						to:jsonContent.cpartyAddress ?? '',
+						to: jsonContent.cpartyAddress ?? '',
 						agreementFormTemplateId: formTemplateId,
 						cid: agreementStoredReference,
 						pending: partyDestination.substring(0, 7) === '0x00000'
@@ -338,7 +385,7 @@ export const doGetDocuments = (currentWallet: any) => async (
 					event: {
 						id: agreementId,
 						from: partySource,
-						to:partyDestination,
+						to: partyDestination,
 						agreementFormTemplateId: formTemplateId,
 						cid: agreementStoredReference
 					},
@@ -354,12 +401,12 @@ export const doGetDocuments = (currentWallet: any) => async (
 		});
 		const agreementsSource = await Promise.all(promisesFrom);
 		const agreementsDestination = await Promise.all(promisesTo);
-		const agreements= agreementsDestination.concat(agreementsSource);
+		const agreements = agreementsDestination.concat(agreementsSource);
 		console.log('agreements', agreements);
 
 		dispatch(getDocuments(agreements));
 	} catch (err) {
-		console.log('ln564',err);
+		console.log('ln564', err);
 		dispatch({
 			type: DocumentsActionTypes.GET_DOCUMENTS_FAILURE,
 			payload: err.msg
@@ -393,7 +440,7 @@ export const doUploadDocuments = (file: any) => async (dispatch: any) => {
 export const doGetSelectedDocument = (document: any) => async (dispatch: any) => {
 	dispatch({ type: DocumentsActionTypes.GET_SELECTED_DOCUMENT_LOADING });
 	let fetchedContent = '';
-	if(document){
+	if (document) {
 		for await (const chunk of ipfs.cat(document.event.cid.toString())) {
 			fetchedContent = uint8ArrayToString(chunk);
 		}
@@ -405,7 +452,7 @@ export const doGetSelectedDocument = (document: any) => async (dispatch: any) =>
 			signatureContent = uint8ArrayToString(chunk);
 		}
 
-		document.signature = signatureContent.substr(0,20) + '...' + 
+		document.signature = signatureContent.substr(0, 20) + '...' +
 			signatureContent.substr(signatureContent.length - 20);
 
 		// verify signature
@@ -419,7 +466,7 @@ export const doGetSelectedDocument = (document: any) => async (dispatch: any) =>
 		for await (const chunk of ipfs.cat(sigRef.cid)) {
 			sigDocument = uint8ArrayToString(chunk);
 		}
-		
+
 		document.verified = key.verify(jsonContent.digest, sigDocument);
 		console.log(document.signature);
 	}
