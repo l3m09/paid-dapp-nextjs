@@ -1,20 +1,20 @@
 import { KeyStorageModel } from 'paid-universal-wallet/dist/key-storage/KeyStorageModel';
 import { DocumentsActionTypes } from '../actionTypes/documents';
-import { BigNumber, ethers, Wallet } from 'ethers';
+import { BigNumber as BN ,ethers, Wallet } from 'ethers';
 import { BlockchainFactory } from '../../utils/blockchainFactory';
 import { ContractFactory } from '../../utils/contractFactory';
 import { base64StringToBlob } from 'blob-util';
 import { AlgorithmType, CEASigningService, WalletManager } from 'paid-universal-wallet';
 import { eddsa } from "elliptic";
 import { SolidoContract, SolidoProvider, SolidoModule, IMethodOrEventCall, Read, Write, EventFilterOptions, GetEvents } from '@decent-bet/solido';
-import { Web3Plugin, Web3Settings, Web3SolidoTopic } from '@decent-bet/solido-provider-web3';
+import { Web3Plugin, Web3Settings, Web3SolidoTopic } from 'solido-provider-web3';
 import { AgreementContract } from './../../contracts/agreement';
 import Web3 from 'web3';
+import { templateRender } from './template/template';
 
-
-const uint8ArrayToString = require('uint8arrays/to-string')
+const uint8ArrayToString = require('uint8arrays/to-string');
+const BigNumber = require('bignumber.js');
 const ipfsClient = require('ipfs-http-client');
-const Web3 = require('web3');
 
 // TODO: Fix
 const ipfs = ipfsClient({ host: 'ipfs.infura.io', port: '5001', protocol: 'https', apiPath: '/api/v0' });
@@ -151,50 +151,39 @@ export const doCreateAgreement = (payload: {
 		const rawWallet = await storage.find<KeyStorageModel>(unlockedWallet._id);
 		const onchainWalletAddress = window.ethereum.selectedAddress;
 
+		const address = manager.getWalletAddress(rawWallet.mnemonic);
+		const web3 = BlockchainFactory.getWeb3Instance(rawWallet.keypairs, rawWallet.mnemonic);
+		const balancewei = await web3.eth.getBalance(address);
 
-		// Solido Contract Bootstrap
-		await window.ethereum.enable();
-		const web3 = window.ethereum;
-		const contracts = await setupSolido(
-			window.ethereum.selectedAddress,
-			window.ethereum.network,
-			window.ethereum
-		);
-		const AgreementContract = contracts.AgreementContract as Web3Plugin | SolidoContract;
-
-		// TODO: Encapsulate
-		const balancewei = await web3.eth.getBalance(onchainWalletAddress);
-		const balance = web3.utils.fromWei(balancewei);
-
-		const parsedBalance = BigNumber.from(balance);
-		if (parsedBalance.lte(0)) {
-			throw new Error('The wallet should has balance to send a transaction.');
-		}
-
-
-		// TODO: Mejorar!!!
 		const today = new Date();
+		const template = templateRender({ 
+			party_name: agreementForm.name, 
+			party_wallet: address,
+			party_address: agreementForm.address,
+			counterparty_name: agreementForm.counterpartyName,
+			counterparty_wallet: agreementForm.counterpartyWallet,
+			counterparty_address: agreementForm.counterpartyAddress,
+			create_date: today.toLocaleDateString() 
+		});
+		let balance:string;
+		await web3.eth.getBalance(address).then((balancewei) =>{
+			balance = web3.utils.fromWei(balancewei);
+			const parsedBalance = BigNumber(balance);
+			console.log(parsedBalance);
+			if ((parsedBalance.c[0] <= 0) && (parsedBalance.c[1] <= 9999999999)) {
+				throw new Error('The wallet should has balance to send a transaction.');
+			}
+			console.log('Current_Wallet_Documents', address,'agreementForm', agreementForm);
+		})
 
-		const content = '<div>' +
-			'<div>Date: ' + today.toLocaleDateString() + ' ' + today.toLocaleTimeString() + ' </div>' +
-			'Agreement creator:<br/>' +
-			'<div style="margin-left: 20px;">Name:' + agreementForm.name + '</div>' +
-			'<div style="margin-left: 20px;">Address:' + agreementForm.address + '</div>' +
-			'<div style="margin-left: 20px;">Phone:' + agreementForm.phone + '</div>' +
-			'<div style="margin-left: 20px;">Wallet:' + onchainWalletAddress + '</div>' +
-			'<div>---------------------------------------</div>' +
-			'Agreement counterparty:<br/>' +
-			'<div style="margin-left: 20px;">Name:' + agreementForm.counterpartyName + '</div>' +
-			'<div style="margin-left: 20px;">Address:' + agreementForm.counterpartyAddress + '</div>' +
-			'<div style="margin-left: 20px;">Phone:' + agreementForm.counterpartyPhone + '</div>' +
-			'<div style="margin-left: 20px;">Wallet:' + agreementForm.counterpartyWallet + '</div>' +
-			'</div>';
-		const blobContent = base64StringToBlob(btoa(content), 'application/pdf');
-
-		// TODO: Encapsulate -------------------------------
+		console.log('Current_Wallet_Documents', address,'agreementForm', agreementForm);
+		// ALICE SIDE
+		const content = template();
+		const blobContent = base64StringToBlob(btoa(unescape(encodeURIComponent(content))), 'application/pdf');
 		const ceass = new CEASigningService();
 		ceass.useKeyStorage(rawWallet);
-		const arrayContent = btoa(content);
+
+		const arrayContent = btoa(unescape(encodeURIComponent(content)));
 		const bytesContent = ethers.utils.toUtf8Bytes(arrayContent);
 		const digest = ethers.utils.sha256(bytesContent).replace('0x', '');
 		const ec_alice = new eddsa('ed25519');
@@ -280,7 +269,7 @@ export const doGetDocuments = (currentWallet: any) => async (
 		const web3 = BlockchainFactory.getWeb3Instance(rawWallet.keypairs, rawWallet.mnemonic);
 
 		const agreementContract = ContractFactory.getAgreementContract(web3);
-		const address_Contract = agreementContract.options.address;
+		
 		console.log('Address Wallet Events:', address, 'web3 accounts wallet', web3.eth.accounts.wallet);
 
 		const eventsSource = await agreementContract.getPastEvents('AgreementPartyCreated', {
@@ -306,7 +295,7 @@ export const doGetDocuments = (currentWallet: any) => async (
 				address
 			} = event;
 			const { id, partySource, partyDestination, formTemplateId, agreementStoredReference } = args;
-			const agreementId = (id as BigNumber).toString();
+			const agreementId = (id as BN).toString();
 
 			let fetchedContent = '';
 			for await (const chunk of ipfs.cat(agreementStoredReference.toString())) {
@@ -345,7 +334,7 @@ export const doGetDocuments = (currentWallet: any) => async (
 					data: {
 						agreementForm,
 						escrowed,
-						validUntil: (validUntil as BigNumber).toString(),
+						validUntil: (validUntil as BN).toString(),
 						toSigner: toSigner.signatory,
 						fromSigner: fromSigner.signatory
 					}
@@ -363,7 +352,7 @@ export const doGetDocuments = (currentWallet: any) => async (
 				address
 			} = event;
 			const { id, partySource, partyDestination, formTemplateId, agreementStoredReference } = args;
-			const agreementId = (id as BigNumber).toString();
+			const agreementId = (id as BN).toString();
 			return new Promise(async (resolve) => {
 				const agreement = await agreementContract.methods.agreements(id).call();
 				const {
@@ -392,7 +381,7 @@ export const doGetDocuments = (currentWallet: any) => async (
 					data: {
 						agreementForm,
 						escrowed,
-						validUntil: (validUntil as BigNumber).toString(),
+						validUntil: (validUntil as BN).toString(),
 						toSigner: toSigner.signatory,
 						fromSigner: fromSigner.signatory
 					}

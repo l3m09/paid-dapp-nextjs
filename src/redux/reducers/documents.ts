@@ -6,7 +6,7 @@ const initialState = {
 	creatingAgreement: false,
 	documents: [],
 	selectedDocument: null,
-	agreementTypes: ['Vehicle', 'Rental'],
+	agreementTypes: ['Non-Disclosure'],
 	agreementFormInfo: {
 		name: '',
 		address: '',

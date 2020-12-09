@@ -27,13 +27,34 @@ const ipfs = ipfsClient({ host: 'ipfs.infura.io', port: '5001', protocol: 'https
 function PdfViewerModal(payload: {
 	show: boolean;
 	closePdfViewer: () => void;
-	url: string
+	url: string,
+	pdfContent: string
 }) {
-	const { show, closePdfViewer, url } = payload;
+	const { show, closePdfViewer, url, pdfContent } = payload;
 	// if (!url) {
 	// 	return null;
 	// }
-
+	/*
+	return (
+		<div id="modal-container">
+			<IonModal isOpen={show} cssClass="pdf-viewer-modal" onDidDismiss={() => {closePdfViewer()}}>
+				<IonHeader translucent={false} mode="md">
+					<IonToolbar>
+						<IonTitle>Document</IonTitle>
+						<IonButtons slot="end">
+							<IonButton color="secondary" shape="round" onClick={() => closePdfViewer()}>
+								Close
+							</IonButton>
+						</IonButtons>
+					</IonToolbar>
+				</IonHeader>
+				<IonContent color="primary">
+					<div dangerouslySetInnerHTML={createMarkup(pdfContent)}></div>
+				</IonContent>
+			</IonModal>
+		</div>
+	);
+	*/
 	return (
 		<div id="modal-container">
 			<IonModal isOpen={show} cssClass="pdf-viewer-modal" onDidDismiss={() => {closePdfViewer()}}>
@@ -55,6 +76,11 @@ function PdfViewerModal(payload: {
 	);
 }
 
+  
+function createMarkup(html: string) { 
+    return {__html: html};
+  }
+
 function SelectedDocument(payload: {
 	show: boolean;
 	showPdfViewerModal: boolean;
@@ -63,8 +89,9 @@ function SelectedDocument(payload: {
 	openPdfViewerModal: (cid : string, transactionHash: string) => void;
 	closePdfViewerModal: () => void;
 	agreementsurl: string;
+	agreementContent: string;
 }) {
-	const { show, agreementsurl, selectedDocument, closeShowDocument, showPdfViewerModal, openPdfViewerModal, closePdfViewerModal} = payload;
+	const { show, agreementsurl, agreementContent, selectedDocument, closeShowDocument, showPdfViewerModal, openPdfViewerModal, closePdfViewerModal} = payload;
 	if (!selectedDocument) {
 		return null;
 	}
@@ -79,8 +106,7 @@ function SelectedDocument(payload: {
 								Document Id: {selectedDocument.event.id}
 							</div>
 							<div>
-								
-								{selectedDocument.verified == true ? 
+								{selectedDocument.verified == true ?
 								<IonLabel>
 									<IonBadge className="circle-container green-alert">
 										&nbsp;
@@ -88,7 +114,7 @@ function SelectedDocument(payload: {
 									<IonBadge className="none-background">
 										Verified
 									</IonBadge>
-								</IonLabel> : 
+								</IonLabel> :
 								<IonLabel>
 									<IonBadge className="circle-container red-alert">
 										&nbsp;
@@ -151,6 +177,7 @@ function SelectedDocument(payload: {
 				show={showPdfViewerModal}
 				closePdfViewer={closePdfViewerModal}
 				url={"https://ipfs.io/ipfs/"+agreementsurl}
+				pdfContent = {agreementContent}
 			/>
 		</div>
 	);
@@ -173,6 +200,7 @@ const DocumentsList: React.FC<Props> = ({documents, type, counterType}) => {
 	const [showModal, setShowModal] = useState(false);
 	const [showPdfViewerModal, setPdfViewerModal] = useState(false);
 	const [showAgreementsUrl, setAgreementUrl] = useState('');
+	const [agreementContent, setAgreementContent] = useState('');
 	const wallet = useSelector(
 		(state: { wallet: { currentWallet: any } }) => state.wallet
 	);
@@ -200,11 +228,12 @@ const DocumentsList: React.FC<Props> = ({documents, type, counterType}) => {
 		const contentRef = jsonContent.contentRef;
 		setAgreementUrl(contentRef.cid);
 		setPdfViewerModal(true);
-		let pdfContent:HTMLElement = document.createElement('DIV');
-
+		//let pdfContent:HTMLElement = document.createElement('DIV');
+		let pdfContent = '';
 		for await (const chunk of ipfs.cat(contentRef.cid)) {
-			pdfContent.innerHTML = uint8ArrayToString(chunk);
+			pdfContent = uint8ArrayToString(chunk);
 		}
+		setAgreementContent(pdfContent);
 		console.info(pdfContent);
 		console.log('showPdfViewerModal', showPdfViewerModal);
 	}
@@ -244,7 +273,7 @@ const DocumentsList: React.FC<Props> = ({documents, type, counterType}) => {
 									<IonBadge color="secondary">
 										OUT
 									</IonBadge>
-									: 
+									:
 									<IonBadge color="primary">
 										IN
 									</IonBadge>}
@@ -265,6 +294,7 @@ const DocumentsList: React.FC<Props> = ({documents, type, counterType}) => {
 				closePdfViewerModal={closePdfViewer}
 				openPdfViewerModal={openPdfViewer}
 				agreementsurl={showAgreementsUrl}
+				agreementContent = {agreementContent}
 			/>
 		</div>
 	);
