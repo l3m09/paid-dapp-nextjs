@@ -37,23 +37,19 @@ const NdaDescription: React.FC<DescriptionProps> = ({ current }) => {
 						<strong>Definition of Confidential Information.</strong>  “Confidential 
 						Information” means information and physical material not generally known 
 						or available outside Discloser and information and physical material entrusted
-						to Discloser in confidence by third parties.  
-						</li>
-						<li>
-						Confidential Information includes, without limitation:  technical data, trade
-						secrets, know-how, research, product or service ideas or plans, software codes
-						and designs, algorithms, developments, inventions, patent applications, laboratory
-						notebooks, processes, formulas, techniques, mask works, engineering designs and
-						drawings, hardware configuration information, agreements with third parties,
-						</li>
-						<li>
-						lists of, or information relating to, employees and consultants of the Discloser
-						(including, but not limited to, the names, contact information, jobs, compensation,
-						and expertise of such employees and consultants), lists of, or information relating
-						to, suppliers and customers, price lists, pricing methodologies, cost data, market 
-						share data, marketing plans, licenses, contract information, business plans, financial 
-						forecasts, historical financial data, budgets or other business information disclosed
-						by Discloser (whether by oral, written, graphic or machine-readable format).
+						to Discloser in confidence by third parties. Confidential Information includes, 
+						without limitation:  technical data, trade secrets, know-how, research, product
+						or service ideas or plans, software codes and designs, algorithms, developments,
+						inventions, patent applications, laboratory notebooks, processes, formulas,
+						techniques, mask works, engineering designs and	drawings, hardware configuration
+						information, agreements with third parties,lists of, or information relating to, 
+						employees and consultants of the Discloser (including, but not limited to, the names,
+						contact information, jobs, compensation, and expertise of such employees and 
+						consultants), lists of, or information relating	to, suppliers and customers, price
+						lists, pricing methodologies, cost data, market share data, marketing plans, licenses,
+						contract information, business plans, financial forecasts, historical financial
+						data, budgets or other business information disclosed by Discloser (whether by
+						 oral, written, graphic or machine-readable format).
 						</li>
 					</ul>
 					<h5 color="secondary" className="instructions-title third">

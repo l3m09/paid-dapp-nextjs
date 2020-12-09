@@ -57,14 +57,14 @@ const NdaCompleted: React.FC<NdaCompletedProps> = ({ current }) => {
 			</IonItem>
 			<IonItem>
 				<IonText class="phrase-content-sub-text phrase-completed-sub-text">
-					And accepted transference of the currency to <span className="text-primary">{agreementFormInfo.counterpartyName}</span> wallet address: <span className="text-primary"> {agreementFormInfo.counterpartyWallet}</span>.
+					And accepted with the signature of these agreement to <span className="text-primary">{agreementFormInfo.counterpartyName}</span> wallet address: <span className="text-primary"> {agreementFormInfo.counterpartyWallet}</span>.
 				</IonText>
 			</IonItem>
 			<IonItem>
 				<IonText class="phrase-content-sub-text phrase-completed-sub-text">
-					This offer to purchase is valid for Nine Days from date of offer and
-					will not be valid if there are any changes to the value of the vehicle
-					due to physical or mechanical issues upon delivery to <span className="text-primary">{agreementFormInfo.counterpartyName}</span>.
+				The agreement is pending for approval for nine days from the date of the
+				offer and will not be valid if there is any change in the conditions
+				of the confidentiality agreement. <span className="text-primary">{agreementFormInfo.counterpartyName}</span>.
 				</IonText>
 			</IonItem>
 			<IonItem class="form-options">
