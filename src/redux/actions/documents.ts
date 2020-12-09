@@ -1,6 +1,6 @@
 import { KeyStorageModel } from 'paid-universal-wallet/dist/key-storage/KeyStorageModel';
 import { DocumentsActionTypes } from '../actionTypes/documents';
-import { BigNumber, ethers, Wallet } from 'ethers';
+import { BigNumber as BN ,ethers, Wallet } from 'ethers';
 import { BlockchainFactory } from '../../utils/blockchainFactory';
 import { ContractFactory } from '../../utils/contractFactory';
 import { base64StringToBlob } from 'blob-util';
@@ -9,6 +9,7 @@ import { eddsa } from "elliptic";
 import { templateRender } from './template/template';
 
 const uint8ArrayToString = require('uint8arrays/to-string');
+const BigNumber = require('bignumber.js');
 const ipfsClient = require('ipfs-http-client');
 const ipfs = ipfsClient({ host: 'ipfs.infura.io', port: '5001', protocol: 'https', apiPath: '/api/v0' });
 
@@ -114,7 +115,6 @@ export const doCreateAgreement = (payload: {
 
 		const web3 = BlockchainFactory.getWeb3Instance(rawWallet.keypairs, rawWallet.mnemonic);
 		const balancewei = await web3.eth.getBalance(address);
-		const balance = web3.utils.fromWei(balancewei);
 
 		const today = new Date();
 		const template = templateRender({ 
@@ -126,23 +126,25 @@ export const doCreateAgreement = (payload: {
 			counterparty_address: agreementForm.counterpartyAddress,
 			create_date: today.toLocaleDateString() 
 		});
-		console.log(template());
-
-		debugger;
-		const parsedBalance = BigNumber.from(balance);
-		if (parsedBalance.lte(0)) {
-			throw new Error('The wallet should has balance to send a transaction.');
-		}
+		let balance:string;
+		await web3.eth.getBalance(address).then((balancewei) =>{
+			balance = web3.utils.fromWei(balancewei);
+			const parsedBalance = BigNumber(balance);
+			console.log(parsedBalance);
+			if ((parsedBalance.c[0] <= 0) && (parsedBalance.c[1] <= 9999999999)) {
+				throw new Error('The wallet should has balance to send a transaction.');
+			}
+			console.log('Current_Wallet_Documents', address,'agreementForm', agreementForm);
+		})
 
 		console.log('Current_Wallet_Documents', address,'agreementForm', agreementForm);
-
 		// ALICE SIDE
-
-		const blobContent = base64StringToBlob(btoa(template()), 'application/pdf');
+		const content = template();
+		const blobContent = base64StringToBlob(btoa(unescape(encodeURIComponent(content))), 'application/pdf');
 		const ceass = new CEASigningService();
 		ceass.useKeyStorage(rawWallet);
 
-		const arrayContent = btoa(template());
+		const arrayContent = btoa(unescape(encodeURIComponent(content)));
 		const bytesContent = ethers.utils.toUtf8Bytes(arrayContent);
 		const digest = ethers.utils.sha256(bytesContent).replace('0x', '');
 		const ec_alice = new eddsa('ed25519');
@@ -163,7 +165,7 @@ export const doCreateAgreement = (payload: {
 		// Transaction for Created Agreements
 		const agreementContract = ContractFactory.getAgreementContract(web3);
 		console.log(web3.eth.accounts.wallet);
-		
+
 		const agreementTransaction = await agreementContract.methods['partyCreate(uint256,string,bytes32,bytes,bytes)'](
 			validUntil,
 			ipfsHash.toString(),
@@ -258,7 +260,7 @@ export const doGetDocuments = (currentWallet: any) => async (
 				address
 			} = event;
 			const { id, partySource, partyDestination, formTemplateId, agreementStoredReference } = args;
-			const agreementId = (id as BigNumber).toString();
+			const agreementId = (id as BN).toString();
 
 			let fetchedContent = '';
 			for await (const chunk of ipfs.cat(agreementStoredReference.toString())) {
@@ -297,7 +299,7 @@ export const doGetDocuments = (currentWallet: any) => async (
 					data: {
 						agreementForm,
 						escrowed,
-						validUntil: (validUntil as BigNumber).toString(),
+						validUntil: (validUntil as BN).toString(),
 						toSigner: toSigner.signatory,
 						fromSigner: fromSigner.signatory
 					}
@@ -315,7 +317,7 @@ export const doGetDocuments = (currentWallet: any) => async (
 				address
 			} = event;
 			const { id, partySource, partyDestination, formTemplateId, agreementStoredReference } = args;
-			const agreementId = (id as BigNumber).toString();
+			const agreementId = (id as BN).toString();
 			return new Promise(async (resolve) => {
 				const agreement = await agreementContract.methods.agreements(id).call();
 				const {
@@ -344,7 +346,7 @@ export const doGetDocuments = (currentWallet: any) => async (
 					data: {
 						agreementForm,
 						escrowed,
-						validUntil: (validUntil as BigNumber).toString(),
+						validUntil: (validUntil as BN).toString(),
 						toSigner: toSigner.signatory,
 						fromSigner: fromSigner.signatory
 					}

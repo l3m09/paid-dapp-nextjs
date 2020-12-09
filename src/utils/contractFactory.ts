@@ -16,9 +16,9 @@ export class ContractFactory {
 		if (!ContractFactory._agreementContract) {
 			ContractFactory._agreementContract = new web3.eth.Contract(
 				AgreementContract.raw.abi as any,
-				AgreementContract.address["rinkeby"]
+				AgreementContract.address[networks]
 			);
-			console.log(AgreementContract.address["rinkeby"], ContractFactory._agreementContract);
+			console.log(AgreementContract.address[networks], ContractFactory._agreementContract);
 		}
 		console.log(ContractFactory._agreementContract);
 		return ContractFactory._agreementContract;

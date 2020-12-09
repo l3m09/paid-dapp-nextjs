@@ -23,7 +23,7 @@ const FormClient: React.FC<AgreementFormProps> = ({ current }) => {
 	useEffect(() => {
 		verifyInfo()
 	}, [agreementFormInfo]);
-	
+
 	function nameChanged(e: any) {
 		dispatch(doSetAgreementFormInfo({name: e.target.value}));
 	}

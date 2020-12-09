@@ -15,11 +15,14 @@ import { useParams, useHistory } from 'react-router';
 import FormClient from './FormClient';
 import FormCounterparty from './FormCounterparty';
 
-import VehicleDescription from './vehicle/VehicleDescription';
-import VehicleCompleted from './vehicle/VehicleCompleted';
+// import VehicleDescription from './vehicle/VehicleDescription';
+// import VehicleCompleted from './vehicle/VehicleCompleted';
 
-import RentalDescription from './rental/RentalDescription';
-import RentalCompleted from './rental/RentalCompleted';
+// import RentalDescription from './rental/RentalDescription';
+// import RentalCompleted from './rental/RentalCompleted';
+
+import NdaDescription from './nda/NdaDescription';
+import NdaCompleted from './nda/NdaCompleted';
 
 import { useDispatch } from 'react-redux';
 import { doSetAgreementFormInfo } from '../../../redux/actions/documents';
@@ -41,10 +44,42 @@ const Agreements: React.FC<AgreementsProps> = () => {
 		slidesPerView: 1
 	};
 
-	const vehicleTemplate: any = (
+	// const vehicleTemplate: any = (
+	// 	<IonSlides pager={false} options={slideOpts} ref={slidesRef}>
+	// 		<IonSlide>
+	// 			<VehicleDescription current={slidesRef.current} />
+	// 		</IonSlide>
+	// 		<IonSlide>
+	// 			<FormClient current={slidesRef.current} />
+	// 		</IonSlide>
+	// 		<IonSlide>
+	// 			<FormCounterparty current={slidesRef.current} />
+	// 		</IonSlide>
+	// 		<IonSlide>
+	// 			<VehicleCompleted current={slidesRef.current} />
+	// 		</IonSlide>
+	// 	</IonSlides>
+	// );
+	// const rentalTemplate: any = (
+	// 	<IonSlides pager={false} options={slideOpts} ref={slidesRef}>
+	// 		<IonSlide>
+	// 			<RentalDescription current={slidesRef.current} />
+	// 		</IonSlide>
+	// 		<IonSlide>
+	// 			<FormClient current={slidesRef.current} />
+	// 		</IonSlide>
+	// 		<IonSlide>
+	// 			<FormCounterparty current={slidesRef.current} />
+	// 		</IonSlide>
+	// 		<IonSlide>
+	// 			<RentalCompleted current={slidesRef.current} />
+	// 		</IonSlide>
+	// 	</IonSlides>
+	// );
+	const ndaTemplate: any = (
 		<IonSlides pager={false} options={slideOpts} ref={slidesRef}>
 			<IonSlide>
-				<VehicleDescription current={slidesRef.current} />
+				<NdaDescription current={slidesRef.current} />
 			</IonSlide>
 			<IonSlide>
 				<FormClient current={slidesRef.current} />
@@ -53,23 +88,7 @@ const Agreements: React.FC<AgreementsProps> = () => {
 				<FormCounterparty current={slidesRef.current} />
 			</IonSlide>
 			<IonSlide>
-				<VehicleCompleted current={slidesRef.current} />
-			</IonSlide>
-		</IonSlides>
-	);
-	const rentalTemplate: any = (
-		<IonSlides pager={false} options={slideOpts} ref={slidesRef}>
-			<IonSlide>
-				<RentalDescription current={slidesRef.current} />
-			</IonSlide>
-			<IonSlide>
-				<FormClient current={slidesRef.current} />
-			</IonSlide>
-			<IonSlide>
-				<FormCounterparty current={slidesRef.current} />
-			</IonSlide>
-			<IonSlide>
-				<RentalCompleted current={slidesRef.current} />
+				<NdaCompleted current={slidesRef.current} />
 			</IonSlide>
 		</IonSlides>
 	);
@@ -120,8 +139,7 @@ const Agreements: React.FC<AgreementsProps> = () => {
 					</IonToolbar>
 				</IonHeader>
 				<div>
-					{type === 'vehicle' ? vehicleTemplate : null}
-					{type === 'rental' ? rentalTemplate : null}
+					{type === 'non-disclosure' ? ndaTemplate : null}
 				</div>
 			</IonContent>
 		</IonPage>
