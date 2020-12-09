@@ -161,7 +161,7 @@ const Documents: React.FC = () => {
 		await slidesRef.current?.lockSwipes(true)
 
 	}
-	
+
 	return (
 		<IonPage className="documents-page content-page">
 			<IonContent fullscreen>

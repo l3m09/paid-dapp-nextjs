@@ -79,8 +79,7 @@ function SelectedDocument(payload: {
 								Document Id: {selectedDocument.event.id}
 							</div>
 							<div>
-								
-								{selectedDocument.verified == true ? 
+								{selectedDocument.verified == true ?
 								<IonLabel>
 									<IonBadge className="circle-container green-alert">
 										&nbsp;
@@ -88,7 +87,7 @@ function SelectedDocument(payload: {
 									<IonBadge className="none-background">
 										Verified
 									</IonBadge>
-								</IonLabel> : 
+								</IonLabel> :
 								<IonLabel>
 									<IonBadge className="circle-container red-alert">
 										&nbsp;
@@ -244,7 +243,7 @@ const DocumentsList: React.FC<Props> = ({documents, type, counterType}) => {
 									<IonBadge color="secondary">
 										OUT
 									</IonBadge>
-									: 
+									:
 									<IonBadge color="primary">
 										IN
 									</IonBadge>}
