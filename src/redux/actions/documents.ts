@@ -6,7 +6,9 @@ import { ContractFactory } from '../../utils/contractFactory';
 import { base64StringToBlob } from 'blob-util';
 import { AlgorithmType, CEASigningService, WalletManager } from 'paid-universal-wallet';
 import { eddsa } from "elliptic";
-const uint8ArrayToString = require('uint8arrays/to-string')
+import { templateRender } from './template/template';
+
+const uint8ArrayToString = require('uint8arrays/to-string');
 const ipfsClient = require('ipfs-http-client');
 const ipfs = ipfsClient({ host: 'ipfs.infura.io', port: '5001', protocol: 'https', apiPath: '/api/v0' });
 
@@ -110,11 +112,23 @@ export const doCreateAgreement = (payload: {
 		const rawWallet = await storage.find<KeyStorageModel>(unlockedWallet._id);
 		const address = manager.getWalletAddress(rawWallet.mnemonic);
 
-
 		const web3 = BlockchainFactory.getWeb3Instance(rawWallet.keypairs, rawWallet.mnemonic);
 		const balancewei = await web3.eth.getBalance(address);
 		const balance = web3.utils.fromWei(balancewei);
 
+		const today = new Date();
+		const template = templateRender({ 
+			party_name: agreementForm.name, 
+			party_wallet: address,
+			party_address: agreementForm.address,
+			counterparty_name: agreementForm.counterpartyName,
+			counterparty_wallet: agreementForm.counterpartyWallet,
+			counterparty_address: agreementForm.counterpartyAddress,
+			create_date: today.toLocaleDateString() 
+		});
+		console.log(template());
+
+		debugger;
 		const parsedBalance = BigNumber.from(balance);
 		if (parsedBalance.lte(0)) {
 			throw new Error('The wallet should has balance to send a transaction.');
@@ -123,27 +137,12 @@ export const doCreateAgreement = (payload: {
 		console.log('Current_Wallet_Documents', address,'agreementForm', agreementForm);
 
 		// ALICE SIDE
-		const today = new Date();
 
-		const content = '<div>'+
-		'<div>Date: ' + today.toLocaleDateString() + ' ' + today.toLocaleTimeString()+ ' </div>' +
-		'Agreement creator:<br/>' +
-		'<div style="margin-left: 20px;">Name:' + agreementForm.name + '</div>' +
-		'<div style="margin-left: 20px;">Address:' + agreementForm.address + '</div>' +
-		'<div style="margin-left: 20px;">Phone:' + agreementForm.phone + '</div>' +
-		'<div style="margin-left: 20px;">Wallet:' + address + '</div>' +
-		'<div>---------------------------------------</div>' +
-		'Agreement counterparty:<br/>' +
-		'<div style="margin-left: 20px;">Name:' + agreementForm.counterpartyName + '</div>' +
-		'<div style="margin-left: 20px;">Address:' + agreementForm.counterpartyAddress + '</div>' +
-		'<div style="margin-left: 20px;">Phone:' + agreementForm.counterpartyPhone + '</div>' +
-		'<div style="margin-left: 20px;">Wallet:' + agreementForm.counterpartyWallet + '</div>' +
-		'</div>';
-		const blobContent = base64StringToBlob(btoa(content), 'application/pdf');
+		const blobContent = base64StringToBlob(btoa(template()), 'application/pdf');
 		const ceass = new CEASigningService();
 		ceass.useKeyStorage(rawWallet);
 
-		const arrayContent = btoa(content);
+		const arrayContent = btoa(template());
 		const bytesContent = ethers.utils.toUtf8Bytes(arrayContent);
 		const digest = ethers.utils.sha256(bytesContent).replace('0x', '');
 		const ec_alice = new eddsa('ed25519');
