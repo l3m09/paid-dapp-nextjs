@@ -13,17 +13,15 @@ const Terms: React.FC<TermsModalProps> = ({show, dismiss, title}) => {
 				<div>
 					<h1>{title || 'Terms'}</h1>
 					<p>
-						Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deserunt impedit minima nesciunt nihil quos sapiente sequi temporibus. Expedita, maiores, minus! Eaque eius harum laudantium odit quisquam? Aperiam explicabo facere, ipsam ipsum libero odio quia! Adipisci architecto atque cupiditate, expedita officia quis tempore. Adipisci commodi eligendi enim illo quibusdam temporibus unde voluptate voluptatibus. Ab animi dicta et iusto magni perspiciatis ratione sed. Ab accusantium architecto at cumque distinctio dolorem eos, eum exercitationem, explicabo facere fugiat impedit incidunt itaque iure libero, nobis odit officiis quam quis quisquam ratione repellendus saepe sit tempora voluptatem. Consequuntur,
-						dicta distinctio dolorum eveniet incidunt itaque nisi recusandae.
+					The mnemonic passphrase is provided to you when you sign up for a new Blockchain Wallet. When you recover your wallet with your mnemonic, your password and identifier will be displayed to you. Your main password cannot be changed once it is set, therefore your mnemonic will always remain the same for each wallet.
 					</p>
 					<p>
-						Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deserunt impedit minima nesciunt nihil quos sapiente sequi temporibus. Expedita, maiores, minus! Eaque eius harum laudantium odit quisquam? Aperiam explicabo facere, ipsam ipsum libero odio quia! Adipisci architecto atque cupiditate, expedita officia quis tempore. Adipisci commodi eligendi enim illo quibusdam temporibus unde voluptate voluptatibus. Ab animi dicta et iusto magni perspiciatis ratione sed. Ab accusantium architecto at cumque distinctio dolorem eos, eum exercitationem, explicabo facere fugiat impedit incidunt itaque iure libero, nobis odit officiis quam quis quisquam ratione repellendus saepe sit tempora voluptatem. Consequuntur,
-						dicta distinctio dolorum eveniet incidunt itaque nisi recusandae.
+					Basically, a mnemonic is a way to reproduce something hard to remember, like a series of data, and by associating the data with things like random words, so humans can remember the original data by using the mnemonic as a deciphering tool. With private keys tied to cryptocurrencies, the list of words you write down as a backup is basically enough information to recover your funds to another wallet if something unfortunate were to happen.
 					</p>
 					<p>
-						Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deserunt impedit minima nesciunt nihil quos sapiente sequi temporibus. Expedita, maiores, minus! Eaque eius harum laudantium odit quisquam? Aperiam explicabo facere, ipsam ipsum libero odio quia! Adipisci architecto atque cupiditate, expedita officia quis tempore. Adipisci commodi eligendi enim illo quibusdam temporibus unde voluptate voluptatibus. Ab animi dicta et iusto magni perspiciatis ratione sed. Ab accusantium architecto at cumque distinctio dolorem eos, eum exercitationem, explicabo facere fugiat impedit incidunt itaque iure libero, nobis odit officiis quam quis quisquam ratione repellendus saepe sit tempora voluptatem. Consequuntur,
-						dicta distinctio dolorum eveniet incidunt itaque nisi recusandae.
-					</p>
+					So whenever you write down a seed to a new wallet the set of words is your private key and anyone who learns the mnemonic phrase has access to your funds. So always be very careful with your mnemonic recovery phrase. The longer the mnemonic, the more secure your assets will be as a 24-word seed is harder to crack compared to one that is just twelve.
+					</p>	
+					
 				</div>
 				<IonButton shape="round" color="secondary" onClick={dismiss}>Close</IonButton>
 			</IonModal>
