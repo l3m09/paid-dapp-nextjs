@@ -52,7 +52,7 @@ const Menu: React.FC = () => {
 			disabled: false
 		},
 		{
-			title: 'Agreements',
+			title: 'Smart Agreements Log',
 			url: '/documents',
 			iosIcon: documentOutline,
 			mdIcon: documentSharp,
@@ -87,7 +87,7 @@ const Menu: React.FC = () => {
 										/>
 									</span>
 
-									<IonLabel color="gradient">{appPage.title}</IonLabel>
+									<IonLabel color="gradient">{appPage.title}1</IonLabel>
 								</IonItem>
 							</IonMenuToggle>
 						);

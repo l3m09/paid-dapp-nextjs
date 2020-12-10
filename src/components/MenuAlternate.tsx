@@ -46,7 +46,7 @@ const MenuAlternate: React.FC = () => {
 			disabled: false
 		},
 		{
-			title: 'Agreements',
+			title: 'Smart Agreements Log',
 			url: '/documents',
 			iosIcon: documentOutline,
 			mdIcon: documentSharp,

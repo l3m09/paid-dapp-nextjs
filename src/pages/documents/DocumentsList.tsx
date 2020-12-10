@@ -1,5 +1,6 @@
 import {
 	IonItem,
+	IonIcon,
 	IonLabel,
 	IonButton,
 	IonModal,
@@ -12,12 +13,14 @@ import {
 
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { closeCircle, checkmarkCircle } from 'ionicons/icons';
 import {
 	doGetSelectedDocument
 } from '../../redux/actions/documents';
 
 import { IonBadge } from '@ionic/react';
 import { Plugins } from '@capacitor/core';
+import { eddsa } from "elliptic";
 const { Storage } = Plugins;
 
 const uint8ArrayToString = require('uint8arrays/to-string');
@@ -34,27 +37,6 @@ function PdfViewerModal(payload: {
 	// if (!url) {
 	// 	return null;
 	// }
-	/*
-	return (
-		<div id="modal-container">
-			<IonModal isOpen={show} cssClass="pdf-viewer-modal" onDidDismiss={() => {closePdfViewer()}}>
-				<IonHeader translucent={false} mode="md">
-					<IonToolbar>
-						<IonTitle>Document</IonTitle>
-						<IonButtons slot="end">
-							<IonButton color="secondary" shape="round" onClick={() => closePdfViewer()}>
-								Close
-							</IonButton>
-						</IonButtons>
-					</IonToolbar>
-				</IonHeader>
-				<IonContent color="primary">
-					<div dangerouslySetInnerHTML={createMarkup(pdfContent)}></div>
-				</IonContent>
-			</IonModal>
-		</div>
-	);
-	*/
 	return (
 		<div id="modal-container">
 			<IonModal isOpen={show} cssClass="pdf-viewer-modal" onDidDismiss={() => {closePdfViewer()}}>
@@ -86,12 +68,27 @@ function SelectedDocument(payload: {
 	showPdfViewerModal: boolean;
 	selectedDocument: any;
 	closeShowDocument: () => void;
+	verifyDocument: (cid : string) => void; 
 	openPdfViewerModal: (cid : string, transactionHash: string) => void;
 	closePdfViewerModal: () => void;
 	agreementsurl: string;
 	agreementContent: string;
+	showVerified: any;
+	showNotVerified: any;
 }) {
-	const { show, agreementsurl, agreementContent, selectedDocument, closeShowDocument, showPdfViewerModal, openPdfViewerModal, closePdfViewerModal} = payload;
+	const { 
+		show, 
+		agreementsurl, 
+		agreementContent, 
+		selectedDocument, 
+		closeShowDocument, 
+		showPdfViewerModal, 
+		openPdfViewerModal, 
+		closePdfViewerModal,
+		verifyDocument,
+		showVerified,
+		showNotVerified
+	} = payload;
 	if (!selectedDocument) {
 		return null;
 	}
@@ -105,31 +102,42 @@ function SelectedDocument(payload: {
 							<div className="float-left-wrapper">
 								Document Id: {selectedDocument.event.id}
 							</div>
-							<div>
-								{selectedDocument.verified == true ?
-								<IonLabel>
-									<IonBadge className="circle-container green-alert">
-										&nbsp;
-									</IonBadge>
-									<IonBadge className="none-background">
-										Verified
-									</IonBadge>
-								</IonLabel> :
-								<IonLabel>
-									<IonBadge className="circle-container red-alert">
-										&nbsp;
-									</IonBadge>
-									<IonBadge className="none-background">
-										Not verified
-									</IonBadge>
-								</IonLabel>}
-							</div>
 						</IonCardTitle>
 						<IonCardSubtitle>
-							Valid until: {selectedDocument.data.validUntil}
 						</IonCardSubtitle>
 					</IonCardHeader>
 					<IonCardContent>
+						<div>
+							Valid until: {selectedDocument.data.validUntil}
+						</div>
+						<div>
+							<IonButton
+								className="small-button"
+								color="primary"
+								onClick={async () => {
+									verifyDocument(selectedDocument.event.cid);
+								}}
+							>
+								<span>Verify document</span>
+							</IonButton>
+							{ showVerified ? <span className="icon-wrapper">
+								<IonIcon
+									ios={checkmarkCircle}
+									md={checkmarkCircle}
+									color="primary"
+									className="font-size-20"
+								/>
+							</span> : null }
+							{ showNotVerified ? <span className="icon-wrapper">
+								<IonIcon
+									ios={closeCircle}
+									md={closeCircle}
+									color="secondary"
+									className="font-size-20"
+								/>
+							</span> : null }
+							
+						</div>
 						<h2>Details</h2>
 						<div className="details-wrapper">
 							<IonItem>
@@ -198,6 +206,8 @@ const DocumentsList: React.FC<Props> = ({documents, type, counterType}) => {
 		loading
 	} = documentsState;
 	const [showModal, setShowModal] = useState(false);
+	const [showVerified, setShowVerified] = useState(false);
+	const [showNotVerified, setShowNotVerified] = useState(false);
 	const [showPdfViewerModal, setPdfViewerModal] = useState(false);
 	const [showAgreementsUrl, setAgreementUrl] = useState('');
 	const [agreementContent, setAgreementContent] = useState('');
@@ -208,6 +218,29 @@ const DocumentsList: React.FC<Props> = ({documents, type, counterType}) => {
 	function showDocument(item: any) {
 		dispatch(doGetSelectedDocument(item));
 		setShowModal(true);
+		setShowNotVerified(false);
+		setShowVerified(false);
+	}
+
+	async function verifyDocument(cid: string) {
+		let fetchedContent	 = '';
+		for await (const chunk of ipfs.cat(cid)) {
+			fetchedContent = uint8ArrayToString(chunk);
+		}
+		const jsonContent = JSON.parse(fetchedContent);
+
+		const fetchedPubKey = jsonContent.publicKey;
+
+		const ec = new eddsa('ed25519');
+		const key = ec.keyFromPublic(fetchedPubKey);
+		const sigRef = jsonContent.sigRef;
+		let sigDocument = '';
+		for await (const chunk of ipfs.cat(sigRef.cid)) {
+			sigDocument = uint8ArrayToString(chunk);
+		}
+		const verified = key.verify(jsonContent.digest, sigDocument);
+		setShowVerified(verified);
+		setShowNotVerified(!verified);
 	}
 
 	function closeShowDocument() {
@@ -295,6 +328,9 @@ const DocumentsList: React.FC<Props> = ({documents, type, counterType}) => {
 				openPdfViewerModal={openPdfViewer}
 				agreementsurl={showAgreementsUrl}
 				agreementContent = {agreementContent}
+				verifyDocument = {verifyDocument}
+				showVerified = {showVerified}
+				showNotVerified = {showNotVerified}
 			/>
 		</div>
 	);

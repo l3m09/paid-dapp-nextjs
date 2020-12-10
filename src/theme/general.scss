@@ -134,6 +134,33 @@ ion-button {
 
 }
 
+.icon-wrapper.verified{
+  color: green;
+}
+
+.icon-wrapper.notverified{
+  color: red;
+}
+
+.small-button{
+  width: 125px;
+  height: 23px;
+  font-size: 0.95em;
+  font-weight: 500;
+}
+
+.font-size-20{
+  font-size: 20px;
+}
+
+.font-size-25{
+  font-size: 25px;
+}
+
+.font-size-30{
+  font-size: 30px;
+}
+
 .backarrow-header {
   display: flex;
   flex-direction: row;
