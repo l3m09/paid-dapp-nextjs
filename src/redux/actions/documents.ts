@@ -207,7 +207,8 @@ export const doCreateAgreement = (payload: {
 		const gas = await methodFn.estimateGas();
 
 		Promise.resolve(gas).then(async (gas:any) => {
-			const agreementTransaction = await methodFn.send({ from: address, gas, gasPrice: 50e9 })
+			console.log(gas+5e4);
+			const agreementTransaction = await methodFn.send({ from: address, gas:gas+5e4, gasPrice: 50e9 })
 		   .on('receipt', async function (receipt: any) {
 			   dispatch(createAgreement());
 			   slideNext();
@@ -219,8 +220,6 @@ export const doCreateAgreement = (payload: {
 		   });
 	   		console.info('agreementTransaction:', agreementTransaction);
 		});
-
-
 	} catch (err) {
 		await payload.slideBack();
 		alert(err.message);
