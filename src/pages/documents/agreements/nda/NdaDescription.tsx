@@ -26,7 +26,7 @@ const NdaDescription: React.FC<DescriptionProps> = ({ current }) => {
 			<IonItem>
 				<div className="instructions">
 				<div>
-					<h5 className="instructions-title first">Non-Disclosure Agreement</h5>
+					<h5 className="instructions-title first">Mutual NDA Agreement Agreement</h5>
 					<IonText color="secondary" class="instructions-sub-text first">
 					This document will serve as the official document for Disclosure 
 					to agree to share information with a Recipient under the following
