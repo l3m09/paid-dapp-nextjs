@@ -8,7 +8,7 @@ import { AlgorithmType, CEASigningService, WalletManager } from 'paid-universal-
 import { eddsa } from "elliptic";
 import { SolidoContract, SolidoProvider, SolidoModule, IMethodOrEventCall, Read, Write, EventFilterOptions, GetEvents } from '@decent-bet/solido';
 import { Web3Plugin, Web3Settings, Web3SolidoTopic } from 'solido-provider-web3';
-import { AgreementContract } from './../../contracts/agreement';
+// import { AgreementContract } from './../../contracts/agreement';
 import Web3 from 'web3';
 import { templateRender } from './template/template';
 
@@ -83,38 +83,38 @@ get the network
 get smart contract
 get meme hash
 */
-export const setupSolido = (
-	defaultAccount: string,
-	network: string,
-	web3: Web3,
-) => {
-	const module = new SolidoModule([
-		{
-			name: 'AgreementContract',
-			import: AgreementContract,
-			enableDynamicStubs: true,
-			provider: Web3Plugin
-		}
-	]);
+// export const setupSolido = (
+// 	defaultAccount: string,
+// 	network: string,
+// 	web3: Web3,
+// ) => {
+// 	const module = new SolidoModule([
+// 		{
+// 			name: 'AgreementContract',
+// 			import: AgreementContract,
+// 			enableDynamicStubs: true,
+// 			provider: Web3Plugin
+// 		}
+// 	]);
 
-	// Bind contracts
-	const contracts = module.bindContracts({
-		'web3': {
-			provider: web3,
-			options: {
-				web3,
-				defaultAccount,
-				network
-			}
-		}
-	}).connect();
+// 	// Bind contracts
+// 	const contracts = module.bindContracts({
+// 		'web3': {
+// 			provider: web3,
+// 			options: {
+// 				web3,
+// 				defaultAccount,
+// 				network
+// 			}
+// 		}
+// 	}).connect();
 
 
-	return {
-		...contracts
-	};
+// 	return {
+// 		...contracts
+// 	};
 
-}
+// }
 
 export const doCreateAgreement = (payload: {
 	signatoryA: string;
@@ -153,7 +153,6 @@ export const doCreateAgreement = (payload: {
 
 		const address = manager.getWalletAddress(rawWallet.mnemonic);
 		const web3 = BlockchainFactory.getWeb3Instance(rawWallet.keypairs, rawWallet.mnemonic);
-		const balancewei = await web3.eth.getBalance(address);
 
 		const today = new Date();
 		const template = templateRender({ 
@@ -197,31 +196,30 @@ export const doCreateAgreement = (payload: {
 		// -----------------------------------------------------
 
 		// Estimate gas,  TODO encapsulate 
-		const methodFn = AgreementContract.instance.methods.partyCreate(
+		const AgreementContract = ContractFactory.getAgreementContract(web3);
+		const methodFn = AgreementContract.methods.partyCreate(
 			validUntil,
 			ipfsHash.toString(),
 			formId,
 			form,
 			'0x' + digest);
 
-		const gas = await
-		    methodFn 
-			.estimateGas();
+		const gas = await methodFn.estimateGas();
 
-		const agreementTransaction = await 
-		     methodFn
-			.send({  gas, gasPrice: 50e9 })
-			.on('receipt', async function (receipt: any) {
-				dispatch(createAgreement());
-				slideNext();
-			})
-			.on('error', function (error: any, receipt: any) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.		
-				slideBack();
-				alert('Transaction failed');
-				throw new Error('Transaction failed');
-			});
-
-		console.info('agreementTransaction:', agreementTransaction);
+		Promise.resolve(gas).then(async (gas:any) => {
+			console.log(gas+5e4);
+			const agreementTransaction = await methodFn.send({ from: address, gas:gas+5e4, gasPrice: 50e9 })
+		   .on('receipt', async function (receipt: any) {
+			   dispatch(createAgreement());
+			   slideNext();
+		   })
+		   .on('error', function (error: any, receipt: any) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.		
+			   slideBack();
+			   alert('Transaction failed');
+			   throw new Error('Transaction failed');
+		   });
+	   		console.info('agreementTransaction:', agreementTransaction);
+		});
 	} catch (err) {
 		await payload.slideBack();
 		alert(err.message);
@@ -269,7 +267,7 @@ export const doGetDocuments = (currentWallet: any) => async (
 		const web3 = BlockchainFactory.getWeb3Instance(rawWallet.keypairs, rawWallet.mnemonic);
 
 		const agreementContract = ContractFactory.getAgreementContract(web3);
-		
+
 		console.log('Address Wallet Events:', address, 'web3 accounts wallet', web3.eth.accounts.wallet);
 
 		const eventsSource = await agreementContract.getPastEvents('AgreementPartyCreated', {
