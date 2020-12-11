@@ -58,14 +58,17 @@ const ImportWallet: React.FC<Props> = ({show, dismiss}) => {
     function onSubmit() {
         dispatch(doImportWallet(walletInfo))
     }
+	async function doDismiss() {
+        dismiss();
+    }
     
     return (
-        <IonModal cssClass="import-modal" isOpen={show} onDidDismiss={() => {dismiss()}}>
+        <IonModal cssClass="import-modal" isOpen={show} onDidDismiss={() => {doDismiss()}}>
             <IonHeader translucent={false} mode="md">
                 <IonToolbar>
                     <IonTitle>Import a Wallet</IonTitle>
                     <IonButtons slot="end">
-                        <IonButton color="secondary" shape="round" disabled={importingWallet} onClick={() => dismiss()}>
+                        <IonButton color="secondary" shape="round" disabled={importingWallet} onClick={() => doDismiss()}>
                             Cancel
                         </IonButton>
                     </IonButtons>

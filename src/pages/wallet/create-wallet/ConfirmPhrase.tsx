@@ -22,6 +22,7 @@ const ConfirmPhrase: React.FC<ConfirmPhraseProps> = ({ current }) => {
 	const dispatch = useDispatch();
 	const wallet = useSelector((state: any) => state.wallet);
 	const { seedPhrase, confirmedSeedPhrase, confirmed } = wallet;
+	const randomSeedPhrase = randomSeedPhraseOrder(seedPhrase);
 
 	async function slideNext() {
 		console.log('ConfirmPhrase', await current.getActiveIndex());
@@ -30,8 +31,47 @@ const ConfirmPhrase: React.FC<ConfirmPhraseProps> = ({ current }) => {
 		await current.lockSwipeToNext(true);
 	}
 
-	function selectWord(word: string, index: number) {
-		dispatch(doAddWord(word, index));
+	function randomSeedPhraseOrder(words: any){
+		let response : [string] = [''];
+		if(words.length > 0){
+			let choosenNumbers : [number] = [0];
+			for(let i = 0; i < words.length; i++){
+				let number = (Math.floor(Math.random() * (words.length)) + 1) - 1;
+				if(i === 0)
+					choosenNumbers[0] = number;
+				else{
+					let found = false;
+					while(!found){
+						for(let index = 0; index < choosenNumbers.length; index++){
+							if(choosenNumbers[index] === number){
+								found = true;
+								break;
+							}
+						}
+						if(found){
+							number = (Math.floor(Math.random() * (words.length)) + 1) - 1;
+							found = false;
+						}
+						else{
+							found = true;	
+						}
+					}
+					choosenNumbers.push(number);
+				}
+			}
+
+			for(let i = 0; i < choosenNumbers.length; i++){
+				if(i === 0)
+					response[0] = words[choosenNumbers[i]];
+				else
+					response.push(words[choosenNumbers[i]]);
+			};
+		}
+		return response;
+	}
+
+	function selectWord(word: string) {
+		dispatch(doAddWord(word));
 	}
 	function deSelectWord(word: string, index: number) {
 		dispatch(doRemoveWord(word, index));
@@ -98,11 +138,11 @@ const ConfirmPhrase: React.FC<ConfirmPhraseProps> = ({ current }) => {
 			<IonText class="confirmed-text">{confirmedState}</IonText>
 			<IonItem className={confirmed ? 'ion-hide' : ''}>
 				<div className="confirm-phrase-words phrase-words">
-					{seedPhrase.map((word: any, index: any) => {
+					{randomSeedPhrase.map((word: any, index: any) => {
 						return (
 							<span
 								onClick={() => {
-									selectWord(word, index);
+									selectWord(word);
 								}}
 								className="word"
 								key={index}

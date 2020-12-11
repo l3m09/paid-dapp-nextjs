@@ -19,7 +19,9 @@ const Instructions: React.FC<InstructionsProps> = ({ current }) => {
 	const [showModal, setShowModal] = useState(false);
 
 	async function slideNext() {
+		console.log(current);
 		await current?.lockSwipeToNext(false);
+		console.log('next');
 		current?.slideNext();
 		// await current.lockSwipeToNext(true);
 	}
@@ -38,7 +40,7 @@ const Instructions: React.FC<InstructionsProps> = ({ current }) => {
 			<IonItem>
 				<span className="some-text">
 					Secure your wallet’s
-					<IonText color="secondary" className="ion-color-secondary">
+					<IonText color="secondary" className="ion-color-secondary" onClick={() => setShowModal(true)}>
 						{' '}
 						seed phrase
 					</IonText>

@@ -31,6 +31,10 @@ const Wallets: React.FC = () => {
 
 	const { wallets, unlockedWallet, selectedWallet } = wallet;
 
+	const openCreateModal = () => {
+		setShowCreateModal(true);
+	}
+
 	const dismissCreateModal = () => {
 		setShowCreateModal(false);
 	};
@@ -107,7 +111,7 @@ const Wallets: React.FC = () => {
 						<IonItemGroup>
 							<IonItem class="form-options">
 								<IonButton
-									onClick={() => setShowCreateModal(true)}
+									onClick={() => openCreateModal()}
 									class=""
 									color="secondary"
 									shape="round"

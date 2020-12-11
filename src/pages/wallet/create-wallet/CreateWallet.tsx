@@ -42,11 +42,10 @@ const CreateWallet: React.FC<CreateWalletProps> = ({ show, dismiss }) => {
 	lockSwipes().then((r) => {});
 
 	async function doDismiss() {
+		dismiss();
+		await slidesRef.current?.slideTo(0);
 		await slidesRef.current?.lockSwipeToPrev(false);
 		await slidesRef.current?.lockSwipeToNext(false);
-		await slidesRef.current?.slideTo(0).then(() => {
-			dismiss();
-		});
 	}
 	return (
 		<IonModal

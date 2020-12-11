@@ -35,7 +35,12 @@ export const WalletReducer = function (state = initialState, action: any) {
 			const index = state.confirmedSeedPhrase.length;
 			// @ts-ignore
 			confirmedPhrase.splice(index, 0, payload.word);
-			seedPhrase.splice(payload.index, 1);
+			for(let i = 0; i < seedPhrase.length; i++){
+				if(seedPhrase[i] === payload.word){
+					seedPhrase.splice(i, 1);
+					break;
+				}
+			}
 			for (let i = 0; i < state.permanentSeedPhrase.length; i += 1) {
 				if (state.permanentSeedPhrase[i] === confirmedPhrase[i]) {
 					if (i === 11) {

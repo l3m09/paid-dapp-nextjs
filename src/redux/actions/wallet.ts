@@ -115,11 +115,11 @@ export const doGeneratePhrase = () => async (dispatch: any) => {
 	dispatch(generatePhrase(words));
 };
 
-export const doAddWord = (word: any, index: any) => (
+export const doAddWord = (word: any) => (
 	dispatch: any,
 	payload: any
 ) => {
-	dispatch(addWord({ word, index }));
+	dispatch(addWord({ word }));
 };
 export const doRemoveWord = (word: any, index: any) => async (
 	dispatch: any,
