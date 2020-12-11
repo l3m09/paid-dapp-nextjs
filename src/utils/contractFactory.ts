@@ -12,13 +12,13 @@ export class ContractFactory {
 	private static _agreementContract: Contract | null = null;
 
 	// Get agreement contract
-	public static getAgreementContract = (web3: Web3) => {
+	public static getAgreementContract = (web3: Web3, network: string) => {
 		if (!ContractFactory._agreementContract) {
 			ContractFactory._agreementContract = new web3.eth.Contract(
 				AgreementContract.raw.abi as any,
-				AgreementContract.address['rinkeby']
+				AgreementContract.address[network]
 			);
-			console.log(AgreementContract.address['rinkeby'], ContractFactory._agreementContract);
+			console.log(AgreementContract.address[network], ContractFactory._agreementContract);
 		}
 		console.log(ContractFactory._agreementContract);
 		return ContractFactory._agreementContract;

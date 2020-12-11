@@ -6,10 +6,7 @@ import { ContractFactory } from '../../utils/contractFactory';
 import { base64StringToBlob } from 'blob-util';
 import { AlgorithmType, CEASigningService, WalletManager } from 'paid-universal-wallet';
 import { eddsa } from "elliptic";
-import { SolidoContract, SolidoProvider, SolidoModule, IMethodOrEventCall, Read, Write, EventFilterOptions, GetEvents } from '@decent-bet/solido';
-import { Web3Plugin, Web3Settings, Web3SolidoTopic } from 'solido-provider-web3';
-// import { AgreementContract } from './../../contracts/agreement';
-import Web3 from 'web3';
+
 import { templateRender } from './template/template';
 
 const uint8ArrayToString = require('uint8arrays/to-string');
@@ -75,47 +72,6 @@ declare global {
 	interface Window { web3: any; ethereum: any; }
 }
 
-// ACTIONS
-
-/*
-get account
-get the network
-get smart contract
-get meme hash
-*/
-// export const setupSolido = (
-// 	defaultAccount: string,
-// 	network: string,
-// 	web3: Web3,
-// ) => {
-// 	const module = new SolidoModule([
-// 		{
-// 			name: 'AgreementContract',
-// 			import: AgreementContract,
-// 			enableDynamicStubs: true,
-// 			provider: Web3Plugin
-// 		}
-// 	]);
-
-// 	// Bind contracts
-// 	const contracts = module.bindContracts({
-// 		'web3': {
-// 			provider: web3,
-// 			options: {
-// 				web3,
-// 				defaultAccount,
-// 				network
-// 			}
-// 		}
-// 	}).connect();
-
-
-// 	return {
-// 		...contracts
-// 	};
-
-// }
-
 export const doCreateAgreement = (payload: {
 	signatoryA: string;
 	signatoryB: string;
@@ -153,6 +109,12 @@ export const doCreateAgreement = (payload: {
 
 		const address = manager.getWalletAddress(rawWallet.mnemonic);
 		const web3 = BlockchainFactory.getWeb3Instance(rawWallet.keypairs, rawWallet.mnemonic);
+		const network = await BlockchainFactory.getNetwork(web3);
+
+		if (!web3.utils.isAddress(agreementForm.counterpartyAddress)) {
+			alert('Invalid Counter Party Address');
+			throw new Error('Invalid Counter Party Address');
+		}
 
 		const today = new Date();
 		const template = templateRender({ 
@@ -195,10 +157,11 @@ export const doCreateAgreement = (payload: {
 		let ipfsHash = await uploadsIPFS(ipfs, blobContent, opts, digest, signature, pubKey, formId, agreementForm.counterpartyWallet, null);
 		// -----------------------------------------------------
 
-		// Estimate gas,  TODO encapsulate 
-		const AgreementContract = ContractFactory.getAgreementContract(web3);
+		// Estimate gas,  TODO encapsulate
+		const AgreementContract = ContractFactory.getAgreementContract(web3, network);
 		const methodFn = AgreementContract.methods.partyCreate(
 			validUntil,
+			agreementForm.counterpartyAddress,
 			ipfsHash.toString(),
 			formId,
 			form,
@@ -265,8 +228,9 @@ export const doGetDocuments = (currentWallet: any) => async (
 		const storage = manager.getKeyStorage();
 		const rawWallet = await storage.find<KeyStorageModel>(unlockedWallet._id);
 		const web3 = BlockchainFactory.getWeb3Instance(rawWallet.keypairs, rawWallet.mnemonic);
+		const network = await BlockchainFactory.getNetwork(web3);
 
-		const agreementContract = ContractFactory.getAgreementContract(web3);
+		const agreementContract = ContractFactory.getAgreementContract(web3, network);
 
 		console.log('Address Wallet Events:', address, 'web3 accounts wallet', web3.eth.accounts.wallet);
 

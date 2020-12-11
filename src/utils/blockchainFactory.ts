@@ -83,7 +83,32 @@ export class BlockchainFactory {
 	// 	return wallet.connect(provider);
 	// }
 
+	private static _getChainId = async (web3: Web3) => {
+		return web3.eth.getChainId()
+	}
 
+	public static getNetwork = async (web3:Web3) => {
+		const id = await BlockchainFactory._getChainId(web3);
+		return await Promise.resolve(id).then((_id) => {
+			switch (_id) {
+				case 1 : {
+					return "mainnet";
+				}
+				case 3 : {
+					return "ropsten";
+				}
+				case 4 : {
+					return "rinkeby";
+				}
+				case 42 : {
+					return "kovan";
+				}
+				default: {
+					return "Not Admit this Network"
+				}
+			}
+		});
+	}
 
 	// public static async getWallet2(): Promise<any | null> {
 	// 	if (!BlockchainFactory._keystore) {
