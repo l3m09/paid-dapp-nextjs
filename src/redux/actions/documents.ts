@@ -128,18 +128,16 @@ export const doCreateAgreement = (payload: {
 			counterparty_address: agreementForm.counterpartyAddress,
 			create_date: today.toLocaleDateString()
 		});
-		let balance:string;
 		await web3.eth.getBalance(address).then((balancewei) =>{
-			balance = web3.utils.fromWei(balancewei);
-			const parsedBalance = BigNumber(balance);
+			const balance = web3.utils.fromWei(balancewei);
+			const parsedBalance = BigNumber(balance).toNumber();
 			console.log(parsedBalance);
-			if ((parsedBalance.c[0] <= 0) && (parsedBalance.c[1] <= 9999999999)) {
+			if ((parsedBalance <= 0.0009999999999)) {
 				throw new Error('The wallet should has balance to send a transaction.');
 			}
-			console.log('Current_Wallet_Documents', address,'agreementForm', agreementForm);
+			console.log('Current_Wallet_address', address,'agreementForm', agreementForm);
 		})
 
-		console.log('Current_Wallet_Documents', address,'agreementForm', agreementForm);
 		// ALICE SIDE
 		const content = template();
 		const blobContent = base64StringToBlob(btoa(unescape(encodeURIComponent(content))), 'application/pdf');
@@ -236,13 +234,13 @@ export const doGetDocuments = (currentWallet: any) => async (
 
 		console.log('Address Wallet Events:', address, 'web3 accounts wallet', web3.eth.accounts.wallet);
 
-		const eventsSource = await agreementContract.getPastEvents('AgreementPartyCreated', {
+		const eventsSource = await agreementContract.getPastEvents('AgreementEvents', {
 			filter: { partySource: address.toString() },
 			fromBlock: 7600000,
 			toBlock: 'latest'
 		});
 		console.table(eventsSource);
-		const eventsDestination = await agreementContract.getPastEvents('AgreementPartyCreated', {
+		const eventsDestination = await agreementContract.getPastEvents('AgreementEvents', {
 			filter: { partyDestination: address.toString() },
 			fromBlock: 7600000,
 			toBlock: 'latest'
@@ -268,7 +266,8 @@ export const doGetDocuments = (currentWallet: any) => async (
 					escrowed,
 					validUntil,
 					toSigner,
-					fromSigner
+					fromSigner,
+					status
 				} = agreement;
 
 				resolve({
@@ -286,7 +285,7 @@ export const doGetDocuments = (currentWallet: any) => async (
 						to: partyDestination,
 						agreementFormTemplateId: formTemplateId,
 						cid: agreementStoredReference,
-						pending: partyDestination.substring(0, 7) === '0x00000'
+						status: status
 					},
 					data: {
 						agreementForm,
@@ -400,8 +399,19 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 		const rawWallet = await storage.find<KeyStorageModel>(unlockedWallet._id);
 		const address = manager.getWalletAddress(rawWallet.mnemonic);
 
+		const chkbalance = manager.getWalletAddress(rawWallet.mnemonic);
 		const web3 = BlockchainFactory.getWeb3Instance(rawWallet.keypairs, rawWallet.mnemonic);
 		const network = await BlockchainFactory.getNetwork(web3);
+
+		await web3.eth.getBalance(chkbalance).then((balancewei) =>{
+			const balance = web3.utils.fromWei(balancewei);
+			const parsedBalance = BigNumber(balance).toNumber();
+			console.log(parsedBalance);
+			if ((parsedBalance <= 0.0009999999999)) {
+				throw new Error('The wallet should has balance to send a transaction.');
+			}
+			console.log('Current_Wallet_address', chkbalance,'agreementForm', document.data.agreementForm);
+		})
 
 		const AgreementContract = ContractFactory.getAgreementContract(web3, network);
 		const form = document.data.agreementForm;
@@ -439,7 +449,7 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 			formId,
 			form,
 			'0x' + digest);
-			
+
 		const gas = await methodFn.estimateGas();
 		Promise.resolve(gas).then(async (gas:any) => {
 			const agreementTransaction = await methodFn.send({ from: address, gas:gas+5e4, gasPrice: 50e9 })
