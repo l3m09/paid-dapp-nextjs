@@ -1,0 +1,17 @@
+# These owners will be the default owners for everything in the repo. 
+# Unless a later match takes precedence, @luissanchez0305 will be requested for
+# review when someone opens a pull request.
+* @luissanchez0305 
+
+# When someone opens a pull request that only
+# modifies JS files, JSON files, src/redux, src/contracts, src/utils and tests directories and its subdirectories 
+# only @alfredolopez80 and not the global owner(s) will be requested for a review.
+/src/redux/ /src/contracts/ /src/utils/ /tests/ *.js *.json  @alfredolopez80
+
+# @mlopezdetrinidad owns any files in the src/web, src/theme, src/components and public
+# directories at the root of the repository and any of its
+# subdirectories.
+/src/web/ /src/theme/ /src/components/ /public/ @mlopezdetrinidad
+
+# @urbinaalex17 owns any files related to CI/CD, Docker and Kubernetes
+/k8s/ /.circleci/ /.devops/ Dockerfile .dockerignore sonar-project.properties @urbinaalex17
