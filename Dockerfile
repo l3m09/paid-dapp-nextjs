@@ -18,6 +18,15 @@ FROM base as build
 RUN npm run build
 
 
+# Use the build stage to run unit tests
+FROM build as unit-test
+# Copy tests directory
+#COPY tests .
+# Execute npm to actually run test:unit script
+# TODO Uncomment the line below when the unit test is passing.
+#RUN npm run test:unit
+
+
 # Use the current stable nginx image for production stage
 FROM nginx:1.19.5-alpine as production
 # Copy build directory from build stage
