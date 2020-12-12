@@ -405,6 +405,7 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 		const manager = BlockchainFactory.getWalletManager();
 		const storage = manager.getKeyStorage();
 		const rawWallet = await storage.find<KeyStorageModel>(unlockedWallet._id);
+		const address = manager.getWalletAddress(rawWallet.mnemonic);
 
 		const web3 = BlockchainFactory.getWeb3Instance(rawWallet.keypairs, rawWallet.mnemonic);
 		const network = await BlockchainFactory.getNetwork(web3);
@@ -422,19 +423,35 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 		const jsonContent = JSON.parse(fetchedContent);
 		const digest = jsonContent.digest;
 
+		const contentRef = jsonContent.contentRef;
+		let pdfContent = '';
+		for await (const chunk of ipfs.cat(contentRef.cid)) {
+			pdfContent = uint8ArrayToString(chunk);
+		}
+
+		const ec_alice = new eddsa('ed25519');
+		const signer = ec_alice.keyFromSecret(rawWallet.keypairs.ED25519);
+		const signature = signer
+			.sign(digest)
+			.toHex();
+		const pubKey = signer.getPublic();
+		const opts = { create: true, parents: true };
+		let ipfsHash = await uploadsIPFS(ipfs, pdfContent, opts, digest, signature, pubKey, formId, address, null);
+		
+
 		const methodFn = AgreementContract.methods.counterPartiesSign(
 			agreementId,
 			validUntil,
-			cid,
+			ipfsHash,
 			formId,
 			form,
 			'0x' + digest);
 			
 		const gas = await methodFn.estimateGas();
-		const address = manager.getWalletAddress(rawWallet.mnemonic);
 		Promise.resolve(gas).then(async (gas:any) => {
 			const agreementTransaction = await methodFn.send({ from: address, gas:gas+5e4, gasPrice: 50e9 })
 			.on('receipt', async function (receipt: any) {
+				console.log('receipt', receipt);
 				dispatch(getSelectedDocument(document));
 			})
 			.on('error', function (error: any, receipt: any) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.		

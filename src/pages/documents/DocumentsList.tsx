@@ -103,7 +103,7 @@ function SelectedDocument(payload: {
 	if (!selectedDocument) {
 		return null;
 	}
-
+	console.log('status', selectedDocument.event.status);
 	return (
 		<div id="modal-container">
 			<IonModal isOpen={show} cssClass="document-modal" onDidDismiss={() => {closeShowDocument()}}>
