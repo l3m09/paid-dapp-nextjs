@@ -324,7 +324,8 @@ export const doGetDocuments = (currentWallet: any) => async (
 					escrowed,
 					validUntil,
 					toSigner,
-					fromSigner
+					fromSigner,
+					status
 				} = agreement;
 				resolve({
 					meta: {
@@ -340,7 +341,8 @@ export const doGetDocuments = (currentWallet: any) => async (
 						from: partySource,
 						to: partyDestination,
 						agreementFormTemplateId: formTemplateId,
-						cid: agreementStoredReference
+						cid: agreementStoredReference,
+						status: status
 					},
 					data: {
 						agreementForm,
@@ -389,6 +391,59 @@ export const doUploadDocuments = (file: any) => async (dispatch: any) => {
 		});
 	}
 };
+
+export const doSignCounterpartyDocument = (document: any) => async (dispatch: any, getState: () => { wallet: any }) => {
+	dispatch({ type: DocumentsActionTypes.GET_SELECTED_DOCUMENT_LOADING });
+	let fetchedContent = '';
+	if(document){
+		const { wallet } = getState();
+		const { unlockedWallet } = wallet;
+		if (!unlockedWallet) {
+			throw new Error('Not unlocked wallet found');
+		}
+
+		const manager = BlockchainFactory.getWalletManager();
+		const storage = manager.getKeyStorage();
+		const rawWallet = await storage.find<KeyStorageModel>(unlockedWallet._id);
+
+		const web3 = BlockchainFactory.getWeb3Instance(rawWallet.keypairs, rawWallet.mnemonic);
+		const network = await BlockchainFactory.getNetwork(web3);
+
+		const AgreementContract = ContractFactory.getAgreementContract(web3, network);
+		const form = document.data.agreementForm;
+		const formId = document.event.agreementFormTemplateId;
+		const validUntil = document.data.validUntil;
+		const agreementId = document.event.id;
+		const cid = document.event.cid.toString();
+
+		for await (const chunk of ipfs.cat(cid)) {
+			fetchedContent = uint8ArrayToString(chunk);
+		}
+		const jsonContent = JSON.parse(fetchedContent);
+		const digest = jsonContent.digest;
+
+		const methodFn = AgreementContract.methods.counterPartiesSign(
+			agreementId,
+			validUntil,
+			cid,
+			formId,
+			form,
+			'0x' + digest);
+			
+		const gas = await methodFn.estimateGas();
+		const address = manager.getWalletAddress(rawWallet.mnemonic);
+		Promise.resolve(gas).then(async (gas:any) => {
+			const agreementTransaction = await methodFn.send({ from: address, gas:gas+5e4, gasPrice: 50e9 })
+			.on('receipt', async function (receipt: any) {
+				dispatch(getSelectedDocument(document));
+			})
+			.on('error', function (error: any, receipt: any) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.		
+				alert('Transaction failed');
+				throw new Error('Transaction failed');
+			});
+		});
+	}
+}
 
 export const doGetSelectedDocument = (document: any) => async (dispatch: any) => {
 	dispatch({ type: DocumentsActionTypes.GET_SELECTED_DOCUMENT_LOADING });

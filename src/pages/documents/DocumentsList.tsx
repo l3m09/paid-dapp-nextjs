@@ -21,7 +21,8 @@ import { useHistory } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { closeCircle, checkmarkCircle } from 'ionicons/icons';
 import {
-	doGetSelectedDocument
+	doGetSelectedDocument,
+	doSignCounterpartyDocument
 } from '../../redux/actions/documents';
 
 import { IonBadge } from '@ionic/react';
@@ -74,7 +75,7 @@ function SelectedDocument(payload: {
 	showPdfViewerModal: boolean;
 	selectedDocument: any;
 	closeShowDocument: () => void;
-	verifyDocument: (cid : string) => void; 
+	verifyDocument: (document: any) => void; 
 	openPdfViewerModal: (cid : string, transactionHash: string) => void;
 	closePdfViewerModal: () => void;
 	agreementsurl: string;
@@ -95,6 +96,10 @@ function SelectedDocument(payload: {
 		showVerified,
 		showNotVerified
 	} = payload;
+	const wallet = useSelector(
+		(state: { wallet: { currentWallet: any } }) => state.wallet
+	);
+	const { currentWallet } = wallet;
 	if (!selectedDocument) {
 		return null;
 	}
@@ -121,10 +126,10 @@ function SelectedDocument(payload: {
 								className="small-button"
 								color="primary"
 								onClick={async () => {
-									verifyDocument(selectedDocument.event.cid);
+									verifyDocument(selectedDocument);
 								}}
 							>
-								<span>Verify document</span>
+								<span>{selectedDocument.event.to == currentWallet?.address && selectedDocument.event.status == 0 ? 'Sign Document' : 'Verify document'}</span>
 							</IonButton>
 							{ showVerified ? <span className="icon-wrapper">
 								<IonIcon
@@ -230,25 +235,31 @@ const DocumentsList: React.FC<Props> = ({documentsTo, documentsFrom, type, count
 		setShowVerified(false);
 	}
 
-	async function verifyDocument(cid: string) {
-		let fetchedContent	 = '';
-		for await (const chunk of ipfs.cat(cid)) {
-			fetchedContent = uint8ArrayToString(chunk);
-		}
-		const jsonContent = JSON.parse(fetchedContent);
+	async function verifyDocument(document: any) {
+		if(document.event.status != 0){
+			let fetchedContent	 = '';
+			for await (const chunk of ipfs.cat(document.event.cid)) {
+				fetchedContent = uint8ArrayToString(chunk);
+			}
+			const jsonContent = JSON.parse(fetchedContent);
 
-		const fetchedPubKey = jsonContent.publicKey;
+			const fetchedPubKey = jsonContent.publicKey;
 
-		const ec = new eddsa('ed25519');
-		const key = ec.keyFromPublic(fetchedPubKey);
-		const sigRef = jsonContent.sigRef;
-		let sigDocument = '';
-		for await (const chunk of ipfs.cat(sigRef.cid)) {
-			sigDocument = uint8ArrayToString(chunk);
+			const ec = new eddsa('ed25519');
+			const key = ec.keyFromPublic(fetchedPubKey);
+			const sigRef = jsonContent.sigRef;
+			let sigDocument = '';
+			for await (const chunk of ipfs.cat(sigRef.cid)) {
+				sigDocument = uint8ArrayToString(chunk);
+			}
+			const verified = key.verify(jsonContent.digest, sigDocument);
+			setShowVerified(verified);
+			setShowNotVerified(!verified);
 		}
-		const verified = key.verify(jsonContent.digest, sigDocument);
-		setShowVerified(verified);
-		setShowNotVerified(!verified);
+		else{
+			dispatch(doSignCounterpartyDocument(document));
+
+		}
 	}
 
 	function closeShowDocument() {

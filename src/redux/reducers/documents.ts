@@ -7,7 +7,7 @@ const initialState = {
 	documentsFrom: [],
 	documentsTo: [],
 	selectedDocument: null,
-	agreementTypes: ['Non-Disclosure'],
+	agreementTypes: ['Mutual-NDA'],
 	agreementFormInfo: {
 		name: '',
 		address: '',

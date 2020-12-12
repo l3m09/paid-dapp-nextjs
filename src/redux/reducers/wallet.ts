@@ -7,6 +7,8 @@ const initialState = {
 	exportingWallet: false,
 	confirmed: null,
 	permanentSeedPhrase: [],
+	name: '',
+	passphrase: '',
 	seedPhrase: [],
 	confirmedSeedPhrase: [],
 	wallets: [],
@@ -75,6 +77,15 @@ export const WalletReducer = function (state = initialState, action: any) {
 				seedPhrase: seedPhrase,
 				confirmedSeedPhrase: confirmedPhrase,
 				confirmed: false
+			};
+		}
+		case WalletActionTypes.ADD_NAME_PASSPHRASE: {
+			let { name, passphrase } = payload;
+
+			return {
+				...state,
+				name,
+				passphrase
 			};
 		}
 		case WalletActionTypes.GET_WALLETS_LOADING:

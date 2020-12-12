@@ -25,6 +25,7 @@ interface Props {
 interface WalletInfo {
     name: string;
     password: string;
+    confirmpassword: string;
     mnemonic: string;
     verified: boolean;
 }
@@ -35,7 +36,7 @@ const ImportWallet: React.FC<Props> = ({show, dismiss}) => {
     const wallet = useSelector((state: any) => state.wallet);
     const { importingWallet } = wallet;
 
-    let walletInfo: WalletInfo = { name: '', password: '', verified: false, mnemonic: '' };
+    let walletInfo: WalletInfo = { name: '', password: '', confirmpassword: '', verified: false, mnemonic: '' };
 
     function verifyInfo() {
         if (walletInfo.name.length > 0 && walletInfo.password.length > 3 && walletInfo.mnemonic.length > 12) {
@@ -50,6 +51,12 @@ const ImportWallet: React.FC<Props> = ({show, dismiss}) => {
     function passwordChanged(e: any) {
         walletInfo.password = e.target.value;
         verifyInfo();
+    }
+     function confirmationPassword(e: any) {
+        walletInfo.confirmpassword = e.target.value;
+        if(walletInfo.confirmpassword = walletInfo.password){
+            verifyInfo();
+        }
     }
     function mnemonicChanged(e: any) {
         walletInfo.mnemonic = e.target.value;
@@ -103,6 +110,16 @@ const ImportWallet: React.FC<Props> = ({show, dismiss}) => {
                             placeholder="Enter a password for this wallet"
                             value={walletInfo.password}
                             onInput={passwordChanged}
+                        />
+                    </IonItem>
+			 <IonItem>
+                        <IonLabel position="stacked">Confirmation Password</IonLabel>
+                        <IonInput
+                            title="confirm password"
+                            type="password"
+                            placeholder="Enter the password for second time"
+                            value={walletInfo.confirmpassword}
+                            onInput={confirmationPassword}
                         />
                     </IonItem>
                     <IonItem>

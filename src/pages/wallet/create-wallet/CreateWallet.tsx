@@ -34,6 +34,7 @@ const CreateWallet: React.FC<CreateWalletProps> = ({ show, dismiss }) => {
 	}, [slidesRef]);
 
 	async function lockSwipes() {
+		await slidesRef.current?.update();
 		await slidesRef.current?.slideTo(0);
 		await slidesRef.current?.lockSwipeToPrev(true);
 		await slidesRef.current?.lockSwipeToNext(true);
@@ -69,14 +70,16 @@ const CreateWallet: React.FC<CreateWalletProps> = ({ show, dismiss }) => {
 						<Instructions current={slidesRef.current} />
 					</IonSlide>
 					<IonSlide>
+						<NamePassword current={slidesRef.current} />
+					</IonSlide>
+					<IonSlide>
 						<SeedPhrase current={slidesRef.current} />
 					</IonSlide>
+					{/*
 					<IonSlide>
 						<ConfirmPhrase current={slidesRef.current} />
 					</IonSlide>
-					<IonSlide>
-						<NamePassword current={slidesRef.current} />
-					</IonSlide>
+					*/}
 					{/*<IonSlide>*/}
 					{/*	<Completed current={slidesRef.current} dismiss={doDismiss} />*/}
 					{/*</IonSlide>*/}

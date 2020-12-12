@@ -9,7 +9,7 @@ import {
 import React, { useEffect } from 'react';
 import { lockClosedOutline } from 'ionicons/icons';
 import { useDispatch, useSelector } from 'react-redux';
-import { doGeneratePhrase } from '../../../redux/actions/wallet';
+import { doGeneratePhrase, doCreateWallet } from '../../../redux/actions/wallet';
 
 interface SeedPhraseProps {
 	current: any;
@@ -18,16 +18,35 @@ interface SeedPhraseProps {
 const SeedPhrase: React.FC<SeedPhraseProps> = ({ current }) => {
 	const dispatch = useDispatch();
 	const wallet = useSelector(
-		(state: { wallet: { seedPhrase: string[] } }) => state.wallet
+		(state: { wallet: { 
+			seedPhrase: string[], 
+			name: string, 
+			passphrase: string,
+			loading: boolean,
+			creatingWallet: boolean
+		} }) => state.wallet
 	);
-	const { seedPhrase } = wallet;
+	const { seedPhrase, name, passphrase, creatingWallet } = wallet;
 
-	async function slideNext() {
-		console.log('SeedPhrase', await current.getActiveIndex());
-		await current.lockSwipeToNext(false);
-		current.slideNext();
-		await current.lockSwipeToNext(true);
-	}
+	// async function slideNext() {
+	// 	console.log('SeedPhrase', await current.getActiveIndex());
+	// 	await current.lockSwipeToNext(false);
+	// 	current.slideNext();
+	// 	await current.lockSwipeToNext(true);
+	// }
+
+	const onSubmit = () => {
+		if (seedPhrase.length > 0) {
+			let mnemonic = seedPhrase.join(' ');
+			dispatch(
+				doCreateWallet({
+					name,
+					password: passphrase,
+					mnemonic: mnemonic
+				})
+			);
+		}
+	};
 
 	useEffect(() => {
 		dispatch(doGeneratePhrase());
@@ -66,13 +85,14 @@ const SeedPhrase: React.FC<SeedPhraseProps> = ({ current }) => {
 			<IonItem class="">
 				<IonButton
 					onClick={() => {
-						slideNext();
+						onSubmit();
 					}}
 					class="purple-button create-button"
 					color="gradient"
 					shape="round"
+					disabled={creatingWallet}
 				>
-					Continue
+					{creatingWallet ? 'Loading..' : 'Confirm'}
 				</IonButton>
 			</IonItem>
 		</IonContent>
