@@ -100,11 +100,11 @@ const UnlockWallet: React.FC<Props> = ({
 				</IonItem>
 				<form onSubmit={onSubmit} className="name-password-form">
 					<IonItem>
-						<IonLabel position="stacked">Password</IonLabel>
+						<IonLabel position="stacked">Passphrase</IonLabel>
 						<IonInput
 							title="Label"
 							type="password"
-							placeholder="Enter your password"
+							placeholder="Enter your passphrase"
 							value={unlockForm.password}
 							onInput={(e) => {
 								passwordChanged(e);

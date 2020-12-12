@@ -6,60 +6,82 @@ import {
 	IonButton
 } from '@ionic/react';
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { doCreateWallet } from '../../../redux/actions/wallet';
+// import { useDispatch, useSelector } from 'react-redux';
+// import { doCreateWallet } from '../../../redux/actions/wallet';
+import { useDispatch } from 'react-redux';
+import { doAddNamePassPharse } from '../../../redux/actions/wallet';
 
 interface NamePasswordProps {
 	current: any;
 }
 interface WalletInfo {
 	name: string;
-	password: string;
+	passphrase: string;
+	confirmPassphrase: string,
 	verified: boolean;
 }
 
 const NamePassword: React.FC<NamePasswordProps> = ({ current }) => {
 	const dispatch = useDispatch();
-	const wallet = useSelector(
-		(state: {
-			wallet: {
-				wallets: [];
-				loading: boolean;
-				confirmedSeedPhrase: [];
-				creatingWallet: boolean;
-			};
-		}) => state.wallet
-	);
-	const { confirmedSeedPhrase, creatingWallet } = wallet;
+	// const wallet = useSelector(
+	// 	(state: {
+	// 		wallet: {
+	// 			wallets: [];
+	// 			loading: boolean;
+	// 			confirmedSeedPhrase: [];
+	// 			creatingWallet: boolean;
+	// 		};
+	// 	}) => state.wallet
+	// );
+	// const { confirmedSeedPhrase, creatingWallet } = wallet;
 
-	let walletInfo: WalletInfo = { name: '', password: '', verified: false };
+	let walletInfo: WalletInfo = { name: '', passphrase: '', confirmPassphrase: '', verified: false };
 
 	function nameChanged(e: any) {
 		walletInfo.name = e.target.value;
 		verifyInfo();
 	}
-	function passwordChanged(e: any) {
-		walletInfo.password = e.target.value;
+	function passphraseChanged(e: any) {
+		walletInfo.passphrase = e.target.value;
 		verifyInfo();
 	}
-
+	function confirmPassphraseChanged(e: any) {
+		walletInfo.confirmPassphrase = e.target.value;
+		verifyInfo();
+	}
 	function verifyInfo() {
-		if (walletInfo.name.length > 0 && walletInfo.password.length > 3) {
+		if (walletInfo.name.length > 0 && 
+			walletInfo.passphrase.length > 3 &&
+			walletInfo.passphrase === walletInfo.confirmPassphrase) {
 			walletInfo.verified = true;
+			return;
 		}
+		walletInfo.verified = false;
 	}
 
-	const onSubmit = () => {
-		// e.preventDefault();
-		let mnemonic = confirmedSeedPhrase.join(' ');
-		dispatch(
-			doCreateWallet({
-				name: walletInfo.name,
-				password: walletInfo.password,
-				mnemonic: mnemonic
-			})
-		);
-		// slideNext().then(() => {});
+	// const onSubmit = () => {
+	// 	// e.preventDefault();
+	// 	let mnemonic = confirmedSeedPhrase.join(' ');
+	// 	dispatch(
+	// 		doCreateWallet({
+	// 			name: walletInfo.name,
+	// 			password: walletInfo.passphrase,
+	// 			mnemonic: mnemonic
+	// 		})
+	// 	);
+	// 	// slideNext().then(() => {});
+	// };
+
+	const onContinue = async () => {
+		if (walletInfo.verified) {
+			const {name, passphrase} = walletInfo;
+			await dispatch(
+				doAddNamePassPharse(name, passphrase)
+			);
+			await current.lockSwipeToNext(false);
+			current.slideNext();
+			await current.lockSwipeToNext(true);
+		}
 	};
 
 	return (
@@ -78,16 +100,27 @@ const NamePassword: React.FC<NamePasswordProps> = ({ current }) => {
 					/>
 				</IonItem>
 				<IonItem>
-					<IonLabel position="stacked">Password</IonLabel>
+					<IonLabel position="stacked">Passphrase</IonLabel>
 					<IonInput
-						title="password"
+						title="passphrase"
 						type="password"
-						placeholder="Enter a password for this wallet"
-						value={walletInfo.password}
-						onInput={passwordChanged}
+						placeholder="Enter a passphrase for this wallet"
+						value={walletInfo.passphrase}
+						onInput={passphraseChanged}
+					/>
+				</IonItem>
+				<IonItem>
+					<IonLabel position="stacked">Confirm Passphrase</IonLabel>
+					<IonInput
+						title="confirm passphrase"
+						type="password"
+						placeholder="Enter the passphrase for second time"
+						value={walletInfo.confirmPassphrase}
+						onInput={confirmPassphraseChanged}
 					/>
 				</IonItem>
 				<IonItem class="form-options">
+					{/*
 					<IonButton
 						// routerLink="/phrase/instructions"
 						onClick={() => {
@@ -98,6 +131,16 @@ const NamePassword: React.FC<NamePasswordProps> = ({ current }) => {
 						disabled={creatingWallet}
 					>
 						{creatingWallet ? 'Loading..' : 'Confirm'}
+					</IonButton>
+					*/}
+					<IonButton
+						onClick={() => {
+							onContinue();
+						}}
+						color="gradient"
+						shape="round"
+					>
+						Continue
 					</IonButton>
 				</IonItem>
 			</form>
