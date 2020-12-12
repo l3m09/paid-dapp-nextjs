@@ -130,9 +130,9 @@ export const doCreateAgreement = (payload: {
 		});
 		await web3.eth.getBalance(address).then((balancewei) =>{
 			const balance = web3.utils.fromWei(balancewei);
-			const parsedBalance = BigNumber(balance);
+			const parsedBalance = BigNumber(balance).toNumber();
 			console.log(parsedBalance);
-			if ((parsedBalance.c[0] <= 0) && (parsedBalance.c[1] <= 9999999999)) {
+			if ((parsedBalance <= 0.0009999999999)) {
 				throw new Error('The wallet should has balance to send a transaction.');
 			}
 			console.log('Current_Wallet_address', address,'agreementForm', agreementForm);
@@ -411,12 +411,12 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 
 		await web3.eth.getBalance(chkbalance).then((balancewei) =>{
 			const balance = web3.utils.fromWei(balancewei);
-			const parsedBalance = BigNumber(balance);
-			console.log(parsedBalance, balance);
-			if ((parsedBalance.c[0] <= 0) && (parsedBalance.c[1] <= 9999999999)) {
+			const parsedBalance = BigNumber(balance).toNumber();
+			console.log(parsedBalance);
+			if ((parsedBalance <= 0.0009999999999)) {
 				throw new Error('The wallet should has balance to send a transaction.');
 			}
-			console.log('Current_Wallet:', chkbalance,'agreementForm', document.data.agreementForm);
+			console.log('Current_Wallet_address', chkbalance,'agreementForm', document.data.agreementForm);
 		})
 
 		const AgreementContract = ContractFactory.getAgreementContract(web3, network);
