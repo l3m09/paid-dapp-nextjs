@@ -132,10 +132,9 @@ workflows:
                 - /^release.*/
                 # Include hotfix branches
                 - /^hotfix.*/
-          # TODO Implement CircleCI Contexts
-          #context: 
-          #  - cea-gcp
-          #  - docker-hub-creds
+          context: 
+            - cea-gcp
+            - docker-hub-creds
       - test:
           requires:
             - build
@@ -144,10 +143,9 @@ workflows:
               only:
                 - master
                 - develop
-          # TODO Implement CircleCI Contexts
-          #context: 
-          #  - cea-gcp
-          #  - docker-hub-creds
+          context: 
+            - cea-gcp
+            - docker-hub-creds
       - code-scan:
           requires: 
             - test
@@ -158,10 +156,9 @@ workflows:
                 - develop
                 # TODO Remove branch
                 - cicd-development
-          # TODO Implement CircleCI Contexts
-          #context: 
-          #  - cea-sonarcloud 
-          #  - docker-hub-creds
+          context: 
+            - cea-sonarcloud 
+            - docker-hub-creds
       - publish:
           requires:
             - build
@@ -179,10 +176,9 @@ workflows:
                 - /^release.*/
                 # Include hotfix branches
                 - /^hotfix.*/
-          # TODO Implement CircleCI Contexts
-          #context: 
-          #  - cea-gcp
-          #  - docker-hub-creds
+          context: 
+            - cea-gcp
+            - docker-hub-creds
       - slack/approval-notification:
           filters:
             branches:
@@ -231,8 +227,7 @@ workflows:
                 - /^release.*/
                 # Include hotfix branches
                 - /^hotfix.*/
-          # TODO Implement CircleCI Contexts
-          #context: cea-gcp
+          context: cea-gcp
       - deploy-prod:
           requires:
             - hold-deploy
@@ -240,5 +235,4 @@ workflows:
             branches:
               only:
                 - master
-          # TODO Implement CircleCI Contexts
-          #context: cea-gcp
+          context: cea-gcp
