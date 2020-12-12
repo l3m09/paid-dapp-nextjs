@@ -261,13 +261,6 @@ export const doGetDocuments = (currentWallet: any) => async (
 			const { id, partySource, partyDestination, formTemplateId, agreementStoredReference } = args;
 			const agreementId = (id as BN).toString();
 
-			let fetchedContent = '';
-			for await (const chunk of ipfs.cat(agreementStoredReference.toString())) {
-				fetchedContent = uint8ArrayToString(chunk);
-			}
-
-			const jsonContent = JSON.parse(fetchedContent);
-
 			return new Promise(async (resolve) => {
 				const agreement = await agreementContract.methods.agreements(id).call();
 				const {
@@ -290,7 +283,7 @@ export const doGetDocuments = (currentWallet: any) => async (
 					event: {
 						id: agreementId,
 						from: partySource,
-						to: jsonContent.cpartyAddress ?? '',
+						to: partyDestination,
 						agreementFormTemplateId: formTemplateId,
 						cid: agreementStoredReference,
 						pending: partyDestination.substring(0, 7) === '0x00000'
