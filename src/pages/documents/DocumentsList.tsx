@@ -331,7 +331,7 @@ const DocumentsList: React.FC<Props> = ({documentsTo, documentsFrom, type, count
 								<div className="col">{data.validUntil}</div>
 								<div className="col">{event.from.slice(0,15)}...</div>
 								<div className="col">{event.to.slice(0,15)}...</div>
-								<div className="col in"><IonBadge color="primary">IN</IonBadge></div>
+								<div className="col in"><IonBadge color="primary">PENDING</IonBadge></div>
 							</div>
 						);
 					})
@@ -346,7 +346,7 @@ const DocumentsList: React.FC<Props> = ({documentsTo, documentsFrom, type, count
 							<div className="col">{data.validUntil}</div>
 							<div className="col">{event.from.slice(0,15)}...</div>
 							<div className="col">{event.to.slice(0,15)}...</div>
-							<div className="col out"><IonBadge color="secondary">OUT</IonBadge></div>
+							<div className="col out"><IonBadge color="secondary">SING...</IonBadge></div>
 							<div className="col in">
 								{event.pending ?
 								<IonBadge className="pending-container">
@@ -355,11 +355,11 @@ const DocumentsList: React.FC<Props> = ({documentsTo, documentsFrom, type, count
 								:
 								event.from == currentWallet?.address ?
 								<IonBadge color="secondary">
-									OUT
+									IN
 								</IonBadge>
 								:
 								<IonBadge color="primary">
-									IN
+									OUT
 								</IonBadge>}
 							</div>
 						</div>
