@@ -144,6 +144,8 @@ workflows:
               only:
                 - master
                 - develop
+                # TODO Remove branch
+                - cicd-development
           # TODO Implement CircleCI Contexts
           #context: 
           #  - cea-gcp
