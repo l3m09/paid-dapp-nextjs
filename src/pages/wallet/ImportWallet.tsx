@@ -23,11 +23,11 @@ interface Props {
 }
 
 interface WalletInfo {
-    name: string;
-    password: string;
-    confirmpassword: string;
-    mnemonic: string;
+	name: string;
+	passphrase: string;
+	confirmPassphrase: string,
     verified: boolean;
+    mnemonic: string;
 }
 
 
@@ -36,35 +36,50 @@ const ImportWallet: React.FC<Props> = ({show, dismiss}) => {
     const wallet = useSelector((state: any) => state.wallet);
     const { importingWallet } = wallet;
 
-    let walletInfo: WalletInfo = { name: '', password: '', confirmpassword: '', verified: false, mnemonic: '' };
+    let walletInfo: WalletInfo = { name: '', passphrase: '', confirmPassphrase: '', verified: false, mnemonic: '' };
 
     function verifyInfo() {
-        if (walletInfo.name.length > 0 && walletInfo.password.length > 3 && walletInfo.mnemonic.length > 12) {
+        if (walletInfo.name.length > 0 && 
+            walletInfo.passphrase.length > 3 &&
+            walletInfo.passphrase === walletInfo.confirmPassphrase && 
+            walletInfo.mnemonic.length > 12) {
             walletInfo.verified = true;
+            return;
         }
+        walletInfo.verified = false;
     }
     
     function nameChanged(e: any) {
         walletInfo.name = e.target.value;
         verifyInfo();
     }
-    function passwordChanged(e: any) {
-        walletInfo.password = e.target.value;
+
+    function passphraseChanged(e: any) {
+        walletInfo.passphrase = e.target.value;
         verifyInfo();
     }
-     function confirmationPassword(e: any) {
-        walletInfo.confirmpassword = e.target.value;
-        if(walletInfo.confirmpassword = walletInfo.password){
-            verifyInfo();
-        }
+
+     function confirmPassphraseChange(e: any) {
+        walletInfo.confirmPassphrase = e.target.value;
+        verifyInfo();
     }
+
     function mnemonicChanged(e: any) {
         walletInfo.mnemonic = e.target.value;
         verifyInfo();
     }
+
     function onSubmit() {
-        dispatch(doImportWallet(walletInfo))
+        const {name, passphrase, mnemonic, verified} = walletInfo;
+        if (verified) {
+            dispatch(doImportWallet({
+                name,
+                password: passphrase,
+                mnemonic
+            }));
+        }
     }
+
 	async function doDismiss() {
         dismiss();
     }
@@ -103,23 +118,23 @@ const ImportWallet: React.FC<Props> = ({show, dismiss}) => {
                         />
                     </IonItem>
                     <IonItem>
-                        <IonLabel position="stacked">Password</IonLabel>
+                        <IonLabel position="stacked">Passphrase</IonLabel>
                         <IonInput
-                            title="password"
+                            title="passphrase"
                             type="password"
-                            placeholder="Enter a password for this wallet"
-                            value={walletInfo.password}
-                            onInput={passwordChanged}
+                            placeholder="Enter a passphrase for this wallet"
+                            value={walletInfo.passphrase}
+                            onInput={passphraseChanged}
                         />
                     </IonItem>
-			 <IonItem>
-                        <IonLabel position="stacked">Confirmation Password</IonLabel>
+			        <IonItem>
+                        <IonLabel position="stacked">Confirm Passphrase</IonLabel>
                         <IonInput
-                            title="confirm password"
+                            title="confirm passphrase"
                             type="password"
-                            placeholder="Enter the password for second time"
-                            value={walletInfo.confirmpassword}
-                            onInput={confirmationPassword}
+                            placeholder="Enter the passphrase for second time"
+                            value={walletInfo.confirmPassphrase}
+                            onInput={confirmPassphraseChange}
                         />
                     </IonItem>
                     <IonItem>

@@ -54,7 +54,9 @@ const NamePassword: React.FC<NamePasswordProps> = ({ current }) => {
 			walletInfo.passphrase.length > 3 &&
 			walletInfo.passphrase === walletInfo.confirmPassphrase) {
 			walletInfo.verified = true;
+			return;
 		}
+		walletInfo.verified = false;
 	}
 
 	// const onSubmit = () => {
@@ -112,7 +114,7 @@ const NamePassword: React.FC<NamePasswordProps> = ({ current }) => {
 					<IonInput
 						title="confirm passphrase"
 						type="password"
-						placeholder="Enter confirm passphrase"
+						placeholder="Enter the passphrase for second time"
 						value={walletInfo.confirmPassphrase}
 						onInput={confirmPassphraseChanged}
 					/>
