@@ -22,6 +22,14 @@ const removeWord = (payload: any) => {
 		payload
 	};
 };
+
+const addNamePassPhrase = (payload: any) => {
+	return {
+		type: WalletActionTypes.ADD_NAME_PASSPHRASE,
+		payload,
+	};
+};
+
 const getWallets = (payload: any[]) => {
 	return {
 		type: WalletActionTypes.GET_WALLETS_SUCCESS,
@@ -126,6 +134,13 @@ export const doRemoveWord = (word: any, index: any) => async (
 	payload: any
 ) => {
 	dispatch(removeWord({ word, index }));
+};
+
+export const doAddNamePassPharse = (name: any, passphrase: any) => async (
+	dispatch: any,
+	payload: any
+) => {
+	dispatch(addNamePassPhrase({ name, passphrase }));
 };
 
 export const doGetWallets = () => async (dispatch: any) => {
