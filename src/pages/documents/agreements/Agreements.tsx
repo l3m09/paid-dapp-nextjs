@@ -139,7 +139,7 @@ const Agreements: React.FC<AgreementsProps> = () => {
 					</IonToolbar>
 				</IonHeader>
 				<div>
-					{type === 'non-disclosure' ? ndaTemplate : null}
+					{type === 'mutual-nda' ? ndaTemplate : null}
 				</div>
 			</IonContent>
 		</IonPage>
