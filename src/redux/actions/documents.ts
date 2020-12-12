@@ -1,3 +1,4 @@
+import { agreementsRef } from './firebase';
 import { KeyStorageModel } from 'paid-universal-wallet/dist/key-storage/KeyStorageModel';
 import { DocumentsActionTypes } from '../actionTypes/documents';
 import { BigNumber as BN ,ethers, Wallet } from 'ethers';
@@ -35,9 +36,10 @@ const createAgreementFormPayload = (obj: any) => {
 	return ethers.utils.defaultAbiCoder.encode(types, values);
 };
 
-const getDocuments = (agreements: any[]) => {
+const getDocuments = (agreementsFrom: any[], agreementsTo: any[]) => {
 	const payload = {
-		from: agreements
+		from: agreementsFrom,
+		to:agreementsTo
 	}
 	return {
 		type: DocumentsActionTypes.GET_DOCUMENTS_SUCCESS,
@@ -105,26 +107,26 @@ export const doCreateAgreement = (payload: {
 		const manager = BlockchainFactory.getWalletManager();
 		const storage = manager.getKeyStorage();
 		const rawWallet = await storage.find<KeyStorageModel>(unlockedWallet._id);
-		const onchainWalletAddress = window.ethereum.selectedAddress;
+		// const onchainWalletAddress = window.ethereum.selectedAddress;
 
 		const address = manager.getWalletAddress(rawWallet.mnemonic);
 		const web3 = BlockchainFactory.getWeb3Instance(rawWallet.keypairs, rawWallet.mnemonic);
 		const network = await BlockchainFactory.getNetwork(web3);
 
-		if (!web3.utils.isAddress(agreementForm.counterpartyAddress)) {
+		if (!web3.utils.isAddress(agreementForm.counterpartyWallet)) {
 			alert('Invalid Counter Party Address');
 			throw new Error('Invalid Counter Party Address');
 		}
 
 		const today = new Date();
-		const template = templateRender({ 
-			party_name: agreementForm.name, 
+		const template = templateRender({
+			party_name: agreementForm.name,
 			party_wallet: address,
 			party_address: agreementForm.address,
 			counterparty_name: agreementForm.counterpartyName,
 			counterparty_wallet: agreementForm.counterpartyWallet,
 			counterparty_address: agreementForm.counterpartyAddress,
-			create_date: today.toLocaleDateString() 
+			create_date: today.toLocaleDateString()
 		});
 		let balance:string;
 		await web3.eth.getBalance(address).then((balancewei) =>{
@@ -161,7 +163,7 @@ export const doCreateAgreement = (payload: {
 		const AgreementContract = ContractFactory.getAgreementContract(web3, network);
 		const methodFn = AgreementContract.methods.partyCreate(
 			validUntil,
-			agreementForm.counterpartyAddress,
+			agreementForm.counterpartyWallet,
 			ipfsHash.toString(),
 			formId,
 			form,
@@ -352,10 +354,10 @@ export const doGetDocuments = (currentWallet: any) => async (
 		});
 		const agreementsSource = await Promise.all(promisesFrom);
 		const agreementsDestination = await Promise.all(promisesTo);
-		const agreements = agreementsDestination.concat(agreementsSource);
-		console.log('agreements', agreements);
+		// const agreements = agreementsDestination.concat(agreementsSource);
+		console.log('agreementsFrom', agreementsSource, 'agreementsTo', agreementsDestination);
 
-		dispatch(getDocuments(agreements));
+		dispatch(getDocuments(agreementsSource, agreementsDestination));
 	} catch (err) {
 		console.log('ln564', err);
 		dispatch({

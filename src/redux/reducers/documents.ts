@@ -4,7 +4,8 @@ const initialState = {
 	loading: false,
 	error: null,
 	creatingAgreement: false,
-	documents: [],
+	documentsFrom: [],
+	documentsTo: [],
 	selectedDocument: null,
 	agreementTypes: ['Non-Disclosure'],
 	agreementFormInfo: {
@@ -26,10 +27,10 @@ export const DocumentsReducer = function (state = initialState, action: any) {
 			return { ...state, loading: true };
 
 		case DocumentsActionTypes.GET_DOCUMENTS_SUCCESS:
-			return { ...state, documents: payload.from, loading: false };
+			return { ...state, documentsFrom: payload.from, documentsTo: payload.to, loading: false };
 
 		case DocumentsActionTypes.GET_DOCUMENTS_FAILURE:
-			return { ...state, documents: [], error: payload, loading: false };
+			return { ...state,  documentsFrom: [], documentsTo: [], error: payload, loading: false };
 
 		case DocumentsActionTypes.UPLOAD_DOCUMENTS_LOADING:
 			return { ...state, loading: true };
@@ -41,7 +42,7 @@ export const DocumentsReducer = function (state = initialState, action: any) {
 		}
 
 		case DocumentsActionTypes.UPLOAD_DOCUMENTS_FAILURE:
-			return { ...state, documents: [], error: payload, loading: false };
+			return { ...state, documentsFrom: [], documentsTo: [], error: payload, loading: false };
 
 		case DocumentsActionTypes.GET_SELECTED_DOCUMENT_LOADING: {
 			return { ...state, loading: true };
