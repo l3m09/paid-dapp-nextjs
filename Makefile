@@ -8,10 +8,7 @@ up: build network run
 
 .PHONY: build
 build:
-	docker build \
-        --build-arg GITHUB_USER=$(GITHUB_USER) \
-        --build-arg GITHUB_PASS=$(GITHUB_PASS) \
-        -t paid-dapp-web .
+	docker build -t paid-dapp --target production .
 
 .PHONY: network
 network:
@@ -20,7 +17,7 @@ network:
 
 .PHONY: run
 run:
-	docker run -d \
+	docker container run -d \
      	--name paid-dapp-web \
       	--network paid-net \
-      	-p 8080:80 paid-dapp-web
+      	-p 8080:80 paid-dapp
