@@ -236,13 +236,13 @@ export const doGetDocuments = (currentWallet: any) => async (
 
 		console.log('Address Wallet Events:', address, 'web3 accounts wallet', web3.eth.accounts.wallet);
 
-		const eventsSource = await agreementContract.getPastEvents('AgreementPartyCreated', {
+		const eventsSource = await agreementContract.getPastEvents('AgreementEvents', {
 			filter: { partySource: address.toString() },
 			fromBlock: 7600000,
 			toBlock: 'latest'
 		});
 		console.table(eventsSource);
-		const eventsDestination = await agreementContract.getPastEvents('AgreementPartyCreated', {
+		const eventsDestination = await agreementContract.getPastEvents('AgreementEvents', {
 			filter: { partyDestination: address.toString() },
 			fromBlock: 7600000,
 			toBlock: 'latest'
