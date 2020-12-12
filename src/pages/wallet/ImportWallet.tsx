@@ -52,16 +52,12 @@ const ImportWallet: React.FC<Props> = ({show, dismiss}) => {
         walletInfo.password = e.target.value;
         verifyInfo();
     }
-    function passwordChanged(e: any) {
-        walletInfo.password = e.target.value;
-        verifyInfo();
-    }
      function confirmationPassword(e: any) {
         walletInfo.confirmpassword = e.target.value;
         if(walletInfo.confirmpassword = walletInfo.password){
             verifyInfo();
         }
-	
+    }
     function mnemonicChanged(e: any) {
         walletInfo.mnemonic = e.target.value;
         verifyInfo();
