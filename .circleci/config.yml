@@ -144,8 +144,6 @@ workflows:
               only:
                 - master
                 - develop
-                # TODO Remove branch
-                - cicd-development
           # TODO Implement CircleCI Contexts
           #context: 
           #  - cea-gcp
@@ -191,6 +189,8 @@ workflows:
               only:
                 - master
                 - develop
+                # TODO Remove branch
+                - cicd-development
                 # Include features branches
                 - /^feature.*/
                 # Include release branches
@@ -206,6 +206,8 @@ workflows:
               only:
                 - master
                 - develop
+                # TODO Remove branch
+                - cicd-development
                 # Include features branches
                 - /^feature.*/
                 # Include release branches
@@ -220,6 +222,8 @@ workflows:
           filters:
             branches:
               only:
+                # TODO Remove branch
+                - cicd-development
                 - develop
                 # Include features branches
                 - /^feature.*/
