@@ -160,6 +160,7 @@ module.exports = {
         {
           inputs: [
             { internalType: "uint256", name: "validUntil", type: "uint256" },
+            { internalType: "address", name: "counterparty", type: "address" },
             {
               internalType: "string",
               name: "multiaddrReference",
@@ -177,7 +178,7 @@ module.exports = {
           outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
           stateMutability: "nonpayable",
           type: "function",
-          signature: "0xfbcfee94",
+          signature: "0x3514a201",
         },
         {
           inputs: [
@@ -297,6 +298,9 @@ module.exports = {
         },
       ],
     },
-    address: { rinkeby: "0xd15568c60B0b6c4b8e4886763F698BeFaE2c2e6d" },
+    address: {
+      "rinkeby-fork": "0x47f7b428A47111D64dA62a89365376301a29B057",
+      rinkeby: "0x47f7b428A47111D64dA62a89365376301a29B057",
+    },
   },
 };

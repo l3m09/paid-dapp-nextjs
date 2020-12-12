@@ -103,7 +103,8 @@ const Documents: React.FC = () => {
 	const documentsState = useSelector((state: any) => state.documents);
 	const walletsState = useSelector((state: any) => state.wallet);
 	const {
-		documents,
+		documentsFrom,
+		documentsTo,
 		selectedDocument,
 		loading,
 		agreementTypes
@@ -181,7 +182,7 @@ const Documents: React.FC = () => {
 
 				/>
 				<div>
-					<DocumentsList documents={documents} type="from" counterType="to"/>
+				<DocumentsList documentsTo={documentsTo} documentsFrom={documentsFrom} type="from" counterType="to"/>
 
 					<IonPopover mode="md" translucent={false} isOpen={showPopOver} cssClass="agreements-popover" onDidDismiss={() => {
 						setShowPopover(false)
