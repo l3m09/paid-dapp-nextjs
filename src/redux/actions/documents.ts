@@ -128,18 +128,16 @@ export const doCreateAgreement = (payload: {
 			counterparty_address: agreementForm.counterpartyAddress,
 			create_date: today.toLocaleDateString()
 		});
-		let balance:string;
 		await web3.eth.getBalance(address).then((balancewei) =>{
-			balance = web3.utils.fromWei(balancewei);
+			const balance = web3.utils.fromWei(balancewei);
 			const parsedBalance = BigNumber(balance);
 			console.log(parsedBalance);
 			if ((parsedBalance.c[0] <= 0) && (parsedBalance.c[1] <= 9999999999)) {
 				throw new Error('The wallet should has balance to send a transaction.');
 			}
-			console.log('Current_Wallet_Documents', address,'agreementForm', agreementForm);
+			console.log('Current_Wallet_address', address,'agreementForm', agreementForm);
 		})
 
-		console.log('Current_Wallet_Documents', address,'agreementForm', agreementForm);
 		// ALICE SIDE
 		const content = template();
 		const blobContent = base64StringToBlob(btoa(unescape(encodeURIComponent(content))), 'application/pdf');
@@ -407,8 +405,19 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 		const storage = manager.getKeyStorage();
 		const rawWallet = await storage.find<KeyStorageModel>(unlockedWallet._id);
 
+		const chkbalance = manager.getWalletAddress(rawWallet.mnemonic);
 		const web3 = BlockchainFactory.getWeb3Instance(rawWallet.keypairs, rawWallet.mnemonic);
 		const network = await BlockchainFactory.getNetwork(web3);
+
+		await web3.eth.getBalance(chkbalance).then((balancewei) =>{
+			const balance = web3.utils.fromWei(balancewei);
+			const parsedBalance = BigNumber(balance);
+			console.log(parsedBalance, balance);
+			if ((parsedBalance.c[0] <= 0) && (parsedBalance.c[1] <= 9999999999)) {
+				throw new Error('The wallet should has balance to send a transaction.');
+			}
+			console.log('Current_Wallet:', chkbalance,'agreementForm', document.data.agreementForm);
+		})
 
 		const AgreementContract = ContractFactory.getAgreementContract(web3, network);
 		const form = document.data.agreementForm;
@@ -430,7 +439,7 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 			formId,
 			form,
 			'0x' + digest);
-			
+
 		const gas = await methodFn.estimateGas();
 		const address = manager.getWalletAddress(rawWallet.mnemonic);
 		Promise.resolve(gas).then(async (gas:any) => {
