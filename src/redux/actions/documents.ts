@@ -275,7 +275,8 @@ export const doGetDocuments = (currentWallet: any) => async (
 					escrowed,
 					validUntil,
 					toSigner,
-					fromSigner
+					fromSigner,
+					status
 				} = agreement;
 
 				resolve({
@@ -290,10 +291,10 @@ export const doGetDocuments = (currentWallet: any) => async (
 					event: {
 						id: agreementId,
 						from: partySource,
-						to: jsonContent.cpartyAddress ?? '',
+						to: partyDestination,
 						agreementFormTemplateId: formTemplateId,
 						cid: agreementStoredReference,
-						pending: partyDestination.substring(0, 7) === '0x00000'
+						status: status
 					},
 					data: {
 						agreementForm,
