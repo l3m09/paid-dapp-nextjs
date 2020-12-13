@@ -22,7 +22,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { closeCircle, checkmarkCircle } from 'ionicons/icons';
 import {
 	doGetSelectedDocument,
-	doSignCounterpartyDocument
+	doSignCounterpartyDocument,
+	doGetDocuments
 } from '../../redux/actions/documents';
 
 import { IonBadge } from '@ionic/react';
@@ -84,6 +85,7 @@ function SelectedDocument(payload: {
 	showNotVerified: any;
 	verifyButtonDisable: boolean;
 	showSignedText: boolean;
+	showVerifyDocumentButton: boolean;
 }) {
 	const { 
 		show, 
@@ -98,7 +100,8 @@ function SelectedDocument(payload: {
 		showVerified,
 		showNotVerified,
 		verifyButtonDisable,
-		showSignedText
+		showSignedText,
+		showVerifyDocumentButton
 	} = payload;
 	const wallet = useSelector(
 		(state: { wallet: { currentWallet: any } }) => state.wallet
@@ -107,7 +110,7 @@ function SelectedDocument(payload: {
 	if (!selectedDocument) {
 		return null;
 	}
-	console.log('status', selectedDocument.event.status);
+	
 	return (
 		<div id="modal-container">
 			<IonModal isOpen={show} cssClass="document-modal" onDidDismiss={() => {closeShowDocument()}}>
@@ -134,8 +137,9 @@ function SelectedDocument(payload: {
 								}}
 								disabled={verifyButtonDisable}
 							>
-								<span>{selectedDocument.event.to == currentWallet?.address && selectedDocument.event.status == 0 ? 'Sign Document' : 'Verify document'}</span>
-								{showSignedText ? <span></span> : null }
+								{showVerifyDocumentButton ? <span>Verify document</span> : null }
+								{!showVerifyDocumentButton ? <span>Sign document</span> : null}
+								{showSignedText ? <span>Signature succesfully created</span> : null }
 							</IonButton>
 							{ showVerified ? <span className="icon-wrapper">
 								<IonIcon
@@ -233,12 +237,14 @@ const DocumentsList: React.FC<Props> = ({documentsTo, documentsFrom, type, count
 	const [agreementContent, setAgreementContent] = useState('');
 	const [showSignedText, setShowSignedText ] = useState(false);
 	const [reloadDocuments, setReloadDocument] = useState(false);
+	const [showVerifyDocumentButton, setShowVerifyDocumentButton] = useState(false);
  	const wallet = useSelector(
 		(state: { wallet: { currentWallet: any } }) => state.wallet
 	);
 	const { currentWallet } = wallet;
 	function showDocument(item: any) {
 		dispatch(doGetSelectedDocument(item));
+		setShowVerifyDocumentButton(!(item.event.to == currentWallet?.address && item.event.status == 0));
 		setShowModal(true);
 		setShowNotVerified(false);
 		setShowVerified(false);
@@ -265,12 +271,12 @@ const DocumentsList: React.FC<Props> = ({documentsTo, documentsFrom, type, count
 			const verified = key.verify(jsonContent.digest, sigDocument);
 			setShowVerified(verified);
 			setShowNotVerified(!verified);
-			setReloadDocument(true);
 		}
 		else{
 			dispatch(doSignCounterpartyDocument(document));
-			setShowSignedText(true);
+			setShowVerified(true);
 			setReloadDocument(true);
+			setShowVerifyDocumentButton(true);
 		}
 		setVerifyButtonDisable(false);
 	}
@@ -279,7 +285,8 @@ const DocumentsList: React.FC<Props> = ({documentsTo, documentsFrom, type, count
 		dispatch(doGetSelectedDocument(null));
 		setShowModal(false);
 		if(reloadDocuments){
-			window.location.reload();
+			dispatch(doGetDocuments(currentWallet));
+			setReloadDocument(false);
 		}
 	}
 
@@ -370,6 +377,7 @@ const DocumentsList: React.FC<Props> = ({documentsTo, documentsFrom, type, count
 				showNotVerified = {showNotVerified}
 				verifyButtonDisable={verifyButtonDisable}
 				showSignedText = {showSignedText}
+				showVerifyDocumentButton = {showVerifyDocumentButton}
 			/>
 		</div>
 	);

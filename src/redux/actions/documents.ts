@@ -511,7 +511,6 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 		Promise.resolve(gas).then(async (gas:any) => {
 			const agreementTransaction = await methodFn.send({ from: address, gas:gas+5e4, gasPrice: 50e9 })
 			.on('receipt', async function (receipt: any) {
-				console.log('receipt', receipt);
 				dispatch(getSelectedDocument(document));
 			})
 			.on('error', function (error: any, receipt: any) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.		

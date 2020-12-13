@@ -49,7 +49,7 @@ export const DocumentsReducer = function (state = initialState, action: any) {
 		}
 
 		case DocumentsActionTypes.GET_SELECTED_DOCUMENT_SUCCESS: {
-			return { ...state, selectedDocument: payload, loading: false };
+			return { ...state, showVerified: true, selectedDocument: payload, loading: false };
 		}
 
 		case DocumentsActionTypes.SET_AGREEMENT_FORM_INFO: {
