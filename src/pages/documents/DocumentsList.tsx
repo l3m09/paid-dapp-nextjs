@@ -103,7 +103,7 @@ function SelectedDocument(payload: {
 	if (!selectedDocument) {
 		return null;
 	}
-
+	console.log('status', selectedDocument.event.status);
 	return (
 		<div id="modal-container">
 			<IonModal isOpen={show} cssClass="document-modal" onDidDismiss={() => {closeShowDocument()}}>
@@ -236,7 +236,8 @@ const DocumentsList: React.FC<Props> = ({documentsTo, documentsFrom, type, count
 	}
 
 	async function verifyDocument(document: any) {
-		if(document.event.status != 0){
+		debugger;
+		if(document.event.status != 0 || document.event.from == currentWallet?.address){
 			let fetchedContent	 = '';
 			for await (const chunk of ipfs.cat(document.event.cid)) {
 				fetchedContent = uint8ArrayToString(chunk);
@@ -305,7 +306,7 @@ const DocumentsList: React.FC<Props> = ({documentsTo, documentsFrom, type, count
 		console.info(pdfContent);
 		console.log('showPdfViewerModal', showPdfViewerModal);
 	}
-
+	console.log('documentsFrom',documentsFrom);
 	return (
 		<div>
 				<IonLoading
@@ -331,43 +332,13 @@ const DocumentsList: React.FC<Props> = ({documentsTo, documentsFrom, type, count
 								<div className="col">{data.validUntil}</div>
 								<div className="col">{event.from.slice(0,15)}...</div>
 								<div className="col">{event.to.slice(0,15)}...</div>
-								<div className="col in"><IonBadge color="primary">IN</IonBadge></div>
+								<div className="col in"><IonBadge color="primary">PENDING</IonBadge></div>
 							</div>
 						);
 					})
 					: null
 				}
-				{documentsTo.length
-				? documentsTo.map((document: any, index: number) => {
-					const {data, meta, event} = document;
-					return (
-						<div className="table-body" onClick={async () => {showDocument({data, meta, event})}}>
-							<div className="col">{meta.transactionHash.slice(0,15)}...</div>
-							<div className="col">{data.validUntil}</div>
-							<div className="col">{event.from.slice(0,15)}...</div>
-							<div className="col">{event.to.slice(0,15)}...</div>
-							<div className="col out"><IonBadge color="secondary">OUT</IonBadge></div>
-							<div className="col in">
-								{event.pending ?
-								<IonBadge className="pending-container">
-									PENDING
-								</IonBadge>
-								:
-								event.from == currentWallet?.address ?
-								<IonBadge color="secondary">
-									OUT
-								</IonBadge>
-								:
-								<IonBadge color="primary">
-									IN
-								</IonBadge>}
-							</div>
-						</div>
-					);
-				})
-				: null
-				}
-				{(!documentsFrom.length && !documentsTo.length ? <IonTitle color="primary">No documents found</IonTitle> : null)}
+				{(!documentsFrom.length ? <IonTitle color="primary">No documents found</IonTitle> : null)}
 			</div>
 
 			<SelectedDocument

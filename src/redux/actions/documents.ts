@@ -36,10 +36,9 @@ const createAgreementFormPayload = (obj: any) => {
 	return ethers.utils.defaultAbiCoder.encode(types, values);
 };
 
-const getDocuments = (agreementsFrom: any[], agreementsTo: any[]) => {
+const getDocuments = (agreements: any[]) => {
 	const payload = {
-		from: agreementsFrom,
-		to:agreementsTo
+		from: agreements,
 	}
 	return {
 		type: DocumentsActionTypes.GET_DOCUMENTS_SUCCESS,
@@ -128,18 +127,16 @@ export const doCreateAgreement = (payload: {
 			counterparty_address: agreementForm.counterpartyAddress,
 			create_date: today.toLocaleDateString()
 		});
-		let balance:string;
 		await web3.eth.getBalance(address).then((balancewei) =>{
-			balance = web3.utils.fromWei(balancewei);
-			const parsedBalance = BigNumber(balance);
+			const balance = web3.utils.fromWei(balancewei);
+			const parsedBalance = BigNumber(balance).toNumber();
 			console.log(parsedBalance);
-			if ((parsedBalance.c[0] <= 0) && (parsedBalance.c[1] <= 9999999999)) {
+			if ((parsedBalance <= 0.0009999999999)) {
 				throw new Error('The wallet should has balance to send a transaction.');
 			}
-			console.log('Current_Wallet_Documents', address,'agreementForm', agreementForm);
+			console.log('Current_Wallet_address', address,'agreementForm', agreementForm);
 		})
 
-		console.log('Current_Wallet_Documents', address,'agreementForm', agreementForm);
 		// ALICE SIDE
 		const content = template();
 		const blobContent = base64StringToBlob(btoa(unescape(encodeURIComponent(content))), 'application/pdf');
@@ -236,13 +233,13 @@ export const doGetDocuments = (currentWallet: any) => async (
 
 		console.log('Address Wallet Events:', address, 'web3 accounts wallet', web3.eth.accounts.wallet);
 
-		const eventsSource = await agreementContract.getPastEvents('AgreementPartyCreated', {
+		const eventsSource = await agreementContract.getPastEvents('AgreementEvents', {
 			filter: { partySource: address.toString() },
 			fromBlock: 7600000,
 			toBlock: 'latest'
 		});
 		console.table(eventsSource);
-		const eventsDestination = await agreementContract.getPastEvents('AgreementPartyCreated', {
+		const eventsDestination = await agreementContract.getPastEvents('AgreementEvents', {
 			filter: { partyDestination: address.toString() },
 			fromBlock: 7600000,
 			toBlock: 'latest'
@@ -261,13 +258,6 @@ export const doGetDocuments = (currentWallet: any) => async (
 			const { id, partySource, partyDestination, formTemplateId, agreementStoredReference } = args;
 			const agreementId = (id as BN).toString();
 
-			let fetchedContent = '';
-			for await (const chunk of ipfs.cat(agreementStoredReference.toString())) {
-				fetchedContent = uint8ArrayToString(chunk);
-			}
-
-			const jsonContent = JSON.parse(fetchedContent);
-
 			return new Promise(async (resolve) => {
 				const agreement = await agreementContract.methods.agreements(id).call();
 				const {
@@ -275,13 +265,14 @@ export const doGetDocuments = (currentWallet: any) => async (
 					escrowed,
 					validUntil,
 					toSigner,
-					fromSigner
+					fromSigner,
+					status
 				} = agreement;
 
 				resolve({
 					meta: {
 						logIndex,
-						transactionIndex,
+						transactionIndex, 
 						transactionHash,
 						blockHash,
 						blockNumber,
@@ -290,10 +281,10 @@ export const doGetDocuments = (currentWallet: any) => async (
 					event: {
 						id: agreementId,
 						from: partySource,
-						to: jsonContent.cpartyAddress ?? '',
+						to: partyDestination,
 						agreementFormTemplateId: formTemplateId,
 						cid: agreementStoredReference,
-						pending: partyDestination.substring(0, 7) === '0x00000'
+						status: status
 					},
 					data: {
 						agreementForm,
@@ -356,10 +347,68 @@ export const doGetDocuments = (currentWallet: any) => async (
 		});
 		const agreementsSource = await Promise.all(promisesFrom);
 		const agreementsDestination = await Promise.all(promisesTo);
+		let responseArray = new Array<any>();
+		let foundIds = new Array<string>();
+
+		for(let i = 0; i < agreementsSource.length; i++){
+			let item : any = agreementsSource[i];
+
+			const id = item.event.id;
+			let found = false;
+			for(let j = i + 1; j < agreementsSource.length; j++){
+				let checkItem : any = agreementsSource[j];
+				if(checkItem.event.id == id){
+					found = true;					
+					responseArray.push(checkItem);
+					foundIds.push(id);
+				}
+			}
+			if(!found){
+				let found = false;
+				for(let k = 0; k < foundIds.length; k++){
+					if(foundIds[k] == id){
+						found = true;
+						break;
+					}
+				}
+				if(!found){
+					responseArray.push(item);
+					foundIds.push(id);
+				}
+			}
+		}
+
+		for(let i = 0; i < agreementsDestination.length; i++){
+			let item : any = agreementsDestination[i];
+
+			const id = item.event.id;
+			let found = false;
+			for(let j = i + 1; j < agreementsDestination.length; j++){
+				let checkItem : any = agreementsDestination[j];
+				if(checkItem.event.id == id){
+					found = true;					
+					responseArray.push(checkItem);
+					foundIds.push(id);
+				}
+			}
+			if(!found){
+				let found = false;
+				for(let k = 0; k < foundIds.length; k++){
+					if(foundIds[k] == id){
+						found = true;
+						break;
+					}
+				}
+				if(!found){
+					responseArray.push(item);
+					foundIds.push(id);
+				}
+			}
+		}
 		// const agreements = agreementsDestination.concat(agreementsSource);
 		console.log('agreementsFrom', agreementsSource, 'agreementsTo', agreementsDestination);
 
-		dispatch(getDocuments(agreementsSource, agreementsDestination));
+		dispatch(getDocuments(responseArray));
 	} catch (err) {
 		console.log('ln564', err);
 		dispatch({
@@ -405,9 +454,21 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 		const manager = BlockchainFactory.getWalletManager();
 		const storage = manager.getKeyStorage();
 		const rawWallet = await storage.find<KeyStorageModel>(unlockedWallet._id);
+		const address = manager.getWalletAddress(rawWallet.mnemonic);
 
+		const chkbalance = manager.getWalletAddress(rawWallet.mnemonic);
 		const web3 = BlockchainFactory.getWeb3Instance(rawWallet.keypairs, rawWallet.mnemonic);
 		const network = await BlockchainFactory.getNetwork(web3);
+
+		await web3.eth.getBalance(chkbalance).then((balancewei) =>{
+			const balance = web3.utils.fromWei(balancewei);
+			const parsedBalance = BigNumber(balance).toNumber();
+			console.log(parsedBalance);
+			if ((parsedBalance <= 0.0009999999999)) {
+				throw new Error('The wallet should has balance to send a transaction.');
+			}
+			console.log('Current_Wallet_address', chkbalance,'agreementForm', document.data.agreementForm);
+		})
 
 		const AgreementContract = ContractFactory.getAgreementContract(web3, network);
 		const form = document.data.agreementForm;
@@ -422,19 +483,35 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 		const jsonContent = JSON.parse(fetchedContent);
 		const digest = jsonContent.digest;
 
+		const contentRef = jsonContent.contentRef;
+		let pdfContent = '';
+		for await (const chunk of ipfs.cat(contentRef.cid)) {
+			pdfContent = uint8ArrayToString(chunk);
+		}
+
+		const ec_alice = new eddsa('ed25519');
+		const signer = ec_alice.keyFromSecret(rawWallet.keypairs.ED25519);
+		const signature = signer
+			.sign(digest)
+			.toHex();
+		const pubKey = signer.getPublic();
+		const opts = { create: true, parents: true };
+		let ipfsHash = await uploadsIPFS(ipfs, pdfContent, opts, digest, signature, pubKey, formId, address, null);
+		
+
 		const methodFn = AgreementContract.methods.counterPartiesSign(
 			agreementId,
 			validUntil,
-			cid,
+			ipfsHash.toString(),
 			formId,
 			form,
 			'0x' + digest);
-			
+
 		const gas = await methodFn.estimateGas();
-		const address = manager.getWalletAddress(rawWallet.mnemonic);
 		Promise.resolve(gas).then(async (gas:any) => {
 			const agreementTransaction = await methodFn.send({ from: address, gas:gas+5e4, gasPrice: 50e9 })
 			.on('receipt', async function (receipt: any) {
+				console.log('receipt', receipt);
 				dispatch(getSelectedDocument(document));
 			})
 			.on('error', function (error: any, receipt: any) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.		
