@@ -82,6 +82,8 @@ function SelectedDocument(payload: {
 	agreementContent: string;
 	showVerified: any;
 	showNotVerified: any;
+	verifyButtonDisable: boolean;
+	showSignedText: boolean;
 }) {
 	const { 
 		show, 
@@ -94,7 +96,9 @@ function SelectedDocument(payload: {
 		closePdfViewerModal,
 		verifyDocument,
 		showVerified,
-		showNotVerified
+		showNotVerified,
+		verifyButtonDisable,
+		showSignedText
 	} = payload;
 	const wallet = useSelector(
 		(state: { wallet: { currentWallet: any } }) => state.wallet
@@ -128,8 +132,10 @@ function SelectedDocument(payload: {
 								onClick={async () => {
 									verifyDocument(selectedDocument);
 								}}
+								disabled={verifyButtonDisable}
 							>
 								<span>{selectedDocument.event.to == currentWallet?.address && selectedDocument.event.status == 0 ? 'Sign Document' : 'Verify document'}</span>
+								{showSignedText ? <span></span> : null }
 							</IonButton>
 							{ showVerified ? <span className="icon-wrapper">
 								<IonIcon
@@ -221,10 +227,13 @@ const DocumentsList: React.FC<Props> = ({documentsTo, documentsFrom, type, count
 	const [showPopOver, setShowPopover] = useState(false);
 	const [showVerified, setShowVerified] = useState(false);
 	const [showNotVerified, setShowNotVerified] = useState(false);
+	const [verifyButtonDisable, setVerifyButtonDisable] = useState(false);
 	const [showPdfViewerModal, setPdfViewerModal] = useState(false);
 	const [showAgreementsUrl, setAgreementUrl] = useState('');
 	const [agreementContent, setAgreementContent] = useState('');
-	const wallet = useSelector(
+	const [showSignedText, setShowSignedText ] = useState(false);
+	const [reloadDocuments, setReloadDocument] = useState(false);
+ 	const wallet = useSelector(
 		(state: { wallet: { currentWallet: any } }) => state.wallet
 	);
 	const { currentWallet } = wallet;
@@ -236,7 +245,7 @@ const DocumentsList: React.FC<Props> = ({documentsTo, documentsFrom, type, count
 	}
 
 	async function verifyDocument(document: any) {
-		debugger;
+		setVerifyButtonDisable(true);
 		if(document.event.status != 0 || document.event.from == currentWallet?.address){
 			let fetchedContent	 = '';
 			for await (const chunk of ipfs.cat(document.event.cid)) {
@@ -256,16 +265,22 @@ const DocumentsList: React.FC<Props> = ({documentsTo, documentsFrom, type, count
 			const verified = key.verify(jsonContent.digest, sigDocument);
 			setShowVerified(verified);
 			setShowNotVerified(!verified);
+			setReloadDocument(true);
 		}
 		else{
 			dispatch(doSignCounterpartyDocument(document));
-
+			setShowSignedText(true);
+			setReloadDocument(true);
 		}
+		setVerifyButtonDisable(false);
 	}
 
 	function closeShowDocument() {
 		dispatch(doGetSelectedDocument(null));
 		setShowModal(false);
+		if(reloadDocuments){
+			window.location.reload();
+		}
 	}
 
 	function trigger(id: string, name: string, status: string) {
@@ -353,6 +368,8 @@ const DocumentsList: React.FC<Props> = ({documentsTo, documentsFrom, type, count
 				verifyDocument = {verifyDocument}
 				showVerified = {showVerified}
 				showNotVerified = {showNotVerified}
+				verifyButtonDisable={verifyButtonDisable}
+				showSignedText = {showSignedText}
 			/>
 		</div>
 	);
