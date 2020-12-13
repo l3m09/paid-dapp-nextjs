@@ -1,4 +1,4 @@
-import { add } from 'ionicons/icons';
+import { add, options } from 'ionicons/icons';
 import {  createWalletManager, WalletManager, AlgorithmType, KeyModel} from 'paid-universal-wallet';
 import { KeyStorageModel } from 'paid-universal-wallet/dist/key-storage/KeyStorageModel';
 import { ethers, providers, Wallet } from 'ethers';
@@ -13,19 +13,29 @@ export class BlockchainFactory {
 	private static _walletManager: WalletManager | null = null;
 	private static _keystore: KeyStorageModel;
 
-	// private static options = {
-	// 	// Enable auto reconnection
-	// 	reconnect: {
-	// 		auto: true,
-	// 		delay: 5000, // ms
-	// 		maxAttempts: 5,
-	// 		onTimeout: false
-	// 	}
-	// };
+	private static options = {
+		timeout: 30000,
+		clientConfig: {
+			// Useful if requests are large
+			// maxReceivedFrameSize: 100000000,   // bytes - default: 1MiB
+			// maxReceivedMessageSize: 100000000, // bytes - default: 8MiB
+	   
+			// Useful to keep a connection alive
+			keepalive: true,
+			keepaliveInterval: 60000 // ms
+		},
+		// Enable auto reconnection
+		reconnect: {
+			auto: true,
+			delay: 5000, // ms
+			maxAttempts: 5,
+			onTimeout: false
+		}
+	};
 
 	public static getWeb3Instance = (keyModel: KeyModel, mnemonic: string) => {
 		if (!BlockchainFactory._web3) {
-			BlockchainFactory._web3 = new Web3 ( new Web3.providers.WebsocketProvider(BlockchainFactory.wssUrl));
+			BlockchainFactory._web3 = new Web3 ( new Web3.providers.WebsocketProvider(BlockchainFactory.wssUrl, BlockchainFactory.options));
 		}
 
 		const address = BlockchainFactory._walletManager?.getWalletAddress(mnemonic);
