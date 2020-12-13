@@ -1,27 +1,27 @@
 {
   "contractName": "AgreementModels",
   "abi": [],
-  "metadata": "{\"compiler\":{\"version\":\"0.6.10+commit.00c0fcaf\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/home/alfredolopez80/PAID/paid-contracts/contracts/AgreementModels.sol\":\"AgreementModels\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"details\":{\"constantOptimizer\":true,\"cse\":false,\"deduplicate\":false,\"jumpdestRemover\":true,\"orderLiterals\":false,\"peephole\":true,\"yul\":true,\"yulDetails\":{\"optimizerSteps\":\"dhfoDgvulfnTUtnIf[xarrscLMcCTUtTOntnfDIulLculVcul jjeulxarulrulxarrcLgvifCTUcarrLsTOtfDncarrIulc]jmuljuljul VcTOcul jmul\",\"stackAllocation\":true}},\"runs\":200},\"remappings\":[]},\"sources\":{\"/home/alfredolopez80/PAID/paid-contracts/contracts/AgreementModels.sol\":{\"keccak256\":\"0xaf20cdfe80e34dd8f79e8bb5c8d89d4a80089a0b6d9bf321eade9d68d53c7616\",\"urls\":[\"bzz-raw://324fa1a29394ecee5f025bb6eaf1b25105f1ee7b71da028cd48e635836ecc817\",\"dweb:/ipfs/QmT3vAPj5zP18iAiofhMqj9WFL7KCHZQ3xEf67ZKZfoTPD\"]},\"@openzeppelin/contracts/GSN/Context.sol\":{\"keccak256\":\"0xdb26cbf4d028490f49831a7865c2fe1b28db44b535ca8d343785a3b768aae183\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://840b14ce0315c47d49ba328f1f9fa7654ded1c9e1559e6c5e777a7b2dc28bf0a\",\"dweb:/ipfs/QmTLLabn4wcfGro9LEmUXUN2nwKqZSotXMvjDCLXEnLtZP\"]},\"@openzeppelin/contracts/access/Ownable.sol\":{\"keccak256\":\"0x4bd6402ca6b3419008c2b482aff54e66836e8cb4eba2680e42ac5884ae6424fc\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://8f9f711fb8d0d92aeea1c327e3845d13ca1fa8f142e47f8723cd5b3106fb29a3\",\"dweb:/ipfs/QmVQUReDW9f4zGqhizwHnyU8EntMs95tbASdqkGncnikba\"]}},\"version\":1}",
-  "bytecode": "0x6080604052348015600f57600080fd5b50603f80601d6000396000f3fe6080604052600080fdfea26469706673582212209413a480cac5f97ac3da697833d3fda6f3812660a087c8918efd99238ed690c564736f6c634300060a0033",
-  "deployedBytecode": "0x6080604052600080fdfea26469706673582212209413a480cac5f97ac3da697833d3fda6f3812660a087c8918efd99238ed690c564736f6c634300060a0033",
+  "metadata": "{\"compiler\":{\"version\":\"0.6.10+commit.00c0fcaf\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/home/esfera-ubuntu/Documents/projects/paid-contracts/contracts/AgreementModels.sol\":\"AgreementModels\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"details\":{\"constantOptimizer\":true,\"cse\":false,\"deduplicate\":false,\"jumpdestRemover\":true,\"orderLiterals\":false,\"peephole\":true,\"yul\":true,\"yulDetails\":{\"optimizerSteps\":\"dhfoDgvulfnTUtnIf[xarrscLMcCTUtTOntnfDIulLculVcul jjeulxarulrulxarrcLgvifCTUcarrLsTOtfDncarrIulc]jmuljuljul VcTOcul jmul\",\"stackAllocation\":true}},\"runs\":200},\"remappings\":[]},\"sources\":{\"/home/esfera-ubuntu/Documents/projects/paid-contracts/contracts/AgreementModels.sol\":{\"keccak256\":\"0xaf20cdfe80e34dd8f79e8bb5c8d89d4a80089a0b6d9bf321eade9d68d53c7616\",\"urls\":[\"bzz-raw://324fa1a29394ecee5f025bb6eaf1b25105f1ee7b71da028cd48e635836ecc817\",\"dweb:/ipfs/QmT3vAPj5zP18iAiofhMqj9WFL7KCHZQ3xEf67ZKZfoTPD\"]},\"@openzeppelin/contracts/GSN/Context.sol\":{\"keccak256\":\"0xdb26cbf4d028490f49831a7865c2fe1b28db44b535ca8d343785a3b768aae183\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://840b14ce0315c47d49ba328f1f9fa7654ded1c9e1559e6c5e777a7b2dc28bf0a\",\"dweb:/ipfs/QmTLLabn4wcfGro9LEmUXUN2nwKqZSotXMvjDCLXEnLtZP\"]},\"@openzeppelin/contracts/access/Ownable.sol\":{\"keccak256\":\"0x4bd6402ca6b3419008c2b482aff54e66836e8cb4eba2680e42ac5884ae6424fc\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://8f9f711fb8d0d92aeea1c327e3845d13ca1fa8f142e47f8723cd5b3106fb29a3\",\"dweb:/ipfs/QmVQUReDW9f4zGqhizwHnyU8EntMs95tbASdqkGncnikba\"]}},\"version\":1}",
+  "bytecode": "0x6080604052348015600f57600080fd5b50603f80601d6000396000f3fe6080604052600080fdfea26469706673582212202463fd033f1f8d7c03b0dd35b33e1400e5a219b557f3c49ec231ee68c134182164736f6c634300060a0033",
+  "deployedBytecode": "0x6080604052600080fdfea26469706673582212202463fd033f1f8d7c03b0dd35b33e1400e5a219b557f3c49ec231ee68c134182164736f6c634300060a0033",
   "immutableReferences": {},
   "sourceMap": "114:395:1:-:0;;;;;;;;;;;;;;;;;;;",
   "deployedSourceMap": "114:395:1:-:0;;;;;",
   "source": "pragma solidity ^0.6.10;\npragma experimental ABIEncoderV2;\n\nimport \"@openzeppelin/contracts/access/Ownable.sol\";\n\ncontract AgreementModels {\n    struct Party {\n        address signatory;\n    }\n\n    struct Content {\n        string multiaddressReference; // multiaddress\n        bytes digest;\n    }\n\n    struct AgreementDocument {\n        Party fromSigner;\n        Party toSigner;\n        bool escrowed;\n        uint256 validUntil;\n        bytes agreementForm;\n        uint status;\n        Content file;\n    }\n}\n",
-  "sourcePath": "/home/alfredolopez80/PAID/paid-contracts/contracts/AgreementModels.sol",
+  "sourcePath": "/home/esfera-ubuntu/Documents/projects/paid-contracts/contracts/AgreementModels.sol",
   "ast": {
-    "absolutePath": "/home/alfredolopez80/PAID/paid-contracts/contracts/AgreementModels.sol",
+    "absolutePath": "/home/esfera-ubuntu/Documents/projects/paid-contracts/contracts/AgreementModels.sol",
     "exportedSymbols": {
       "AgreementModels": [
-        312
+        311
       ]
     },
-    "id": 313,
+    "id": 312,
     "license": null,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 286,
+        "id": 285,
         "literals": [
           "solidity",
           "^",
@@ -32,7 +32,7 @@
         "src": "0:24:1"
       },
       {
-        "id": 287,
+        "id": 286,
         "literals": [
           "experimental",
           "ABIEncoderV2"
@@ -43,10 +43,10 @@
       {
         "absolutePath": "@openzeppelin/contracts/access/Ownable.sol",
         "file": "@openzeppelin/contracts/access/Ownable.sol",
-        "id": 288,
+        "id": 287,
         "nodeType": "ImportDirective",
-        "scope": 313,
-        "sourceUnit": 953,
+        "scope": 312,
+        "sourceUnit": 952,
         "src": "60:52:1",
         "symbolAliases": [],
         "unitAlias": ""
@@ -58,25 +58,25 @@
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
-        "id": 312,
+        "id": 311,
         "linearizedBaseContracts": [
-          312
+          311
         ],
         "name": "AgreementModels",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "canonicalName": "AgreementModels.Party",
-            "id": 291,
+            "id": 290,
             "members": [
               {
                 "constant": false,
-                "id": 290,
+                "id": 289,
                 "mutability": "mutable",
                 "name": "signatory",
                 "nodeType": "VariableDeclaration",
                 "overrides": null,
-                "scope": 291,
+                "scope": 290,
                 "src": "168:17:1",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -85,7 +85,7 @@
                   "typeString": "address"
                 },
                 "typeName": {
-                  "id": 289,
+                  "id": 288,
                   "name": "address",
                   "nodeType": "ElementaryTypeName",
                   "src": "168:7:1",
@@ -101,22 +101,22 @@
             ],
             "name": "Party",
             "nodeType": "StructDefinition",
-            "scope": 312,
+            "scope": 311,
             "src": "145:47:1",
             "visibility": "public"
           },
           {
             "canonicalName": "AgreementModels.Content",
-            "id": 296,
+            "id": 295,
             "members": [
               {
                 "constant": false,
-                "id": 293,
+                "id": 292,
                 "mutability": "mutable",
                 "name": "multiaddressReference",
                 "nodeType": "VariableDeclaration",
                 "overrides": null,
-                "scope": 296,
+                "scope": 295,
                 "src": "223:28:1",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -125,7 +125,7 @@
                   "typeString": "string"
                 },
                 "typeName": {
-                  "id": 292,
+                  "id": 291,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
                   "src": "223:6:1",
@@ -139,12 +139,12 @@
               },
               {
                 "constant": false,
-                "id": 295,
+                "id": 294,
                 "mutability": "mutable",
                 "name": "digest",
                 "nodeType": "VariableDeclaration",
                 "overrides": null,
-                "scope": 296,
+                "scope": 295,
                 "src": "277:12:1",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -153,7 +153,7 @@
                   "typeString": "bytes"
                 },
                 "typeName": {
-                  "id": 294,
+                  "id": 293,
                   "name": "bytes",
                   "nodeType": "ElementaryTypeName",
                   "src": "277:5:1",
@@ -168,38 +168,38 @@
             ],
             "name": "Content",
             "nodeType": "StructDefinition",
-            "scope": 312,
+            "scope": 311,
             "src": "198:98:1",
             "visibility": "public"
           },
           {
             "canonicalName": "AgreementModels.AgreementDocument",
-            "id": 311,
+            "id": 310,
             "members": [
               {
                 "constant": false,
-                "id": 298,
+                "id": 297,
                 "mutability": "mutable",
                 "name": "fromSigner",
                 "nodeType": "VariableDeclaration",
                 "overrides": null,
-                "scope": 311,
+                "scope": 310,
                 "src": "337:16:1",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_struct$_Party_$291_storage_ptr",
+                  "typeIdentifier": "t_struct$_Party_$290_storage_ptr",
                   "typeString": "struct AgreementModels.Party"
                 },
                 "typeName": {
                   "contractScope": null,
-                  "id": 297,
+                  "id": 296,
                   "name": "Party",
                   "nodeType": "UserDefinedTypeName",
-                  "referencedDeclaration": 291,
+                  "referencedDeclaration": 290,
                   "src": "337:5:1",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_struct$_Party_$291_storage_ptr",
+                    "typeIdentifier": "t_struct$_Party_$290_storage_ptr",
                     "typeString": "struct AgreementModels.Party"
                   }
                 },
@@ -208,28 +208,28 @@
               },
               {
                 "constant": false,
-                "id": 300,
+                "id": 299,
                 "mutability": "mutable",
                 "name": "toSigner",
                 "nodeType": "VariableDeclaration",
                 "overrides": null,
-                "scope": 311,
+                "scope": 310,
                 "src": "363:14:1",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_struct$_Party_$291_storage_ptr",
+                  "typeIdentifier": "t_struct$_Party_$290_storage_ptr",
                   "typeString": "struct AgreementModels.Party"
                 },
                 "typeName": {
                   "contractScope": null,
-                  "id": 299,
+                  "id": 298,
                   "name": "Party",
                   "nodeType": "UserDefinedTypeName",
-                  "referencedDeclaration": 291,
+                  "referencedDeclaration": 290,
                   "src": "363:5:1",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_struct$_Party_$291_storage_ptr",
+                    "typeIdentifier": "t_struct$_Party_$290_storage_ptr",
                     "typeString": "struct AgreementModels.Party"
                   }
                 },
@@ -238,12 +238,12 @@
               },
               {
                 "constant": false,
-                "id": 302,
+                "id": 301,
                 "mutability": "mutable",
                 "name": "escrowed",
                 "nodeType": "VariableDeclaration",
                 "overrides": null,
-                "scope": 311,
+                "scope": 310,
                 "src": "387:13:1",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -252,7 +252,7 @@
                   "typeString": "bool"
                 },
                 "typeName": {
-                  "id": 301,
+                  "id": 300,
                   "name": "bool",
                   "nodeType": "ElementaryTypeName",
                   "src": "387:4:1",
@@ -266,12 +266,12 @@
               },
               {
                 "constant": false,
-                "id": 304,
+                "id": 303,
                 "mutability": "mutable",
                 "name": "validUntil",
                 "nodeType": "VariableDeclaration",
                 "overrides": null,
-                "scope": 311,
+                "scope": 310,
                 "src": "410:18:1",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -280,7 +280,7 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 303,
+                  "id": 302,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
                   "src": "410:7:1",
@@ -294,12 +294,12 @@
               },
               {
                 "constant": false,
-                "id": 306,
+                "id": 305,
                 "mutability": "mutable",
                 "name": "agreementForm",
                 "nodeType": "VariableDeclaration",
                 "overrides": null,
-                "scope": 311,
+                "scope": 310,
                 "src": "438:19:1",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -308,7 +308,7 @@
                   "typeString": "bytes"
                 },
                 "typeName": {
-                  "id": 305,
+                  "id": 304,
                   "name": "bytes",
                   "nodeType": "ElementaryTypeName",
                   "src": "438:5:1",
@@ -322,12 +322,12 @@
               },
               {
                 "constant": false,
-                "id": 308,
+                "id": 307,
                 "mutability": "mutable",
                 "name": "status",
                 "nodeType": "VariableDeclaration",
                 "overrides": null,
-                "scope": 311,
+                "scope": 310,
                 "src": "467:11:1",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -336,7 +336,7 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 307,
+                  "id": 306,
                   "name": "uint",
                   "nodeType": "ElementaryTypeName",
                   "src": "467:4:1",
@@ -350,28 +350,28 @@
               },
               {
                 "constant": false,
-                "id": 310,
+                "id": 309,
                 "mutability": "mutable",
                 "name": "file",
                 "nodeType": "VariableDeclaration",
                 "overrides": null,
-                "scope": 311,
+                "scope": 310,
                 "src": "488:12:1",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_struct$_Content_$296_storage_ptr",
+                  "typeIdentifier": "t_struct$_Content_$295_storage_ptr",
                   "typeString": "struct AgreementModels.Content"
                 },
                 "typeName": {
                   "contractScope": null,
-                  "id": 309,
+                  "id": 308,
                   "name": "Content",
                   "nodeType": "UserDefinedTypeName",
-                  "referencedDeclaration": 296,
+                  "referencedDeclaration": 295,
                   "src": "488:7:1",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_struct$_Content_$296_storage_ptr",
+                    "typeIdentifier": "t_struct$_Content_$295_storage_ptr",
                     "typeString": "struct AgreementModels.Content"
                   }
                 },
@@ -381,30 +381,30 @@
             ],
             "name": "AgreementDocument",
             "nodeType": "StructDefinition",
-            "scope": 312,
+            "scope": 311,
             "src": "302:205:1",
             "visibility": "public"
           }
         ],
-        "scope": 313,
+        "scope": 312,
         "src": "114:395:1"
       }
     ],
     "src": "0:510:1"
   },
   "legacyAST": {
-    "absolutePath": "/home/alfredolopez80/PAID/paid-contracts/contracts/AgreementModels.sol",
+    "absolutePath": "/home/esfera-ubuntu/Documents/projects/paid-contracts/contracts/AgreementModels.sol",
     "exportedSymbols": {
       "AgreementModels": [
-        312
+        311
       ]
     },
-    "id": 313,
+    "id": 312,
     "license": null,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 286,
+        "id": 285,
         "literals": [
           "solidity",
           "^",
@@ -415,7 +415,7 @@
         "src": "0:24:1"
       },
       {
-        "id": 287,
+        "id": 286,
         "literals": [
           "experimental",
           "ABIEncoderV2"
@@ -426,10 +426,10 @@
       {
         "absolutePath": "@openzeppelin/contracts/access/Ownable.sol",
         "file": "@openzeppelin/contracts/access/Ownable.sol",
-        "id": 288,
+        "id": 287,
         "nodeType": "ImportDirective",
-        "scope": 313,
-        "sourceUnit": 953,
+        "scope": 312,
+        "sourceUnit": 952,
         "src": "60:52:1",
         "symbolAliases": [],
         "unitAlias": ""
@@ -441,25 +441,25 @@
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
-        "id": 312,
+        "id": 311,
         "linearizedBaseContracts": [
-          312
+          311
         ],
         "name": "AgreementModels",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "canonicalName": "AgreementModels.Party",
-            "id": 291,
+            "id": 290,
             "members": [
               {
                 "constant": false,
-                "id": 290,
+                "id": 289,
                 "mutability": "mutable",
                 "name": "signatory",
                 "nodeType": "VariableDeclaration",
                 "overrides": null,
-                "scope": 291,
+                "scope": 290,
                 "src": "168:17:1",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -468,7 +468,7 @@
                   "typeString": "address"
                 },
                 "typeName": {
-                  "id": 289,
+                  "id": 288,
                   "name": "address",
                   "nodeType": "ElementaryTypeName",
                   "src": "168:7:1",
@@ -484,22 +484,22 @@
             ],
             "name": "Party",
             "nodeType": "StructDefinition",
-            "scope": 312,
+            "scope": 311,
             "src": "145:47:1",
             "visibility": "public"
           },
           {
             "canonicalName": "AgreementModels.Content",
-            "id": 296,
+            "id": 295,
             "members": [
               {
                 "constant": false,
-                "id": 293,
+                "id": 292,
                 "mutability": "mutable",
                 "name": "multiaddressReference",
                 "nodeType": "VariableDeclaration",
                 "overrides": null,
-                "scope": 296,
+                "scope": 295,
                 "src": "223:28:1",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -508,7 +508,7 @@
                   "typeString": "string"
                 },
                 "typeName": {
-                  "id": 292,
+                  "id": 291,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
                   "src": "223:6:1",
@@ -522,12 +522,12 @@
               },
               {
                 "constant": false,
-                "id": 295,
+                "id": 294,
                 "mutability": "mutable",
                 "name": "digest",
                 "nodeType": "VariableDeclaration",
                 "overrides": null,
-                "scope": 296,
+                "scope": 295,
                 "src": "277:12:1",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -536,7 +536,7 @@
                   "typeString": "bytes"
                 },
                 "typeName": {
-                  "id": 294,
+                  "id": 293,
                   "name": "bytes",
                   "nodeType": "ElementaryTypeName",
                   "src": "277:5:1",
@@ -551,38 +551,38 @@
             ],
             "name": "Content",
             "nodeType": "StructDefinition",
-            "scope": 312,
+            "scope": 311,
             "src": "198:98:1",
             "visibility": "public"
           },
           {
             "canonicalName": "AgreementModels.AgreementDocument",
-            "id": 311,
+            "id": 310,
             "members": [
               {
                 "constant": false,
-                "id": 298,
+                "id": 297,
                 "mutability": "mutable",
                 "name": "fromSigner",
                 "nodeType": "VariableDeclaration",
                 "overrides": null,
-                "scope": 311,
+                "scope": 310,
                 "src": "337:16:1",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_struct$_Party_$291_storage_ptr",
+                  "typeIdentifier": "t_struct$_Party_$290_storage_ptr",
                   "typeString": "struct AgreementModels.Party"
                 },
                 "typeName": {
                   "contractScope": null,
-                  "id": 297,
+                  "id": 296,
                   "name": "Party",
                   "nodeType": "UserDefinedTypeName",
-                  "referencedDeclaration": 291,
+                  "referencedDeclaration": 290,
                   "src": "337:5:1",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_struct$_Party_$291_storage_ptr",
+                    "typeIdentifier": "t_struct$_Party_$290_storage_ptr",
                     "typeString": "struct AgreementModels.Party"
                   }
                 },
@@ -591,28 +591,28 @@
               },
               {
                 "constant": false,
-                "id": 300,
+                "id": 299,
                 "mutability": "mutable",
                 "name": "toSigner",
                 "nodeType": "VariableDeclaration",
                 "overrides": null,
-                "scope": 311,
+                "scope": 310,
                 "src": "363:14:1",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_struct$_Party_$291_storage_ptr",
+                  "typeIdentifier": "t_struct$_Party_$290_storage_ptr",
                   "typeString": "struct AgreementModels.Party"
                 },
                 "typeName": {
                   "contractScope": null,
-                  "id": 299,
+                  "id": 298,
                   "name": "Party",
                   "nodeType": "UserDefinedTypeName",
-                  "referencedDeclaration": 291,
+                  "referencedDeclaration": 290,
                   "src": "363:5:1",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_struct$_Party_$291_storage_ptr",
+                    "typeIdentifier": "t_struct$_Party_$290_storage_ptr",
                     "typeString": "struct AgreementModels.Party"
                   }
                 },
@@ -621,12 +621,12 @@
               },
               {
                 "constant": false,
-                "id": 302,
+                "id": 301,
                 "mutability": "mutable",
                 "name": "escrowed",
                 "nodeType": "VariableDeclaration",
                 "overrides": null,
-                "scope": 311,
+                "scope": 310,
                 "src": "387:13:1",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -635,7 +635,7 @@
                   "typeString": "bool"
                 },
                 "typeName": {
-                  "id": 301,
+                  "id": 300,
                   "name": "bool",
                   "nodeType": "ElementaryTypeName",
                   "src": "387:4:1",
@@ -649,12 +649,12 @@
               },
               {
                 "constant": false,
-                "id": 304,
+                "id": 303,
                 "mutability": "mutable",
                 "name": "validUntil",
                 "nodeType": "VariableDeclaration",
                 "overrides": null,
-                "scope": 311,
+                "scope": 310,
                 "src": "410:18:1",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -663,7 +663,7 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 303,
+                  "id": 302,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
                   "src": "410:7:1",
@@ -677,12 +677,12 @@
               },
               {
                 "constant": false,
-                "id": 306,
+                "id": 305,
                 "mutability": "mutable",
                 "name": "agreementForm",
                 "nodeType": "VariableDeclaration",
                 "overrides": null,
-                "scope": 311,
+                "scope": 310,
                 "src": "438:19:1",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -691,7 +691,7 @@
                   "typeString": "bytes"
                 },
                 "typeName": {
-                  "id": 305,
+                  "id": 304,
                   "name": "bytes",
                   "nodeType": "ElementaryTypeName",
                   "src": "438:5:1",
@@ -705,12 +705,12 @@
               },
               {
                 "constant": false,
-                "id": 308,
+                "id": 307,
                 "mutability": "mutable",
                 "name": "status",
                 "nodeType": "VariableDeclaration",
                 "overrides": null,
-                "scope": 311,
+                "scope": 310,
                 "src": "467:11:1",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -719,7 +719,7 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 307,
+                  "id": 306,
                   "name": "uint",
                   "nodeType": "ElementaryTypeName",
                   "src": "467:4:1",
@@ -733,28 +733,28 @@
               },
               {
                 "constant": false,
-                "id": 310,
+                "id": 309,
                 "mutability": "mutable",
                 "name": "file",
                 "nodeType": "VariableDeclaration",
                 "overrides": null,
-                "scope": 311,
+                "scope": 310,
                 "src": "488:12:1",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_struct$_Content_$296_storage_ptr",
+                  "typeIdentifier": "t_struct$_Content_$295_storage_ptr",
                   "typeString": "struct AgreementModels.Content"
                 },
                 "typeName": {
                   "contractScope": null,
-                  "id": 309,
+                  "id": 308,
                   "name": "Content",
                   "nodeType": "UserDefinedTypeName",
-                  "referencedDeclaration": 296,
+                  "referencedDeclaration": 295,
                   "src": "488:7:1",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_struct$_Content_$296_storage_ptr",
+                    "typeIdentifier": "t_struct$_Content_$295_storage_ptr",
                     "typeString": "struct AgreementModels.Content"
                   }
                 },
@@ -764,12 +764,12 @@
             ],
             "name": "AgreementDocument",
             "nodeType": "StructDefinition",
-            "scope": 312,
+            "scope": 311,
             "src": "302:205:1",
             "visibility": "public"
           }
         ],
-        "scope": 313,
+        "scope": 312,
         "src": "114:395:1"
       }
     ],
@@ -781,7 +781,7 @@
   },
   "networks": {},
   "schemaVersion": "3.3.2",
-  "updatedAt": "2020-11-26T20:23:17.716Z",
+  "updatedAt": "2020-12-12T15:58:25.716Z",
   "devdoc": {
     "methods": {}
   },

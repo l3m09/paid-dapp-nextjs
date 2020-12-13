@@ -262,27 +262,27 @@
       "type": "function"
     }
   ],
-  "metadata": "{\"compiler\":{\"version\":\"0.6.10+commit.00c0fcaf\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"id\",\"type\":\"uint256\"}],\"name\":\"AgreementClosed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"id\",\"type\":\"uint256\"}],\"name\":\"AgreementCreated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"id\",\"type\":\"uint256\"}],\"name\":\"AgreementDisputed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"id\",\"type\":\"uint256\"}],\"name\":\"AgreementModified\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"recipient\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"next\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"actorId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"documentId\",\"type\":\"uint256\"}],\"name\":\"WorkflowStepCompleted\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"current\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"actorId\",\"type\":\"uint256\"}],\"name\":\"WorkflowStepStart\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"agreementContract\",\"type\":\"address\"}],\"name\":\"addUserToWhitelist\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"agreements\",\"outputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"signatory\",\"type\":\"address\"}],\"internalType\":\"struct AgreementModels.Party\",\"name\":\"fromSigner\",\"type\":\"tuple\"},{\"components\":[{\"internalType\":\"address\",\"name\":\"signatory\",\"type\":\"address\"}],\"internalType\":\"struct AgreementModels.Party\",\"name\":\"toSigner\",\"type\":\"tuple\"},{\"internalType\":\"bool\",\"name\":\"escrowed\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"validUntil\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"agreementForm\",\"type\":\"bytes\"},{\"internalType\":\"uint256\",\"name\":\"status\",\"type\":\"uint256\"},{\"components\":[{\"internalType\":\"string\",\"name\":\"multiaddressReference\",\"type\":\"string\"},{\"internalType\":\"bytes\",\"name\":\"digest\",\"type\":\"bytes\"}],\"internalType\":\"struct AgreementModels.Content\",\"name\":\"file\",\"type\":\"tuple\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"id\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"stepId\",\"type\":\"uint256\"}],\"name\":\"executeStep\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"agreementContract\",\"type\":\"address\"}],\"name\":\"removeUserFromWhitelist\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/home/alfredolopez80/PAID/paid-contracts/contracts/WorkflowGateway.sol\":\"WorkflowGateway\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"details\":{\"constantOptimizer\":true,\"cse\":false,\"deduplicate\":false,\"jumpdestRemover\":true,\"orderLiterals\":false,\"peephole\":true,\"yul\":true,\"yulDetails\":{\"optimizerSteps\":\"dhfoDgvulfnTUtnIf[xarrscLMcCTUtTOntnfDIulLculVcul jjeulxarulrulxarrcLgvifCTUcarrLsTOtfDncarrIulc]jmuljuljul VcTOcul jmul\",\"stackAllocation\":true}},\"runs\":200},\"remappings\":[]},\"sources\":{\"/home/alfredolopez80/PAID/paid-contracts/contracts/AgreementModels.sol\":{\"keccak256\":\"0xaf20cdfe80e34dd8f79e8bb5c8d89d4a80089a0b6d9bf321eade9d68d53c7616\",\"urls\":[\"bzz-raw://324fa1a29394ecee5f025bb6eaf1b25105f1ee7b71da028cd48e635836ecc817\",\"dweb:/ipfs/QmT3vAPj5zP18iAiofhMqj9WFL7KCHZQ3xEf67ZKZfoTPD\"]},\"/home/alfredolopez80/PAID/paid-contracts/contracts/WorkflowGateway.sol\":{\"keccak256\":\"0x456aacac4c90c5b96b0e52d06bd6520b5fed0a300ac6c7a245274138246b729e\",\"urls\":[\"bzz-raw://36906de62b69c416f3718b05fed73cd2e99a5771fef65021d1f057a9424abdb1\",\"dweb:/ipfs/QmTHcwDrumTGZcK4eLC4G6ziGy19TK6wXG6KbLQryhkQcL\"]},\"/home/alfredolopez80/PAID/paid-contracts/contracts/WorkflowStep.sol\":{\"keccak256\":\"0x5f83b8236c086f81d89e3ec9a4563f317be645344fc5d45080dfaa812e9cb415\",\"urls\":[\"bzz-raw://c8594fd13ba4406452208dd1032e5c6dde58a22d1cbd4ae5a5f2eaf075964c01\",\"dweb:/ipfs/QmVJSen2FaYLL28qSyCmVtb7j6bHva7dK7kp1TJ4wNtBJL\"]},\"@openzeppelin/contracts/GSN/Context.sol\":{\"keccak256\":\"0xdb26cbf4d028490f49831a7865c2fe1b28db44b535ca8d343785a3b768aae183\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://840b14ce0315c47d49ba328f1f9fa7654ded1c9e1559e6c5e777a7b2dc28bf0a\",\"dweb:/ipfs/QmTLLabn4wcfGro9LEmUXUN2nwKqZSotXMvjDCLXEnLtZP\"]},\"@openzeppelin/contracts/access/Ownable.sol\":{\"keccak256\":\"0x4bd6402ca6b3419008c2b482aff54e66836e8cb4eba2680e42ac5884ae6424fc\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://8f9f711fb8d0d92aeea1c327e3845d13ca1fa8f142e47f8723cd5b3106fb29a3\",\"dweb:/ipfs/QmVQUReDW9f4zGqhizwHnyU8EntMs95tbASdqkGncnikba\"]}},\"version\":1}",
-  "bytecode": "0x608060405234801561001057600080fd5b50610597806100206000396000f3fe608060405234801561001057600080fd5b506004361061004c5760003560e01c806318be19d2146100515780637aabb5c514610081578063abf8ba1b146100b1578063bd14de96146100e1575b600080fd5b61006b60048036038101906100669190610402565b610117565b60405161007891906104c8565b60405180910390f35b61009b60048036038101906100969190610451565b610123565b6040516100a891906104c8565b60405180910390f35b6100cb60048036038101906100c69190610402565b61012f565b6040516100d891906104c8565b60405180910390f35b6100fb60048036038101906100f69190610436565b61013b565b60405161010e97969594939291906104db565b60405180910390f35b60006001905092915050565b60006001905092915050565b60006001905092915050565b6001602052806000526040600020600091509050806000016040518060200160405290816000820160009054906101000a90046001600160a01b03166001600160a01b03166001600160a01b03168152505090806001016040518060200160405290816000820160009054906101000a90046001600160a01b03166001600160a01b03166001600160a01b031681525050908060020160009054906101000a900460ff1690806003015490806004018054600181600116156101000203166002900480601f01602080910402602001604051908101604052809291908181526020018280546001816001161561010002031660029004801561027e5780601f106102535761010080835404028352916020019161027e565b820191906000526020600020905b81548152906001019060200180831161026157829003601f168201915b50505050509080600501549080600601604051806040016040529081600082018054600181600116156101000203166002900480601f0160208091040260200160405190810160405280929190818152602001828054600181600116156101000203166002900480156103325780601f1061030757610100808354040283529160200191610332565b820191906000526020600020905b81548152906001019060200180831161031557829003601f168201915b50505050508152602001600182018054600181600116156101000203166002900480601f0160208091040260200160405190810160405280929190818152602001828054600181600116156101000203166002900480156103d45780601f106103a9576101008083540402835291602001916103d4565b820191906000526020600020905b8154815290600101906020018083116103b757829003601f168201915b505050505081525050905087565b60008135905060018060a01b03811681146103fc57600080fd5b92915050565b60008060408385031215610414578182fd5b61041e84846103e2565b915061042d84602085016103e2565b90509250929050565b600060208284031215610447578081fd5b8135905092915050565b60008060408385031215610463578182fd5b82359150602083013590509250929050565b60008151808452815b818110156104a05760208082860101518183880101525060208101905061047e565b818111156104b15782602083870101525b506020601f19601f83011685010191505092915050565b6000602082019050821515825292915050565b600060018060a01b03808a5116835280895116602084015250861515604083015285606083015260e0608083015261051660e0830186610475565b8460a084015282810360c08401528351604082526105376040830182610475565b6020860151915082810360208401526105508183610475565b93505050509897505050505050505056fea2646970667358221220deea1d41e52c2952732e81f0fffb1a3ec17b56e395f36e5a84b8defc19adc8c964736f6c634300060a0033",
-  "deployedBytecode": "0x608060405234801561001057600080fd5b506004361061004c5760003560e01c806318be19d2146100515780637aabb5c514610081578063abf8ba1b146100b1578063bd14de96146100e1575b600080fd5b61006b60048036038101906100669190610402565b610117565b60405161007891906104c8565b60405180910390f35b61009b60048036038101906100969190610451565b610123565b6040516100a891906104c8565b60405180910390f35b6100cb60048036038101906100c69190610402565b61012f565b6040516100d891906104c8565b60405180910390f35b6100fb60048036038101906100f69190610436565b61013b565b60405161010e97969594939291906104db565b60405180910390f35b60006001905092915050565b60006001905092915050565b60006001905092915050565b6001602052806000526040600020600091509050806000016040518060200160405290816000820160009054906101000a90046001600160a01b03166001600160a01b03166001600160a01b03168152505090806001016040518060200160405290816000820160009054906101000a90046001600160a01b03166001600160a01b03166001600160a01b031681525050908060020160009054906101000a900460ff1690806003015490806004018054600181600116156101000203166002900480601f01602080910402602001604051908101604052809291908181526020018280546001816001161561010002031660029004801561027e5780601f106102535761010080835404028352916020019161027e565b820191906000526020600020905b81548152906001019060200180831161026157829003601f168201915b50505050509080600501549080600601604051806040016040529081600082018054600181600116156101000203166002900480601f0160208091040260200160405190810160405280929190818152602001828054600181600116156101000203166002900480156103325780601f1061030757610100808354040283529160200191610332565b820191906000526020600020905b81548152906001019060200180831161031557829003601f168201915b50505050508152602001600182018054600181600116156101000203166002900480601f0160208091040260200160405190810160405280929190818152602001828054600181600116156101000203166002900480156103d45780601f106103a9576101008083540402835291602001916103d4565b820191906000526020600020905b8154815290600101906020018083116103b757829003601f168201915b505050505081525050905087565b60008135905060018060a01b03811681146103fc57600080fd5b92915050565b60008060408385031215610414578182fd5b61041e84846103e2565b915061042d84602085016103e2565b90509250929050565b600060208284031215610447578081fd5b8135905092915050565b60008060408385031215610463578182fd5b82359150602083013590509250929050565b60008151808452815b818110156104a05760208082860101518183880101525060208101905061047e565b818111156104b15782602083870101525b506020601f19601f83011685010191505092915050565b6000602082019050821515825292915050565b600060018060a01b03808a5116835280895116602084015250861515604083015285606083015260e0608083015261051660e0830186610475565b8460a084015282810360c08401528351604082526105376040830182610475565b6020860151915082810360208401526105508183610475565b93505050509897505050505050505056fea2646970667358221220deea1d41e52c2952732e81f0fffb1a3ec17b56e395f36e5a84b8defc19adc8c964736f6c634300060a0033",
+  "metadata": "{\"compiler\":{\"version\":\"0.6.10+commit.00c0fcaf\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"id\",\"type\":\"uint256\"}],\"name\":\"AgreementClosed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"id\",\"type\":\"uint256\"}],\"name\":\"AgreementCreated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"id\",\"type\":\"uint256\"}],\"name\":\"AgreementDisputed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"id\",\"type\":\"uint256\"}],\"name\":\"AgreementModified\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"recipient\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"next\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"actorId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"documentId\",\"type\":\"uint256\"}],\"name\":\"WorkflowStepCompleted\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"current\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"actorId\",\"type\":\"uint256\"}],\"name\":\"WorkflowStepStart\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"agreementContract\",\"type\":\"address\"}],\"name\":\"addUserToWhitelist\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"agreements\",\"outputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"signatory\",\"type\":\"address\"}],\"internalType\":\"struct AgreementModels.Party\",\"name\":\"fromSigner\",\"type\":\"tuple\"},{\"components\":[{\"internalType\":\"address\",\"name\":\"signatory\",\"type\":\"address\"}],\"internalType\":\"struct AgreementModels.Party\",\"name\":\"toSigner\",\"type\":\"tuple\"},{\"internalType\":\"bool\",\"name\":\"escrowed\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"validUntil\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"agreementForm\",\"type\":\"bytes\"},{\"internalType\":\"uint256\",\"name\":\"status\",\"type\":\"uint256\"},{\"components\":[{\"internalType\":\"string\",\"name\":\"multiaddressReference\",\"type\":\"string\"},{\"internalType\":\"bytes\",\"name\":\"digest\",\"type\":\"bytes\"}],\"internalType\":\"struct AgreementModels.Content\",\"name\":\"file\",\"type\":\"tuple\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"id\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"stepId\",\"type\":\"uint256\"}],\"name\":\"executeStep\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"agreementContract\",\"type\":\"address\"}],\"name\":\"removeUserFromWhitelist\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/home/esfera-ubuntu/Documents/projects/paid-contracts/contracts/WorkflowGateway.sol\":\"WorkflowGateway\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"details\":{\"constantOptimizer\":true,\"cse\":false,\"deduplicate\":false,\"jumpdestRemover\":true,\"orderLiterals\":false,\"peephole\":true,\"yul\":true,\"yulDetails\":{\"optimizerSteps\":\"dhfoDgvulfnTUtnIf[xarrscLMcCTUtTOntnfDIulLculVcul jjeulxarulrulxarrcLgvifCTUcarrLsTOtfDncarrIulc]jmuljuljul VcTOcul jmul\",\"stackAllocation\":true}},\"runs\":200},\"remappings\":[]},\"sources\":{\"/home/esfera-ubuntu/Documents/projects/paid-contracts/contracts/AgreementModels.sol\":{\"keccak256\":\"0xaf20cdfe80e34dd8f79e8bb5c8d89d4a80089a0b6d9bf321eade9d68d53c7616\",\"urls\":[\"bzz-raw://324fa1a29394ecee5f025bb6eaf1b25105f1ee7b71da028cd48e635836ecc817\",\"dweb:/ipfs/QmT3vAPj5zP18iAiofhMqj9WFL7KCHZQ3xEf67ZKZfoTPD\"]},\"/home/esfera-ubuntu/Documents/projects/paid-contracts/contracts/WorkflowGateway.sol\":{\"keccak256\":\"0x456aacac4c90c5b96b0e52d06bd6520b5fed0a300ac6c7a245274138246b729e\",\"urls\":[\"bzz-raw://36906de62b69c416f3718b05fed73cd2e99a5771fef65021d1f057a9424abdb1\",\"dweb:/ipfs/QmTHcwDrumTGZcK4eLC4G6ziGy19TK6wXG6KbLQryhkQcL\"]},\"/home/esfera-ubuntu/Documents/projects/paid-contracts/contracts/WorkflowStep.sol\":{\"keccak256\":\"0x5f83b8236c086f81d89e3ec9a4563f317be645344fc5d45080dfaa812e9cb415\",\"urls\":[\"bzz-raw://c8594fd13ba4406452208dd1032e5c6dde58a22d1cbd4ae5a5f2eaf075964c01\",\"dweb:/ipfs/QmVJSen2FaYLL28qSyCmVtb7j6bHva7dK7kp1TJ4wNtBJL\"]},\"@openzeppelin/contracts/GSN/Context.sol\":{\"keccak256\":\"0xdb26cbf4d028490f49831a7865c2fe1b28db44b535ca8d343785a3b768aae183\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://840b14ce0315c47d49ba328f1f9fa7654ded1c9e1559e6c5e777a7b2dc28bf0a\",\"dweb:/ipfs/QmTLLabn4wcfGro9LEmUXUN2nwKqZSotXMvjDCLXEnLtZP\"]},\"@openzeppelin/contracts/access/Ownable.sol\":{\"keccak256\":\"0x4bd6402ca6b3419008c2b482aff54e66836e8cb4eba2680e42ac5884ae6424fc\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://8f9f711fb8d0d92aeea1c327e3845d13ca1fa8f142e47f8723cd5b3106fb29a3\",\"dweb:/ipfs/QmVQUReDW9f4zGqhizwHnyU8EntMs95tbASdqkGncnikba\"]}},\"version\":1}",
+  "bytecode": "0x608060405234801561001057600080fd5b50610597806100206000396000f3fe608060405234801561001057600080fd5b506004361061004c5760003560e01c806318be19d2146100515780637aabb5c514610081578063abf8ba1b146100b1578063bd14de96146100e1575b600080fd5b61006b60048036038101906100669190610402565b610117565b60405161007891906104c8565b60405180910390f35b61009b60048036038101906100969190610451565b610123565b6040516100a891906104c8565b60405180910390f35b6100cb60048036038101906100c69190610402565b61012f565b6040516100d891906104c8565b60405180910390f35b6100fb60048036038101906100f69190610436565b61013b565b60405161010e97969594939291906104db565b60405180910390f35b60006001905092915050565b60006001905092915050565b60006001905092915050565b6001602052806000526040600020600091509050806000016040518060200160405290816000820160009054906101000a90046001600160a01b03166001600160a01b03166001600160a01b03168152505090806001016040518060200160405290816000820160009054906101000a90046001600160a01b03166001600160a01b03166001600160a01b031681525050908060020160009054906101000a900460ff1690806003015490806004018054600181600116156101000203166002900480601f01602080910402602001604051908101604052809291908181526020018280546001816001161561010002031660029004801561027e5780601f106102535761010080835404028352916020019161027e565b820191906000526020600020905b81548152906001019060200180831161026157829003601f168201915b50505050509080600501549080600601604051806040016040529081600082018054600181600116156101000203166002900480601f0160208091040260200160405190810160405280929190818152602001828054600181600116156101000203166002900480156103325780601f1061030757610100808354040283529160200191610332565b820191906000526020600020905b81548152906001019060200180831161031557829003601f168201915b50505050508152602001600182018054600181600116156101000203166002900480601f0160208091040260200160405190810160405280929190818152602001828054600181600116156101000203166002900480156103d45780601f106103a9576101008083540402835291602001916103d4565b820191906000526020600020905b8154815290600101906020018083116103b757829003601f168201915b505050505081525050905087565b60008135905060018060a01b03811681146103fc57600080fd5b92915050565b60008060408385031215610414578182fd5b61041e84846103e2565b915061042d84602085016103e2565b90509250929050565b600060208284031215610447578081fd5b8135905092915050565b60008060408385031215610463578182fd5b82359150602083013590509250929050565b60008151808452815b818110156104a05760208082860101518183880101525060208101905061047e565b818111156104b15782602083870101525b506020601f19601f83011685010191505092915050565b6000602082019050821515825292915050565b600060018060a01b03808a5116835280895116602084015250861515604083015285606083015260e0608083015261051660e0830186610475565b8460a084015282810360c08401528351604082526105376040830182610475565b6020860151915082810360208401526105508183610475565b93505050509897505050505050505056fea264697066735822122023bec6ba51b4f99b78baa3ed5bdcb3862818ccff8a9d5491ac592cf89d604c5764736f6c634300060a0033",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b506004361061004c5760003560e01c806318be19d2146100515780637aabb5c514610081578063abf8ba1b146100b1578063bd14de96146100e1575b600080fd5b61006b60048036038101906100669190610402565b610117565b60405161007891906104c8565b60405180910390f35b61009b60048036038101906100969190610451565b610123565b6040516100a891906104c8565b60405180910390f35b6100cb60048036038101906100c69190610402565b61012f565b6040516100d891906104c8565b60405180910390f35b6100fb60048036038101906100f69190610436565b61013b565b60405161010e97969594939291906104db565b60405180910390f35b60006001905092915050565b60006001905092915050565b60006001905092915050565b6001602052806000526040600020600091509050806000016040518060200160405290816000820160009054906101000a90046001600160a01b03166001600160a01b03166001600160a01b03168152505090806001016040518060200160405290816000820160009054906101000a90046001600160a01b03166001600160a01b03166001600160a01b031681525050908060020160009054906101000a900460ff1690806003015490806004018054600181600116156101000203166002900480601f01602080910402602001604051908101604052809291908181526020018280546001816001161561010002031660029004801561027e5780601f106102535761010080835404028352916020019161027e565b820191906000526020600020905b81548152906001019060200180831161026157829003601f168201915b50505050509080600501549080600601604051806040016040529081600082018054600181600116156101000203166002900480601f0160208091040260200160405190810160405280929190818152602001828054600181600116156101000203166002900480156103325780601f1061030757610100808354040283529160200191610332565b820191906000526020600020905b81548152906001019060200180831161031557829003601f168201915b50505050508152602001600182018054600181600116156101000203166002900480601f0160208091040260200160405190810160405280929190818152602001828054600181600116156101000203166002900480156103d45780601f106103a9576101008083540402835291602001916103d4565b820191906000526020600020905b8154815290600101906020018083116103b757829003601f168201915b505050505081525050905087565b60008135905060018060a01b03811681146103fc57600080fd5b92915050565b60008060408385031215610414578182fd5b61041e84846103e2565b915061042d84602085016103e2565b90509250929050565b600060208284031215610447578081fd5b8135905092915050565b60008060408385031215610463578182fd5b82359150602083013590509250929050565b60008151808452815b818110156104a05760208082860101518183880101525060208101905061047e565b818111156104b15782602083870101525b506020601f19601f83011685010191505092915050565b6000602082019050821515825292915050565b600060018060a01b03808a5116835280895116602084015250861515604083015285606083015260e0608083015261051660e0830186610475565b8460a084015282810360c08401528351604082526105376040830182610475565b6020860151915082810360208401526105508183610475565b93505050509897505050505050505056fea264697066735822122023bec6ba51b4f99b78baa3ed5bdcb3862818ccff8a9d5491ac592cf89d604c5764736f6c634300060a0033",
   "immutableReferences": {},
   "sourceMap": "239:1067:5:-:0;;;587:28;;;;;;;;;;239:1067;;;;;;",
   "deployedSourceMap": "239:1067:5:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;905:189;;;;;;;;;;;;;;;;:::i;:::-;;;;;;;;;;;;;;;;622:273;;;;;;;;;;;;;;;;:::i;:::-;;;;;;;;;;;;;;;;1100:197;;;;;;;;;;;;;;;;:::i;:::-;;;;;;;;;;;;;;;;524:56;;;;;;;;;;;;;;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;905:189;1017:4;1083;1076:11;;905:189;;;;:::o;622:273::-;708:4;884;877:11;;622:273;;;;:::o;1100:197::-;1217:4;1286;1279:11;;1100:197;;;;:::o;524:56::-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;;;524:56:5;-1:-1:-1;;;;;524:56:5;-1:-1:-1;;;;;524:56:5;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;;;524:56:5;-1:-1:-1;;;;;524:56:5;-1:-1:-1;;;;;524:56:5;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::o;5:130:-1:-;;85:6;72:20;63:29;;6285:42;;;;;6888:5;6274:54;6863:5;6860:35;6850:2;;6909:1;;6899:12;6850:2;57:78;;;;;279:366;;;400:2;388:9;379:7;375:23;371:32;368:2;;;-1:-1;;406:12;368:2;468:53;513:7;489:22;468:53;;;458:63;;576:53;621:7;558:2;601:9;597:22;576:53;;;566:63;;362:283;;;;;;652:241;;756:2;744:9;735:7;731:23;727:32;724:2;;;-1:-1;;762:12;724:2;845:22;209:20;814:63;;718:175;;;;;900:366;;;1021:2;1009:9;1000:7;996:23;992:32;989:2;;;-1:-1;;1027:12;989:2;1110:22;209:20;1079:63;;1179:2;1222:9;1218:22;209:20;1187:63;;983:283;;;;;;1494:323;;1626:5;5358:12;5633:6;5628:3;5621:19;-1:-1;6492:101;6506:6;6503:1;6500:13;6492:101;;;5670:4;;6582:1;1735:5;6573:11;;6567:18;5670:4;6563:1;5665:3;6554:11;;6547:39;;5670:4;6525:1;6521:10;6516:15;;6492:101;;;6608:6;6605:1;6602:13;6599:2;;;-1:-1;5670:4;6664:6;5665:3;6655:16;;6648:27;6599:2;;5670:4;6780:7;;6784:2;1804:6;6764:14;6760:28;5665:3;1773:39;;1766:46;;;1574:243;;;;;3763:210;;3884:2;3873:9;3869:18;3861:26;;1475:5;6186:13;6179:21;1455:3;1448:34;3855:118;;;;;3980:1284;;6285:42;;;;;;3529:16;3523:23;6274:54;1341:3;1334:37;6285:42;3529:16;3523:23;6274:54;4676:2;4665:9;4661:18;1334:37;;1475:5;6186:13;6179:21;4753:2;4742:9;4738:18;1448:34;3744:5;4836:2;4825:9;4821:18;3714:37;4423:3;4873;4862:9;4858:19;4851:49;4914:76;4423:3;4412:9;4408:19;4976:6;4914:76;;;3744:5;5069:3;5058:9;5054:19;3714:37;5123:9;5117:4;5113:20;5107:3;5096:9;5092:19;5085:49;2817:16;2811:23;4753:2;2854:14;2847:38;2900:73;4753:2;2723:3;2719:14;2954:12;2900:73;;;4676:2;3053:5;3049:16;3043:23;3023:43;;3112:3;3106:4;3102:14;4676:2;3090:3;3086:14;3079:38;3132:71;3198:4;3184:12;3132:71;;;5140:114;;;;;4394:870;;;;;;;;;;",
   "source": "pragma solidity ^0.6.10;\npragma experimental ABIEncoderV2;\n\nimport \"@openzeppelin/contracts/access/Ownable.sol\";\nimport \"./AgreementModels.sol\";\nimport \"./WorkflowStep.sol\";\n// \n// @dev Controls and executes steps by whitelisted users\n// \ncontract WorkflowGateway is AgreementModels, WorkflowStep {\n    event AgreementCreated(uint256 indexed id);\n    event AgreementModified(uint256 indexed id);\n    event AgreementDisputed(uint256 indexed id);\n    event AgreementClosed(uint256 indexed id);\n\n    uint256 private count;\n    mapping (uint256 => AgreementDocument) public agreements;\n\n    constructor() public {\n    }\n\n\n    function executeStep(\n        uint id,\n        uint stepId\n    ) \n    public returns (bool) {\n        // Validates msg.sender\n        // Validates workflow exists in registry\n        // Validates steps exists in registry\n        // Executes steps\n        return true;\n    }\n    \n    function addUserToWhitelist(\n        address user,\n        address agreementContract\n    ) \n    public returns (bool) {\n        // Adds user to agreement contract\n        return true;\n    }\n\n    function removeUserFromWhitelist(\n        address user,\n        address agreementContract\n    ) \n    public returns (bool) {\n        // Removes user to agreement contract\n        return true;\n    }\n\n    \n\n}",
-  "sourcePath": "/home/alfredolopez80/PAID/paid-contracts/contracts/WorkflowGateway.sol",
+  "sourcePath": "/home/esfera-ubuntu/Documents/projects/paid-contracts/contracts/WorkflowGateway.sol",
   "ast": {
-    "absolutePath": "/home/alfredolopez80/PAID/paid-contracts/contracts/WorkflowGateway.sol",
+    "absolutePath": "/home/esfera-ubuntu/Documents/projects/paid-contracts/contracts/WorkflowGateway.sol",
     "exportedSymbols": {
       "WorkflowGateway": [
-        473
+        472
       ]
     },
-    "id": 474,
+    "id": 473,
     "license": null,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 402,
+        "id": 401,
         "literals": [
           "solidity",
           "^",
@@ -293,7 +293,7 @@
         "src": "0:24:5"
       },
       {
-        "id": 403,
+        "id": 402,
         "literals": [
           "experimental",
           "ABIEncoderV2"
@@ -304,32 +304,32 @@
       {
         "absolutePath": "@openzeppelin/contracts/access/Ownable.sol",
         "file": "@openzeppelin/contracts/access/Ownable.sol",
-        "id": 404,
+        "id": 403,
         "nodeType": "ImportDirective",
-        "scope": 474,
-        "sourceUnit": 953,
+        "scope": 473,
+        "sourceUnit": 952,
         "src": "60:52:5",
         "symbolAliases": [],
         "unitAlias": ""
       },
       {
-        "absolutePath": "/home/alfredolopez80/PAID/paid-contracts/contracts/AgreementModels.sol",
+        "absolutePath": "/home/esfera-ubuntu/Documents/projects/paid-contracts/contracts/AgreementModels.sol",
         "file": "./AgreementModels.sol",
-        "id": 405,
+        "id": 404,
         "nodeType": "ImportDirective",
-        "scope": 474,
-        "sourceUnit": 313,
+        "scope": 473,
+        "sourceUnit": 312,
         "src": "113:31:5",
         "symbolAliases": [],
         "unitAlias": ""
       },
       {
-        "absolutePath": "/home/alfredolopez80/PAID/paid-contracts/contracts/WorkflowStep.sol",
+        "absolutePath": "/home/esfera-ubuntu/Documents/projects/paid-contracts/contracts/WorkflowStep.sol",
         "file": "./WorkflowStep.sol",
-        "id": 406,
+        "id": 405,
         "nodeType": "ImportDirective",
-        "scope": 474,
-        "sourceUnit": 538,
+        "scope": 473,
+        "sourceUnit": 537,
         "src": "145:28:5",
         "symbolAliases": [],
         "unitAlias": ""
@@ -341,17 +341,17 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 407,
+              "id": 406,
               "name": "AgreementModels",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 312,
+              "referencedDeclaration": 311,
               "src": "267:15:5",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_AgreementModels_$312",
+                "typeIdentifier": "t_contract$_AgreementModels_$311",
                 "typeString": "contract AgreementModels"
               }
             },
-            "id": 408,
+            "id": 407,
             "nodeType": "InheritanceSpecifier",
             "src": "267:15:5"
           },
@@ -359,33 +359,33 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 409,
+              "id": 408,
               "name": "WorkflowStep",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 537,
+              "referencedDeclaration": 536,
               "src": "284:12:5",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_WorkflowStep_$537",
+                "typeIdentifier": "t_contract$_WorkflowStep_$536",
                 "typeString": "contract WorkflowStep"
               }
             },
-            "id": 410,
+            "id": 409,
             "nodeType": "InheritanceSpecifier",
             "src": "284:12:5"
           }
         ],
         "contractDependencies": [
-          312,
-          537
+          311,
+          536
         ],
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
-        "id": 473,
+        "id": 472,
         "linearizedBaseContracts": [
-          473,
-          537,
-          312
+          472,
+          536,
+          311
         ],
         "name": "WorkflowGateway",
         "nodeType": "ContractDefinition",
@@ -393,22 +393,22 @@
           {
             "anonymous": false,
             "documentation": null,
-            "id": 414,
+            "id": 413,
             "name": "AgreementCreated",
             "nodeType": "EventDefinition",
             "parameters": {
-              "id": 413,
+              "id": 412,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 412,
+                  "id": 411,
                   "indexed": true,
                   "mutability": "mutable",
                   "name": "id",
                   "nodeType": "VariableDeclaration",
                   "overrides": null,
-                  "scope": 414,
+                  "scope": 413,
                   "src": "326:18:5",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -417,7 +417,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 411,
+                    "id": 410,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "326:7:5",
@@ -437,22 +437,22 @@
           {
             "anonymous": false,
             "documentation": null,
-            "id": 418,
+            "id": 417,
             "name": "AgreementModified",
             "nodeType": "EventDefinition",
             "parameters": {
-              "id": 417,
+              "id": 416,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 416,
+                  "id": 415,
                   "indexed": true,
                   "mutability": "mutable",
                   "name": "id",
                   "nodeType": "VariableDeclaration",
                   "overrides": null,
-                  "scope": 418,
+                  "scope": 417,
                   "src": "375:18:5",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -461,7 +461,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 415,
+                    "id": 414,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "375:7:5",
@@ -481,22 +481,22 @@
           {
             "anonymous": false,
             "documentation": null,
-            "id": 422,
+            "id": 421,
             "name": "AgreementDisputed",
             "nodeType": "EventDefinition",
             "parameters": {
-              "id": 421,
+              "id": 420,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 420,
+                  "id": 419,
                   "indexed": true,
                   "mutability": "mutable",
                   "name": "id",
                   "nodeType": "VariableDeclaration",
                   "overrides": null,
-                  "scope": 422,
+                  "scope": 421,
                   "src": "424:18:5",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -505,7 +505,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 419,
+                    "id": 418,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "424:7:5",
@@ -525,22 +525,22 @@
           {
             "anonymous": false,
             "documentation": null,
-            "id": 426,
+            "id": 425,
             "name": "AgreementClosed",
             "nodeType": "EventDefinition",
             "parameters": {
-              "id": 425,
+              "id": 424,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 424,
+                  "id": 423,
                   "indexed": true,
                   "mutability": "mutable",
                   "name": "id",
                   "nodeType": "VariableDeclaration",
                   "overrides": null,
-                  "scope": 426,
+                  "scope": 425,
                   "src": "471:18:5",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -549,7 +549,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 423,
+                    "id": 422,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "471:7:5",
@@ -568,12 +568,12 @@
           },
           {
             "constant": false,
-            "id": 428,
+            "id": 427,
             "mutability": "mutable",
             "name": "count",
             "nodeType": "VariableDeclaration",
             "overrides": null,
-            "scope": 473,
+            "scope": 472,
             "src": "497:21:5",
             "stateVariable": true,
             "storageLocation": "default",
@@ -582,7 +582,7 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 427,
+              "id": 426,
               "name": "uint256",
               "nodeType": "ElementaryTypeName",
               "src": "497:7:5",
@@ -597,23 +597,23 @@
           {
             "constant": false,
             "functionSelector": "bd14de96",
-            "id": 432,
+            "id": 431,
             "mutability": "mutable",
             "name": "agreements",
             "nodeType": "VariableDeclaration",
             "overrides": null,
-            "scope": 473,
+            "scope": 472,
             "src": "524:56:5",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_mapping$_t_uint256_$_t_struct$_AgreementDocument_$311_storage_$",
+              "typeIdentifier": "t_mapping$_t_uint256_$_t_struct$_AgreementDocument_$310_storage_$",
               "typeString": "mapping(uint256 => struct AgreementModels.AgreementDocument)"
             },
             "typeName": {
-              "id": 431,
+              "id": 430,
               "keyType": {
-                "id": 429,
+                "id": 428,
                 "name": "uint256",
                 "nodeType": "ElementaryTypeName",
                 "src": "533:7:5",
@@ -625,18 +625,18 @@
               "nodeType": "Mapping",
               "src": "524:38:5",
               "typeDescriptions": {
-                "typeIdentifier": "t_mapping$_t_uint256_$_t_struct$_AgreementDocument_$311_storage_$",
+                "typeIdentifier": "t_mapping$_t_uint256_$_t_struct$_AgreementDocument_$310_storage_$",
                 "typeString": "mapping(uint256 => struct AgreementModels.AgreementDocument)"
               },
               "valueType": {
                 "contractScope": null,
-                "id": 430,
+                "id": 429,
                 "name": "AgreementDocument",
                 "nodeType": "UserDefinedTypeName",
-                "referencedDeclaration": 311,
+                "referencedDeclaration": 310,
                 "src": "544:17:5",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_struct$_AgreementDocument_$311_storage_ptr",
+                  "typeIdentifier": "t_struct$_AgreementDocument_$310_storage_ptr",
                   "typeString": "struct AgreementModels.AgreementDocument"
                 }
               }
@@ -646,13 +646,13 @@
           },
           {
             "body": {
-              "id": 435,
+              "id": 434,
               "nodeType": "Block",
               "src": "608:7:5",
               "statements": []
             },
             "documentation": null,
-            "id": 436,
+            "id": 435,
             "implemented": true,
             "kind": "constructor",
             "modifiers": [],
@@ -660,18 +660,18 @@
             "nodeType": "FunctionDefinition",
             "overrides": null,
             "parameters": {
-              "id": 433,
+              "id": 432,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "598:2:5"
             },
             "returnParameters": {
-              "id": 434,
+              "id": 433,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "608:0:5"
             },
-            "scope": 473,
+            "scope": 472,
             "src": "587:28:5",
             "stateMutability": "nonpayable",
             "virtual": false,
@@ -679,7 +679,7 @@
           },
           {
             "body": {
-              "id": 447,
+              "id": 446,
               "nodeType": "Block",
               "src": "714:181:5",
               "statements": [
@@ -687,7 +687,7 @@
                   "expression": {
                     "argumentTypes": null,
                     "hexValue": "74727565",
-                    "id": 445,
+                    "id": 444,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": true,
@@ -702,8 +702,8 @@
                     },
                     "value": "true"
                   },
-                  "functionReturnParameters": 444,
-                  "id": 446,
+                  "functionReturnParameters": 443,
+                  "id": 445,
                   "nodeType": "Return",
                   "src": "877:11:5"
                 }
@@ -711,7 +711,7 @@
             },
             "documentation": null,
             "functionSelector": "7aabb5c5",
-            "id": 448,
+            "id": 447,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
@@ -719,17 +719,17 @@
             "nodeType": "FunctionDefinition",
             "overrides": null,
             "parameters": {
-              "id": 441,
+              "id": 440,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 438,
+                  "id": 437,
                   "mutability": "mutable",
                   "name": "id",
                   "nodeType": "VariableDeclaration",
                   "overrides": null,
-                  "scope": 448,
+                  "scope": 447,
                   "src": "652:7:5",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -738,7 +738,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 437,
+                    "id": 436,
                     "name": "uint",
                     "nodeType": "ElementaryTypeName",
                     "src": "652:4:5",
@@ -752,12 +752,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 440,
+                  "id": 439,
                   "mutability": "mutable",
                   "name": "stepId",
                   "nodeType": "VariableDeclaration",
                   "overrides": null,
-                  "scope": 448,
+                  "scope": 447,
                   "src": "669:11:5",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -766,7 +766,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 439,
+                    "id": 438,
                     "name": "uint",
                     "nodeType": "ElementaryTypeName",
                     "src": "669:4:5",
@@ -782,17 +782,17 @@
               "src": "642:44:5"
             },
             "returnParameters": {
-              "id": 444,
+              "id": 443,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 443,
+                  "id": 442,
                   "mutability": "mutable",
                   "name": "",
                   "nodeType": "VariableDeclaration",
                   "overrides": null,
-                  "scope": 448,
+                  "scope": 447,
                   "src": "708:4:5",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -801,7 +801,7 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 442,
+                    "id": 441,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
                     "src": "708:4:5",
@@ -816,7 +816,7 @@
               ],
               "src": "707:6:5"
             },
-            "scope": 473,
+            "scope": 472,
             "src": "622:273:5",
             "stateMutability": "nonpayable",
             "virtual": false,
@@ -824,7 +824,7 @@
           },
           {
             "body": {
-              "id": 459,
+              "id": 458,
               "nodeType": "Block",
               "src": "1023:71:5",
               "statements": [
@@ -832,7 +832,7 @@
                   "expression": {
                     "argumentTypes": null,
                     "hexValue": "74727565",
-                    "id": 457,
+                    "id": 456,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": true,
@@ -847,8 +847,8 @@
                     },
                     "value": "true"
                   },
-                  "functionReturnParameters": 456,
-                  "id": 458,
+                  "functionReturnParameters": 455,
+                  "id": 457,
                   "nodeType": "Return",
                   "src": "1076:11:5"
                 }
@@ -856,7 +856,7 @@
             },
             "documentation": null,
             "functionSelector": "18be19d2",
-            "id": 460,
+            "id": 459,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
@@ -864,17 +864,17 @@
             "nodeType": "FunctionDefinition",
             "overrides": null,
             "parameters": {
-              "id": 453,
+              "id": 452,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 450,
+                  "id": 449,
                   "mutability": "mutable",
                   "name": "user",
                   "nodeType": "VariableDeclaration",
                   "overrides": null,
-                  "scope": 460,
+                  "scope": 459,
                   "src": "942:12:5",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -883,7 +883,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 449,
+                    "id": 448,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "942:7:5",
@@ -898,12 +898,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 452,
+                  "id": 451,
                   "mutability": "mutable",
                   "name": "agreementContract",
                   "nodeType": "VariableDeclaration",
                   "overrides": null,
-                  "scope": 460,
+                  "scope": 459,
                   "src": "964:25:5",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -912,7 +912,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 451,
+                    "id": 450,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "964:7:5",
@@ -929,17 +929,17 @@
               "src": "932:63:5"
             },
             "returnParameters": {
-              "id": 456,
+              "id": 455,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 455,
+                  "id": 454,
                   "mutability": "mutable",
                   "name": "",
                   "nodeType": "VariableDeclaration",
                   "overrides": null,
-                  "scope": 460,
+                  "scope": 459,
                   "src": "1017:4:5",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -948,7 +948,7 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 454,
+                    "id": 453,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
                     "src": "1017:4:5",
@@ -963,7 +963,7 @@
               ],
               "src": "1016:6:5"
             },
-            "scope": 473,
+            "scope": 472,
             "src": "905:189:5",
             "stateMutability": "nonpayable",
             "virtual": false,
@@ -971,7 +971,7 @@
           },
           {
             "body": {
-              "id": 471,
+              "id": 470,
               "nodeType": "Block",
               "src": "1223:74:5",
               "statements": [
@@ -979,7 +979,7 @@
                   "expression": {
                     "argumentTypes": null,
                     "hexValue": "74727565",
-                    "id": 469,
+                    "id": 468,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": true,
@@ -994,8 +994,8 @@
                     },
                     "value": "true"
                   },
-                  "functionReturnParameters": 468,
-                  "id": 470,
+                  "functionReturnParameters": 467,
+                  "id": 469,
                   "nodeType": "Return",
                   "src": "1279:11:5"
                 }
@@ -1003,7 +1003,7 @@
             },
             "documentation": null,
             "functionSelector": "abf8ba1b",
-            "id": 472,
+            "id": 471,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
@@ -1011,17 +1011,17 @@
             "nodeType": "FunctionDefinition",
             "overrides": null,
             "parameters": {
-              "id": 465,
+              "id": 464,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 462,
+                  "id": 461,
                   "mutability": "mutable",
                   "name": "user",
                   "nodeType": "VariableDeclaration",
                   "overrides": null,
-                  "scope": 472,
+                  "scope": 471,
                   "src": "1142:12:5",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1030,7 +1030,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 461,
+                    "id": 460,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "1142:7:5",
@@ -1045,12 +1045,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 464,
+                  "id": 463,
                   "mutability": "mutable",
                   "name": "agreementContract",
                   "nodeType": "VariableDeclaration",
                   "overrides": null,
-                  "scope": 472,
+                  "scope": 471,
                   "src": "1164:25:5",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1059,7 +1059,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 463,
+                    "id": 462,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "1164:7:5",
@@ -1076,17 +1076,17 @@
               "src": "1132:63:5"
             },
             "returnParameters": {
-              "id": 468,
+              "id": 467,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 467,
+                  "id": 466,
                   "mutability": "mutable",
                   "name": "",
                   "nodeType": "VariableDeclaration",
                   "overrides": null,
-                  "scope": 472,
+                  "scope": 471,
                   "src": "1217:4:5",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1095,7 +1095,7 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 466,
+                    "id": 465,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
                     "src": "1217:4:5",
@@ -1110,32 +1110,32 @@
               ],
               "src": "1216:6:5"
             },
-            "scope": 473,
+            "scope": 472,
             "src": "1100:197:5",
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "public"
           }
         ],
-        "scope": 474,
+        "scope": 473,
         "src": "239:1067:5"
       }
     ],
     "src": "0:1306:5"
   },
   "legacyAST": {
-    "absolutePath": "/home/alfredolopez80/PAID/paid-contracts/contracts/WorkflowGateway.sol",
+    "absolutePath": "/home/esfera-ubuntu/Documents/projects/paid-contracts/contracts/WorkflowGateway.sol",
     "exportedSymbols": {
       "WorkflowGateway": [
-        473
+        472
       ]
     },
-    "id": 474,
+    "id": 473,
     "license": null,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 402,
+        "id": 401,
         "literals": [
           "solidity",
           "^",
@@ -1146,7 +1146,7 @@
         "src": "0:24:5"
       },
       {
-        "id": 403,
+        "id": 402,
         "literals": [
           "experimental",
           "ABIEncoderV2"
@@ -1157,32 +1157,32 @@
       {
         "absolutePath": "@openzeppelin/contracts/access/Ownable.sol",
         "file": "@openzeppelin/contracts/access/Ownable.sol",
-        "id": 404,
+        "id": 403,
         "nodeType": "ImportDirective",
-        "scope": 474,
-        "sourceUnit": 953,
+        "scope": 473,
+        "sourceUnit": 952,
         "src": "60:52:5",
         "symbolAliases": [],
         "unitAlias": ""
       },
       {
-        "absolutePath": "/home/alfredolopez80/PAID/paid-contracts/contracts/AgreementModels.sol",
+        "absolutePath": "/home/esfera-ubuntu/Documents/projects/paid-contracts/contracts/AgreementModels.sol",
         "file": "./AgreementModels.sol",
-        "id": 405,
+        "id": 404,
         "nodeType": "ImportDirective",
-        "scope": 474,
-        "sourceUnit": 313,
+        "scope": 473,
+        "sourceUnit": 312,
         "src": "113:31:5",
         "symbolAliases": [],
         "unitAlias": ""
       },
       {
-        "absolutePath": "/home/alfredolopez80/PAID/paid-contracts/contracts/WorkflowStep.sol",
+        "absolutePath": "/home/esfera-ubuntu/Documents/projects/paid-contracts/contracts/WorkflowStep.sol",
         "file": "./WorkflowStep.sol",
-        "id": 406,
+        "id": 405,
         "nodeType": "ImportDirective",
-        "scope": 474,
-        "sourceUnit": 538,
+        "scope": 473,
+        "sourceUnit": 537,
         "src": "145:28:5",
         "symbolAliases": [],
         "unitAlias": ""
@@ -1194,17 +1194,17 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 407,
+              "id": 406,
               "name": "AgreementModels",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 312,
+              "referencedDeclaration": 311,
               "src": "267:15:5",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_AgreementModels_$312",
+                "typeIdentifier": "t_contract$_AgreementModels_$311",
                 "typeString": "contract AgreementModels"
               }
             },
-            "id": 408,
+            "id": 407,
             "nodeType": "InheritanceSpecifier",
             "src": "267:15:5"
           },
@@ -1212,33 +1212,33 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 409,
+              "id": 408,
               "name": "WorkflowStep",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 537,
+              "referencedDeclaration": 536,
               "src": "284:12:5",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_WorkflowStep_$537",
+                "typeIdentifier": "t_contract$_WorkflowStep_$536",
                 "typeString": "contract WorkflowStep"
               }
             },
-            "id": 410,
+            "id": 409,
             "nodeType": "InheritanceSpecifier",
             "src": "284:12:5"
           }
         ],
         "contractDependencies": [
-          312,
-          537
+          311,
+          536
         ],
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
-        "id": 473,
+        "id": 472,
         "linearizedBaseContracts": [
-          473,
-          537,
-          312
+          472,
+          536,
+          311
         ],
         "name": "WorkflowGateway",
         "nodeType": "ContractDefinition",
@@ -1246,22 +1246,22 @@
           {
             "anonymous": false,
             "documentation": null,
-            "id": 414,
+            "id": 413,
             "name": "AgreementCreated",
             "nodeType": "EventDefinition",
             "parameters": {
-              "id": 413,
+              "id": 412,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 412,
+                  "id": 411,
                   "indexed": true,
                   "mutability": "mutable",
                   "name": "id",
                   "nodeType": "VariableDeclaration",
                   "overrides": null,
-                  "scope": 414,
+                  "scope": 413,
                   "src": "326:18:5",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1270,7 +1270,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 411,
+                    "id": 410,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "326:7:5",
@@ -1290,22 +1290,22 @@
           {
             "anonymous": false,
             "documentation": null,
-            "id": 418,
+            "id": 417,
             "name": "AgreementModified",
             "nodeType": "EventDefinition",
             "parameters": {
-              "id": 417,
+              "id": 416,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 416,
+                  "id": 415,
                   "indexed": true,
                   "mutability": "mutable",
                   "name": "id",
                   "nodeType": "VariableDeclaration",
                   "overrides": null,
-                  "scope": 418,
+                  "scope": 417,
                   "src": "375:18:5",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1314,7 +1314,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 415,
+                    "id": 414,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "375:7:5",
@@ -1334,22 +1334,22 @@
           {
             "anonymous": false,
             "documentation": null,
-            "id": 422,
+            "id": 421,
             "name": "AgreementDisputed",
             "nodeType": "EventDefinition",
             "parameters": {
-              "id": 421,
+              "id": 420,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 420,
+                  "id": 419,
                   "indexed": true,
                   "mutability": "mutable",
                   "name": "id",
                   "nodeType": "VariableDeclaration",
                   "overrides": null,
-                  "scope": 422,
+                  "scope": 421,
                   "src": "424:18:5",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1358,7 +1358,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 419,
+                    "id": 418,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "424:7:5",
@@ -1378,22 +1378,22 @@
           {
             "anonymous": false,
             "documentation": null,
-            "id": 426,
+            "id": 425,
             "name": "AgreementClosed",
             "nodeType": "EventDefinition",
             "parameters": {
-              "id": 425,
+              "id": 424,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 424,
+                  "id": 423,
                   "indexed": true,
                   "mutability": "mutable",
                   "name": "id",
                   "nodeType": "VariableDeclaration",
                   "overrides": null,
-                  "scope": 426,
+                  "scope": 425,
                   "src": "471:18:5",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1402,7 +1402,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 423,
+                    "id": 422,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "471:7:5",
@@ -1421,12 +1421,12 @@
           },
           {
             "constant": false,
-            "id": 428,
+            "id": 427,
             "mutability": "mutable",
             "name": "count",
             "nodeType": "VariableDeclaration",
             "overrides": null,
-            "scope": 473,
+            "scope": 472,
             "src": "497:21:5",
             "stateVariable": true,
             "storageLocation": "default",
@@ -1435,7 +1435,7 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 427,
+              "id": 426,
               "name": "uint256",
               "nodeType": "ElementaryTypeName",
               "src": "497:7:5",
@@ -1450,23 +1450,23 @@
           {
             "constant": false,
             "functionSelector": "bd14de96",
-            "id": 432,
+            "id": 431,
             "mutability": "mutable",
             "name": "agreements",
             "nodeType": "VariableDeclaration",
             "overrides": null,
-            "scope": 473,
+            "scope": 472,
             "src": "524:56:5",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_mapping$_t_uint256_$_t_struct$_AgreementDocument_$311_storage_$",
+              "typeIdentifier": "t_mapping$_t_uint256_$_t_struct$_AgreementDocument_$310_storage_$",
               "typeString": "mapping(uint256 => struct AgreementModels.AgreementDocument)"
             },
             "typeName": {
-              "id": 431,
+              "id": 430,
               "keyType": {
-                "id": 429,
+                "id": 428,
                 "name": "uint256",
                 "nodeType": "ElementaryTypeName",
                 "src": "533:7:5",
@@ -1478,18 +1478,18 @@
               "nodeType": "Mapping",
               "src": "524:38:5",
               "typeDescriptions": {
-                "typeIdentifier": "t_mapping$_t_uint256_$_t_struct$_AgreementDocument_$311_storage_$",
+                "typeIdentifier": "t_mapping$_t_uint256_$_t_struct$_AgreementDocument_$310_storage_$",
                 "typeString": "mapping(uint256 => struct AgreementModels.AgreementDocument)"
               },
               "valueType": {
                 "contractScope": null,
-                "id": 430,
+                "id": 429,
                 "name": "AgreementDocument",
                 "nodeType": "UserDefinedTypeName",
-                "referencedDeclaration": 311,
+                "referencedDeclaration": 310,
                 "src": "544:17:5",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_struct$_AgreementDocument_$311_storage_ptr",
+                  "typeIdentifier": "t_struct$_AgreementDocument_$310_storage_ptr",
                   "typeString": "struct AgreementModels.AgreementDocument"
                 }
               }
@@ -1499,13 +1499,13 @@
           },
           {
             "body": {
-              "id": 435,
+              "id": 434,
               "nodeType": "Block",
               "src": "608:7:5",
               "statements": []
             },
             "documentation": null,
-            "id": 436,
+            "id": 435,
             "implemented": true,
             "kind": "constructor",
             "modifiers": [],
@@ -1513,18 +1513,18 @@
             "nodeType": "FunctionDefinition",
             "overrides": null,
             "parameters": {
-              "id": 433,
+              "id": 432,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "598:2:5"
             },
             "returnParameters": {
-              "id": 434,
+              "id": 433,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "608:0:5"
             },
-            "scope": 473,
+            "scope": 472,
             "src": "587:28:5",
             "stateMutability": "nonpayable",
             "virtual": false,
@@ -1532,7 +1532,7 @@
           },
           {
             "body": {
-              "id": 447,
+              "id": 446,
               "nodeType": "Block",
               "src": "714:181:5",
               "statements": [
@@ -1540,7 +1540,7 @@
                   "expression": {
                     "argumentTypes": null,
                     "hexValue": "74727565",
-                    "id": 445,
+                    "id": 444,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": true,
@@ -1555,8 +1555,8 @@
                     },
                     "value": "true"
                   },
-                  "functionReturnParameters": 444,
-                  "id": 446,
+                  "functionReturnParameters": 443,
+                  "id": 445,
                   "nodeType": "Return",
                   "src": "877:11:5"
                 }
@@ -1564,7 +1564,7 @@
             },
             "documentation": null,
             "functionSelector": "7aabb5c5",
-            "id": 448,
+            "id": 447,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
@@ -1572,17 +1572,17 @@
             "nodeType": "FunctionDefinition",
             "overrides": null,
             "parameters": {
-              "id": 441,
+              "id": 440,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 438,
+                  "id": 437,
                   "mutability": "mutable",
                   "name": "id",
                   "nodeType": "VariableDeclaration",
                   "overrides": null,
-                  "scope": 448,
+                  "scope": 447,
                   "src": "652:7:5",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1591,7 +1591,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 437,
+                    "id": 436,
                     "name": "uint",
                     "nodeType": "ElementaryTypeName",
                     "src": "652:4:5",
@@ -1605,12 +1605,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 440,
+                  "id": 439,
                   "mutability": "mutable",
                   "name": "stepId",
                   "nodeType": "VariableDeclaration",
                   "overrides": null,
-                  "scope": 448,
+                  "scope": 447,
                   "src": "669:11:5",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1619,7 +1619,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 439,
+                    "id": 438,
                     "name": "uint",
                     "nodeType": "ElementaryTypeName",
                     "src": "669:4:5",
@@ -1635,17 +1635,17 @@
               "src": "642:44:5"
             },
             "returnParameters": {
-              "id": 444,
+              "id": 443,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 443,
+                  "id": 442,
                   "mutability": "mutable",
                   "name": "",
                   "nodeType": "VariableDeclaration",
                   "overrides": null,
-                  "scope": 448,
+                  "scope": 447,
                   "src": "708:4:5",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1654,7 +1654,7 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 442,
+                    "id": 441,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
                     "src": "708:4:5",
@@ -1669,7 +1669,7 @@
               ],
               "src": "707:6:5"
             },
-            "scope": 473,
+            "scope": 472,
             "src": "622:273:5",
             "stateMutability": "nonpayable",
             "virtual": false,
@@ -1677,7 +1677,7 @@
           },
           {
             "body": {
-              "id": 459,
+              "id": 458,
               "nodeType": "Block",
               "src": "1023:71:5",
               "statements": [
@@ -1685,7 +1685,7 @@
                   "expression": {
                     "argumentTypes": null,
                     "hexValue": "74727565",
-                    "id": 457,
+                    "id": 456,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": true,
@@ -1700,8 +1700,8 @@
                     },
                     "value": "true"
                   },
-                  "functionReturnParameters": 456,
-                  "id": 458,
+                  "functionReturnParameters": 455,
+                  "id": 457,
                   "nodeType": "Return",
                   "src": "1076:11:5"
                 }
@@ -1709,7 +1709,7 @@
             },
             "documentation": null,
             "functionSelector": "18be19d2",
-            "id": 460,
+            "id": 459,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
@@ -1717,17 +1717,17 @@
             "nodeType": "FunctionDefinition",
             "overrides": null,
             "parameters": {
-              "id": 453,
+              "id": 452,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 450,
+                  "id": 449,
                   "mutability": "mutable",
                   "name": "user",
                   "nodeType": "VariableDeclaration",
                   "overrides": null,
-                  "scope": 460,
+                  "scope": 459,
                   "src": "942:12:5",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1736,7 +1736,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 449,
+                    "id": 448,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "942:7:5",
@@ -1751,12 +1751,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 452,
+                  "id": 451,
                   "mutability": "mutable",
                   "name": "agreementContract",
                   "nodeType": "VariableDeclaration",
                   "overrides": null,
-                  "scope": 460,
+                  "scope": 459,
                   "src": "964:25:5",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1765,7 +1765,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 451,
+                    "id": 450,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "964:7:5",
@@ -1782,17 +1782,17 @@
               "src": "932:63:5"
             },
             "returnParameters": {
-              "id": 456,
+              "id": 455,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 455,
+                  "id": 454,
                   "mutability": "mutable",
                   "name": "",
                   "nodeType": "VariableDeclaration",
                   "overrides": null,
-                  "scope": 460,
+                  "scope": 459,
                   "src": "1017:4:5",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1801,7 +1801,7 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 454,
+                    "id": 453,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
                     "src": "1017:4:5",
@@ -1816,7 +1816,7 @@
               ],
               "src": "1016:6:5"
             },
-            "scope": 473,
+            "scope": 472,
             "src": "905:189:5",
             "stateMutability": "nonpayable",
             "virtual": false,
@@ -1824,7 +1824,7 @@
           },
           {
             "body": {
-              "id": 471,
+              "id": 470,
               "nodeType": "Block",
               "src": "1223:74:5",
               "statements": [
@@ -1832,7 +1832,7 @@
                   "expression": {
                     "argumentTypes": null,
                     "hexValue": "74727565",
-                    "id": 469,
+                    "id": 468,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": true,
@@ -1847,8 +1847,8 @@
                     },
                     "value": "true"
                   },
-                  "functionReturnParameters": 468,
-                  "id": 470,
+                  "functionReturnParameters": 467,
+                  "id": 469,
                   "nodeType": "Return",
                   "src": "1279:11:5"
                 }
@@ -1856,7 +1856,7 @@
             },
             "documentation": null,
             "functionSelector": "abf8ba1b",
-            "id": 472,
+            "id": 471,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
@@ -1864,17 +1864,17 @@
             "nodeType": "FunctionDefinition",
             "overrides": null,
             "parameters": {
-              "id": 465,
+              "id": 464,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 462,
+                  "id": 461,
                   "mutability": "mutable",
                   "name": "user",
                   "nodeType": "VariableDeclaration",
                   "overrides": null,
-                  "scope": 472,
+                  "scope": 471,
                   "src": "1142:12:5",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1883,7 +1883,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 461,
+                    "id": 460,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "1142:7:5",
@@ -1898,12 +1898,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 464,
+                  "id": 463,
                   "mutability": "mutable",
                   "name": "agreementContract",
                   "nodeType": "VariableDeclaration",
                   "overrides": null,
-                  "scope": 472,
+                  "scope": 471,
                   "src": "1164:25:5",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1912,7 +1912,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 463,
+                    "id": 462,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "1164:7:5",
@@ -1929,17 +1929,17 @@
               "src": "1132:63:5"
             },
             "returnParameters": {
-              "id": 468,
+              "id": 467,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 467,
+                  "id": 466,
                   "mutability": "mutable",
                   "name": "",
                   "nodeType": "VariableDeclaration",
                   "overrides": null,
-                  "scope": 472,
+                  "scope": 471,
                   "src": "1217:4:5",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1948,7 +1948,7 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 466,
+                    "id": 465,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
                     "src": "1217:4:5",
@@ -1963,14 +1963,14 @@
               ],
               "src": "1216:6:5"
             },
-            "scope": 473,
+            "scope": 472,
             "src": "1100:197:5",
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "public"
           }
         ],
-        "scope": 474,
+        "scope": 473,
         "src": "239:1067:5"
       }
     ],
@@ -1982,7 +1982,7 @@
   },
   "networks": {},
   "schemaVersion": "3.3.2",
-  "updatedAt": "2020-11-26T20:23:17.723Z",
+  "updatedAt": "2020-12-12T15:58:25.733Z",
   "devdoc": {
     "methods": {}
   },

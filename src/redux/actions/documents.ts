@@ -36,10 +36,9 @@ const createAgreementFormPayload = (obj: any) => {
 	return ethers.utils.defaultAbiCoder.encode(types, values);
 };
 
-const getDocuments = (agreementsFrom: any[], agreementsTo: any[]) => {
+const getDocuments = (agreements: any[]) => {
 	const payload = {
-		from: agreementsFrom,
-		to:agreementsTo
+		from: agreements,
 	}
 	return {
 		type: DocumentsActionTypes.GET_DOCUMENTS_SUCCESS,
@@ -273,7 +272,7 @@ export const doGetDocuments = (currentWallet: any) => async (
 				resolve({
 					meta: {
 						logIndex,
-						transactionIndex,
+						transactionIndex, 
 						transactionHash,
 						blockHash,
 						blockNumber,
@@ -348,10 +347,68 @@ export const doGetDocuments = (currentWallet: any) => async (
 		});
 		const agreementsSource = await Promise.all(promisesFrom);
 		const agreementsDestination = await Promise.all(promisesTo);
+		let responseArray = new Array<any>();
+		let foundIds = new Array<string>();
+
+		for(let i = 0; i < agreementsSource.length; i++){
+			let item : any = agreementsSource[i];
+
+			const id = item.event.id;
+			let found = false;
+			for(let j = i + 1; j < agreementsSource.length; j++){
+				let checkItem : any = agreementsSource[j];
+				if(checkItem.event.id == id){
+					found = true;					
+					responseArray.push(checkItem);
+					foundIds.push(id);
+				}
+			}
+			if(!found){
+				let found = false;
+				for(let k = 0; k < foundIds.length; k++){
+					if(foundIds[k] == id){
+						found = true;
+						break;
+					}
+				}
+				if(!found){
+					responseArray.push(item);
+					foundIds.push(id);
+				}
+			}
+		}
+
+		for(let i = 0; i < agreementsDestination.length; i++){
+			let item : any = agreementsDestination[i];
+
+			const id = item.event.id;
+			let found = false;
+			for(let j = i + 1; j < agreementsDestination.length; j++){
+				let checkItem : any = agreementsDestination[j];
+				if(checkItem.event.id == id){
+					found = true;					
+					responseArray.push(checkItem);
+					foundIds.push(id);
+				}
+			}
+			if(!found){
+				let found = false;
+				for(let k = 0; k < foundIds.length; k++){
+					if(foundIds[k] == id){
+						found = true;
+						break;
+					}
+				}
+				if(!found){
+					responseArray.push(item);
+					foundIds.push(id);
+				}
+			}
+		}
 		// const agreements = agreementsDestination.concat(agreementsSource);
 		console.log('agreementsFrom', agreementsSource, 'agreementsTo', agreementsDestination);
 
-		dispatch(getDocuments(agreementsSource, agreementsDestination));
+		dispatch(getDocuments(responseArray));
 	} catch (err) {
 		console.log('ln564', err);
 		dispatch({
@@ -445,7 +502,7 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 		const methodFn = AgreementContract.methods.counterPartiesSign(
 			agreementId,
 			validUntil,
-			ipfsHash,
+			ipfsHash.toString(),
 			formId,
 			form,
 			'0x' + digest);

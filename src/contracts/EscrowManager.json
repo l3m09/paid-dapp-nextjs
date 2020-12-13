@@ -46,27 +46,27 @@
       "type": "function"
     }
   ],
-  "metadata": "{\"compiler\":{\"version\":\"0.6.10+commit.00c0fcaf\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"inputs\":[],\"name\":\"deposit\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"has\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"withdraw\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/home/alfredolopez80/PAID/paid-contracts/contracts/EscrowManager.sol\":\"EscrowManager\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"details\":{\"constantOptimizer\":true,\"cse\":false,\"deduplicate\":false,\"jumpdestRemover\":true,\"orderLiterals\":false,\"peephole\":true,\"yul\":true,\"yulDetails\":{\"optimizerSteps\":\"dhfoDgvulfnTUtnIf[xarrscLMcCTUtTOntnfDIulLculVcul jjeulxarulrulxarrcLgvifCTUcarrLsTOtfDncarrIulc]jmuljuljul VcTOcul jmul\",\"stackAllocation\":true}},\"runs\":200},\"remappings\":[]},\"sources\":{\"/home/alfredolopez80/PAID/paid-contracts/contracts/EscrowManager.sol\":{\"keccak256\":\"0xe99c035e7563a3bbe87e6da3c559b048f32f5e0a64a271004c6f4d7acd6598e4\",\"urls\":[\"bzz-raw://266d7e753380026b7945968c79d58712518632536c9952c6e0efc344d5d8d1c6\",\"dweb:/ipfs/QmWB7CwZESixPvKLabSQN1H9Q74QHD9YB3gWW7jJcZ47Nz\"]},\"@openzeppelin/contracts/GSN/Context.sol\":{\"keccak256\":\"0xdb26cbf4d028490f49831a7865c2fe1b28db44b535ca8d343785a3b768aae183\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://840b14ce0315c47d49ba328f1f9fa7654ded1c9e1559e6c5e777a7b2dc28bf0a\",\"dweb:/ipfs/QmTLLabn4wcfGro9LEmUXUN2nwKqZSotXMvjDCLXEnLtZP\"]},\"@openzeppelin/contracts/access/Ownable.sol\":{\"keccak256\":\"0x4bd6402ca6b3419008c2b482aff54e66836e8cb4eba2680e42ac5884ae6424fc\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://8f9f711fb8d0d92aeea1c327e3845d13ca1fa8f142e47f8723cd5b3106fb29a3\",\"dweb:/ipfs/QmVQUReDW9f4zGqhizwHnyU8EntMs95tbASdqkGncnikba\"]},\"@openzeppelin/contracts/math/SafeMath.sol\":{\"keccak256\":\"0x9a9cf02622cd7a64261b10534fc3260449da25c98c9e96d1b4ae8110a20e5806\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://2df142592d1dc267d9549049ee3317fa190d2f87eaa565f86ab05ec83f7ab8f5\",\"dweb:/ipfs/QmSkJtcfWo7c42KnL5hho6GFxK6HRNV91XABx1P7xDtfLV\"]},\"@openzeppelin/contracts/payment/escrow/Escrow.sol\":{\"keccak256\":\"0xcb0d72d446c3a90bd38ec5cfedcb7c11d6af0e2b545abb9939b5293f9dfab372\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://5a4fa4094639dff593d07162d7d0196abae8db602b8b5c2754bca0694f678fd5\",\"dweb:/ipfs/QmfHMiapKeHWTL1kQmmWt4XhzHbF8DtZuhHqdQpjTQpMnA\"]},\"@openzeppelin/contracts/utils/Address.sol\":{\"keccak256\":\"0xdfb4f812600ba4ce6738c35584ceb8c9433472583051b48ba5b1f66cb758a498\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://df02dffe1c1de089d9b4f6192f0dcf464526f2230f420b3deec4645e0cdd2bff\",\"dweb:/ipfs/QmcqXGAU3KJqwrgUVoGJ2W8osomhSJ4R5kdsRpbuW3fELS\"]}},\"version\":1}",
-  "bytecode": "0x608060405234801561001057600080fd5b5060f38061001f6000396000f3fe6080604052348015600f57600080fd5b5060043610603c5760003560e01c80633ccfd60b146041578063b689d5ac14605b578063d0e30db0146075575b600080fd5b6047608f565b6040516052919060aa565b60405180910390f35b60616098565b604051606c919060aa565b60405180910390f35b607b60a1565b6040516086919060aa565b60405180910390f35b60006001905090565b60006001905090565b60006001905090565b600060208201905082151582529291505056fea2646970667358221220af2b5666749cb425708e640acaa2d23d266a9036092fed8cf3776fe9aa46a17b64736f6c634300060a0033",
-  "deployedBytecode": "0x6080604052348015600f57600080fd5b5060043610603c5760003560e01c80633ccfd60b146041578063b689d5ac14605b578063d0e30db0146075575b600080fd5b6047608f565b6040516052919060aa565b60405180910390f35b60616098565b604051606c919060aa565b60405180910390f35b607b60a1565b6040516086919060aa565b60405180910390f35b60006001905090565b60006001905090565b60006001905090565b600060208201905082151582529291505056fea2646970667358221220af2b5666749cb425708e640acaa2d23d266a9036092fed8cf3776fe9aa46a17b64736f6c634300060a0033",
+  "metadata": "{\"compiler\":{\"version\":\"0.6.10+commit.00c0fcaf\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"inputs\":[],\"name\":\"deposit\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"has\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"withdraw\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/home/esfera-ubuntu/Documents/projects/paid-contracts/contracts/EscrowManager.sol\":\"EscrowManager\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"details\":{\"constantOptimizer\":true,\"cse\":false,\"deduplicate\":false,\"jumpdestRemover\":true,\"orderLiterals\":false,\"peephole\":true,\"yul\":true,\"yulDetails\":{\"optimizerSteps\":\"dhfoDgvulfnTUtnIf[xarrscLMcCTUtTOntnfDIulLculVcul jjeulxarulrulxarrcLgvifCTUcarrLsTOtfDncarrIulc]jmuljuljul VcTOcul jmul\",\"stackAllocation\":true}},\"runs\":200},\"remappings\":[]},\"sources\":{\"/home/esfera-ubuntu/Documents/projects/paid-contracts/contracts/EscrowManager.sol\":{\"keccak256\":\"0xe99c035e7563a3bbe87e6da3c559b048f32f5e0a64a271004c6f4d7acd6598e4\",\"urls\":[\"bzz-raw://266d7e753380026b7945968c79d58712518632536c9952c6e0efc344d5d8d1c6\",\"dweb:/ipfs/QmWB7CwZESixPvKLabSQN1H9Q74QHD9YB3gWW7jJcZ47Nz\"]},\"@openzeppelin/contracts/GSN/Context.sol\":{\"keccak256\":\"0xdb26cbf4d028490f49831a7865c2fe1b28db44b535ca8d343785a3b768aae183\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://840b14ce0315c47d49ba328f1f9fa7654ded1c9e1559e6c5e777a7b2dc28bf0a\",\"dweb:/ipfs/QmTLLabn4wcfGro9LEmUXUN2nwKqZSotXMvjDCLXEnLtZP\"]},\"@openzeppelin/contracts/access/Ownable.sol\":{\"keccak256\":\"0x4bd6402ca6b3419008c2b482aff54e66836e8cb4eba2680e42ac5884ae6424fc\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://8f9f711fb8d0d92aeea1c327e3845d13ca1fa8f142e47f8723cd5b3106fb29a3\",\"dweb:/ipfs/QmVQUReDW9f4zGqhizwHnyU8EntMs95tbASdqkGncnikba\"]},\"@openzeppelin/contracts/math/SafeMath.sol\":{\"keccak256\":\"0x9a9cf02622cd7a64261b10534fc3260449da25c98c9e96d1b4ae8110a20e5806\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://2df142592d1dc267d9549049ee3317fa190d2f87eaa565f86ab05ec83f7ab8f5\",\"dweb:/ipfs/QmSkJtcfWo7c42KnL5hho6GFxK6HRNV91XABx1P7xDtfLV\"]},\"@openzeppelin/contracts/payment/escrow/Escrow.sol\":{\"keccak256\":\"0xcb0d72d446c3a90bd38ec5cfedcb7c11d6af0e2b545abb9939b5293f9dfab372\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://5a4fa4094639dff593d07162d7d0196abae8db602b8b5c2754bca0694f678fd5\",\"dweb:/ipfs/QmfHMiapKeHWTL1kQmmWt4XhzHbF8DtZuhHqdQpjTQpMnA\"]},\"@openzeppelin/contracts/utils/Address.sol\":{\"keccak256\":\"0xdfb4f812600ba4ce6738c35584ceb8c9433472583051b48ba5b1f66cb758a498\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://df02dffe1c1de089d9b4f6192f0dcf464526f2230f420b3deec4645e0cdd2bff\",\"dweb:/ipfs/QmcqXGAU3KJqwrgUVoGJ2W8osomhSJ4R5kdsRpbuW3fELS\"]}},\"version\":1}",
+  "bytecode": "0x608060405234801561001057600080fd5b5060f38061001f6000396000f3fe6080604052348015600f57600080fd5b5060043610603c5760003560e01c80633ccfd60b146041578063b689d5ac14605b578063d0e30db0146075575b600080fd5b6047608f565b6040516052919060aa565b60405180910390f35b60616098565b604051606c919060aa565b60405180910390f35b607b60a1565b6040516086919060aa565b60405180910390f35b60006001905090565b60006001905090565b60006001905090565b600060208201905082151582529291505056fea2646970667358221220938b160a3601725323c195590aed8a00de0b12358ad963f04aea903ab6d23f0364736f6c634300060a0033",
+  "deployedBytecode": "0x6080604052348015600f57600080fd5b5060043610603c5760003560e01c80633ccfd60b146041578063b689d5ac14605b578063d0e30db0146075575b600080fd5b6047608f565b6040516052919060aa565b60405180910390f35b60616098565b604051606c919060aa565b60405180910390f35b607b60a1565b6040516086919060aa565b60405180910390f35b60006001905090565b60006001905090565b60006001905090565b600060208201905082151582529291505056fea2646970667358221220938b160a3601725323c195590aed8a00de0b12358ad963f04aea903ab6d23f0364736f6c634300060a0033",
   "immutableReferences": {},
   "sourceMap": "121:332:2:-:0;;;190:34;;;;;;;;;;121:332;;;;;;",
   "deployedSourceMap": "121:332:2:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;231:70;;;:::i;:::-;;;;;;;;;;;;;;;;386:65;;;:::i;:::-;;;;;;;;;;;;;;;;307:73;;;:::i;:::-;;;;;;;;;;;;;;;;231:70;267:4;290;283:11;;231:70;:::o;386:65::-;417:4;440;433:11;;386:65;:::o;307:73::-;346:4;369;362:11;;307:73;:::o;116:210:-1:-;;237:2;226:9;222:18;214:26;;97:5;399:13;392:21;77:3;70:34;208:118;;;;",
   "source": "pragma solidity ^0.6.10;\npragma experimental ABIEncoderV2;\n\nimport \"@openzeppelin/contracts/payment/escrow/Escrow.sol\";\n\ncontract EscrowManager {\n    mapping(bytes32 => Escrow) escrows;\n    constructor() \n    public {\n\n    } \n\n    function withdraw() public returns (bool) {\n        return true;\n    }\n\n    function deposit() public view returns(bool) {\n        return true;\n    }\n\n    function has() public returns (bool) {\n        return true;\n    }\n}",
-  "sourcePath": "/home/alfredolopez80/PAID/paid-contracts/contracts/EscrowManager.sol",
+  "sourcePath": "/home/esfera-ubuntu/Documents/projects/paid-contracts/contracts/EscrowManager.sol",
   "ast": {
-    "absolutePath": "/home/alfredolopez80/PAID/paid-contracts/contracts/EscrowManager.sol",
+    "absolutePath": "/home/esfera-ubuntu/Documents/projects/paid-contracts/contracts/EscrowManager.sol",
     "exportedSymbols": {
       "EscrowManager": [
-        349
+        348
       ]
     },
-    "id": 350,
+    "id": 349,
     "license": null,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 314,
+        "id": 313,
         "literals": [
           "solidity",
           "^",
@@ -77,7 +77,7 @@
         "src": "0:24:2"
       },
       {
-        "id": 315,
+        "id": 314,
         "literals": [
           "experimental",
           "ABIEncoderV2"
@@ -88,10 +88,10 @@
       {
         "absolutePath": "@openzeppelin/contracts/payment/escrow/Escrow.sol",
         "file": "@openzeppelin/contracts/payment/escrow/Escrow.sol",
-        "id": 316,
+        "id": 315,
         "nodeType": "ImportDirective",
-        "scope": 350,
-        "sourceUnit": 1254,
+        "scope": 349,
+        "sourceUnit": 1253,
         "src": "60:59:2",
         "symbolAliases": [],
         "unitAlias": ""
@@ -103,32 +103,32 @@
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
-        "id": 349,
+        "id": 348,
         "linearizedBaseContracts": [
-          349
+          348
         ],
         "name": "EscrowManager",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "constant": false,
-            "id": 320,
+            "id": 319,
             "mutability": "mutable",
             "name": "escrows",
             "nodeType": "VariableDeclaration",
             "overrides": null,
-            "scope": 349,
+            "scope": 348,
             "src": "150:34:2",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_mapping$_t_bytes32_$_t_contract$_Escrow_$1253_$",
+              "typeIdentifier": "t_mapping$_t_bytes32_$_t_contract$_Escrow_$1252_$",
               "typeString": "mapping(bytes32 => contract Escrow)"
             },
             "typeName": {
-              "id": 319,
+              "id": 318,
               "keyType": {
-                "id": 317,
+                "id": 316,
                 "name": "bytes32",
                 "nodeType": "ElementaryTypeName",
                 "src": "158:7:2",
@@ -140,18 +140,18 @@
               "nodeType": "Mapping",
               "src": "150:26:2",
               "typeDescriptions": {
-                "typeIdentifier": "t_mapping$_t_bytes32_$_t_contract$_Escrow_$1253_$",
+                "typeIdentifier": "t_mapping$_t_bytes32_$_t_contract$_Escrow_$1252_$",
                 "typeString": "mapping(bytes32 => contract Escrow)"
               },
               "valueType": {
                 "contractScope": null,
-                "id": 318,
+                "id": 317,
                 "name": "Escrow",
                 "nodeType": "UserDefinedTypeName",
-                "referencedDeclaration": 1253,
+                "referencedDeclaration": 1252,
                 "src": "169:6:2",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_contract$_Escrow_$1253",
+                  "typeIdentifier": "t_contract$_Escrow_$1252",
                   "typeString": "contract Escrow"
                 }
               }
@@ -161,13 +161,13 @@
           },
           {
             "body": {
-              "id": 323,
+              "id": 322,
               "nodeType": "Block",
               "src": "216:8:2",
               "statements": []
             },
             "documentation": null,
-            "id": 324,
+            "id": 323,
             "implemented": true,
             "kind": "constructor",
             "modifiers": [],
@@ -175,18 +175,18 @@
             "nodeType": "FunctionDefinition",
             "overrides": null,
             "parameters": {
-              "id": 321,
+              "id": 320,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "201:2:2"
             },
             "returnParameters": {
-              "id": 322,
+              "id": 321,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "216:0:2"
             },
-            "scope": 349,
+            "scope": 348,
             "src": "190:34:2",
             "stateMutability": "nonpayable",
             "virtual": false,
@@ -194,7 +194,7 @@
           },
           {
             "body": {
-              "id": 331,
+              "id": 330,
               "nodeType": "Block",
               "src": "273:28:2",
               "statements": [
@@ -202,7 +202,7 @@
                   "expression": {
                     "argumentTypes": null,
                     "hexValue": "74727565",
-                    "id": 329,
+                    "id": 328,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": true,
@@ -217,8 +217,8 @@
                     },
                     "value": "true"
                   },
-                  "functionReturnParameters": 328,
-                  "id": 330,
+                  "functionReturnParameters": 327,
+                  "id": 329,
                   "nodeType": "Return",
                   "src": "283:11:2"
                 }
@@ -226,7 +226,7 @@
             },
             "documentation": null,
             "functionSelector": "3ccfd60b",
-            "id": 332,
+            "id": 331,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
@@ -234,23 +234,23 @@
             "nodeType": "FunctionDefinition",
             "overrides": null,
             "parameters": {
-              "id": 325,
+              "id": 324,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "248:2:2"
             },
             "returnParameters": {
-              "id": 328,
+              "id": 327,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 327,
+                  "id": 326,
                   "mutability": "mutable",
                   "name": "",
                   "nodeType": "VariableDeclaration",
                   "overrides": null,
-                  "scope": 332,
+                  "scope": 331,
                   "src": "267:4:2",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -259,7 +259,7 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 326,
+                    "id": 325,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
                     "src": "267:4:2",
@@ -274,7 +274,7 @@
               ],
               "src": "266:6:2"
             },
-            "scope": 349,
+            "scope": 348,
             "src": "231:70:2",
             "stateMutability": "nonpayable",
             "virtual": false,
@@ -282,7 +282,7 @@
           },
           {
             "body": {
-              "id": 339,
+              "id": 338,
               "nodeType": "Block",
               "src": "352:28:2",
               "statements": [
@@ -290,7 +290,7 @@
                   "expression": {
                     "argumentTypes": null,
                     "hexValue": "74727565",
-                    "id": 337,
+                    "id": 336,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": true,
@@ -305,8 +305,8 @@
                     },
                     "value": "true"
                   },
-                  "functionReturnParameters": 336,
-                  "id": 338,
+                  "functionReturnParameters": 335,
+                  "id": 337,
                   "nodeType": "Return",
                   "src": "362:11:2"
                 }
@@ -314,7 +314,7 @@
             },
             "documentation": null,
             "functionSelector": "d0e30db0",
-            "id": 340,
+            "id": 339,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
@@ -322,23 +322,23 @@
             "nodeType": "FunctionDefinition",
             "overrides": null,
             "parameters": {
-              "id": 333,
+              "id": 332,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "323:2:2"
             },
             "returnParameters": {
-              "id": 336,
+              "id": 335,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 335,
+                  "id": 334,
                   "mutability": "mutable",
                   "name": "",
                   "nodeType": "VariableDeclaration",
                   "overrides": null,
-                  "scope": 340,
+                  "scope": 339,
                   "src": "346:4:2",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -347,7 +347,7 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 334,
+                    "id": 333,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
                     "src": "346:4:2",
@@ -362,7 +362,7 @@
               ],
               "src": "345:6:2"
             },
-            "scope": 349,
+            "scope": 348,
             "src": "307:73:2",
             "stateMutability": "view",
             "virtual": false,
@@ -370,7 +370,7 @@
           },
           {
             "body": {
-              "id": 347,
+              "id": 346,
               "nodeType": "Block",
               "src": "423:28:2",
               "statements": [
@@ -378,7 +378,7 @@
                   "expression": {
                     "argumentTypes": null,
                     "hexValue": "74727565",
-                    "id": 345,
+                    "id": 344,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": true,
@@ -393,8 +393,8 @@
                     },
                     "value": "true"
                   },
-                  "functionReturnParameters": 344,
-                  "id": 346,
+                  "functionReturnParameters": 343,
+                  "id": 345,
                   "nodeType": "Return",
                   "src": "433:11:2"
                 }
@@ -402,7 +402,7 @@
             },
             "documentation": null,
             "functionSelector": "b689d5ac",
-            "id": 348,
+            "id": 347,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
@@ -410,23 +410,23 @@
             "nodeType": "FunctionDefinition",
             "overrides": null,
             "parameters": {
-              "id": 341,
+              "id": 340,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "398:2:2"
             },
             "returnParameters": {
-              "id": 344,
+              "id": 343,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 343,
+                  "id": 342,
                   "mutability": "mutable",
                   "name": "",
                   "nodeType": "VariableDeclaration",
                   "overrides": null,
-                  "scope": 348,
+                  "scope": 347,
                   "src": "417:4:2",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -435,7 +435,7 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 342,
+                    "id": 341,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
                     "src": "417:4:2",
@@ -450,32 +450,32 @@
               ],
               "src": "416:6:2"
             },
-            "scope": 349,
+            "scope": 348,
             "src": "386:65:2",
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "public"
           }
         ],
-        "scope": 350,
+        "scope": 349,
         "src": "121:332:2"
       }
     ],
     "src": "0:453:2"
   },
   "legacyAST": {
-    "absolutePath": "/home/alfredolopez80/PAID/paid-contracts/contracts/EscrowManager.sol",
+    "absolutePath": "/home/esfera-ubuntu/Documents/projects/paid-contracts/contracts/EscrowManager.sol",
     "exportedSymbols": {
       "EscrowManager": [
-        349
+        348
       ]
     },
-    "id": 350,
+    "id": 349,
     "license": null,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 314,
+        "id": 313,
         "literals": [
           "solidity",
           "^",
@@ -486,7 +486,7 @@
         "src": "0:24:2"
       },
       {
-        "id": 315,
+        "id": 314,
         "literals": [
           "experimental",
           "ABIEncoderV2"
@@ -497,10 +497,10 @@
       {
         "absolutePath": "@openzeppelin/contracts/payment/escrow/Escrow.sol",
         "file": "@openzeppelin/contracts/payment/escrow/Escrow.sol",
-        "id": 316,
+        "id": 315,
         "nodeType": "ImportDirective",
-        "scope": 350,
-        "sourceUnit": 1254,
+        "scope": 349,
+        "sourceUnit": 1253,
         "src": "60:59:2",
         "symbolAliases": [],
         "unitAlias": ""
@@ -512,32 +512,32 @@
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
-        "id": 349,
+        "id": 348,
         "linearizedBaseContracts": [
-          349
+          348
         ],
         "name": "EscrowManager",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "constant": false,
-            "id": 320,
+            "id": 319,
             "mutability": "mutable",
             "name": "escrows",
             "nodeType": "VariableDeclaration",
             "overrides": null,
-            "scope": 349,
+            "scope": 348,
             "src": "150:34:2",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_mapping$_t_bytes32_$_t_contract$_Escrow_$1253_$",
+              "typeIdentifier": "t_mapping$_t_bytes32_$_t_contract$_Escrow_$1252_$",
               "typeString": "mapping(bytes32 => contract Escrow)"
             },
             "typeName": {
-              "id": 319,
+              "id": 318,
               "keyType": {
-                "id": 317,
+                "id": 316,
                 "name": "bytes32",
                 "nodeType": "ElementaryTypeName",
                 "src": "158:7:2",
@@ -549,18 +549,18 @@
               "nodeType": "Mapping",
               "src": "150:26:2",
               "typeDescriptions": {
-                "typeIdentifier": "t_mapping$_t_bytes32_$_t_contract$_Escrow_$1253_$",
+                "typeIdentifier": "t_mapping$_t_bytes32_$_t_contract$_Escrow_$1252_$",
                 "typeString": "mapping(bytes32 => contract Escrow)"
               },
               "valueType": {
                 "contractScope": null,
-                "id": 318,
+                "id": 317,
                 "name": "Escrow",
                 "nodeType": "UserDefinedTypeName",
-                "referencedDeclaration": 1253,
+                "referencedDeclaration": 1252,
                 "src": "169:6:2",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_contract$_Escrow_$1253",
+                  "typeIdentifier": "t_contract$_Escrow_$1252",
                   "typeString": "contract Escrow"
                 }
               }
@@ -570,13 +570,13 @@
           },
           {
             "body": {
-              "id": 323,
+              "id": 322,
               "nodeType": "Block",
               "src": "216:8:2",
               "statements": []
             },
             "documentation": null,
-            "id": 324,
+            "id": 323,
             "implemented": true,
             "kind": "constructor",
             "modifiers": [],
@@ -584,18 +584,18 @@
             "nodeType": "FunctionDefinition",
             "overrides": null,
             "parameters": {
-              "id": 321,
+              "id": 320,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "201:2:2"
             },
             "returnParameters": {
-              "id": 322,
+              "id": 321,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "216:0:2"
             },
-            "scope": 349,
+            "scope": 348,
             "src": "190:34:2",
             "stateMutability": "nonpayable",
             "virtual": false,
@@ -603,7 +603,7 @@
           },
           {
             "body": {
-              "id": 331,
+              "id": 330,
               "nodeType": "Block",
               "src": "273:28:2",
               "statements": [
@@ -611,7 +611,7 @@
                   "expression": {
                     "argumentTypes": null,
                     "hexValue": "74727565",
-                    "id": 329,
+                    "id": 328,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": true,
@@ -626,8 +626,8 @@
                     },
                     "value": "true"
                   },
-                  "functionReturnParameters": 328,
-                  "id": 330,
+                  "functionReturnParameters": 327,
+                  "id": 329,
                   "nodeType": "Return",
                   "src": "283:11:2"
                 }
@@ -635,7 +635,7 @@
             },
             "documentation": null,
             "functionSelector": "3ccfd60b",
-            "id": 332,
+            "id": 331,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
@@ -643,23 +643,23 @@
             "nodeType": "FunctionDefinition",
             "overrides": null,
             "parameters": {
-              "id": 325,
+              "id": 324,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "248:2:2"
             },
             "returnParameters": {
-              "id": 328,
+              "id": 327,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 327,
+                  "id": 326,
                   "mutability": "mutable",
                   "name": "",
                   "nodeType": "VariableDeclaration",
                   "overrides": null,
-                  "scope": 332,
+                  "scope": 331,
                   "src": "267:4:2",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -668,7 +668,7 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 326,
+                    "id": 325,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
                     "src": "267:4:2",
@@ -683,7 +683,7 @@
               ],
               "src": "266:6:2"
             },
-            "scope": 349,
+            "scope": 348,
             "src": "231:70:2",
             "stateMutability": "nonpayable",
             "virtual": false,
@@ -691,7 +691,7 @@
           },
           {
             "body": {
-              "id": 339,
+              "id": 338,
               "nodeType": "Block",
               "src": "352:28:2",
               "statements": [
@@ -699,7 +699,7 @@
                   "expression": {
                     "argumentTypes": null,
                     "hexValue": "74727565",
-                    "id": 337,
+                    "id": 336,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": true,
@@ -714,8 +714,8 @@
                     },
                     "value": "true"
                   },
-                  "functionReturnParameters": 336,
-                  "id": 338,
+                  "functionReturnParameters": 335,
+                  "id": 337,
                   "nodeType": "Return",
                   "src": "362:11:2"
                 }
@@ -723,7 +723,7 @@
             },
             "documentation": null,
             "functionSelector": "d0e30db0",
-            "id": 340,
+            "id": 339,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
@@ -731,23 +731,23 @@
             "nodeType": "FunctionDefinition",
             "overrides": null,
             "parameters": {
-              "id": 333,
+              "id": 332,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "323:2:2"
             },
             "returnParameters": {
-              "id": 336,
+              "id": 335,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 335,
+                  "id": 334,
                   "mutability": "mutable",
                   "name": "",
                   "nodeType": "VariableDeclaration",
                   "overrides": null,
-                  "scope": 340,
+                  "scope": 339,
                   "src": "346:4:2",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -756,7 +756,7 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 334,
+                    "id": 333,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
                     "src": "346:4:2",
@@ -771,7 +771,7 @@
               ],
               "src": "345:6:2"
             },
-            "scope": 349,
+            "scope": 348,
             "src": "307:73:2",
             "stateMutability": "view",
             "virtual": false,
@@ -779,7 +779,7 @@
           },
           {
             "body": {
-              "id": 347,
+              "id": 346,
               "nodeType": "Block",
               "src": "423:28:2",
               "statements": [
@@ -787,7 +787,7 @@
                   "expression": {
                     "argumentTypes": null,
                     "hexValue": "74727565",
-                    "id": 345,
+                    "id": 344,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": true,
@@ -802,8 +802,8 @@
                     },
                     "value": "true"
                   },
-                  "functionReturnParameters": 344,
-                  "id": 346,
+                  "functionReturnParameters": 343,
+                  "id": 345,
                   "nodeType": "Return",
                   "src": "433:11:2"
                 }
@@ -811,7 +811,7 @@
             },
             "documentation": null,
             "functionSelector": "b689d5ac",
-            "id": 348,
+            "id": 347,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
@@ -819,23 +819,23 @@
             "nodeType": "FunctionDefinition",
             "overrides": null,
             "parameters": {
-              "id": 341,
+              "id": 340,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "398:2:2"
             },
             "returnParameters": {
-              "id": 344,
+              "id": 343,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 343,
+                  "id": 342,
                   "mutability": "mutable",
                   "name": "",
                   "nodeType": "VariableDeclaration",
                   "overrides": null,
-                  "scope": 348,
+                  "scope": 347,
                   "src": "417:4:2",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -844,7 +844,7 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 342,
+                    "id": 341,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
                     "src": "417:4:2",
@@ -859,14 +859,14 @@
               ],
               "src": "416:6:2"
             },
-            "scope": 349,
+            "scope": 348,
             "src": "386:65:2",
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "public"
           }
         ],
-        "scope": 350,
+        "scope": 349,
         "src": "121:332:2"
       }
     ],
@@ -878,7 +878,7 @@
   },
   "networks": {},
   "schemaVersion": "3.3.2",
-  "updatedAt": "2020-11-26T20:23:17.718Z",
+  "updatedAt": "2020-12-12T15:58:25.717Z",
   "devdoc": {
     "methods": {}
   },
