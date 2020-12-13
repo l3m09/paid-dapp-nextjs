@@ -10,7 +10,10 @@ import {
 	IonToolbar,
 	IonButton,
 	IonIcon,
-	IonItemDivider
+	IonItemDivider,
+	IonGrid,
+	IonRow,
+	IonCol
 } from '@ionic/react';
 import {checkmarkCircle} from 'ionicons/icons';
 
@@ -77,17 +80,20 @@ const Wallets: React.FC = () => {
 								: ''
 							}
 							{wallets.map((item: any, index: any) => {
-								if (unlockedWallet === item.address) {
+								if (unlockedWallet?.address === item.address) {
 									return (
 										<IonItem class="wallet-wrapper selected-wallet" key={index}>
 											<div className="wallet-container">
-												{unlockedWallet === item.address ? (
-													<IonIcon icon={checkmarkCircle} className="current-tag" />
-												) : (
-													''
-												)}
+												<IonIcon icon={checkmarkCircle} className="current-tag" />
 												<span className="label">{item.name}</span>
 												<span className="address">{item.address}</span>
+												{
+													(typeof item.balance !== 'undefined') &&
+													<div className="balanceContainer">
+														<span className="labelCoin">ETH</span>
+														<span className="amountCoin">{item.balance}</span>
+													</div>
+												}
 											</div>
 										</IonItem>
 									);
@@ -101,6 +107,13 @@ const Wallets: React.FC = () => {
 											<div className="wallet-container">
 												<span className="label">{item.name}</span>
 												<span className="address">{item.address}</span>
+												{
+													(typeof item.balance !== 'undefined') &&
+													<div className="balanceContainer">
+														<span className="labelCoin">ETH</span>
+														<span className="amountCoin">{item.balance}</span>
+													</div>
+												}
 											</div>
 										</IonItem>
 									);

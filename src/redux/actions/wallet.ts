@@ -1,6 +1,7 @@
 import { WalletActionTypes } from '../actionTypes/wallet';
 import { Plugins } from '@capacitor/core';
 import { BlockchainFactory } from '../../utils/blockchainFactory';
+const BigNumber = require('bignumber.js');
 const { Storage } = Plugins;
 
 // CREATORS
@@ -103,10 +104,29 @@ export const doUnlockWallet = (payload: {
 		} else {
 			// const { address } = wallet;
 			BlockchainFactory.setKeystore(ks);
-			const value = JSON.stringify(wallet);
+			const address = walletManager.getWalletAddress(ks.mnemonic);
+			const web3 = BlockchainFactory.getWeb3Instance(ks.keypairs, ks.mnemonic);
+			const balancewei = await web3.eth.getBalance(address);
+			const balance = web3.utils.fromWei(balancewei);
+			const walletWithBalance = {...wallet, balance: balance ?? 0.00};
+			const value = JSON.stringify(walletWithBalance);
+			const stored: any = await Storage.get({ key: 'WALLETS' });
 			console.log('CURRENT_WALLET_ACTIONS', value);
 			await Storage.set({ key: 'CURRENT_WALLET', value });
-			dispatch(unlockWallet(wallet));
+			dispatch(unlockWallet(walletWithBalance));
+			if (stored || stored.value) {
+				const currentWallets = JSON.parse(stored.value);
+				const currentWalletsWithBalance = currentWallets.map((currentWallet: any) => {
+					if (currentWallet.address === walletWithBalance.address) {
+						return {...currentWallet, balance: balance ?? 0.00}
+					} else {
+						return currentWallet;
+					}
+				});
+				const walletsString = JSON.stringify(currentWalletsWithBalance);
+				await Storage.set({ key: 'WALLETS', value: walletsString });
+				dispatch(getWallets((currentWalletsWithBalance)));
+			}
 		}
 	} catch (err) {
 		dispatch({
@@ -150,7 +170,7 @@ export const doGetWallets = () => async (dispatch: any) => {
 		if (!stored || !stored.value) {
 			dispatch(getWallets([]));
 		} else {
-			dispatch(getWallets(JSON.parse(stored.value)));
+			dispatch(getWallets((JSON.parse(stored.value))));
 		}
 	} catch (err) {
 		dispatch({ type: WalletActionTypes.GET_WALLETS_FAILURE, payload: err.msg });

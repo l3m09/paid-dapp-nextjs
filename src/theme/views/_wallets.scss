@@ -87,9 +87,21 @@
             margin-bottom: 0;
 
           }
-
         }
 
+      }
+
+      .balanceContainer {
+        display: flex;
+        align-self: flex-start;
+        margin-top: 15px;
+        padding-top: 5px;
+        border-top: 1px solid #ad8f8f;
+        width: 100%;
+
+        span {
+          width: 40px;
+        }
       }
 
       &.selected-wallet {
