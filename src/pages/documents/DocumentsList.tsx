@@ -348,13 +348,22 @@ const DocumentsList: React.FC<Props> = ({documentsTo, documentsFrom, type, count
 				{documentsFrom.length
 					? documentsFrom.map((document: any, index: number) => {
 						const {data, meta, event} = document;
+						
+						const statusClass = event.status == 0 ? (currentWallet?.address == event.from ? 'PENDING' :
+						'SIGN...') : (currentWallet?.address == event.from ? 'OUT' :
+						'IN');
 						return (
 							<div className="table-body" onClick={async () => {showDocument({data, meta, event})}}>
 								<div className="col">{meta.transactionHash.slice(0,15)}...</div>
 								<div className="col">{data.validUntil}</div>
 								<div className="col">{event.from.slice(0,15)}...</div>
 								<div className="col">{event.to.slice(0,15)}...</div>
-								<div className="col in"><IonBadge color="primary">PENDING</IonBadge></div>
+								<div className="col in">
+									{event.status == 0 && currentWallet?.address == event.from ? <IonBadge color="success">PENDING</IonBadge> :
+									(event.status == 0 && currentWallet?.address == event.to ? <IonBadge color="secondary">SIGN...</IonBadge> : 
+									(event.status == 1 && currentWallet?.address == event.from ? <IonBadge color="warning">OUT</IonBadge> : 
+									event.status == 1 && currentWallet?.address == event.to ? <IonBadge color="primary">IN</IonBadge> : null))}
+								</div>
 							</div>
 						);
 					})
