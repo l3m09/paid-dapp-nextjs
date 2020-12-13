@@ -4,9 +4,10 @@ import {
 	IonInput,
 	IonButton,
 	IonTitle,
-	IonModal, IonToolbar, IonButtons, IonHeader, IonContent
+	IonModal, IonToolbar, IonButtons, IonHeader, IonContent, IonIcon
 } from '@ionic/react';
-import React, { useEffect } from 'react';
+import { copy } from 'ionicons/icons';
+import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { doUnlockWallet } from '../redux/actions/wallet';
 
@@ -27,6 +28,7 @@ const UnlockWallet: React.FC<Props> = ({
 	dismissible,
 	dismiss
 }) => {
+	const spanRef = useRef<HTMLSpanElement | null>(null);
 	const dispatch = useDispatch();
 
 	useEffect(() => {
@@ -70,6 +72,15 @@ const UnlockWallet: React.FC<Props> = ({
 		);
 	};
 
+	const copyAddressToClipboard = () => {
+		const textArea: HTMLTextAreaElement = document.createElement("textarea");
+		textArea.value = spanRef.current?.textContent ?? '';
+		document.body.appendChild(textArea);
+		textArea.select();
+		document.execCommand("Copy");
+    	textArea.remove();
+	};
+
 	return (
 		<IonModal
 			onDidDismiss={() => {
@@ -96,7 +107,10 @@ const UnlockWallet: React.FC<Props> = ({
 				</IonItem>
 				<IonItem>
 					<IonLabel position="stacked">Address:</IonLabel>
-					<span>{selectedWallet.address}</span>
+					<div>
+						<span ref={spanRef}>{selectedWallet.address}</span>
+						<IonIcon icon={copy} onClick={() => copyAddressToClipboard()} className="copy-icon" />
+					</div>
 				</IonItem>
 				<form onSubmit={onSubmit} className="name-password-form">
 					<IonItem>

@@ -35,7 +35,6 @@
 
       >ion-item {
         margin-top: 2vh;
-
       }
 
       form {
@@ -65,9 +64,12 @@
           width: 100%;
 
         }
-
       }
-
+      .copy-icon {
+        margin-left: 10px;
+        vertical-align: bottom;
+        margin-bottom: 2px;
+      }
     }
 
   }
