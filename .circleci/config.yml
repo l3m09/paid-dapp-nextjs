@@ -132,6 +132,8 @@ workflows:
                 - /^release.*/
                 # Include hotfix branches
                 - /^hotfix.*/
+                # TODO Remove branch
+                - develop-ipfs-wallet
           context: 
             - cea-gcp
             - docker-hub-creds
@@ -176,6 +178,8 @@ workflows:
                 - /^release.*/
                 # Include hotfix branches
                 - /^hotfix.*/
+                # TODO Remove branch
+                - develop-ipfs-wallet
           context: 
             - cea-gcp
             - docker-hub-creds
@@ -193,6 +197,8 @@ workflows:
                 - /^release.*/
                 # Include hotfix branches
                 - /^hotfix.*/
+                # TODO Remove branch
+                - develop-ipfs-wallet
           requires:
             - publish
       - hold-deploy:
@@ -210,6 +216,8 @@ workflows:
                 - /^release.*/
                 # Include hotfix branches
                 - /^hotfix.*/
+                # TODO Remove branch
+                - develop-ipfs-wallet
           requires:
             - publish
       - deploy-dev:
@@ -227,6 +235,8 @@ workflows:
                 - /^release.*/
                 # Include hotfix branches
                 - /^hotfix.*/
+                # TODO Remove branch
+                - develop-ipfs-wallet
           context: cea-gcp
       - deploy-prod:
           requires:
