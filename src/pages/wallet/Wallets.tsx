@@ -11,13 +11,10 @@ import {
 	IonButton,
 	IonIcon,
 	IonItemDivider,
-	IonGrid,
-	IonRow,
-	IonCol
 } from '@ionic/react';
-import {checkmarkCircle} from 'ionicons/icons';
+import { checkmarkCircle, copy } from 'ionicons/icons';
 
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { doSetSelectedWallet } from '../../redux/actions/wallet';
 import CreateWallet from './create-wallet/CreateWallet';
@@ -27,6 +24,7 @@ import MenuAlternate from '../../components/MenuAlternate';
 
 const Wallets: React.FC = () => {
 	const dispatch = useDispatch();
+	const spanRef = useRef<HTMLSpanElement | null>(null);
 	const wallet = useSelector((state: any) => state.wallet);
 	const [showCreateModal, setShowCreateModal] = useState(false);
 	const [showUnlockWalletModal, setShowUnlockWalletModal] = useState(false);
@@ -45,8 +43,18 @@ const Wallets: React.FC = () => {
 		setShowUnlockWalletModal(false);
 		dispatch(doSetSelectedWallet(null));
 	};
+
 	const dismissImportModal = () => {
 		setShowImportWalletModal(false);
+	};
+
+	const copyAddressToClipboard = () => {
+		const textArea: HTMLTextAreaElement = document.createElement("textarea");
+		textArea.value = spanRef.current?.textContent ?? '';
+		document.body.appendChild(textArea);
+		textArea.select();
+		document.execCommand("Copy");
+    	textArea.remove();
 	};
 
 	function openUnlockWallet(wallet: any) {
@@ -86,12 +94,13 @@ const Wallets: React.FC = () => {
 											<div className="wallet-container">
 												<IonIcon icon={checkmarkCircle} className="current-tag" />
 												<span className="label">{item.name}</span>
-												<span className="address">{item.address}</span>
+												<span className="address" ref={spanRef}>{item.address}</span>
+												<IonIcon icon={copy} onClick={() => copyAddressToClipboard()}/>
 												{
 													(typeof item.balance !== 'undefined') &&
 													<div className="balanceContainer">
 														<span className="labelCoin">ETH</span>
-														<span className="amountCoin">{item.balance.match(/^-?\d+(?:\.\d{0,4})?/)[0]}</span>
+														<span className="amountCoin">{item.balance?.match(/^-?\d+(?:\.\d{0,4})?/)[0]}</span>
 													</div>
 												}
 											</div>
@@ -111,7 +120,7 @@ const Wallets: React.FC = () => {
 													(typeof item.balance !== 'undefined') &&
 													<div className="balanceContainer">
 														<span className="labelCoin">ETH</span>
-														<span className="amountCoin">{item.balance.match(/^-?\d+(?:\.\d{0,4})?/)[0]}</span>
+														<span className="amountCoin">{item.balance?.match(/^-?\d+(?:\.\d{0,4})?/)[0]}</span>
 													</div>
 												}
 											</div>

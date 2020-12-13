@@ -1,7 +1,8 @@
 import { WalletActionTypes } from '../actionTypes/wallet';
 import { Plugins } from '@capacitor/core';
 import { BlockchainFactory } from '../../utils/blockchainFactory';
-const BigNumber = require('bignumber.js');
+import { KeyStorageModel } from 'paid-universal-wallet/dist/key-storage/KeyStorageModel';
+import { WalletManager } from 'paid-universal-wallet';
 const { Storage } = Plugins;
 
 // CREATORS
@@ -85,6 +86,16 @@ const unlockWallet = (payload: any) => {
 	};
 };
 
+//Utils
+const getBalanceWallet = async (ks: KeyStorageModel, walletManager: WalletManager) => {
+	const address = walletManager.getWalletAddress(ks.mnemonic);
+	const web3 = BlockchainFactory.getWeb3Instance(ks.keypairs, ks.mnemonic);
+	const balancewei = await web3.eth.getBalance(address);
+	const balance = web3.utils.fromWei(balancewei);
+
+	return balance;
+}
+
 // ACTIONS
 export const doUnlockWallet = (payload: {
 	wallet: any;
@@ -104,11 +115,8 @@ export const doUnlockWallet = (payload: {
 		} else {
 			// const { address } = wallet;
 			BlockchainFactory.setKeystore(ks);
-			const address = walletManager.getWalletAddress(ks.mnemonic);
-			const web3 = BlockchainFactory.getWeb3Instance(ks.keypairs, ks.mnemonic);
-			const balancewei = await web3.eth.getBalance(address);
-			const balance = web3.utils.fromWei(balancewei);
-			const walletWithBalance = {...wallet, balance: balance ?? 0.00};
+			const balance = await getBalanceWallet(ks, walletManager);
+			const walletWithBalance = {...wallet, balance: balance ?? '0'};
 			const value = JSON.stringify(walletWithBalance);
 			const stored: any = await Storage.get({ key: 'WALLETS' });
 			console.log('CURRENT_WALLET_ACTIONS', value);
@@ -118,7 +126,7 @@ export const doUnlockWallet = (payload: {
 				const currentWallets = JSON.parse(stored.value);
 				const currentWalletsWithBalance = currentWallets.map((currentWallet: any) => {
 					if (currentWallet.address === walletWithBalance.address) {
-						return {...currentWallet, balance: balance ?? 0.00}
+						return {...currentWallet, balance: balance ?? '0'}
 					} else {
 						return currentWallet;
 					}
@@ -228,6 +236,7 @@ export const doCreateWallet = (payload: {
 			_id,
 			address,
 			name,
+			balance: '0',
 			created: created.toString()
 		};
 
@@ -266,11 +275,15 @@ export const doImportWallet = (payload: {
 		const wallet = await walletManager.createWallet(password, mnemonic);
 		const { _id, created } = wallet;
 		const address = walletManager.getWalletAddress(mnemonic);
+	
+		const ks = await walletManager.unlockWallet(_id, password);
+		const balance = await getBalanceWallet(ks, walletManager);
 
 		const referenceWallet = {
 			_id,
 			address,
 			name,
+			balance: balance ?? '0',
 			created: created.toString()
 		};
 
@@ -290,6 +303,7 @@ export const doImportWallet = (payload: {
 			importWallet({
 				_id,
 				address,
+				balance: balance ?? '0',
 				name
 			})
 		);
