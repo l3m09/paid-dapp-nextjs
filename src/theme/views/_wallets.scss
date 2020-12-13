@@ -99,8 +99,13 @@
         border-top: 1px solid #ad8f8f;
         width: 100%;
 
-        span {
+        .labelCoin {
           width: 40px;
+        }
+
+        .amountCoin {
+          margin-left: 10px;
+          text-align: left;
         }
       }
 
