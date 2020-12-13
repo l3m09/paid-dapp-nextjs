@@ -17,7 +17,7 @@ const initialState = {
 		counterpartyAddress: '',
 		counterpartyPhone: '',
 		createdAt: null
-	}
+	},
 };
 
 export const DocumentsReducer = function (state = initialState, action: any) {

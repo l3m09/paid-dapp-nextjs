@@ -116,9 +116,39 @@ function SelectedDocument(payload: {
 			<IonModal isOpen={show} cssClass="document-modal" onDidDismiss={() => {closeShowDocument()}}>
 				<IonCard>
 					<IonCardHeader>
-						<IonCardTitle>
-							<div className="float-left-wrapper">
+						<IonCardTitle className="document-title-modal">
+							<div>
 								Document Id: {selectedDocument.event.id}
+							</div>
+							<div>
+								<IonButton
+									className="small-button font-size-13"
+									color="primary"
+									onClick={async () => {
+										verifyDocument(selectedDocument);
+									}}
+									disabled={verifyButtonDisable}
+								>
+									{showVerifyDocumentButton ? <span>Verify document</span> : null }
+									{!showVerifyDocumentButton ? <span>Sign document</span> : null}
+									{showSignedText ? <span>Signature succesfully created</span> : null }
+								</IonButton>
+								{ showVerified ? <span className="icon-wrapper">
+									<IonIcon
+										ios={checkmarkCircle}
+										md={checkmarkCircle}
+										color="primary"
+										className="font-size-20"
+									/>
+								</span> : null }
+								{ showNotVerified ? <span className="icon-wrapper">
+									<IonIcon
+										ios={closeCircle}
+										md={closeCircle}
+										color="secondary"
+										className="font-size-20"
+									/>
+								</span> : null }
 							</div>
 						</IonCardTitle>
 						<IonCardSubtitle>
@@ -126,54 +156,28 @@ function SelectedDocument(payload: {
 					</IonCardHeader>
 					<IonCardContent>
 						<div>
-							Valid until: {selectedDocument.data.validUntil}
-						</div>
-						<div>
-							<IonButton
-								className="small-button"
-								color="primary"
-								onClick={async () => {
-									verifyDocument(selectedDocument);
-								}}
-								disabled={verifyButtonDisable}
-							>
-								{showVerifyDocumentButton ? <span>Verify document</span> : null }
-								{!showVerifyDocumentButton ? <span>Sign document</span> : null}
-								{showSignedText ? <span>Signature succesfully created</span> : null }
-							</IonButton>
-							{ showVerified ? <span className="icon-wrapper">
-								<IonIcon
-									ios={checkmarkCircle}
-									md={checkmarkCircle}
-									color="primary"
-									className="font-size-20"
-								/>
-							</span> : null }
-							{ showNotVerified ? <span className="icon-wrapper">
-								<IonIcon
-									ios={closeCircle}
-									md={closeCircle}
-									color="secondary"
-									className="font-size-20"
-								/>
-							</span> : null }
+							Expires in {(selectedDocument.data.validUntil > 1) ?
+							`${selectedDocument.data.validUntil} days` : 
+							`${selectedDocument.data.validUntil} day`}
 						</div>
 						<h2>Details</h2>
 						<div className="details-wrapper">
 							<IonItem>
-								<IonLabel position="stacked">Signatory A</IonLabel>
+								<IonLabel position="stacked">Signed By</IonLabel>
 								<span>{selectedDocument.event.from}</span>
 							</IonItem>
-							<IonItem>
-								<IonLabel position="stacked">Signatory B</IonLabel>
-								<span>{selectedDocument.event.to}</span>
-							</IonItem>
+							{/*
+								<IonItem>
+									<IonLabel position="stacked">Signatory B</IonLabel>
+									<span>{selectedDocument.event.to}</span>
+								</IonItem>
+							*/}
 							<IonItem>
 								<IonLabel position="stacked">Transaction Hash</IonLabel>
 								<span>{selectedDocument.meta.transactionHash}</span>
 							</IonItem>
 							<IonItem>
-								<IonLabel position="stacked">Signature</IonLabel>
+								<IonLabel position="stacked">Document Signature</IonLabel>
 								<span>{selectedDocument.signature}</span>
 							</IonItem>
 						</div>
@@ -225,7 +229,7 @@ const DocumentsList: React.FC<Props> = ({documentsTo, documentsFrom, type, count
 	const documentsState = useSelector((state: any) => state.documents);
 	const {
 		selectedDocument,
-		loading
+		loading,
 	} = documentsState;
 	const [showModal, setShowModal] = useState(false);
 	const [showPopOver, setShowPopover] = useState(false);
