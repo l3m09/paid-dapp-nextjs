@@ -306,7 +306,7 @@ const DocumentsList: React.FC<Props> = ({documentsTo, documentsFrom, type, count
 		console.info(pdfContent);
 		console.log('showPdfViewerModal', showPdfViewerModal);
 	}
-	console.log('documentsFrom',documentsFrom);
+	
 	return (
 		<div>
 				<IonLoading
