@@ -39,6 +39,13 @@ const MenuAlternate: React.FC = () => {
 
 	const appPages: AppPage[] = [
 		{
+			title: 'Network: rinkeby',
+			url: '/wallets',
+			iosIcon: listCircleOutline,
+			mdIcon: listCircleOutline,
+			disabled: false
+		},
+		{
 			title: 'Wallets',
 			url: '/wallets',
 			iosIcon: listCircleOutline,
