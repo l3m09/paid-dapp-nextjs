@@ -59,7 +59,7 @@ function PdfViewerModal(payload: {
 					</IonToolbar>
 				</IonHeader>
 				<IonContent color="primary">
-					{pdfContent}
+					<iframe src={url} width="100%" height="100%" frameBorder="0"></iframe>
 				</IonContent>
 			</IonModal>
 		</div>
@@ -242,6 +242,7 @@ const DocumentsList: React.FC<Props> = ({documentsTo, documentsFrom, type, count
 	const [showSignedText, setShowSignedText ] = useState(false);
 	const [reloadDocuments, setReloadDocument] = useState(false);
 	const [showVerifyDocumentButton, setShowVerifyDocumentButton] = useState(false);
+	const [forceVerifyDocument, setForceVerifyDocument] = useState(false);
  	const wallet = useSelector(
 		(state: { wallet: { currentWallet: any } }) => state.wallet
 	);
@@ -256,7 +257,7 @@ const DocumentsList: React.FC<Props> = ({documentsTo, documentsFrom, type, count
 
 	async function verifyDocument(document: any) {
 		setVerifyButtonDisable(true);
-		if(document.event.status != 0 || document.event.from == currentWallet?.address){
+		if(document.event.status != 0 || document.event.from == currentWallet?.address || forceVerifyDocument){
 			let fetchedContent	 = '';
 			for await (const chunk of ipfs.cat(document.event.cid)) {
 				fetchedContent = uint8ArrayToString(chunk);
@@ -278,7 +279,7 @@ const DocumentsList: React.FC<Props> = ({documentsTo, documentsFrom, type, count
 		}
 		else{
 			dispatch(doSignCounterpartyDocument(document));
-			setShowVerified(true);
+			setForceVerifyDocument(true);
 			setReloadDocument(true);
 			setShowVerifyDocumentButton(true);
 		}
