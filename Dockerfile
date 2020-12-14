@@ -9,8 +9,11 @@ COPY package.json .
 # Execute npm to actually install dependencies
 RUN npm install
 # Copy specific files and folders from source to the dest path in the image's filesystem.
-COPY . .
-
+COPY android android
+COPY ios ios
+COPY public public
+COPY src src
+COPY *.js *.json .env ./
 
 # Use the base stage to produce a build
 FROM base as build
