@@ -50,6 +50,14 @@ const uploadDocuments = () => {
 		type: DocumentsActionTypes.UPLOAD_DOCUMENTS_SUCCESS
 	};
 };
+
+const getSelectedSignedDocument = (document: any) => {
+	return {
+		type: DocumentsActionTypes.COUNTERPARTY_SIGNED_SUCCESS,
+		payload: document
+	};
+};
+
 const getSelectedDocument = (document: any) => {
 	return {
 		type: DocumentsActionTypes.GET_SELECTED_DOCUMENT_SUCCESS,
@@ -139,7 +147,7 @@ export const doCreateAgreement = (payload: {
 
 		// ALICE SIDE
 		const content = template();
-		const blobContent = base64StringToBlob(btoa(unescape(encodeURIComponent(content))), 'application/pdf');
+		const blobContent = base64StringToBlob(btoa(unescape(encodeURIComponent(content))), 'text/html');
 		const ceass = new CEASigningService();
 		ceass.useKeyStorage(rawWallet);
 
@@ -442,7 +450,7 @@ export const doUploadDocuments = (file: any) => async (dispatch: any) => {
 };
 
 export const doSignCounterpartyDocument = (document: any) => async (dispatch: any, getState: () => { wallet: any }) => {
-	dispatch({ type: DocumentsActionTypes.GET_SELECTED_DOCUMENT_LOADING });
+	dispatch({ type: DocumentsActionTypes.COUNTERPARTY_SIGNED_LOADING });
 	let fetchedContent = '';
 	if(document){
 		const { wallet } = getState();
@@ -511,10 +519,11 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 		Promise.resolve(gas).then(async (gas:any) => {
 			const agreementTransaction = await methodFn.send({ from: address, gas:gas+5e4, gasPrice: 50e9 })
 			.on('receipt', async function (receipt: any) {
-				dispatch(getSelectedDocument(document));
+				dispatch(getSelectedSignedDocument(document));
 			})
 			.on('error', function (error: any, receipt: any) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.		
 				alert('Transaction failed');
+				dispatch({ type: DocumentsActionTypes.COUNTERPARTY_SIGNED_FAILURE });
 				throw new Error('Transaction failed');
 			});
 		});

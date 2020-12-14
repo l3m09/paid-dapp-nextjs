@@ -59,7 +59,7 @@ function PdfViewerModal(payload: {
 					</IonToolbar>
 				</IonHeader>
 				<IonContent color="primary">
-					<iframe src={url} width="100%" height="100%" frameBorder="0"></iframe>
+					{pdfContent}
 				</IonContent>
 			</IonModal>
 		</div>

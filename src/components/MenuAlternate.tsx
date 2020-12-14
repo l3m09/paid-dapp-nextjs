@@ -13,6 +13,8 @@ import {
 	listCircleOutline
 } from 'ionicons/icons';
 import {useSelector} from 'react-redux';
+import { BlockchainFactory } from '../utils/blockchainFactory';
+import { KeyStorageModel } from 'paid-universal-wallet/dist/key-storage/KeyStorageModel';
 
 interface AppPage {
 	url: string;
@@ -22,24 +24,35 @@ interface AppPage {
 	disabled: boolean;
 }
 
-const MenuAlternate: React.FC = () => {
+const MenuAlternate:  React.FC = () =>{
 	const location = useLocation();
 	const wallet = useSelector((state: any) => state.wallet);
-
 	const { unlockedWallet } = wallet;
 
 	const [disableMenu, setDisableMenu] = useState(true);
+	const [networkText, setNetWorkText] = useState('...');
 
 
 	useEffect(() => {
 		if (unlockedWallet !== null) {
 			setDisableMenu(false)
+
+			const manager = BlockchainFactory.getWalletManager();
+			const storage = manager.getKeyStorage();
+			const rawWallet = storage.find<KeyStorageModel>(unlockedWallet._id);
+			rawWallet.then((rWallet) => {		
+				const web3 = BlockchainFactory.getWeb3Instance(rWallet.keypairs, rWallet.mnemonic);
+				const network = BlockchainFactory.getNetwork(web3);
+				network.then((networkText) => {
+					setNetWorkText(networkText.toUpperCase());
+				});
+			});
 		}
 	}, [unlockedWallet]);
 
 	const appPages: AppPage[] = [
 		{
-			title: 'Network: rinkeby',
+			title: 'Network: ' + networkText,
 			url: '/wallets',
 			iosIcon: listCircleOutline,
 			mdIcon: listCircleOutline,
