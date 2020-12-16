@@ -39,6 +39,8 @@ import MenuAlternate from '../../components/MenuAlternate';
 import DocumentsList from './DocumentsList';
 import { IonText } from '@ionic/react';
 import { Plugins } from '@capacitor/core';
+import { BlockchainFactory } from './../../utils/blockchainFactory'
+
 const { Storage } = Plugins;
 
 function SelectedDocument(payload: {
@@ -50,6 +52,10 @@ function SelectedDocument(payload: {
 	if (!selectedDocument) {
 		return null;
 	}
+	// const network:string = BlockchainFactory.getNetwork();
+	const linkSignA:string = `https://rinkeby.etherscan.io/address/${selectedDocument.event.from}`;
+	const linkSignB:string = `https://rinkeby.etherscan.io/address/${selectedDocument.event.to}`;
+	const txHash:string = `https://rinkeby.etherscan.io/tx/${selectedDocument.meta.transactionHash}`;
 	return (
 		<div id="modal-container">
 			<IonModal isOpen={show} cssClass="document-modal" onDidDismiss={() => {closeShowDocument()}}>
@@ -67,15 +73,15 @@ function SelectedDocument(payload: {
 						<div className="details-wrapper">
 							<IonItem>
 								<IonLabel position="stacked">Signatory A</IonLabel>
-								<span>{selectedDocument.event.from}</span>
+								<a href={linkSignA} target="_blank">{selectedDocument.event.from}</a>
 							</IonItem>
 							<IonItem>
 								<IonLabel position="stacked">Signatory B</IonLabel>
-								<span>{selectedDocument.event.to}</span>
+								<a href={linkSignB} target="_blank">{selectedDocument.event.to}</a>
 							</IonItem>
 							<IonItem>
 								<IonLabel position="stacked">Transaction Hash</IonLabel>
-								<span>{selectedDocument.meta.transactionHash}</span>
+								<a href={txHash} target="_blank">{selectedDocument.meta.transactionHash}</a>
 							</IonItem>
 						</div>
 					</IonCardContent>

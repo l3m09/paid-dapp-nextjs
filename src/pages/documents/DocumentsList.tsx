@@ -29,6 +29,7 @@ import {
 import { IonBadge } from '@ionic/react';
 import { Plugins } from '@capacitor/core';
 import { eddsa } from "elliptic";
+import { link } from 'fs';
 const { Storage } = Plugins;
 
 const uint8ArrayToString = require('uint8arrays/to-string');
@@ -110,7 +111,9 @@ function SelectedDocument(payload: {
 	if (!selectedDocument) {
 		return null;
 	}
-	
+	const linkSignA:string = `https://rinkeby.etherscan.io/address/${selectedDocument.event.from}`;
+	// const linkSignB:string = `https://rinkeby.etherscan.io/address/${selectedDocument.event.to}`;
+	const txHash:string = `https://rinkeby.etherscan.io/tx/${selectedDocument.meta.transactionHash}`;
 	return (
 		<div id="modal-container">
 			<IonModal isOpen={show} cssClass="document-modal" onDidDismiss={() => {closeShowDocument()}}>
@@ -164,7 +167,8 @@ function SelectedDocument(payload: {
 						<div className="details-wrapper">
 							<IonItem>
 								<IonLabel position="stacked">Signed By</IonLabel>
-								<span>{selectedDocument.event.from}</span>
+								{/* <span>{selectedDocument.event.from}</span> */}
+								<a href={linkSignA} target="_blank">{selectedDocument.event.from}</a>
 							</IonItem>
 							{/*
 								<IonItem>
@@ -174,7 +178,8 @@ function SelectedDocument(payload: {
 							*/}
 							<IonItem>
 								<IonLabel position="stacked">Transaction Hash</IonLabel>
-								<span>{selectedDocument.meta.transactionHash}</span>
+								{/* <span>{selectedDocument.meta.transactionHash}</span> */}
+								<a href={txHash} target="_blank">{selectedDocument.meta.transactionHash}</a>
 							</IonItem>
 							<IonItem>
 								<IonLabel position="stacked">Document Signature</IonLabel>
