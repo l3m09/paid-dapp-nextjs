@@ -34,6 +34,7 @@
     "jspdf": "^2.1.1",
     "jspdf-html2canvas": "^1.3.2",
     "multihash": "^0.1.0",
+    "node-fetch": "^2.6.1",
     "paid-universal-wallet": "git://github.com:PAIDNetwork/universal-wallet.git",
     "pouchdb": "^7.2.2",
     "promise-file-reader": "^1.0.3",

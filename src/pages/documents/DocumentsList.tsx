@@ -323,17 +323,20 @@ const DocumentsList: React.FC<Props> = ({documentsTo, documentsFrom, type, count
 		const jsonContent = JSON.parse(fetchedContent);
 		const contentRef = jsonContent.contentRef;
 		setAgreementUrl(contentRef.cid);
+		console.log(contentRef.cid)
 		setPdfViewerModal(true);
-		//let pdfContent:HTMLElement = document.createElement('DIV');
+		// let pdfContentHTML:HTMLElement = document.createElement('DIV');
 		let pdfContent = '';
 		for await (const chunk of ipfs.cat(contentRef.cid)) {
 			pdfContent = uint8ArrayToString(chunk);
 		}
 		setAgreementContent(pdfContent);
-		console.info(pdfContent);
+		// pdfContentHTML.innerHTML = pdfContent;
+		// window.open(pdfContentHTML);
+		console.log(pdfContent);
 		console.log('showPdfViewerModal', showPdfViewerModal);
 	}
-	
+
 	return (
 		<div>
 				<IonLoading

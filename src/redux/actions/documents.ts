@@ -13,6 +13,7 @@ import { templateRender } from './template/template';
 const uint8ArrayToString = require('uint8arrays/to-string');
 const BigNumber = require('bignumber.js');
 const ipfsClient = require('ipfs-http-client');
+const fetch = require('node-fetch');
 
 // TODO: Fix
 const ipfs = ipfsClient({ host: 'ipfs.infura.io', port: '5001', protocol: 'https', apiPath: '/api/v0' });
@@ -492,10 +493,19 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 		const digest = jsonContent.digest;
 
 		const contentRef = jsonContent.contentRef;
-		let pdfContent = '';
-		for await (const chunk of ipfs.cat(contentRef.cid)) {
-			pdfContent = uint8ArrayToString(chunk);
+		// let pdfContent = '';
+		console.log(contentRef.cid);
+		// for await (const chunk of ipfs.cat(contentRef.cid)) {
+		// 	pdfContent = uint8ArrayToString(chunk);
+		// }
+		const urlIpfsContent = `https://ipfs.io/ipfs/${contentRef.cid}`;
+		const ipfsContent = async () => {
+			return await fetch(urlIpfsContent)
+			.then(res => res.text())
 		}
+		const pdfContent:string = await ipfsContent();
+		console.log(pdfContent);
+		const blobContent = base64StringToBlob(btoa(unescape(encodeURIComponent(pdfContent))), 'text/html');
 
 		const ec_alice = new eddsa('ed25519');
 		const signer = ec_alice.keyFromSecret(rawWallet.keypairs.ED25519);
@@ -504,8 +514,8 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 			.toHex();
 		const pubKey = signer.getPublic();
 		const opts = { create: true, parents: true };
-		let ipfsHash = await uploadsIPFS(ipfs, pdfContent, opts, digest, signature, pubKey, formId, address, null);
-		
+		let ipfsHash = await uploadsIPFS(ipfs, blobContent, opts, digest, signature, pubKey, formId, address, null);
+
 
 		const methodFn = AgreementContract.methods.counterPartiesSign(
 			agreementId,
