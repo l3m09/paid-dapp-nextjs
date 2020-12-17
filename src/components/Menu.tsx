@@ -87,7 +87,7 @@ const Menu: React.FC = () => {
 										/>
 									</span>
 
-									<IonLabel color="gradient">{appPage.title}1</IonLabel>
+									<IonLabel color="gradient">{appPage.title}</IonLabel>
 								</IonItem>
 							</IonMenuToggle>
 						);
