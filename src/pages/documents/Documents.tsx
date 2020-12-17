@@ -40,6 +40,7 @@ import DocumentsList from './DocumentsList';
 import { IonText } from '@ionic/react';
 import { Plugins } from '@capacitor/core';
 import { BlockchainFactory } from './../../utils/blockchainFactory'
+import { KeyStorageModel } from 'paid-universal-wallet/dist/key-storage/KeyStorageModel';
 
 const { Storage } = Plugins;
 
@@ -48,14 +49,31 @@ function SelectedDocument(payload: {
 	selectedDocument: any;
 	closeShowDocument: () => void;
 }) {
+	const wallet = useSelector((state: any) => state.wallet);
+	const { unlockedWallet } = wallet;
+
+	const [networkText, setNetWorkText] = useState('...');
 	const { show, selectedDocument, closeShowDocument } = payload;
+
+	useEffect(() => {
+		if (unlockedWallet !== null) {
+			const manager = BlockchainFactory.getWalletManager();
+			const storage = manager.getKeyStorage();
+			const rawWallet = storage.find<KeyStorageModel>(unlockedWallet._id);
+			rawWallet.then((rWallet) => {
+				const web3 = BlockchainFactory.getWeb3Instance(rWallet.keypairs, rWallet.mnemonic);
+				const network = BlockchainFactory.getNetwork(web3);
+				network.then((networkText) => {
+					setNetWorkText(networkText.toUpperCase());
+				});
+			});
+		}
+	}, [unlockedWallet]);
+
 	if (!selectedDocument) {
 		return null;
 	}
-	// const network:string = BlockchainFactory.getNetwork();
-	const linkSignA:string = `https://rinkeby.etherscan.io/address/${selectedDocument.event.from}`;
-	const linkSignB:string = `https://rinkeby.etherscan.io/address/${selectedDocument.event.to}`;
-	const txHash:string = `https://rinkeby.etherscan.io/tx/${selectedDocument.meta.transactionHash}`;
+
 	return (
 		<div id="modal-container">
 			<IonModal isOpen={show} cssClass="document-modal" onDidDismiss={() => {closeShowDocument()}}>
@@ -73,15 +91,15 @@ function SelectedDocument(payload: {
 						<div className="details-wrapper">
 							<IonItem>
 								<IonLabel position="stacked">Signatory A</IonLabel>
-								<a href={linkSignA} target="_blank">{selectedDocument.event.from}</a>
+								<a href={`https://${networkText}.etherscan.io/address/${selectedDocument.event.from}`} target="_blank">{selectedDocument.event.from}</a>
 							</IonItem>
 							<IonItem>
 								<IonLabel position="stacked">Signatory B</IonLabel>
-								<a href={linkSignB} target="_blank">{selectedDocument.event.to}</a>
+								<a href={`https://${networkText}.etherscan.io/address/${selectedDocument.event.to}`} target="_blank">{selectedDocument.event.to}</a>
 							</IonItem>
 							<IonItem>
 								<IonLabel position="stacked">Transaction Hash</IonLabel>
-								<a href={txHash} target="_blank">{selectedDocument.meta.transactionHash}</a>
+								<a href={`https://${networkText}.etherscan.io/tx/${selectedDocument.meta.transactionHash}`} target="_blank">{selectedDocument.meta.transactionHash}</a>
 							</IonItem>
 						</div>
 					</IonCardContent>

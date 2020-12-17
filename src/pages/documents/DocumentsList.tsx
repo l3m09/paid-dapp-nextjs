@@ -30,6 +30,9 @@ import { IonBadge } from '@ionic/react';
 import { Plugins } from '@capacitor/core';
 import { eddsa } from "elliptic";
 import { link } from 'fs';
+import { BlockchainFactory } from '../../utils/blockchainFactory';
+import { KeyStorageModel } from 'paid-universal-wallet/dist/key-storage/KeyStorageModel';
+
 const { Storage } = Plugins;
 
 const uint8ArrayToString = require('uint8arrays/to-string');
@@ -105,15 +108,31 @@ function SelectedDocument(payload: {
 		showVerifyDocumentButton
 	} = payload;
 	const wallet = useSelector(
-		(state: { wallet: { currentWallet: any } }) => state.wallet
+		(state: { wallet: { unlockedWallet: any } }) => state.wallet
 	);
-	const { currentWallet } = wallet;
+	const { unlockedWallet } = wallet;
+	const [networkText, setNetWorkText] = useState('...');
+
+	useEffect(() => {
+		if (unlockedWallet !== null) {
+			const manager = BlockchainFactory.getWalletManager();
+			const storage = manager.getKeyStorage();
+			const rawWallet = storage.find<KeyStorageModel>(unlockedWallet._id);
+			rawWallet.then((rWallet) => {
+				const web3 = BlockchainFactory.getWeb3Instance(rWallet.keypairs, rWallet.mnemonic);
+				const network = BlockchainFactory.getNetwork(web3);
+				network.then((networkText) => {
+					setNetWorkText(networkText.toUpperCase());
+				});
+			});
+		}
+	}, [unlockedWallet]);
+
+
 	if (!selectedDocument) {
 		return null;
 	}
-	const linkSignA:string = `https://rinkeby.etherscan.io/address/${selectedDocument.event.from}`;
-	// const linkSignB:string = `https://rinkeby.etherscan.io/address/${selectedDocument.event.to}`;
-	const txHash:string = `https://rinkeby.etherscan.io/tx/${selectedDocument.meta.transactionHash}`;
+
 	return (
 		<div id="modal-container">
 			<IonModal isOpen={show} cssClass="document-modal" onDidDismiss={() => {closeShowDocument()}}>
@@ -160,7 +179,7 @@ function SelectedDocument(payload: {
 					<IonCardContent>
 						<div>
 							Expires in {(selectedDocument.data.validUntil > 1) ?
-							`${selectedDocument.data.validUntil} days` : 
+							`${selectedDocument.data.validUntil} days` :
 							`${selectedDocument.data.validUntil} day`}
 						</div>
 						<h2>Details</h2>
@@ -168,18 +187,18 @@ function SelectedDocument(payload: {
 							<IonItem>
 								<IonLabel position="stacked">Signed By</IonLabel>
 								{/* <span>{selectedDocument.event.from}</span> */}
-								<a href={linkSignA} target="_blank">{selectedDocument.event.from}</a>
+								<a href={`https://${networkText}.etherscan.io/address/${selectedDocument.event.from}`} target="_blank">{selectedDocument.event.from}</a>
 							</IonItem>
 							{/*
 								<IonItem>
 									<IonLabel position="stacked">Signatory B</IonLabel>
-									<span>{selectedDocument.event.to}</span>
+									<a href={`https://rinkeby.etherscan.io/address/${selectedDocument.event.to`}target="_blank">{selectedDocument.event.to}</a>
 								</IonItem>
 							*/}
 							<IonItem>
 								<IonLabel position="stacked">Transaction Hash</IonLabel>
 								{/* <span>{selectedDocument.meta.transactionHash}</span> */}
-								<a href={txHash} target="_blank">{selectedDocument.meta.transactionHash}</a>
+								<a href={`https://${networkText}.etherscan.io/tx/${selectedDocument.meta.transactionHash}`} target="_blank">{selectedDocument.meta.transactionHash}</a>
 							</IonItem>
 							<IonItem>
 								<IonLabel position="stacked">Document Signature</IonLabel>
@@ -361,7 +380,6 @@ const DocumentsList: React.FC<Props> = ({documentsTo, documentsFrom, type, count
 				{documentsFrom.length
 					? documentsFrom.map((document: any, index: number) => {
 						const {data, meta, event} = document;
-						
 						const statusClass = event.status == 0 ? (currentWallet?.address == event.from ? 'PENDING' :
 						'SIGN...') : (currentWallet?.address == event.from ? 'OUT' :
 						'IN');
