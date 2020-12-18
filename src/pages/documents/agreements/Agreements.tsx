@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef,  useEffect } from 'react';
 import {
 	IonButton,
 	IonTitle,
@@ -14,12 +14,6 @@ import { useParams, useHistory } from 'react-router';
 
 import FormClient from './FormClient';
 import FormCounterparty from './FormCounterparty';
-
-// import VehicleDescription from './vehicle/VehicleDescription';
-// import VehicleCompleted from './vehicle/VehicleCompleted';
-
-// import RentalDescription from './rental/RentalDescription';
-// import RentalCompleted from './rental/RentalCompleted';
 
 import NdaDescription from './nda/NdaDescription';
 import NdaCompleted from './nda/NdaCompleted';
@@ -41,65 +35,24 @@ const Agreements: React.FC<AgreementsProps> = () => {
 	const slideOpts = {
 		initialSlide: 0,
 		speed: 400,
-		slidesPerView: 1
+		slidesPerView: 1,
+		autoHeight: true
 	};
 
-	// const vehicleTemplate: any = (
-	// 	<IonSlides pager={false} options={slideOpts} ref={slidesRef}>
-	// 		<IonSlide>
-	// 			<VehicleDescription current={slidesRef.current} />
-	// 		</IonSlide>
-	// 		<IonSlide>
-	// 			<FormClient current={slidesRef.current} />
-	// 		</IonSlide>
-	// 		<IonSlide>
-	// 			<FormCounterparty current={slidesRef.current} />
-	// 		</IonSlide>
-	// 		<IonSlide>
-	// 			<VehicleCompleted current={slidesRef.current} />
-	// 		</IonSlide>
-	// 	</IonSlides>
-	// );
-	// const rentalTemplate: any = (
-	// 	<IonSlides pager={false} options={slideOpts} ref={slidesRef}>
-	// 		<IonSlide>
-	// 			<RentalDescription current={slidesRef.current} />
-	// 		</IonSlide>
-	// 		<IonSlide>
-	// 			<FormClient current={slidesRef.current} />
-	// 		</IonSlide>
-	// 		<IonSlide>
-	// 			<FormCounterparty current={slidesRef.current} />
-	// 		</IonSlide>
-	// 		<IonSlide>
-	// 			<RentalCompleted current={slidesRef.current} />
-	// 		</IonSlide>
-	// 	</IonSlides>
-	// );
-	const ndaTemplate: any = (
-		<IonSlides pager={false} options={slideOpts} ref={slidesRef}>
-			<IonSlide>
-				<NdaDescription current={slidesRef.current} />
-			</IonSlide>
-			<IonSlide>
-				<FormClient current={slidesRef.current} />
-			</IonSlide>
-			<IonSlide>
-				<FormCounterparty current={slidesRef.current} />
-			</IonSlide>
-			<IonSlide>
-				<NdaCompleted current={slidesRef.current} />
-			</IonSlide>
-		</IonSlides>
-	);
+	useEffect(() => {
+		lockSwipes().then((r) => {});
+		window.scrollTo({ top: 0, behavior: 'smooth' });
+	}, [slidesRef]);
 
 	async function lockSwipes() {
+		slidesRef.current?.scroll(0,0);
+		await slidesRef.current?.updateAutoHeight();
 		await slidesRef.current?.slideTo(0);
 		await slidesRef.current?.lockSwipeToPrev(true);
 		await slidesRef.current?.lockSwipeToNext(true);
 	}
 
-	lockSwipes().then(() => {});
+	lockSwipes().then((r) => {});
 
 	async function toDocuments() {
 		dispatch(doSetAgreementFormInfo({
@@ -112,12 +65,31 @@ const Agreements: React.FC<AgreementsProps> = () => {
 			counterpartyPhone: '',
 			createdAt: null
 		}));
+		slidesRef.current?.scroll(0,0);
 		await slidesRef.current?.lockSwipeToPrev(false);
 		await slidesRef.current?.lockSwipeToNext(false);
 		await slidesRef.current?.slideTo(0).then(() => {
 			history.push('/documents');
 		});
 	}
+
+	const ndaTemplate: any = (
+		<IonSlides mode="md" pager={false} options={slideOpts} ref={slidesRef}> 
+			<IonSlide>
+				<NdaDescription current={slidesRef.current} />
+			</IonSlide>
+			<IonSlide >
+				<FormClient current={slidesRef.current} />
+			</IonSlide>
+			<IonSlide >
+				<FormCounterparty current={slidesRef.current} />
+			</IonSlide>
+			<IonSlide >
+				<NdaCompleted current={slidesRef.current} />
+			</IonSlide>
+		</IonSlides>
+	);
+
 	return (
 		<IonPage className="agreements-page content-page">
 			<IonContent fullscreen>

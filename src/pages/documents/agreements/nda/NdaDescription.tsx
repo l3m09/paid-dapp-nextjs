@@ -4,7 +4,7 @@ import {
 	IonText,
 	IonModal,
 } from '@ionic/react';
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 interface DescriptionProps {
 	current: any;
@@ -13,16 +13,20 @@ interface DescriptionProps {
 const NdaDescription: React.FC<DescriptionProps> = ({ current }) => {
 	const [showModal, setShowModal] = useState(false);
 
+	useEffect(() => {
+		window.scrollTo({ top: 0, behavior: 'smooth' });
+	}, []);
+
 	async function slideNext() {
+		current.scroll(0,0);
+		await current.updateAutoHeight();
 		await current.lockSwipeToNext(false);
 		current.slideNext();
 		await current.lockSwipeToNext(true);
 	}
 
 	return (
-		<div
-			className="agreement-content vehicle-agreement-instructions"
-		>
+		<div className="agreement-content vehicle-agreement-instructions">
 			<IonItem>
 				<div className="instructions">
 				<div>
@@ -85,17 +89,17 @@ const NdaDescription: React.FC<DescriptionProps> = ({ current }) => {
 						</li>
 					</ul>
 				</div>
-					<div>
-						<IonButton
-							onClick={() => {
-								slideNext();
-							}}
-							color="gradient"
-							shape="round"
-						>
-							Continue
-						</IonButton>
-					</div>
+				<div>
+					<IonButton
+						onClick={() => {
+							slideNext();
+						}}
+						color="gradient"
+						shape="round"
+					>
+						Continue
+					</IonButton>
+				</div>
 				</div>
 			</IonItem>
 			<IonModal isOpen={showModal} cssClass="instructions-info-modal">

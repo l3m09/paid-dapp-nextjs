@@ -38,6 +38,7 @@
     "paid-universal-wallet": "git://github.com:PAIDNetwork/universal-wallet.git",
     "pouchdb": "^7.2.2",
     "promise-file-reader": "^1.0.3",
+    "reach-router-scroll-top": "^1.0.0",
     "react": "^16.13.0",
     "react-collapsible": "^2.8.1",
     "react-dom": "^16.13.0",

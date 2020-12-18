@@ -65,16 +65,21 @@ const FormCounterparty: React.FC<AgreementFormProps> = ({ current }) => {
 
 	useEffect(() => {
 		verifyInfo();
-	});
+		window.scrollTo({ top: 0, behavior: 'smooth' });
+	},[agreementFormInfo]);
 
 	async function slideNext() {
+		current.scroll(0,0);
 		await current.lockSwipeToNext(false);
+		await current.updateAutoHeight();
 		await current.slideNext();
 		await current.lockSwipeToNext(true);
 	}
 
 	async function slideBack() {
+		current.scroll(0,0);
 		await current.lockSwipeToPrev(false);
+		await current.updateAutoHeight();
 		await current.slidePrev();
 		await current.lockSwipeToPrev(true);
 	}

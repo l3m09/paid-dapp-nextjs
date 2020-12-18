@@ -2,9 +2,10 @@ import {
 	IonLabel,
 	IonItem,
 	IonInput,
-	IonButton
+	IonButton,
+	IonContent
 } from '@ionic/react';
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { doSetAgreementFormInfo } from '../../../redux/actions/documents';
 
@@ -21,17 +22,18 @@ const FormClient: React.FC<AgreementFormProps> = ({ current }) => {
 	const { loading, agreementFormInfo } = documentsState;
 
 	useEffect(() => {
-		verifyInfo()
+		verifyInfo();
+		window.scrollTo({ top: 0, behavior: 'smooth' });
 	}, [agreementFormInfo]);
 
 	function nameChanged(e: any) {
-		dispatch(doSetAgreementFormInfo({name: e.target.value}));
+		dispatch(doSetAgreementFormInfo({ name: e.target.value }));
 	}
 	function addressChanged(e: any) {
-		dispatch(doSetAgreementFormInfo({address: e.target.value}));
+		dispatch(doSetAgreementFormInfo({ address: e.target.value }));
 	}
 	function phoneChanged(e: any) {
-		dispatch(doSetAgreementFormInfo({phone: e.target.value}));
+		dispatch(doSetAgreementFormInfo({ phone: e.target.value }));
 	}
 
 	function verifyInfo() {
@@ -41,19 +43,23 @@ const FormClient: React.FC<AgreementFormProps> = ({ current }) => {
 			agreementFormInfo.phone.length > 3
 		) {
 			setFilled(true)
+			window.scrollTo({ top: 0, behavior: 'smooth' });
 		} else {
 			setFilled(false)
+			window.scrollTo({ top: 0, behavior: 'smooth' });
 		}
 	}
 
 	async function slideNext() {
+		current.scroll(0,0);
 		await current.lockSwipeToNext(false);
 		current.slideNext();
+		await current.updateAutoHeight();
 		await current.lockSwipeToNext(true);
 	}
 
 	const onSubmit = () => {
-		slideNext().then(() => {});
+		slideNext().then(() => { });
 	};
 
 	return (
