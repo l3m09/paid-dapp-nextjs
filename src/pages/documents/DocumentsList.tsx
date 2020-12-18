@@ -110,6 +110,7 @@ function SelectedDocument(payload: {
 	const wallet = useSelector(
 		(state: { wallet: { unlockedWallet: any } }) => state.wallet
 	);
+
 	const { unlockedWallet } = wallet;
 	const [networkText, setNetWorkText] = useState('...');
 
@@ -132,6 +133,26 @@ function SelectedDocument(payload: {
 	if (!selectedDocument) {
 		return null;
 	}
+
+	const { event } = selectedDocument;
+	const date = new Date(event.created_at * 1000);
+	const update = new Date(event.updated_at * 1000);
+	const date_values = [
+		date.getUTCFullYear(),
+		date.getUTCMonth()+1,
+		date.getUTCDate(),
+		date.getUTCHours(),
+		date.getUTCMinutes(),
+		date.getUTCSeconds()];
+	const update_values = [
+			update.getUTCFullYear(),
+			update.getUTCMonth()+1,
+			update.getUTCDate(),
+			update.getUTCHours(),
+			update.getUTCMinutes(),
+			update.getUTCSeconds()];
+	const created_date = `${date_values[1]}/${date_values[2]}/${date_values[0]} ${date_values[3]}:${date_values[4]}:${date_values[5]}`;
+	const updated_date = `${update_values[1]}/${update_values[2]}/${update_values[0]} ${update_values[3]}:${update_values[4]}:${update_values[5]}`;
 
 	return (
 		<div id="modal-container">
@@ -203,6 +224,14 @@ function SelectedDocument(payload: {
 							<IonItem>
 								<IonLabel position="stacked">Document Signature</IonLabel>
 								<span>{selectedDocument.signature}</span>
+							</IonItem>
+							<IonItem>
+								<IonLabel position="stacked">Created on</IonLabel>
+								<span>{created_date}</span>
+							</IonItem>
+							<IonItem>
+								<IonLabel position="stacked">Updated</IonLabel>
+								<span>{updated_date}</span>
 							</IonItem>
 						</div>
 					</IonCardContent>
@@ -375,11 +404,31 @@ const DocumentsList: React.FC<Props> = ({documentsTo, documentsFrom, type, count
 					<div className="col">Valid</div>
 					<div className="col">Wallet From</div>
 					<div className="col">Wallet To</div>
-					<div className="col"></div>
+					<div className="col">Created</div>
+					<div className="col">Updated</div>
+					<div className="col">  State</div>
 				</div>
 				{documentsFrom.length
 					? documentsFrom.map((document: any, index: number) => {
 						const {data, meta, event} = document;
+						const date = new Date(event.created_at * 1000);
+						const update = new Date(event.updated_at * 1000);
+						const date_values = [
+							date.getUTCFullYear(),
+							date.getUTCMonth()+1,
+							date.getUTCDate(),
+							date.getUTCHours(),
+							date.getUTCMinutes(),
+							date.getUTCSeconds()];
+						const update_values = [
+								update.getUTCFullYear(),
+								update.getUTCMonth()+1,
+								update.getUTCDate(),
+								update.getUTCHours(),
+								update.getUTCMinutes(),
+								update.getUTCSeconds()];
+						const created_date = `${date_values[1]}/${date_values[2]}/${date_values[0]} ${date_values[3]}:${date_values[4]}:${date_values[5]}`;
+						const updated_date = `${update_values[1]}/${update_values[2]}/${update_values[0]} ${update_values[3]}:${update_values[4]}:${update_values[5]}`;
 						const statusClass = event.status == 0 ? (currentWallet?.address == event.from ? 'PENDING' :
 						'SIGN...') : (currentWallet?.address == event.from ? 'OUT' :
 						'IN');
@@ -389,7 +438,9 @@ const DocumentsList: React.FC<Props> = ({documentsTo, documentsFrom, type, count
 								<div className="col">{data.validUntil}</div>
 								<div className="col">{event.from.slice(0,15)}...</div>
 								<div className="col">{event.to.slice(0,15)}...</div>
-								<div className="col in">
+								<div className="col">{created_date}</div>
+								<div className="col">{updated_date}</div>
+								<div className="col">
 									{event.status == 0 && currentWallet?.address == event.from ? <IonBadge color="success">PENDING</IonBadge> :
 									(event.status == 0 && currentWallet?.address == event.to ? <IonBadge color="secondary">SIGN...</IonBadge> : 
 									(event.status == 1 && currentWallet?.address == event.from ? <IonBadge color="warning">OUT</IonBadge> : 

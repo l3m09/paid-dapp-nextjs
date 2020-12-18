@@ -275,13 +275,15 @@ export const doGetDocuments = (currentWallet: any) => async (
 					validUntil,
 					toSigner,
 					fromSigner,
-					status
+					status,
+					created_at,
+					updated_at,
 				} = agreement;
 
 				resolve({
 					meta: {
 						logIndex,
-						transactionIndex, 
+						transactionIndex,
 						transactionHash,
 						blockHash,
 						blockNumber,
@@ -293,7 +295,9 @@ export const doGetDocuments = (currentWallet: any) => async (
 						to: partyDestination,
 						agreementFormTemplateId: formTemplateId,
 						cid: agreementStoredReference,
-						status: status
+						status: status,
+						created_at: created_at,
+						updated_at: updated_at,
 					},
 					data: {
 						agreementForm,
@@ -325,7 +329,9 @@ export const doGetDocuments = (currentWallet: any) => async (
 					validUntil,
 					toSigner,
 					fromSigner,
-					status
+					status,
+					created_at,
+					updated_at,
 				} = agreement;
 				resolve({
 					meta: {
@@ -342,7 +348,9 @@ export const doGetDocuments = (currentWallet: any) => async (
 						to: partyDestination,
 						agreementFormTemplateId: formTemplateId,
 						cid: agreementStoredReference,
-						status: status
+						status: status,
+						created_at: created_at,
+						updated_at: updated_at,
 					},
 					data: {
 						agreementForm,
@@ -367,7 +375,7 @@ export const doGetDocuments = (currentWallet: any) => async (
 			for(let j = i + 1; j < agreementsSource.length; j++){
 				let checkItem : any = agreementsSource[j];
 				if(checkItem.event.id == id){
-					found = true;					
+					found = true;
 					responseArray.push(checkItem);
 					foundIds.push(id);
 				}
@@ -395,7 +403,7 @@ export const doGetDocuments = (currentWallet: any) => async (
 			for(let j = i + 1; j < agreementsDestination.length; j++){
 				let checkItem : any = agreementsDestination[j];
 				if(checkItem.event.id == id){
-					found = true;					
+					found = true;
 					responseArray.push(checkItem);
 					foundIds.push(id);
 				}
