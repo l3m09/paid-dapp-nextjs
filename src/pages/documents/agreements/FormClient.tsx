@@ -20,10 +20,6 @@ const FormClient: React.FC<AgreementFormProps> = ({ current }) => {
 
 	const { loading, agreementFormInfo } = documentsState;
 
-	useEffect(() => {
-		verifyInfo();
-	}, [agreementFormInfo]);
-
 	function nameChanged(e: any) {
 		dispatch(doSetAgreementFormInfo({ name: e.target.value }));
 	}
@@ -47,6 +43,10 @@ const FormClient: React.FC<AgreementFormProps> = ({ current }) => {
 			window.scrollTo({ top: 0, behavior: 'smooth' });
 		}
 	}
+
+	useEffect(() => {
+		verifyInfo();
+	}, [agreementFormInfo]);
 
 	async function slideNext() {
 		await current.lockSwipeToNext(false);

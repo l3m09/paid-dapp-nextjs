@@ -27,7 +27,7 @@ import {
 	documentsOutline as documentsIcon,
 } from 'ionicons/icons';
 
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { useHistory } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -38,11 +38,8 @@ import {
 import MenuAlternate from '../../components/MenuAlternate';
 import DocumentsList from './DocumentsList';
 import { IonText } from '@ionic/react';
-import { Plugins } from '@capacitor/core';
 import { BlockchainFactory } from './../../utils/blockchainFactory'
 import { KeyStorageModel } from 'paid-universal-wallet/dist/key-storage/KeyStorageModel';
-
-// const { Storage } = Plugins;
 
 function SelectedDocument(payload: {
 	show: boolean;
@@ -137,10 +134,8 @@ const Documents: React.FC = () => {
 	const { currentWallet } = wallet;
 	const [showModal, setShowModal] = useState(false);
 	const [showPopOver, setShowPopover] = useState(false);
-	// const [currentIndex, setCurrentIndex] = useState(0);
 	useEffect(() => {
 		dispatch(doGetDocuments(currentWallet));
-		// slidesRef.current?.lockSwipes(true)
 	}, [dispatch]);
 	function showDocument(item: any) {
 		dispatch(doGetSelectedDocument(item));
@@ -166,26 +161,6 @@ const Documents: React.FC = () => {
 		setShowPopover(false);
 		history.push('/agreements/' + type.toLowerCase());
 	}
-
-	// const slidesRef = useRef<HTMLIonSlidesElement | null>(null);
-	// const slideOpts = {
-	// 	initialSlide: 0,
-	// 	speed: 400,
-	// 	height: 500,
-	// 	slidesPerView: 1,
-	// 	navigation: {
-	// 		nextEl: '.swipper-btn',
-	// 		prevEl: '.swipper-btn'
-	// 	}
-	// };
-
-	// async function slideTo(i: number) {
-	// 	await slidesRef.current?.lockSwipes(false)
-	// 	setCurrentIndex(i)
-	// 	await slidesRef.current?.slideTo(i)
-	// 	await slidesRef.current?.lockSwipes(true)
-
-	// }
 
 	return (
 		<IonPage className="documents-page content-page">

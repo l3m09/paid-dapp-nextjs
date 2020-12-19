@@ -4,7 +4,7 @@ import {
 	IonText,
 	//IonModal,
 } from '@ionic/react';
-import React, { useState } from 'react';
+import React from 'react';
 
 interface DescriptionProps {
 	current: any;
@@ -90,23 +90,6 @@ const NdaDescription: React.FC<DescriptionProps> = ({ current }) => {
 					</div>
 				</div>
 			</IonItem>
-			{/* <IonModal isOpen={showModal} cssClass="instructions-info-modal">
-				<p>
-					Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deserunt
-					impedit minima nesciunt nihil quos sapiente sequi temporibus.
-					Expedita, maiores, minus! Eaque eius harum laudantium odit quisquam?
-					Aperiam explicabo facere, ipsam ipsum libero odio quia! Adipisci
-					architecto atque cupiditate, expedita officia quis tempore. Adipisci
-					commodi eligendi enim illo quibusdam temporibus unde voluptate
-					voluptatibus. Ab animi dicta et iusto magni perspiciatis ratione sed.
-					Ab accusantium architecto at cumque distinctio dolorem eos, eum
-					exercitationem, explicabo facere fugiat impedit incidunt itaque iure
-					libero, nobis odit officiis quam quis quisquam ratione repellendus
-					saepe sit tempora voluptatem. Consequuntur, dicta distinctio dolorum
-					eveniet incidunt itaque nisi recusandae.
-				</p>
-				<IonButton onClick={() => setShowModal(false)}>Close</IonButton>
-			</IonModal> */}
 		</div>
 	);
 };

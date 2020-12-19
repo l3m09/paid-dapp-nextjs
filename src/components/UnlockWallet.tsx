@@ -35,7 +35,6 @@ const UnlockWallet: React.FC<Props> = ({
 		console.log('dismissible', dismissible);
 	}, [dismissible]);
 
-	// const { type } = useParams<{ type: string }>();
 	const wallet = useSelector(
 		(state: {
 			wallet: {
@@ -64,12 +63,15 @@ const UnlockWallet: React.FC<Props> = ({
 
 	const onSubmit = (e: any) => {
 		e.preventDefault();
-		dispatch(
-			doUnlockWallet({
-				wallet: selectedWallet,
-				password: unlockForm.password
-			})
-		);
+		console.log(unlockForm, selectedWallet)
+		if (unlockForm.filled) {
+			dispatch(
+				doUnlockWallet({
+					wallet: selectedWallet,
+					password: unlockForm.password
+				})
+			)
+		};
 	};
 
 	const copyAddressToClipboard = () => {
@@ -140,7 +142,7 @@ const UnlockWallet: React.FC<Props> = ({
 						>
 							{unlockingWallet ? 'Loading..' : 'Unlock'}
 						</IonButton>
-						{/*{unlockedWallet ? (*/}
+						{/* {unlockedWallet ? (*/}
 						{/*	<IonButton*/}
 						{/*		color="secondary"*/}
 						{/*		shape="round"*/}
@@ -151,7 +153,7 @@ const UnlockWallet: React.FC<Props> = ({
 						{/*	>*/}
 						{/*		Cancel*/}
 						{/*	</IonButton>*/}
-						{/*) : null}*/}
+						{/*) : null} */}
 					</IonItem>
 				</form>
 			</IonContent>

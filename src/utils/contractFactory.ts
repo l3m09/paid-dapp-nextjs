@@ -1,10 +1,7 @@
-// import { Contract, Wallet } from 'ethers';
-import { options } from 'ionicons/icons';
 import Web3 from 'web3';
 import { Contract } from 'web3-eth-contract';
 import { AgreementContract } from '../contracts/agreement.js';
 
-// import Agreements from '../contracts/Agreement.json';
 
 
 export class ContractFactory {

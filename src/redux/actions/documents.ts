@@ -1,11 +1,10 @@
-import { agreementsRef } from './firebase';
 import { KeyStorageModel } from 'paid-universal-wallet/dist/key-storage/KeyStorageModel';
 import { DocumentsActionTypes } from '../actionTypes/documents';
-import { BigNumber as BN ,ethers, Wallet } from 'ethers';
+import { BigNumber as BN ,ethers } from 'ethers';
 import { BlockchainFactory } from '../../utils/blockchainFactory';
 import { ContractFactory } from '../../utils/contractFactory';
 import { base64StringToBlob } from 'blob-util';
-import { AlgorithmType, CEASigningService, WalletManager } from 'paid-universal-wallet';
+import { CEASigningService } from 'paid-universal-wallet';
 import { eddsa } from "elliptic";
 
 import { templateRender } from './template/template';
@@ -18,7 +17,6 @@ const fetch = require('node-fetch');
 // TODO: Fix
 const ipfs = ipfsClient({ host: 'ipfs.infura.io', port: '5001', protocol: 'https', apiPath: '/api/v0' });
 
-//const { compile } = require('./compile');
 
 const createAgreementFormPayload = (obj: any) => {
 	const types: string[] = [];
@@ -115,7 +113,6 @@ export const doCreateAgreement = (payload: {
 		const manager = BlockchainFactory.getWalletManager();
 		const storage = manager.getKeyStorage();
 		const rawWallet = await storage.find<KeyStorageModel>(unlockedWallet._id);
-		// const onchainWalletAddress = window.ethereum.selectedAddress;
 
 		const address = manager.getWalletAddress(rawWallet.mnemonic);
 		const web3 = BlockchainFactory.getWeb3Instance(rawWallet.keypairs, rawWallet.mnemonic);
@@ -139,11 +136,9 @@ export const doCreateAgreement = (payload: {
 		await web3.eth.getBalance(address).then((balancewei) =>{
 			const balance = web3.utils.fromWei(balancewei);
 			const parsedBalance = BigNumber(balance).toNumber();
-			//console.log(parsedBalance);
 			if ((parsedBalance <= 0.0009999999999)) {
 				throw new Error('The wallet should has balance to send a transaction.');
 			}
-			//console.log('Current_Wallet_address', address,'agreementForm', agreementForm);
 		})
 
 		// ALICE SIDE
@@ -178,7 +173,6 @@ export const doCreateAgreement = (payload: {
 		const gas = await methodFn.estimateGas();
 
 		Promise.resolve(gas).then(async (gas:any) => {
-			//console.log(gas+5e4);
 			const agreementTransaction = await methodFn.send({ from: address, gas:gas+5e4, gasPrice: 50e9 })
 		   .on('receipt', async function (receipt: any) {
 			   dispatch(createAgreement());
@@ -189,7 +183,6 @@ export const doCreateAgreement = (payload: {
 			   alert('Transaction failed');
 			   throw new Error('Transaction failed');
 		   });
-	   		//console.info('agreementTransaction:', agreementTransaction);
 		});
 	} catch (err) {
 		await payload.slideBack();
@@ -240,20 +233,16 @@ export const doGetDocuments = (currentWallet: any) => async (
 
 		const agreementContract = ContractFactory.getAgreementContract(web3, network);
 
-		//console.log('Address Wallet Events:', address, 'web3 accounts wallet', web3.eth.accounts.wallet);
-
 		const eventsSource = await agreementContract.getPastEvents('AgreementEvents', {
 			filter: { partySource: address.toString() },
 			fromBlock: 7600000,
 			toBlock: 'latest'
 		});
-		// console.table(eventsSource);
 		const eventsDestination = await agreementContract.getPastEvents('AgreementEvents', {
 			filter: { partyDestination: address.toString() },
 			fromBlock: 7600000,
 			toBlock: 'latest'
 		});
-		// console.table(eventsDestination);
 		const promisesFrom = eventsSource.map(async (event) => {
 			const args = event.returnValues;
 			const {
@@ -374,7 +363,7 @@ export const doGetDocuments = (currentWallet: any) => async (
 			let found = false;
 			for(let j = i + 1; j < agreementsSource.length; j++){
 				let checkItem : any = agreementsSource[j];
-				if(checkItem.event.id == id){
+				if(checkItem.event.id === id){
 					found = true;
 					responseArray.push(checkItem);
 					foundIds.push(id);
@@ -383,7 +372,7 @@ export const doGetDocuments = (currentWallet: any) => async (
 			if(!found){
 				let found = false;
 				for(let k = 0; k < foundIds.length; k++){
-					if(foundIds[k] == id){
+					if(foundIds[k] === id){
 						found = true;
 						break;
 					}
@@ -402,7 +391,7 @@ export const doGetDocuments = (currentWallet: any) => async (
 			let found = false;
 			for(let j = i + 1; j < agreementsDestination.length; j++){
 				let checkItem : any = agreementsDestination[j];
-				if(checkItem.event.id == id){
+				if(checkItem.event.id === id){
 					found = true;
 					responseArray.push(checkItem);
 					foundIds.push(id);
@@ -411,7 +400,7 @@ export const doGetDocuments = (currentWallet: any) => async (
 			if(!found){
 				let found = false;
 				for(let k = 0; k < foundIds.length; k++){
-					if(foundIds[k] == id){
+					if(foundIds[k] === id){
 						found = true;
 						break;
 					}
@@ -422,8 +411,6 @@ export const doGetDocuments = (currentWallet: any) => async (
 				}
 			}
 		}
-		// const agreements = agreementsDestination.concat(agreementsSource);
-		//console.log('agreementsFrom', agreementsSource, 'agreementsTo', agreementsDestination);
 
 		dispatch(getDocuments(responseArray));
 	} catch (err) {
@@ -437,15 +424,7 @@ export const doGetDocuments = (currentWallet: any) => async (
 
 export const doUploadDocuments = (file: any) => async (dispatch: any) => {
 	dispatch({ type: DocumentsActionTypes.UPLOAD_DOCUMENTS_LOADING });
-	// const config = {
-	//     headers: {
-	//         'Content-type': 'application/json'
-	//     }
-	// };
 	try {
-		//console.log('uploading documents', file);
-		// const res = await axios.post(`${API_ENDPOINT}/documents/`, file, config);
-		// dispatch(login(res.data);
 		setTimeout(function () {
 			dispatch(uploadDocuments());
 		}, 3000);
@@ -485,7 +464,6 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 				if ((parsedBalance <= 0.0009999999999)) {
 					throw new Error('The wallet should has balance to send a transaction.');
 				}
-				//console.log('Current_Wallet_address', chkbalance,'agreementForm', document.data.agreementForm);
 			})
 	
 			const AgreementContract = ContractFactory.getAgreementContract(web3, network);
@@ -592,7 +570,6 @@ export const doGetSelectedDocument = (document: any) => async (dispatch: any) =>
 		}
 
 		document.verified = key.verify(jsonContent.digest, sigDocument);
-		//console.log(document.signature);
 	}
 	dispatch(getSelectedDocument(document));
 };

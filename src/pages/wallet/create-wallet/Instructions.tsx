@@ -19,11 +19,8 @@ const Instructions: React.FC<InstructionsProps> = ({ current }) => {
 	const [showModal, setShowModal] = useState(false);
 
 	async function slideNext() {
-		console.log(current);
 		await current?.lockSwipeToNext(false);
-		console.log('next');
 		current?.slideNext();
-		// await current.lockSwipeToNext(true);
 	}
 
 	return (

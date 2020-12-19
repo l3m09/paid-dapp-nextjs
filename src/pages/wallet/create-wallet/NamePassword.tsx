@@ -5,7 +5,7 @@ import {
 	IonInput,
 	IonButton
 } from '@ionic/react';
-import React from 'react';
+import React, { useEffect } from 'react';
 // import { useDispatch, useSelector } from 'react-redux';
 // import { doCreateWallet } from '../../../redux/actions/wallet';
 import { useDispatch } from 'react-redux';
@@ -23,17 +23,6 @@ interface WalletInfo {
 
 const NamePassword: React.FC<NamePasswordProps> = ({ current }) => {
 	const dispatch = useDispatch();
-	// const wallet = useSelector(
-	// 	(state: {
-	// 		wallet: {
-	// 			wallets: [];
-	// 			loading: boolean;
-	// 			confirmedSeedPhrase: [];
-	// 			creatingWallet: boolean;
-	// 		};
-	// 	}) => state.wallet
-	// );
-	// const { confirmedSeedPhrase, creatingWallet } = wallet;
 
 	let walletInfo: WalletInfo = { name: '', passphrase: '', confirmPassphrase: '', verified: false };
 
@@ -72,6 +61,10 @@ const NamePassword: React.FC<NamePasswordProps> = ({ current }) => {
 	// 	// slideNext().then(() => {});
 	// };
 
+	useEffect(() => {
+		verifyInfo();
+	}, [walletInfo]);
+
 	const onContinue = async () => {
 		if (walletInfo.verified) {
 			const {name, passphrase} = walletInfo;
@@ -81,6 +74,12 @@ const NamePassword: React.FC<NamePasswordProps> = ({ current }) => {
 			await current.lockSwipeToNext(false);
 			current.slideNext();
 			await current.lockSwipeToNext(true);
+		} else if (walletInfo.passphrase !== walletInfo.confirmPassphrase) {
+			alert('Passphrase is different Confirm Passphrase');
+		} else if (walletInfo.passphrase === '') {
+			alert('Passphrase is Empty');
+		} else if (walletInfo.confirmPassphrase === '') {
+			alert('Passphrase is Empty');
 		}
 	};
 

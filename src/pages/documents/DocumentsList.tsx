@@ -44,9 +44,6 @@ function PdfViewerModal(payload: {
 	pdfContent: string
 }) {
 	const { show, closePdfViewer, url, pdfContent } = payload;
-	// if (!url) {
-	// 	return null;
-	// }
 	return (
 		<div id="modal-container">
 			<IonModal isOpen={show} cssClass="pdf-viewer-modal" onDidDismiss={() => {closePdfViewer()}}>
@@ -205,7 +202,6 @@ function SelectedDocument(payload: {
 						<div className="details-wrapper">
 							<IonItem>
 								<IonLabel position="stacked">Signed By</IonLabel>
-								{/* <span>{selectedDocument.event.from}</span> */}
 								<a href={`https://${networkText}.etherscan.io/address/${selectedDocument.event.from}`} target="_blank" rel="noopener noreferrer" >{selectedDocument.event.from}</a>
 							</IonItem>
 							{/*
@@ -216,7 +212,6 @@ function SelectedDocument(payload: {
 							*/}
 							<IonItem>
 								<IonLabel position="stacked">Transaction Hash</IonLabel>
-								{/* <span>{selectedDocument.meta.transactionHash}</span> */}
 								<a href={`https://${networkText}.etherscan.io/tx/${selectedDocument.meta.transactionHash}`} target="_blank" rel="noopener noreferrer" >{selectedDocument.meta.transactionHash}</a>
 							</IonItem>
 							<IonItem>
@@ -300,7 +295,7 @@ const DocumentsList: React.FC<Props> = ({documentsTo, documentsFrom, type, count
 	const { currentWallet } = wallet;
 	function showDocument(item: any) {
 		dispatch(doGetSelectedDocument(item));
-		setShowVerifyDocumentButton(!(item.event.to == currentWallet?.address && item.event.status == 0));
+		setShowVerifyDocumentButton(!(item.event.to === currentWallet?.address && item.event.status === 0));
 		setShowModal(true);
 		setShowNotVerified(false);
 		setShowVerified(false);
@@ -308,7 +303,7 @@ const DocumentsList: React.FC<Props> = ({documentsTo, documentsFrom, type, count
 
 	async function verifyDocument(document: any) {
 		setVerifyButtonDisable(true);
-		if(document.event.status != 0 || document.event.from == currentWallet?.address || forceVerifyDocument){
+		if(document.event.status != 0 || document.event.from === currentWallet?.address || forceVerifyDocument){
 			let fetchedContent	 = '';
 			for await (const chunk of ipfs.cat(document.event.cid)) {
 				fetchedContent = uint8ArrayToString(chunk);
@@ -352,7 +347,7 @@ const DocumentsList: React.FC<Props> = ({documentsTo, documentsFrom, type, count
 				<IonIcon icon={documentsIcon} />
 				<span className="document-id">{id}</span>
 				<span>{name}</span>
-				<span>{status == 'PARTY_INIT' ? 'Not signed' : 'Signed'}</span>
+				<span>{status === 'PARTY_INIT' ? 'Not signed' : 'Signed'}</span>
 			</button>
 		);
 	}
@@ -376,14 +371,12 @@ const DocumentsList: React.FC<Props> = ({documentsTo, documentsFrom, type, count
 		setAgreementUrl(contentRef.cid);
 		console.log(contentRef.cid)
 		setPdfViewerModal(true);
-		// let pdfContentHTML:HTMLElement = document.createElement('DIV');
 		let pdfContent = '';
 		for await (const chunk of ipfs.cat(contentRef.cid)) {
 			pdfContent = uint8ArrayToString(chunk);
 		}
 		setAgreementContent(pdfContent);
-		// pdfContentHTML.innerHTML = pdfContent;
-		// window.open(pdfContentHTML);
+
 		console.log(pdfContent);
 		console.log('showPdfViewerModal', showPdfViewerModal);
 	}

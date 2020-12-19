@@ -29,21 +29,9 @@ const CreateWallet: React.FC<CreateWalletProps> = ({ show, dismiss }) => {
 		slidesPerView: 1
 	};
 
-	useEffect(() => {
-		lockSwipes().then((r) => {});
-	}, [slidesRef]);
-
-	async function lockSwipes() {
-		await slidesRef.current?.update();
-		await slidesRef.current?.slideTo(0);
-		await slidesRef.current?.lockSwipeToPrev(true);
-		await slidesRef.current?.lockSwipeToNext(true);
-	}
-
-	lockSwipes().then((r) => {});
-
 	async function doDismiss() {
 		dismiss();
+		await slidesRef.current?.update();
 		await slidesRef.current?.slideTo(0);
 		await slidesRef.current?.lockSwipeToPrev(false);
 		await slidesRef.current?.lockSwipeToNext(false);
@@ -65,7 +53,7 @@ const CreateWallet: React.FC<CreateWalletProps> = ({ show, dismiss }) => {
 				</IonToolbar>
 			</IonHeader>
 			<IonContent fullscreen>
-				<IonSlides mode="md" pager={false} options={slideOpts} ref={slidesRef}>
+				<IonSlides pager={false} options={slideOpts} ref={slidesRef}>
 					<IonSlide>
 						<Instructions current={slidesRef.current} />
 					</IonSlide>

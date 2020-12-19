@@ -12,7 +12,7 @@ import {
     IonButtons,
     IonInput
 } from '@ionic/react';
-import React from 'react';
+import React, { useEffect } from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {doImportWallet} from "../../redux/actions/wallet";
 
@@ -48,7 +48,7 @@ const ImportWallet: React.FC<Props> = ({show, dismiss}) => {
         }
         walletInfo.verified = false;
     }
-    
+
     function nameChanged(e: any) {
         walletInfo.name = e.target.value;
         verifyInfo();
@@ -77,13 +77,23 @@ const ImportWallet: React.FC<Props> = ({show, dismiss}) => {
                 password: passphrase,
                 mnemonic
             }));
-        }
+        } else if (walletInfo.passphrase !== walletInfo.confirmPassphrase) {
+			alert('Passphrase is different Confirm Passphrase');
+		} else if (walletInfo.passphrase === '') {
+			alert('Passphrase is Empty');
+		} else if (walletInfo.confirmPassphrase === '') {
+			alert('Passphrase is Empty');
+		}
     }
+
+    useEffect(() => {
+		verifyInfo();
+	}, [walletInfo]);
 
 	async function doDismiss() {
         dismiss();
     }
-    
+
     return (
         <IonModal cssClass="import-modal" isOpen={show} onDidDismiss={() => {doDismiss()}}>
             <IonHeader translucent={false} mode="md">

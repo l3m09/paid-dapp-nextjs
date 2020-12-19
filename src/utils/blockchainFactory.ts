@@ -1,13 +1,9 @@
-import { add, options } from 'ionicons/icons';
 import {  createWalletManager, WalletManager, AlgorithmType, KeyModel} from 'paid-universal-wallet';
 import { KeyStorageModel } from 'paid-universal-wallet/dist/key-storage/KeyStorageModel';
-import { ethers, providers, Wallet } from 'ethers';
+import { ethers } from 'ethers';
 import Web3 from 'web3';
 
 export class BlockchainFactory {
-	// static GETH_URL =
-	// 	'https://rinkeby.infura.io/v3/6d8bfebd6db24c3cb3f3d50839e1c5be';
-	// 	//'http://127.0.0.1:7545';
 	private static wssUrl = 'wss://kind-lalande:arrest-cursor-slogan-prism-carbon-neon@ws-nd-233-385-399.p2pify.com';
 	private static _web3: Web3 | null = null;
 	private static _walletManager: WalletManager | null = null;
@@ -17,8 +13,8 @@ export class BlockchainFactory {
 		timeout: 30000,
 		clientConfig: {
 			// Useful if requests are large
-			maxReceivedFrameSize: 100000000,   // bytes - default: 1MiB
-			maxReceivedMessageSize: 100000000, // bytes - default: 8MiB
+			maxReceivedFrameSize: 10000000,   // bytes - default: 1MiB
+			maxReceivedMessageSize: 80000000, // bytes - default: 8MiB
 	   
 			// Useful to keep a connection alive
 			keepalive: true,
@@ -38,7 +34,6 @@ export class BlockchainFactory {
 			BlockchainFactory._web3 = new Web3 ( new Web3.providers.WebsocketProvider(BlockchainFactory.wssUrl, BlockchainFactory.options));
 		}
 
-		const address = BlockchainFactory._walletManager?.getWalletAddress(mnemonic);
 		const mnemonicWallet = ethers.Wallet.fromMnemonic(mnemonic);
 		const { privateKey } = mnemonicWallet;
 		//console.log(address,privateKey);
