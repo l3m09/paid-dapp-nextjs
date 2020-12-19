@@ -18,9 +18,9 @@ export class ContractFactory {
 				AgreementContract.raw.abi as any,
 				AgreementContract.address[network]
 			);
-			console.log(AgreementContract.address[network], ContractFactory._agreementContract);
+			//console.log(AgreementContract.address[network], ContractFactory._agreementContract);
 		}
-		console.log(ContractFactory._agreementContract);
+		//console.log(ContractFactory._agreementContract);
 		return ContractFactory._agreementContract;
 	};
 }

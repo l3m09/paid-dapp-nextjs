@@ -13,7 +13,7 @@ import {
 import Instructions from './Instructions';
 import SeedPhrase from './SeedPhrase';
 // import Completed from './Completed';
-import ConfirmPhrase from './ConfirmPhrase';
+// import ConfirmPhrase from './ConfirmPhrase';
 import NamePassword from './NamePassword';
 
 interface CreateWalletProps {

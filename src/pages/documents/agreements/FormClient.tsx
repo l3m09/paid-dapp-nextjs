@@ -2,10 +2,9 @@ import {
 	IonLabel,
 	IonItem,
 	IonInput,
-	IonButton,
-	IonContent
+	IonButton
 } from '@ionic/react';
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { doSetAgreementFormInfo } from '../../../redux/actions/documents';
 
@@ -23,7 +22,6 @@ const FormClient: React.FC<AgreementFormProps> = ({ current }) => {
 
 	useEffect(() => {
 		verifyInfo();
-		window.scrollTo({ top: 0, behavior: 'smooth' });
 	}, [agreementFormInfo]);
 
 	function nameChanged(e: any) {
@@ -51,7 +49,6 @@ const FormClient: React.FC<AgreementFormProps> = ({ current }) => {
 	}
 
 	async function slideNext() {
-		current.scroll(0,0);
 		await current.lockSwipeToNext(false);
 		current.slideNext();
 		await current.updateAutoHeight();

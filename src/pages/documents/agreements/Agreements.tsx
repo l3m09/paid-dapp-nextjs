@@ -36,21 +36,21 @@ const Agreements: React.FC<AgreementsProps> = () => {
 		initialSlide: 0,
 		speed: 400,
 		slidesPerView: 1,
-		autoHeight: true
+		autoHeight: true,
+		centeredSlides: true,
+		centeredSlidesBounds: true
 	};
 
-	useEffect(() => {
-		lockSwipes().then((r) => {});
-		window.scrollTo({ top: 0, behavior: 'smooth' });
-	}, [slidesRef]);
-
 	async function lockSwipes() {
-		slidesRef.current?.scroll(0,0);
 		await slidesRef.current?.updateAutoHeight();
 		await slidesRef.current?.slideTo(0);
 		await slidesRef.current?.lockSwipeToPrev(true);
 		await slidesRef.current?.lockSwipeToNext(true);
 	}
+
+	useEffect(() => {
+		lockSwipes().then((r) => {});
+	}, [slidesRef]);
 
 	lockSwipes().then((r) => {});
 
@@ -65,7 +65,6 @@ const Agreements: React.FC<AgreementsProps> = () => {
 			counterpartyPhone: '',
 			createdAt: null
 		}));
-		slidesRef.current?.scroll(0,0);
 		await slidesRef.current?.lockSwipeToPrev(false);
 		await slidesRef.current?.lockSwipeToNext(false);
 		await slidesRef.current?.slideTo(0).then(() => {
@@ -92,8 +91,8 @@ const Agreements: React.FC<AgreementsProps> = () => {
 
 	return (
 		<IonPage className="agreements-page content-page">
-			<IonContent fullscreen>
-
+			<IonContent fullscreen 
+				scrollEvents={true}>
 				<IonHeader translucent={false} mode="md">
 					<IonToolbar>
 						<IonTitle>Agreement</IonTitle>

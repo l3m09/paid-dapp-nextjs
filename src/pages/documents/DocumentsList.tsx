@@ -12,8 +12,7 @@ import {
 } from '@ionic/react';
 
 import {
-	documentsOutline as documentsIcon,
-	documentOutline as documentIcon,
+	documentsOutline as documentsIcon
 } from 'ionicons/icons';
 
 import React, { useEffect, useState } from 'react';
@@ -29,7 +28,6 @@ import {
 import { IonBadge } from '@ionic/react';
 import { Plugins } from '@capacitor/core';
 import { eddsa } from "elliptic";
-import { link } from 'fs';
 import { BlockchainFactory } from '../../utils/blockchainFactory';
 import { KeyStorageModel } from 'paid-universal-wallet/dist/key-storage/KeyStorageModel';
 
@@ -208,7 +206,7 @@ function SelectedDocument(payload: {
 							<IonItem>
 								<IonLabel position="stacked">Signed By</IonLabel>
 								{/* <span>{selectedDocument.event.from}</span> */}
-								<a href={`https://${networkText}.etherscan.io/address/${selectedDocument.event.from}`} target="_blank">{selectedDocument.event.from}</a>
+								<a href={`https://${networkText}.etherscan.io/address/${selectedDocument.event.from}`} target="_blank" rel="noopener noreferrer" >{selectedDocument.event.from}</a>
 							</IonItem>
 							{/*
 								<IonItem>
@@ -219,7 +217,7 @@ function SelectedDocument(payload: {
 							<IonItem>
 								<IonLabel position="stacked">Transaction Hash</IonLabel>
 								{/* <span>{selectedDocument.meta.transactionHash}</span> */}
-								<a href={`https://${networkText}.etherscan.io/tx/${selectedDocument.meta.transactionHash}`} target="_blank">{selectedDocument.meta.transactionHash}</a>
+								<a href={`https://${networkText}.etherscan.io/tx/${selectedDocument.meta.transactionHash}`} target="_blank" rel="noopener noreferrer" >{selectedDocument.meta.transactionHash}</a>
 							</IonItem>
 							<IonItem>
 								<IonLabel position="stacked">Document Signature</IonLabel>
@@ -433,7 +431,7 @@ const DocumentsList: React.FC<Props> = ({documentsTo, documentsFrom, type, count
 						'SIGN...') : (currentWallet?.address == event.from ? 'OUT' :
 						'IN');
 						return (
-							<div className="table-body" onClick={async () => {showDocument({data, meta, event})}}>
+							<div className="table-body" onClick={async () => {showDocument({data, meta, event})}} key={index}>
 								<div className="col">{meta.transactionHash.slice(0,15)}...</div>
 								<div className="col">{data.validUntil}</div>
 								<div className="col">{event.from.slice(0,15)}...</div>

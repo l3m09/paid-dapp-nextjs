@@ -28,7 +28,7 @@ import {
 } from 'ionicons/icons';
 
 import React, {useEffect, useRef, useState} from 'react';
-import { useParams, useHistory} from 'react-router';
+import { useHistory } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import {
 	doGetDocuments,
@@ -42,7 +42,7 @@ import { Plugins } from '@capacitor/core';
 import { BlockchainFactory } from './../../utils/blockchainFactory'
 import { KeyStorageModel } from 'paid-universal-wallet/dist/key-storage/KeyStorageModel';
 
-const { Storage } = Plugins;
+// const { Storage } = Plugins;
 
 function SelectedDocument(payload: {
 	show: boolean;
@@ -91,15 +91,15 @@ function SelectedDocument(payload: {
 						<div className="details-wrapper">
 							<IonItem>
 								<IonLabel position="stacked">Signatory A</IonLabel>
-								<a href={`https://${networkText}.etherscan.io/address/${selectedDocument.event.from}`} target="_blank">{selectedDocument.event.from}</a>
+								<a href={`https://${networkText}.etherscan.io/address/${selectedDocument.event.from}`} target="_blank" rel="noopener noreferrer" >{selectedDocument.event.from}</a>
 							</IonItem>
 							<IonItem>
 								<IonLabel position="stacked">Signatory B</IonLabel>
-								<a href={`https://${networkText}.etherscan.io/address/${selectedDocument.event.to}`} target="_blank">{selectedDocument.event.to}</a>
+								<a href={`https://${networkText}.etherscan.io/address/${selectedDocument.event.to}`} target="_blank" rel="noopener noreferrer" >{selectedDocument.event.to}</a>
 							</IonItem>
 							<IonItem>
 								<IonLabel position="stacked">Transaction Hash</IonLabel>
-								<a href={`https://${networkText}.etherscan.io/tx/${selectedDocument.meta.transactionHash}`} target="_blank">{selectedDocument.meta.transactionHash}</a>
+								<a href={`https://${networkText}.etherscan.io/tx/${selectedDocument.meta.transactionHash}`} target="_blank" rel="noopener noreferrer" >{selectedDocument.meta.transactionHash}</a>
 							</IonItem>
 						</div>
 					</IonCardContent>
@@ -137,10 +137,10 @@ const Documents: React.FC = () => {
 	const { currentWallet } = wallet;
 	const [showModal, setShowModal] = useState(false);
 	const [showPopOver, setShowPopover] = useState(false);
-	const [currentIndex, setCurrentIndex] = useState(0);
+	// const [currentIndex, setCurrentIndex] = useState(0);
 	useEffect(() => {
 		dispatch(doGetDocuments(currentWallet));
-		slidesRef.current?.lockSwipes(true)
+		// slidesRef.current?.lockSwipes(true)
 	}, [dispatch]);
 	function showDocument(item: any) {
 		dispatch(doGetSelectedDocument(item));
@@ -167,25 +167,25 @@ const Documents: React.FC = () => {
 		history.push('/agreements/' + type.toLowerCase());
 	}
 
-	const slidesRef = useRef<HTMLIonSlidesElement | null>(null);
-	const slideOpts = {
-		initialSlide: 0,
-		speed: 400,
-		height: 500,
-		slidesPerView: 1,
-		navigation: {
-			nextEl: '.swipper-btn',
-			prevEl: '.swipper-btn'
-		}
-	};
+	// const slidesRef = useRef<HTMLIonSlidesElement | null>(null);
+	// const slideOpts = {
+	// 	initialSlide: 0,
+	// 	speed: 400,
+	// 	height: 500,
+	// 	slidesPerView: 1,
+	// 	navigation: {
+	// 		nextEl: '.swipper-btn',
+	// 		prevEl: '.swipper-btn'
+	// 	}
+	// };
 
-	async function slideTo(i: number) {
-		await slidesRef.current?.lockSwipes(false)
-		setCurrentIndex(i)
-		await slidesRef.current?.slideTo(i)
-		await slidesRef.current?.lockSwipes(true)
+	// async function slideTo(i: number) {
+	// 	await slidesRef.current?.lockSwipes(false)
+	// 	setCurrentIndex(i)
+	// 	await slidesRef.current?.slideTo(i)
+	// 	await slidesRef.current?.lockSwipes(true)
 
-	}
+	// }
 
 	return (
 		<IonPage className="documents-page content-page">

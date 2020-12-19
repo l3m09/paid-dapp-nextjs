@@ -17,8 +17,8 @@ export class BlockchainFactory {
 		timeout: 30000,
 		clientConfig: {
 			// Useful if requests are large
-			// maxReceivedFrameSize: 100000000,   // bytes - default: 1MiB
-			// maxReceivedMessageSize: 100000000, // bytes - default: 8MiB
+			maxReceivedFrameSize: 100000000,   // bytes - default: 1MiB
+			maxReceivedMessageSize: 100000000, // bytes - default: 8MiB
 	   
 			// Useful to keep a connection alive
 			keepalive: true,
@@ -27,7 +27,7 @@ export class BlockchainFactory {
 		// Enable auto reconnection
 		reconnect: {
 			auto: true,
-			delay: 5000, // ms
+			delay: 2500, // ms
 			maxAttempts: 5,
 			onTimeout: false
 		}
@@ -41,7 +41,7 @@ export class BlockchainFactory {
 		const address = BlockchainFactory._walletManager?.getWalletAddress(mnemonic);
 		const mnemonicWallet = ethers.Wallet.fromMnemonic(mnemonic);
 		const { privateKey } = mnemonicWallet;
-		console.log(address,privateKey);
+		//console.log(address,privateKey);
 		// if (keyService) {
 		// 	const pk = keyService.getPrivateKey(AlgorithmType.ES256K, keyModel);
 		// 	console.log('privateKey Wallet',pk);

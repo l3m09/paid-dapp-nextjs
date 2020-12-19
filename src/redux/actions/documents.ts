@@ -139,11 +139,11 @@ export const doCreateAgreement = (payload: {
 		await web3.eth.getBalance(address).then((balancewei) =>{
 			const balance = web3.utils.fromWei(balancewei);
 			const parsedBalance = BigNumber(balance).toNumber();
-			console.log(parsedBalance);
+			//console.log(parsedBalance);
 			if ((parsedBalance <= 0.0009999999999)) {
 				throw new Error('The wallet should has balance to send a transaction.');
 			}
-			console.log('Current_Wallet_address', address,'agreementForm', agreementForm);
+			//console.log('Current_Wallet_address', address,'agreementForm', agreementForm);
 		})
 
 		// ALICE SIDE
@@ -178,7 +178,7 @@ export const doCreateAgreement = (payload: {
 		const gas = await methodFn.estimateGas();
 
 		Promise.resolve(gas).then(async (gas:any) => {
-			console.log(gas+5e4);
+			//console.log(gas+5e4);
 			const agreementTransaction = await methodFn.send({ from: address, gas:gas+5e4, gasPrice: 50e9 })
 		   .on('receipt', async function (receipt: any) {
 			   dispatch(createAgreement());
@@ -189,7 +189,7 @@ export const doCreateAgreement = (payload: {
 			   alert('Transaction failed');
 			   throw new Error('Transaction failed');
 		   });
-	   		console.info('agreementTransaction:', agreementTransaction);
+	   		//console.info('agreementTransaction:', agreementTransaction);
 		});
 	} catch (err) {
 		await payload.slideBack();
@@ -240,20 +240,20 @@ export const doGetDocuments = (currentWallet: any) => async (
 
 		const agreementContract = ContractFactory.getAgreementContract(web3, network);
 
-		console.log('Address Wallet Events:', address, 'web3 accounts wallet', web3.eth.accounts.wallet);
+		//console.log('Address Wallet Events:', address, 'web3 accounts wallet', web3.eth.accounts.wallet);
 
 		const eventsSource = await agreementContract.getPastEvents('AgreementEvents', {
 			filter: { partySource: address.toString() },
 			fromBlock: 7600000,
 			toBlock: 'latest'
 		});
-		console.table(eventsSource);
+		// console.table(eventsSource);
 		const eventsDestination = await agreementContract.getPastEvents('AgreementEvents', {
 			filter: { partyDestination: address.toString() },
 			fromBlock: 7600000,
 			toBlock: 'latest'
 		});
-		console.table(eventsDestination);
+		// console.table(eventsDestination);
 		const promisesFrom = eventsSource.map(async (event) => {
 			const args = event.returnValues;
 			const {
@@ -423,7 +423,7 @@ export const doGetDocuments = (currentWallet: any) => async (
 			}
 		}
 		// const agreements = agreementsDestination.concat(agreementsSource);
-		console.log('agreementsFrom', agreementsSource, 'agreementsTo', agreementsDestination);
+		//console.log('agreementsFrom', agreementsSource, 'agreementsTo', agreementsDestination);
 
 		dispatch(getDocuments(responseArray));
 	} catch (err) {
@@ -443,7 +443,7 @@ export const doUploadDocuments = (file: any) => async (dispatch: any) => {
 	//     }
 	// };
 	try {
-		console.log('uploading documents', file);
+		//console.log('uploading documents', file);
 		// const res = await axios.post(`${API_ENDPOINT}/documents/`, file, config);
 		// dispatch(login(res.data);
 		setTimeout(function () {
@@ -481,11 +481,11 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 			await web3.eth.getBalance(chkbalance).then((balancewei) =>{
 				const balance = web3.utils.fromWei(balancewei);
 				const parsedBalance = BigNumber(balance).toNumber();
-				console.log(parsedBalance);
+				//console.log(parsedBalance);
 				if ((parsedBalance <= 0.0009999999999)) {
 					throw new Error('The wallet should has balance to send a transaction.');
 				}
-				console.log('Current_Wallet_address', chkbalance,'agreementForm', document.data.agreementForm);
+				//console.log('Current_Wallet_address', chkbalance,'agreementForm', document.data.agreementForm);
 			})
 	
 			const AgreementContract = ContractFactory.getAgreementContract(web3, network);
@@ -592,7 +592,7 @@ export const doGetSelectedDocument = (document: any) => async (dispatch: any) =>
 		}
 
 		document.verified = key.verify(jsonContent.digest, sigDocument);
-		console.log(document.signature);
+		//console.log(document.signature);
 	}
 	dispatch(getSelectedDocument(document));
 };
