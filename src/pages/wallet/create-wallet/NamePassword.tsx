@@ -3,78 +3,95 @@ import {
 	IonLabel,
 	IonItem,
 	IonInput,
-	IonButton
+	IonButton,
+	IonNote
 } from '@ionic/react';
-import React from 'react';
+import React, { useReducer } from 'react';
 // import { useDispatch, useSelector } from 'react-redux';
 // import { doCreateWallet } from '../../../redux/actions/wallet';
 import { useDispatch } from 'react-redux';
+import ActionModel from '../../../models/ActionModel';
 import { doAddNamePassPharse } from '../../../redux/actions/wallet';
 
 interface NamePasswordProps {
 	current: any;
 }
+
 interface WalletInfo {
 	name: string;
 	passphrase: string;
-	confirmPassphrase: string,
+	confirmPassphrase: string;
 	verified: boolean;
+	validName: boolean;
+	validPassphrase: boolean;
+	confirmedPassphrase: boolean;
+}
+
+const CHANGE_WALLET_NAME = 'CHANGE_WALLET_NAME';
+const CHANGE_PASSPHRASE = 'CHANGE_PASSPHRASE';
+const CHANGE_CONFIRM_PASSPHRASE = 'CHANGE_CONFIRM_PASSPHRASE';
+
+const namePasswordReducer: React.Reducer<WalletInfo, ActionModel> = (state: WalletInfo, action: ActionModel) => {
+	const { type, payload } = action;
+
+	switch(type) {
+		case CHANGE_WALLET_NAME:
+			const name = payload;
+			return {
+				...state,
+				name,
+				verified: name.length > 0 && state.passphrase.length > 3 &&
+				state.passphrase === state.confirmPassphrase,
+				validName: name.length > 0
+			};
+		case CHANGE_PASSPHRASE:
+			const passphrase = payload;
+			return {
+				...state,
+				passphrase,
+				verified: state.name.length > 0 && passphrase.length > 3 &&
+				passphrase === state.confirmPassphrase,
+				validPassphrase: passphrase.length > 3,
+				confirmedPassphrase: passphrase === state.confirmPassphrase
+			};
+		case CHANGE_CONFIRM_PASSPHRASE:
+			const confirmPassphrase = payload;
+			return {
+				...state,
+				confirmPassphrase,
+				verified: state.name.length > 0 && state.passphrase.length > 3 &&
+				state.passphrase === confirmPassphrase,
+				confirmedPassphrase: state.passphrase === confirmPassphrase,
+			};
+		default:
+			return { ...state };
+	}
 }
 
 const NamePassword: React.FC<NamePasswordProps> = ({ current }) => {
 	const dispatch = useDispatch();
-	// const wallet = useSelector(
-	// 	(state: {
-	// 		wallet: {
-	// 			wallets: [];
-	// 			loading: boolean;
-	// 			confirmedSeedPhrase: [];
-	// 			creatingWallet: boolean;
-	// 		};
-	// 	}) => state.wallet
-	// );
-	// const { confirmedSeedPhrase, creatingWallet } = wallet;
+	
+	let walletInfo: WalletInfo = { 
+		name: '', 
+		passphrase: '', 
+		confirmPassphrase: '', 
+		verified: false,
+		validName: true,
+		validPassphrase: true,
+		confirmedPassphrase: true
+	};
 
-	let walletInfo: WalletInfo = { name: '', passphrase: '', confirmPassphrase: '', verified: false };
+	const [state, commit] = useReducer(namePasswordReducer, walletInfo);
 
-	function nameChanged(e: any) {
-		walletInfo.name = e.target.value;
-		verifyInfo();
-	}
-	function passphraseChanged(e: any) {
-		walletInfo.passphrase = e.target.value;
-		verifyInfo();
-	}
-	function confirmPassphraseChanged(e: any) {
-		walletInfo.confirmPassphrase = e.target.value;
-		verifyInfo();
-	}
-	function verifyInfo() {
-		if (walletInfo.name.length > 0 && 
-			walletInfo.passphrase.length > 3 &&
-			walletInfo.passphrase === walletInfo.confirmPassphrase) {
-			walletInfo.verified = true;
-			return;
-		}
-		walletInfo.verified = false;
-	}
-
-	// const onSubmit = () => {
-	// 	// e.preventDefault();
-	// 	let mnemonic = confirmedSeedPhrase.join(' ');
-	// 	dispatch(
-	// 		doCreateWallet({
-	// 			name: walletInfo.name,
-	// 			password: walletInfo.passphrase,
-	// 			mnemonic: mnemonic
-	// 		})
-	// 	);
-	// 	// slideNext().then(() => {});
-	// };
+	const setter = (typeAction: string) => (e: any) => {
+		const { target } = e;
+		const { value } = target;
+		commit({ type: typeAction, payload: value });
+	};
 
 	const onContinue = async () => {
-		if (walletInfo.verified) {
-			const {name, passphrase} = walletInfo;
+		if (state.verified) {
+			const {name, passphrase} = state;
 			await dispatch(
 				doAddNamePassPharse(name, passphrase)
 			);
@@ -93,11 +110,16 @@ const NamePassword: React.FC<NamePasswordProps> = ({ current }) => {
 						title="Label"
 						type="text"
 						placeholder="Enter a name for this wallet"
-						value={walletInfo.name}
-						onInput={(e) => {
-							nameChanged(e);
-						}}
+						value={state.name}
+						onInput={setter(CHANGE_WALLET_NAME)}
+						onIonBlur={setter(CHANGE_WALLET_NAME)}
 					/>
+					{
+						!state.validName &&
+						<IonNote color="danger" className="ion-margin-top">
+							You must enter a Wallet Name.
+						</IonNote>
+					}
 				</IonItem>
 				<IonItem>
 					<IonLabel position="stacked">Passphrase</IonLabel>
@@ -105,9 +127,16 @@ const NamePassword: React.FC<NamePasswordProps> = ({ current }) => {
 						title="passphrase"
 						type="password"
 						placeholder="Enter a passphrase for this wallet"
-						value={walletInfo.passphrase}
-						onInput={passphraseChanged}
+						value={state.passphrase}
+						onInput={setter(CHANGE_PASSPHRASE)}
+						onIonBlur={setter(CHANGE_PASSPHRASE)}
 					/>
+					{
+						!state.validPassphrase &&
+						<IonNote color="danger" className="ion-margin-top">
+							Passphrase must be at least 3 characters.
+						</IonNote>
+					}
 				</IonItem>
 				<IonItem>
 					<IonLabel position="stacked">Confirm Passphrase</IonLabel>
@@ -115,30 +144,25 @@ const NamePassword: React.FC<NamePasswordProps> = ({ current }) => {
 						title="confirm passphrase"
 						type="password"
 						placeholder="Enter the passphrase for second time"
-						value={walletInfo.confirmPassphrase}
-						onInput={confirmPassphraseChanged}
+						value={state.confirmPassphrase}
+						onInput={setter(CHANGE_CONFIRM_PASSPHRASE)}
+						onIonBlur={setter(CHANGE_CONFIRM_PASSPHRASE)}
 					/>
+					{
+						!state.confirmedPassphrase &&
+						<IonNote color="danger" className="ion-margin-top">
+							Passphrase and Confirm Passphrase do not match.
+						</IonNote>
+					}
 				</IonItem>
 				<IonItem class="form-options">
-					{/*
-					<IonButton
-						// routerLink="/phrase/instructions"
-						onClick={() => {
-							onSubmit();
-						}}
-						color="gradient"
-						shape="round"
-						disabled={creatingWallet}
-					>
-						{creatingWallet ? 'Loading..' : 'Confirm'}
-					</IonButton>
-					*/}
 					<IonButton
 						onClick={() => {
 							onContinue();
 						}}
 						color="gradient"
 						shape="round"
+						disabled={!state.verified}
 					>
 						Continue
 					</IonButton>
