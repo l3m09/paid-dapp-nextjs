@@ -10,10 +10,12 @@ import {
     IonModal,
     IonToolbar,
     IonButtons,
-    IonInput
+    IonInput,
+    IonNote
 } from '@ionic/react';
-import React from 'react';
+import React, { useReducer, Reducer } from 'react';
 import {useDispatch, useSelector} from 'react-redux';
+import ActionModel from '../../models/ActionModel';
 import {doImportWallet} from "../../redux/actions/wallet";
 
 interface Props {
@@ -26,8 +28,63 @@ interface WalletInfo {
 	name: string;
 	passphrase: string;
 	confirmPassphrase: string,
-    verified: boolean;
     mnemonic: string;
+    verified: boolean;
+    validName: boolean;
+	validPassphrase: boolean;
+    confirmedPassphrase: boolean;
+    validMnemonic: boolean;
+}
+
+const CHANGE_WALLET_NAME = 'CHANGE_WALLET_NAME';
+const CHANGE_PASSPHRASE = 'CHANGE_PASSPHRASE';
+const CHANGE_CONFIRM_PASSPHRASE = 'CHANGE_CONFIRM_PASSPHRASE';
+const CHANGE_MNEMONIC = 'CHANGE_MNEMONIC';
+
+const importWalletReducer: Reducer<WalletInfo, ActionModel> = (state: WalletInfo, action: ActionModel) => {
+    const { type, payload } = action;
+
+    switch(type) {
+        case CHANGE_WALLET_NAME:
+			const name = payload;
+			return {
+				...state,
+				name,
+				verified: name.length > 0 && state.passphrase.length > 3 &&
+				state.passphrase === state.confirmPassphrase,
+				validName: name.length > 0
+			};
+		case CHANGE_PASSPHRASE:
+			const passphrase = payload;
+			return {
+				...state,
+				passphrase,
+				verified: state.name.length > 0 && passphrase.length > 3 &&
+				passphrase === state.confirmPassphrase,
+				validPassphrase: passphrase.length > 3,
+				confirmedPassphrase: passphrase === state.confirmPassphrase
+			};
+		case CHANGE_CONFIRM_PASSPHRASE:
+			const confirmPassphrase = payload;
+			return {
+				...state,
+				confirmPassphrase,
+				verified: state.name.length > 0 && state.passphrase.length > 3 &&
+				state.passphrase === confirmPassphrase,
+				confirmedPassphrase: state.passphrase === confirmPassphrase,
+            };
+        case CHANGE_MNEMONIC:
+            const mnemonic = payload;
+            return {
+                ...state,
+                mnemonic,
+                verified: state.name.length > 0 && state.passphrase.length > 3 &&
+                state.passphrase === state.confirmPassphrase && mnemonic.length > 0,
+                validMnemonic: mnemonic.length > 0
+            };
+        default:
+            return { ...state };
+    }
 }
 
 
@@ -36,41 +93,30 @@ const ImportWallet: React.FC<Props> = ({show, dismiss}) => {
     const wallet = useSelector((state: any) => state.wallet);
     const { importingWallet } = wallet;
 
-    let walletInfo: WalletInfo = { name: '', passphrase: '', confirmPassphrase: '', verified: false, mnemonic: '' };
+    let walletInfo: WalletInfo = { 
+        name: '', 
+        passphrase: '', 
+        confirmPassphrase: '', 
+        mnemonic: '',
+        verified: false, 
+        validName: true,
+		validPassphrase: true,
+        confirmedPassphrase: true,
+        validMnemonic: true
+    };
 
-    function verifyInfo() {
-        if (walletInfo.name.length > 0 && 
-            walletInfo.passphrase.length > 3 &&
-            walletInfo.passphrase === walletInfo.confirmPassphrase && 
-            walletInfo.mnemonic.length > 12) {
-            walletInfo.verified = true;
-            return;
-        }
-        walletInfo.verified = false;
-    }
-    
-    function nameChanged(e: any) {
-        walletInfo.name = e.target.value;
-        verifyInfo();
-    }
+    const [state, commit] = useReducer(importWalletReducer, walletInfo);
 
-    function passphraseChanged(e: any) {
-        walletInfo.passphrase = e.target.value;
-        verifyInfo();
-    }
+    const setter = (type: string) => (e: any) => {
+        const { target } = e;
+        const { value } = target;
 
-     function confirmPassphraseChange(e: any) {
-        walletInfo.confirmPassphrase = e.target.value;
-        verifyInfo();
-    }
-
-    function mnemonicChanged(e: any) {
-        walletInfo.mnemonic = e.target.value;
-        verifyInfo();
-    }
+        commit({ type, payload: value });
+    };
 
     function onSubmit() {
-        const {name, passphrase, mnemonic, verified} = walletInfo;
+        const {name, passphrase, mnemonic, verified} = state;
+
         if (verified) {
             dispatch(doImportWallet({
                 name,
@@ -111,11 +157,16 @@ const ImportWallet: React.FC<Props> = ({show, dismiss}) => {
                             title="Label"
                             type="text"
                             placeholder="Enter a name for this wallet"
-                            value={walletInfo.name}
-                            onInput={(e) => {
-                                nameChanged(e);
-                            }}
+                            value={state.name}
+                            onInput={setter(CHANGE_WALLET_NAME)}
+                            onIonBlur={setter(CHANGE_WALLET_NAME)}
                         />
+                        {
+                            !state.validName &&
+                            <IonNote color="danger" className="ion-margin-top">
+                                You must enter a Wallet Name.
+                            </IonNote>
+                        }
                     </IonItem>
                     <IonItem>
                         <IonLabel position="stacked">Passphrase</IonLabel>
@@ -123,9 +174,16 @@ const ImportWallet: React.FC<Props> = ({show, dismiss}) => {
                             title="passphrase"
                             type="password"
                             placeholder="Enter a passphrase for this wallet"
-                            value={walletInfo.passphrase}
-                            onInput={passphraseChanged}
+                            value={state.passphrase}
+                            onInput={setter(CHANGE_PASSPHRASE)}
+                            onIonBlur={setter(CHANGE_PASSPHRASE)}
                         />
+                        {
+                            !state.validPassphrase &&
+                            <IonNote color="danger" className="ion-margin-top">
+                                Passphrase must be at least 3 characters.
+                            </IonNote>
+                        }
                     </IonItem>
 			        <IonItem>
                         <IonLabel position="stacked">Confirm Passphrase</IonLabel>
@@ -133,18 +191,32 @@ const ImportWallet: React.FC<Props> = ({show, dismiss}) => {
                             title="confirm passphrase"
                             type="password"
                             placeholder="Enter the passphrase for second time"
-                            value={walletInfo.confirmPassphrase}
-                            onInput={confirmPassphraseChange}
+                            value={state.confirmPassphrase}
+                            onInput={setter(CHANGE_CONFIRM_PASSPHRASE)}
+                            onIonBlur={setter(CHANGE_CONFIRM_PASSPHRASE)}
                         />
+                        {
+                            !state.confirmedPassphrase &&
+                            <IonNote color="danger" className="ion-margin-top">
+                                Passphrase and Confirm Passphrase do not match.
+                            </IonNote>
+                        }
                     </IonItem>
                     <IonItem>
                         <IonLabel position="stacked">Phrase</IonLabel>
                         <IonTextarea 
                             title="Phrase" 
                             placeholder="Enter your seed phrase"
-                            value={walletInfo.mnemonic}
-                            onInput={mnemonicChanged}
+                            value={state.mnemonic}
+                            onInput={setter(CHANGE_MNEMONIC)}
+                            onIonBlur={setter(CHANGE_MNEMONIC)}
                         />
+                        {
+                            !state.validMnemonic &&
+                            <IonNote color="danger" className="ion-margin-top">
+                                You must enter the Phrase.
+                            </IonNote>
+                        }
                         <IonText className="textarea-hint">
                             <small>
                                 Typically 12 (sometimes 24) words separeted by single spaces
@@ -157,7 +229,7 @@ const ImportWallet: React.FC<Props> = ({show, dismiss}) => {
                             class="import-button"
                             color="gradient"
                             shape="round"
-                            disabled={importingWallet}
+                            disabled={importingWallet || !state.verified}
                         >
                             {importingWallet ? 'Loading..' : 'Import'}
                         </IonButton>
