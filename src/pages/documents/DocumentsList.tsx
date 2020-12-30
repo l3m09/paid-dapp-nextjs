@@ -163,36 +163,37 @@ function SelectedDocument(payload: {
 							<div>
 								Document Id: {selectedDocument.event.id}
 							</div>
-							<div>
-								<IonButton
-									className="small-button font-size-13"
-									color="primary"
-									onClick={async () => {
-										verifyDocument(selectedDocument);
-									}}
-									disabled={verifyButtonDisable}
-								>
-									{showVerifyDocumentButton ? <span>Verify document</span> : null }
-									{!showVerifyDocumentButton ? <span>Sign document</span> : null}
-									{showSignedText ? <span>Signature succesfully created</span> : null }
-								</IonButton>
-								{ showVerified ? <span className="icon-wrapper">
-									<IonIcon
-										ios={checkmarkCircle}
-										md={checkmarkCircle}
+							{
+								showVerifyDocumentButton &&
+								<div>
+									<IonButton
+										className="small-button font-size-13"
 										color="primary"
-										className="font-size-20"
-									/>
-								</span> : null }
-								{ showNotVerified ? <span className="icon-wrapper">
-									<IonIcon
-										ios={closeCircle}
-										md={closeCircle}
-										color="secondary"
-										className="font-size-20"
-									/>
-								</span> : null }
-							</div>
+										onClick={async () => {
+											verifyDocument(selectedDocument);
+										}}
+										disabled={verifyButtonDisable}
+									>
+										<span>Verify document</span>
+									</IonButton>
+									{ showVerified ? <span className="icon-wrapper">
+										<IonIcon
+											ios={checkmarkCircle}
+											md={checkmarkCircle}
+											color="primary"
+											className="font-size-20"
+										/>
+									</span> : null }
+									{ showNotVerified ? <span className="icon-wrapper">
+										<IonIcon
+											ios={closeCircle}
+											md={closeCircle}
+											color="secondary"
+											className="font-size-20"
+										/>
+									</span> : null }
+								</div>
+							}
 						</IonCardTitle>
 						<IonCardSubtitle>
 						</IonCardSubtitle>
@@ -247,6 +248,20 @@ function SelectedDocument(payload: {
 					>
 						<span>Open Pdf</span>
 					</IonButton>
+					{
+						(!showVerifyDocumentButton || showSignedText) &&
+						<IonButton
+							color="gradient"
+							shape="round"
+							onClick={async () => {
+								verifyDocument(selectedDocument);
+							}}
+							disabled={verifyButtonDisable || showSignedText}
+						>
+							{!showVerifyDocumentButton ? <span>Sign document</span> : null}
+							{showSignedText ? <span>Signature succesfully created</span> : null }
+						</IonButton>
+					}
 					<IonButton
 						color="secondary"
 						shape="round"
