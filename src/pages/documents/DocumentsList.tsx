@@ -161,7 +161,7 @@ function SelectedDocument(payload: {
 					<IonCardHeader>
 						<IonCardTitle className="document-title-modal">
 							<div>
-								Document Id: {selectedDocument.event.id}
+								{`${selectedDocument.data.documentName} ( ${selectedDocument.data.partyAName} - ${selectedDocument.data.partyBName} )`}
 							</div>
 							{
 								showVerifyDocumentButton &&
@@ -415,6 +415,9 @@ const DocumentsList: React.FC<Props> = ({documentsTo, documentsFrom, type, count
 				/>
 			<div className="documents-container">
 				<div className="table-header">
+					<div className="col">Document</div>
+					<div className="col">Company</div>
+					<div className="col">Counterparty</div>
 					<div className="col">Transaction Hash</div>
 					<div className="col">Valid</div>
 					<div className="col">Wallet From</div>
@@ -449,6 +452,9 @@ const DocumentsList: React.FC<Props> = ({documentsTo, documentsFrom, type, count
 						'IN');
 						return (
 							<div className="table-body" onClick={async () => {showDocument({data, meta, event})}}>
+								<div className="col">{(data.documentName.length > 12) ? `${data.documentName.slice(0, 12)}...` : data.documentName}</div>
+								<div className="col">{data.partyAName}</div>
+								<div className="col">{data.partyBName}</div>
 								<div className="col">{meta.transactionHash.slice(0,15)}...</div>
 								<div className="col">{data.validUntil}</div>
 								<div className="col">{event.from.slice(0,15)}...</div>
