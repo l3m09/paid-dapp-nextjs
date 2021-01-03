@@ -50,7 +50,6 @@ export const DocumentsReducer = function (state = initialState, action: any) {
 		}
 
 		case DocumentsActionTypes.COUNTERPARTY_SIGNED_SUCCESS: {
-			alert('You have successfully sign the agreement');
 			return { ...state, showVerified: true, selectedDocument: payload, loading: false };
 		}
 

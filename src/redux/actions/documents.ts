@@ -9,6 +9,7 @@ import { AlgorithmType, CEASigningService, WalletManager } from 'paid-universal-
 import { eddsa } from "elliptic";
 
 import { templateRender } from './template/template';
+import { DialogsActionTypes } from '../actionTypes/dialogs';
 
 const uint8ArrayToString = require('uint8arrays/to-string');
 const BigNumber = require('bignumber.js');
@@ -58,6 +59,13 @@ const getSelectedSignedDocument = (document: any) => {
 		payload: document
 	};
 };
+
+const openSuccessDialog = (message: string) => {
+	return {
+		type: DialogsActionTypes.OPEN_SUCCESS_DIALOG,
+		payload: message
+	}
+}
 
 const getSelectedDocument = (document: any) => {
 	return {
@@ -581,6 +589,7 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 				const agreementTransaction = await methodFn.send({ from: address, gas:gas+5e4, gasPrice: 50e9 })
 				.on('receipt', async function (receipt: any) {
 					dispatch(getSelectedSignedDocument(document));
+					dispatch(openSuccessDialog('You have successfully sign the agreement'));
 				})
 				.on('error', function (error: any, receipt: any) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.		
 					alert('Transaction failed');

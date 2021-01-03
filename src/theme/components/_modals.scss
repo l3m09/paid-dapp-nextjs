@@ -121,3 +121,27 @@
     visibility: visible;
   }
 }
+
+.success-dialog-modal {
+  .modal-wrapper {
+    min-height: 10vh !important;
+    max-height: 500px !important;
+    height: 25vh;
+
+    .ion-page {
+      justify-content: flex-start !important;
+
+      .message-content {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+      }
+
+      >ion-item {
+        margin-top: 1vh;
+        margin-bottom: 1vh;
+      }
+    }
+  }
+}
