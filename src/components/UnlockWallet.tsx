@@ -4,11 +4,11 @@ import {
 	IonInput,
 	IonButton,
 	IonTitle,
-	IonModal, IonToolbar, IonButtons, IonHeader, IonContent, IonIcon, IonNote
+	IonModal, IonToolbar, IonButtons, IonHeader, IonContent, IonIcon, IonNote, IonToast
 } from '@ionic/react';
 import { stat } from 'fs';
 import { copy } from 'ionicons/icons';
-import React, { Reducer, useEffect, useReducer, useRef } from 'react';
+import React, { Reducer, useEffect, useReducer, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ActionModel from '../models/ActionModel';
 import { doUnlockWallet } from '../redux/actions/wallet';
@@ -51,6 +51,7 @@ const UnlockWallet: React.FC<Props> = ({
 }) => {
 	const spanRef = useRef<HTMLSpanElement | null>(null);
 	const dispatch = useDispatch();
+	const [showToastCopy, setShowToastCopy] = useState(false);
 
 	useEffect(() => {
 		console.log('dismissible', dismissible);
@@ -101,7 +102,8 @@ const UnlockWallet: React.FC<Props> = ({
 		document.body.appendChild(textArea);
 		textArea.select();
 		document.execCommand("Copy");
-    	textArea.remove();
+		textArea.remove();
+		setShowToastCopy(true);
 	};
 
 	return (
@@ -170,6 +172,13 @@ const UnlockWallet: React.FC<Props> = ({
 						</IonButton>
 					</IonItem>
 				</form>
+				<IonToast
+					isOpen={showToastCopy}
+					color="primary"
+					onDidDismiss={() => setShowToastCopy(false)}
+					message="Wallet address has been copied to clipboard"
+					duration={300}
+				/>
 			</IonContent>
 		</IonModal>
 	);
