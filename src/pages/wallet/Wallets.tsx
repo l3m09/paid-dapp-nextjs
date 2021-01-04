@@ -11,6 +11,7 @@ import {
 	IonButton,
 	IonIcon,
 	IonItemDivider,
+	IonToast,
 } from '@ionic/react';
 import { checkmarkCircle, copy } from 'ionicons/icons';
 
@@ -21,6 +22,7 @@ import CreateWallet from './create-wallet/CreateWallet';
 import UnlockWallet from '../../components/UnlockWallet';
 import ImportWallet from './ImportWallet';
 import MenuAlternate from '../../components/MenuAlternate';
+import { bold } from '../../redux/actions/template/agreement.html';
 
 const Wallets: React.FC = () => {
 	const dispatch = useDispatch();
@@ -29,6 +31,7 @@ const Wallets: React.FC = () => {
 	const [showCreateModal, setShowCreateModal] = useState(false);
 	const [showUnlockWalletModal, setShowUnlockWalletModal] = useState(false);
 	const [showImportWalletModal, setShowImportWalletModal] = useState(false);
+	const [showToastCopy, setShowToastCopy] = useState(false);
 
 	const { wallets, unlockedWallet, selectedWallet } = wallet;
 
@@ -54,7 +57,8 @@ const Wallets: React.FC = () => {
 		document.body.appendChild(textArea);
 		textArea.select();
 		document.execCommand("Copy");
-    	textArea.remove();
+		textArea.remove();
+		setShowToastCopy(true);
 	};
 
 	function openUnlockWallet(wallet: any) {
@@ -92,10 +96,11 @@ const Wallets: React.FC = () => {
 									return (
 										<IonItem class="wallet-wrapper selected-wallet" key={index}>
 											<div className="wallet-container">
-												<IonIcon icon={checkmarkCircle} className="current-tag" />
+												{/* <IonIcon icon={checkmarkCircle} className="current-tag" aria-label="Active wallet" /> */}
+												<strong className="current-tag">Active</strong>
 												<span className="label">{item.name}</span>
 												<span className="address" ref={spanRef}>{item.address}</span>
-												<IonIcon icon={copy} onClick={() => copyAddressToClipboard()}/>
+												<IonIcon className="icon-copy" icon={copy} onClick={() => copyAddressToClipboard()}/>
 												{
 													(typeof item.balance !== 'undefined') &&
 													<div className="balanceContainer">
@@ -167,6 +172,13 @@ const Wallets: React.FC = () => {
 						/>
 					) : null}
 				</div>
+				<IonToast
+					isOpen={showToastCopy}
+					color="primary"
+					onDidDismiss={() => setShowToastCopy(false)}
+					message="Wallet address has been copied to clipboard"
+					duration={300}
+				/>
 			</IonContent>
 		</IonPage>
 	);

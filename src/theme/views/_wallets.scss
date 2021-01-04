@@ -89,6 +89,10 @@
           }
         }
 
+        .icon-copy {
+          cursor: pointer;
+        }
+
       }
 
       .balanceContainer {
@@ -120,7 +124,7 @@
           .current-tag {
             position: absolute;
             top: 5px;
-            right: 20px;
+            right: 25px;
             font-size: 0.9em;
 
           }
