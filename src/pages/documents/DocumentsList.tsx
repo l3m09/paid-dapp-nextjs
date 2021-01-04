@@ -8,7 +8,7 @@ import {
 	IonCardTitle,
 	IonCardSubtitle,
 	IonCardHeader,
-	IonCard, IonTitle, IonHeader, IonToolbar, IonButtons, IonContent, IonLoading,
+	IonCard, IonTitle, IonHeader, IonToolbar, IonButtons, IonContent, IonLoading, IonList, IonItemDivider,
 } from '@ionic/react';
 
 import {
@@ -16,7 +16,7 @@ import {
 	documentOutline as documentIcon,
 } from 'ionicons/icons';
 
-import React, { useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { closeCircle, checkmarkCircle } from 'ionicons/icons';
@@ -288,10 +288,19 @@ interface Props {
 	documentsTo: [];
 	documentsFrom: [];
 	type: string;
-	counterType: string
+	counterType: string,
+	agreementTypes: [];
+	onClickAgreementType: any;
 }
 
-const DocumentsList: React.FC<Props> = ({documentsTo, documentsFrom, type, counterType}) => {
+const DocumentsList: React.FC<Props> = ({
+	documentsTo, 
+	documentsFrom, 
+	type, 
+	counterType,
+	agreementTypes,
+	onClickAgreementType
+}) => {
 	const history = useHistory();
 	const dispatch = useDispatch();
 	const documentsState = useSelector((state: any) => state.documents);
@@ -382,6 +391,7 @@ const DocumentsList: React.FC<Props> = ({documentsTo, documentsFrom, type, count
 	function closePdfViewer() {
 		setPdfViewerModal(false)
 	}
+
 	async function openPdfViewer(cid:string, transactionHash: string) {
 		let fetchedContent = '';
 
@@ -405,6 +415,28 @@ const DocumentsList: React.FC<Props> = ({documentsTo, documentsFrom, type, count
 		console.log('showPdfViewerModal', showPdfViewerModal);
 	}
 
+	const agreementTypesList = () => {
+		return <IonList>
+			{
+				agreementTypes.map((type: string, index: number) => {
+					return (
+						<IonItem
+							className="ion-text-center"
+							onClick={() => {
+								onClickAgreementType(type);
+							}}
+							key={index}
+						>
+							<IonLabel>
+								{type}
+							</IonLabel>
+						</IonItem>
+					);
+				})
+			}
+		</IonList>
+	}
+
 	return (
 		<div>
 				<IonLoading
@@ -413,66 +445,79 @@ const DocumentsList: React.FC<Props> = ({documentsTo, documentsFrom, type, count
 					isOpen={loading}
 
 				/>
+				
 			<div className="documents-container">
-				<div className="table-header">
-					<div className="col">Document</div>
-					<div className="col">Company</div>
-					<div className="col">Counterparty</div>
-					<div className="col">Transaction Hash</div>
-					<div className="col">Valid</div>
-					<div className="col">Wallet From</div>
-					<div className="col">Wallet To</div>
-					<div className="col">Created</div>
-					<div className="col">Updated</div>
-					<div className="col">  State</div>
-				</div>
-				{documentsFrom.length
-					? documentsFrom.map((document: any, index: number) => {
-						const {data, meta, event} = document;
-						const date = new Date(event.created_at * 1000);
-						const update = new Date(event.updated_at * 1000);
-						const date_values = [
-							date.getUTCFullYear(),
-							date.getUTCMonth()+1,
-							date.getUTCDate(),
-							date.getUTCHours(),
-							date.getUTCMinutes(),
-							date.getUTCSeconds()];
-						const update_values = [
-								update.getUTCFullYear(),
-								update.getUTCMonth()+1,
-								update.getUTCDate(),
-								update.getUTCHours(),
-								update.getUTCMinutes(),
-								update.getUTCSeconds()];
-						const created_date = `${date_values[1]}/${date_values[2]}/${date_values[0]} ${date_values[3]}:${date_values[4]}:${date_values[5]}`;
-						const updated_date = `${update_values[1]}/${update_values[2]}/${update_values[0]} ${update_values[3]}:${update_values[4]}:${update_values[5]}`;
-						const statusClass = event.status == 0 ? (currentWallet?.address == event.from ? 'PENDING' :
-						'SIGN...') : (currentWallet?.address == event.from ? 'OUT' :
-						'IN');
-						return (
-							<div key={index} className="table-body" onClick={async () => {showDocument({data, meta, event})}}>
-								<div className="col">{(data.documentName?.length > 12) ? `${data.documentName.slice(0, 12)}...` : data.documentName}</div>
-								<div className="col">{data.partyAName}</div>
-								<div className="col">{data.partyBName}</div>
-								<div className="col">{meta.transactionHash.slice(0,15)}...</div>
-								<div className="col">{data.validUntil}</div>
-								<div className="col">{event.from.slice(0,15)}...</div>
-								<div className="col">{event.to.slice(0,15)}...</div>
-								<div className="col">{created_date}</div>
-								<div className="col">{updated_date}</div>
-								<div className="col">
-									{event.status == 0 && currentWallet?.address == event.from ? <IonBadge color="success">PENDING</IonBadge> :
-									(event.status == 0 && currentWallet?.address == event.to ? <IonBadge color="secondary">SIGN</IonBadge> : 
-									(event.status == 1 && currentWallet?.address == event.from ? <IonBadge color="warning">SIGNED</IonBadge> : 
-									event.status == 1 && currentWallet?.address == event.to ? <IonBadge color="primary">SIGNED</IonBadge> : null))}
-								</div>
-							</div>
-						);
-					})
-					: null
+				{
+					(documentsFrom.length > 0) &&
+					<>
+						<div className="table-header">
+							<div className="col">Document</div>
+							<div className="col">Company</div>
+							<div className="col">Counterparty</div>
+							<div className="col">Transaction Hash</div>
+							<div className="col">Valid</div>
+							<div className="col">Wallet From</div>
+							<div className="col">Wallet To</div>
+							<div className="col">Created</div>
+							<div className="col">Updated</div>
+							<div className="col">  State</div>
+						</div>
+						{
+							documentsFrom.map((document: any, index: number) => {
+								const {data, meta, event} = document;
+								const date = new Date(event.created_at * 1000);
+								const update = new Date(event.updated_at * 1000);
+								const date_values = [
+									date.getUTCFullYear(),
+									date.getUTCMonth()+1,
+									date.getUTCDate(),
+									date.getUTCHours(),
+									date.getUTCMinutes(),
+									date.getUTCSeconds()];
+								const update_values = [
+										update.getUTCFullYear(),
+										update.getUTCMonth()+1,
+										update.getUTCDate(),
+										update.getUTCHours(),
+										update.getUTCMinutes(),
+										update.getUTCSeconds()];
+								const created_date = `${date_values[1]}/${date_values[2]}/${date_values[0]} ${date_values[3]}:${date_values[4]}:${date_values[5]}`;
+								const updated_date = `${update_values[1]}/${update_values[2]}/${update_values[0]} ${update_values[3]}:${update_values[4]}:${update_values[5]}`;
+								const statusClass = event.status == 0 ? (currentWallet?.address == event.from ? 'PENDING' :
+								'SIGN...') : (currentWallet?.address == event.from ? 'OUT' :
+								'IN');
+								return (
+									<div key={index} className="table-body" onClick={async () => {showDocument({data, meta, event})}}>
+										<div className="col">{(data.documentName?.length > 12) ? `${data.documentName.slice(0, 12)}...` : data.documentName}</div>
+										<div className="col">{data.partyAName}</div>
+										<div className="col">{data.partyBName}</div>
+										<div className="col">{meta.transactionHash.slice(0,15)}...</div>
+										<div className="col">{data.validUntil}</div>
+										<div className="col">{event.from.slice(0,15)}...</div>
+										<div className="col">{event.to.slice(0,15)}...</div>
+										<div className="col">{created_date}</div>
+										<div className="col">{updated_date}</div>
+										<div className="col">
+											{event.status == 0 && currentWallet?.address == event.from ? <IonBadge color="success">PENDING</IonBadge> :
+											(event.status == 0 && currentWallet?.address == event.to ? <IonBadge color="secondary">SIGN</IonBadge> : 
+											(event.status == 1 && currentWallet?.address == event.from ? <IonBadge color="warning">SIGNED</IonBadge> : 
+											event.status == 1 && currentWallet?.address == event.to ? <IonBadge color="primary">SIGNED</IonBadge> : null))}
+										</div>
+									</div>
+								);
+							})
+						}
+					</>
 				}
-				{(!documentsFrom.length ? <IonTitle color="primary">No documents found</IonTitle> : null)}
+				{
+					(!documentsFrom.length) &&
+					<div className="empty-documents-container">
+						<IonTitle color="primary">You don't have any agreements yet. Select a template from the list below to create one.</IonTitle>
+						{
+							agreementTypesList()
+						}
+					</div>
+				}
 			</div>
 
 			<SelectedDocument
