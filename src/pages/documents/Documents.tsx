@@ -182,7 +182,14 @@ const Documents: React.FC = () => {
 
 				/>
 				<div>
-				<DocumentsList documentsTo={documentsTo} documentsFrom={documentsFrom} type="from" counterType="to"/>
+				<DocumentsList 
+					documentsTo={documentsTo} 
+					documentsFrom={documentsFrom} 
+					type="from" 
+					counterType="to"
+					agreementTypes={agreementTypes}
+					onClickAgreementType={chooseOption}
+				/>
 
 					<IonPopover mode="md" translucent={false} isOpen={showPopOver} cssClass="agreements-popover" onDidDismiss={() => {
 						setShowPopover(false)
