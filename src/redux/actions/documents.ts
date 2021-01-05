@@ -8,6 +8,7 @@ import { CEASigningService } from 'paid-universal-wallet';
 import { eddsa } from "elliptic";
 
 import { templateRender } from './template/template';
+import { DialogsActionTypes } from '../actionTypes/dialogs';
 
 const uint8ArrayToString = require('uint8arrays/to-string');
 const BigNumber = require('bignumber.js');
@@ -57,6 +58,13 @@ const getSelectedSignedDocument = (document: any) => {
 	};
 };
 
+const openSuccessDialog = (message: string) => {
+	return {
+		type: DialogsActionTypes.OPEN_SUCCESS_DIALOG,
+		payload: message
+	}
+}
+
 const getSelectedDocument = (document: any) => {
 	return {
 		type: DocumentsActionTypes.GET_SELECTED_DOCUMENT_SUCCESS,
@@ -76,6 +84,50 @@ const createAgreement = () => {
 		type: DocumentsActionTypes.CREATE_AGREEMENT_SUCCESS
 	};
 };
+
+const getContractInfoByIpfs = async (agreementStoredReference: any) => {
+	const firstUrlIpfsContent = `https://ipfs.io/ipfs/${agreementStoredReference}`;
+	const firstIpfsContent = async () => {
+		return await fetch(firstUrlIpfsContent)
+		.then(res => res.text())
+	};
+
+	const jsonContent = JSON.parse(await firstIpfsContent());
+	const { contentRef } = jsonContent;
+	
+	const urlIpfsContent = `https://ipfs.io/ipfs/${contentRef.cid}`;
+	const ipfsContent = async () => {
+		return await fetch(urlIpfsContent)
+		.then(res => res.text())
+	};
+
+	const doc = new DOMParser().parseFromString(await ipfsContent(), 'text/html');
+	const documentName = doc.querySelector('h1')?.textContent ?? '';
+	const paragraphs = doc.querySelectorAll('p');
+
+	let countNameParty = 0;
+	let partyAName = '';
+	let partyBName = '';
+
+	paragraphs.forEach((paragraphElement) => {
+		if (paragraphElement) {
+			const { textContent } = paragraphElement;
+			if ((textContent != null && textContent.indexOf('Name: ') > -1) &&
+			countNameParty < 2) {
+				const name = textContent.trim().split(':')[1] ?? '';
+				if (countNameParty === 0) {
+					partyAName = name;
+				} else {
+					partyBName = name;
+				}
+				countNameParty++;
+			}
+		}
+	});
+
+	return { documentName, partyAName, partyBName};
+}
+
 declare global {
 	interface Window { web3: any; ethereum: any; }
 }
@@ -269,6 +321,8 @@ export const doGetDocuments = (currentWallet: any) => async (
 					updated_at,
 				} = agreement;
 
+				const { documentName, partyAName, partyBName } = await getContractInfoByIpfs(agreementStoredReference);
+
 				resolve({
 					meta: {
 						logIndex,
@@ -289,6 +343,9 @@ export const doGetDocuments = (currentWallet: any) => async (
 						updated_at: updated_at,
 					},
 					data: {
+						documentName,
+						partyAName,
+						partyBName,
 						agreementForm,
 						escrowed,
 						validUntil: (validUntil as BN).toString(),
@@ -322,6 +379,9 @@ export const doGetDocuments = (currentWallet: any) => async (
 					created_at,
 					updated_at,
 				} = agreement;
+
+				const { documentName, partyAName, partyBName } = await getContractInfoByIpfs(agreementStoredReference);
+
 				resolve({
 					meta: {
 						logIndex,
@@ -342,6 +402,9 @@ export const doGetDocuments = (currentWallet: any) => async (
 						updated_at: updated_at,
 					},
 					data: {
+						documentName,
+						partyAName,
+						partyBName,
 						agreementForm,
 						escrowed,
 						validUntil: (validUntil as BN).toString(),
@@ -411,6 +474,8 @@ export const doGetDocuments = (currentWallet: any) => async (
 				}
 			}
 		}
+
+		console.log('agreementsFrom', agreementsSource, 'agreementsTo', agreementsDestination);
 
 		dispatch(getDocuments(responseArray));
 	} catch (err) {
@@ -517,6 +582,7 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 				const agreementTransaction = await methodFn.send({ from: address, gas:gas+5e4, gasPrice: 50e9 })
 				.on('receipt', async function (receipt: any) {
 					dispatch(getSelectedSignedDocument(document));
+					dispatch(openSuccessDialog('You have successfully sign the agreement'));
 				})
 				.on('error', function (error: any, receipt: any) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.		
 					alert('Transaction failed');

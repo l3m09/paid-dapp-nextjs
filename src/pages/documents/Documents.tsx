@@ -40,6 +40,7 @@ import DocumentsList from './DocumentsList';
 import { IonText } from '@ionic/react';
 import { BlockchainFactory } from './../../utils/blockchainFactory'
 import { KeyStorageModel } from 'paid-universal-wallet/dist/key-storage/KeyStorageModel';
+import SuccessDialog from '../../components/SuccessDialog';
 
 function SelectedDocument(payload: {
 	show: boolean;
@@ -215,6 +216,7 @@ const Documents: React.FC = () => {
 						</IonFabButton>
 					</IonFab>
 				</div>
+				<SuccessDialog />
 			</IonContent>
 		</IonPage>
 	);
