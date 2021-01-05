@@ -4,7 +4,7 @@ import { ethers } from 'ethers';
 import Web3 from 'web3';
 
 export class BlockchainFactory {
-	private static wssUrl = 'wss://kind-lalande:arrest-cursor-slogan-prism-carbon-neon@ws-nd-233-385-399.p2pify.com';
+	private static wssUrl = `${process.env.REACT_APP_WEB3_WSS}`;
 	private static _web3: Web3 | null = null;
 	private static _walletManager: WalletManager | null = null;
 	private static _keystore: KeyStorageModel;
