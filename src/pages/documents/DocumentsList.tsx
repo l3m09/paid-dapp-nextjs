@@ -29,6 +29,7 @@ import {
 import { IonBadge } from '@ionic/react';
 import { Plugins } from '@capacitor/core';
 import { eddsa } from "elliptic";
+import { format } from 'date-fns';
 import { link } from 'fs';
 import { BlockchainFactory } from '../../utils/blockchainFactory';
 import { KeyStorageModel } from 'paid-universal-wallet/dist/key-storage/KeyStorageModel';
@@ -465,27 +466,9 @@ const DocumentsList: React.FC<Props> = ({
 						{
 							documentsFrom.map((document: any, index: number) => {
 								const {data, meta, event} = document;
-								const date = new Date(event.created_at * 1000);
-								const update = new Date(event.updated_at * 1000);
-								const date_values = [
-									date.getUTCFullYear(),
-									date.getUTCMonth()+1,
-									date.getUTCDate(),
-									date.getUTCHours(),
-									date.getUTCMinutes(),
-									date.getUTCSeconds()];
-								const update_values = [
-										update.getUTCFullYear(),
-										update.getUTCMonth()+1,
-										update.getUTCDate(),
-										update.getUTCHours(),
-										update.getUTCMinutes(),
-										update.getUTCSeconds()];
-								const created_date = `${date_values[1]}/${date_values[2]}/${date_values[0]} ${date_values[3]}:${date_values[4]}:${date_values[5]}`;
-								const updated_date = `${update_values[1]}/${update_values[2]}/${update_values[0]} ${update_values[3]}:${update_values[4]}:${update_values[5]}`;
-								const statusClass = event.status == 0 ? (currentWallet?.address == event.from ? 'PENDING' :
-								'SIGN...') : (currentWallet?.address == event.from ? 'OUT' :
-								'IN');
+								const createdAt = format(new Date(event.created_at * 1000), 'MM/dd/yyyy kk:mm:ss');
+								const updatedAt = format(new Date(event.updated_at * 1000), 'MM/dd/yyyy kk:mm:ss');
+
 								return (
 									<div key={index} className="table-body" onClick={async () => {showDocument({data, meta, event})}}>
 										<div className="col">{(data.documentName?.length > 12) ? `${data.documentName.slice(0, 12)}...` : data.documentName}</div>
@@ -495,8 +478,8 @@ const DocumentsList: React.FC<Props> = ({
 										<div className="col">{data.validUntil}</div>
 										<div className="col">{event.from.slice(0,15)}...</div>
 										<div className="col">{event.to.slice(0,15)}...</div>
-										<div className="col">{created_date}</div>
-										<div className="col">{updated_date}</div>
+										<div className="col">{createdAt}</div>
+										<div className="col">{updatedAt}</div>
 										<div className="col">
 											{event.status == 0 && currentWallet?.address == event.from ? <IonBadge color="success">PENDING</IonBadge> :
 											(event.status == 0 && currentWallet?.address == event.to ? <IonBadge color="secondary">SIGN</IonBadge> : 
