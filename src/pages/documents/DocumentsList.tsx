@@ -161,38 +161,39 @@ function SelectedDocument(payload: {
 					<IonCardHeader>
 						<IonCardTitle className="document-title-modal">
 							<div>
-								Document Id: {selectedDocument.event.id}
+								{`${selectedDocument.data?.documentName} ( ${selectedDocument.data?.partyAName} - ${selectedDocument.data?.partyBName} )`}
 							</div>
-							<div>
-								<IonButton
-									className="small-button font-size-13"
-									color="primary"
-									onClick={async () => {
-										verifyDocument(selectedDocument);
-									}}
-									disabled={verifyButtonDisable}
-								>
-									{showVerifyDocumentButton ? <span>Verify document</span> : null }
-									{!showVerifyDocumentButton ? <span>Sign document</span> : null}
-									{showSignedText ? <span>Signature succesfully created</span> : null }
-								</IonButton>
-								{ showVerified ? <span className="icon-wrapper">
-									<IonIcon
-										ios={checkmarkCircle}
-										md={checkmarkCircle}
+							{
+								showVerifyDocumentButton &&
+								<div>
+									<IonButton
+										className="small-button font-size-13"
 										color="primary"
-										className="font-size-20"
-									/>
-								</span> : null }
-								{ showNotVerified ? <span className="icon-wrapper">
-									<IonIcon
-										ios={closeCircle}
-										md={closeCircle}
-										color="secondary"
-										className="font-size-20"
-									/>
-								</span> : null }
-							</div>
+										onClick={async () => {
+											verifyDocument(selectedDocument);
+										}}
+										disabled={verifyButtonDisable}
+									>
+										<span>Verify document</span>
+									</IonButton>
+									{ showVerified ? <span className="icon-wrapper">
+										<IonIcon
+											ios={checkmarkCircle}
+											md={checkmarkCircle}
+											color="primary"
+											className="font-size-20"
+										/>
+									</span> : null }
+									{ showNotVerified ? <span className="icon-wrapper">
+										<IonIcon
+											ios={closeCircle}
+											md={closeCircle}
+											color="secondary"
+											className="font-size-20"
+										/>
+									</span> : null }
+								</div>
+							}
 						</IonCardTitle>
 						<IonCardSubtitle>
 						</IonCardSubtitle>
@@ -247,6 +248,20 @@ function SelectedDocument(payload: {
 					>
 						<span>Open Pdf</span>
 					</IonButton>
+					{
+						(!showVerifyDocumentButton || showSignedText) &&
+						<IonButton
+							color="gradient"
+							shape="round"
+							onClick={async () => {
+								verifyDocument(selectedDocument);
+							}}
+							disabled={verifyButtonDisable || showSignedText}
+						>
+							{!showVerifyDocumentButton ? <span>Sign document</span> : null}
+							{showSignedText ? <span>Signature succesfully created</span> : null }
+						</IonButton>
+					}
 					<IonButton
 						color="secondary"
 						shape="round"
@@ -400,6 +415,9 @@ const DocumentsList: React.FC<Props> = ({documentsTo, documentsFrom, type, count
 				/>
 			<div className="documents-container">
 				<div className="table-header">
+					<div className="col">Document</div>
+					<div className="col">Company</div>
+					<div className="col">Counterparty</div>
 					<div className="col">Transaction Hash</div>
 					<div className="col">Valid</div>
 					<div className="col">Wallet From</div>
@@ -433,7 +451,10 @@ const DocumentsList: React.FC<Props> = ({documentsTo, documentsFrom, type, count
 						'SIGN...') : (currentWallet?.address == event.from ? 'OUT' :
 						'IN');
 						return (
-							<div className="table-body" onClick={async () => {showDocument({data, meta, event})}}>
+							<div key={index} className="table-body" onClick={async () => {showDocument({data, meta, event})}}>
+								<div className="col">{(data.documentName?.length > 12) ? `${data.documentName.slice(0, 12)}...` : data.documentName}</div>
+								<div className="col">{data.partyAName}</div>
+								<div className="col">{data.partyBName}</div>
 								<div className="col">{meta.transactionHash.slice(0,15)}...</div>
 								<div className="col">{data.validUntil}</div>
 								<div className="col">{event.from.slice(0,15)}...</div>
@@ -442,9 +463,9 @@ const DocumentsList: React.FC<Props> = ({documentsTo, documentsFrom, type, count
 								<div className="col">{updated_date}</div>
 								<div className="col">
 									{event.status == 0 && currentWallet?.address == event.from ? <IonBadge color="success">PENDING</IonBadge> :
-									(event.status == 0 && currentWallet?.address == event.to ? <IonBadge color="secondary">SIGN...</IonBadge> : 
-									(event.status == 1 && currentWallet?.address == event.from ? <IonBadge color="warning">OUT</IonBadge> : 
-									event.status == 1 && currentWallet?.address == event.to ? <IonBadge color="primary">IN</IonBadge> : null))}
+									(event.status == 0 && currentWallet?.address == event.to ? <IonBadge color="secondary">SIGN</IonBadge> : 
+									(event.status == 1 && currentWallet?.address == event.from ? <IonBadge color="warning">SIGNED</IonBadge> : 
+									event.status == 1 && currentWallet?.address == event.to ? <IonBadge color="primary">SIGNED</IonBadge> : null))}
 								</div>
 							</div>
 						);

@@ -41,6 +41,7 @@ import { IonText } from '@ionic/react';
 import { Plugins } from '@capacitor/core';
 import { BlockchainFactory } from './../../utils/blockchainFactory'
 import { KeyStorageModel } from 'paid-universal-wallet/dist/key-storage/KeyStorageModel';
+import SuccessDialog from '../../components/SuccessDialog';
 
 const { Storage } = Plugins;
 
@@ -240,6 +241,7 @@ const Documents: React.FC = () => {
 						</IonFabButton>
 					</IonFab>
 				</div>
+				<SuccessDialog />
 			</IonContent>
 		</IonPage>
 	);

@@ -3,7 +3,7 @@ import {
 	IonItem,
 	IonInput,
 	IonButton,
-	IonContent
+	IonNote
 } from '@ionic/react';
 import React, { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -16,6 +16,10 @@ interface AgreementFormProps {
 
 const FormClient: React.FC<AgreementFormProps> = ({ current }) => {
 	const [filled, setFilled] = useState(false);
+	const [validName, setValidName] = useState(true);
+	const [validAddress, setValidAddress] = useState(true);
+	const [validPhone, setValidPhone] = useState(true);
+	const [startValidation, setStartValidation] = useState(false);
 	const documentsState = useSelector((state: any) => state.documents);
 	const dispatch = useDispatch();
 
@@ -23,7 +27,6 @@ const FormClient: React.FC<AgreementFormProps> = ({ current }) => {
 
 	useEffect(() => {
 		verifyInfo();
-		window.scrollTo({ top: 0, behavior: 'smooth' });
 	}, [agreementFormInfo]);
 
 	function nameChanged(e: any) {
@@ -37,17 +40,14 @@ const FormClient: React.FC<AgreementFormProps> = ({ current }) => {
 	}
 
 	function verifyInfo() {
-		if (
-			agreementFormInfo.name.length > 3 &&
-			agreementFormInfo.address.length > 3 &&
-			agreementFormInfo.phone.length > 3
-		) {
-			setFilled(true)
-			window.scrollTo({ top: 0, behavior: 'smooth' });
-		} else {
-			setFilled(false)
-			window.scrollTo({ top: 0, behavior: 'smooth' });
+		const { name, address, phone } = agreementFormInfo;
+		setFilled(name.length > 3 && address.length > 3 && phone.length > 3);
+		if (startValidation) {
+			setValidName(name.length > 3);
+			setValidAddress(address.length > 3);
+			setValidPhone(phone.length > 3);
 		}
+		setStartValidation(true);
 	}
 
 	async function slideNext() {
@@ -77,7 +77,16 @@ const FormClient: React.FC<AgreementFormProps> = ({ current }) => {
 						onInput={(e) => {
 							nameChanged(e);
 						}}
+						onIonBlur={(e) => {
+							nameChanged(e);
+						}}
 					/>
+					{
+						!validName &&
+						<IonNote color="danger" className="ion-margin-top">
+							Full name must be at least 3 characters.
+						</IonNote>
+					}
 				</IonItem>
 				<IonItem>
 					<IonLabel position="stacked">Address</IonLabel>
@@ -88,7 +97,16 @@ const FormClient: React.FC<AgreementFormProps> = ({ current }) => {
 						onInput={(e) => {
 							addressChanged(e);
 						}}
+						onIonBlur={(e) => {
+							addressChanged(e);
+						}}
 					/>
+					{
+						!validAddress &&
+						<IonNote color="danger" className="ion-margin-top">
+							Address must be at least 3 characters.
+						</IonNote>
+					}
 				</IonItem>
 				<IonItem>
 					<IonLabel position="stacked">Phone</IonLabel>
@@ -99,7 +117,16 @@ const FormClient: React.FC<AgreementFormProps> = ({ current }) => {
 						onInput={(e) => {
 							phoneChanged(e);
 						}}
+						onIonBlur={(e) => {
+							phoneChanged(e);
+						}}
 					/>
+					{
+						!validPhone &&
+						<IonNote color="danger" className="ion-margin-top">
+							Phone must be at least 3 numbers.
+						</IonNote>
+					}
 				</IonItem>
 				<IonItem class="form-options">
 					<IonButton

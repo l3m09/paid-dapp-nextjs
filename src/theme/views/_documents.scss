@@ -48,12 +48,18 @@
             width: 100%;
             min-width: 650px;
             .col {
-                width: calc(20% - 5px);
+                width: calc(12% - 5px);
                 padding: 0 2.5px;
                 font-size: 0.9em;
                 text-align: center;
-                &:nth-child(2) {
-                    width: calc(16% - 5px);
+                &:first-child {
+                    width: calc(9% - 5px);
+                }
+                &:nth-child(5) {
+                    width: calc(5% - 5px);
+                }
+                &:nth-child(8) {
+                    width: calc(10% - 5px);
                 }
                 &:last-child {
                     text-align: center;
@@ -178,6 +184,7 @@
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
+                font-size: 18px;
             }
             .circle-container{
                 border-radius: 50%;

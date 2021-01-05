@@ -4,11 +4,13 @@ import {
 	IonInput,
 	IonButton,
 	IonTitle,
-	IonModal, IonToolbar, IonButtons, IonHeader, IonContent, IonIcon
+	IonModal, IonToolbar, IonButtons, IonHeader, IonContent, IonIcon, IonNote, IonToast
 } from '@ionic/react';
+import { stat } from 'fs';
 import { copy } from 'ionicons/icons';
-import React, { useEffect, useRef } from 'react';
+import React, { Reducer, useEffect, useReducer, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import ActionModel from '../models/ActionModel';
 import { doUnlockWallet } from '../redux/actions/wallet';
 
 interface Props {
@@ -20,6 +22,25 @@ interface Props {
 interface UnlockForm {
 	password: string;
 	filled: boolean;
+	validPassphrase: boolean;
+}
+
+const CHANGE_PASSPHRASE = 'CHANGE_PASSPHRASE';
+
+const unlockWalletReducer: Reducer<UnlockForm, ActionModel> = (state: UnlockForm, action: ActionModel) => {
+	const { type, payload } = action;
+
+	switch(type) {
+		case CHANGE_PASSPHRASE:
+			return {
+				...state,
+				password: payload,
+				filled: payload.length > 0,
+				validPassphrase: payload.length > 0,
+			}
+		default:
+			return { ...state };
+	}
 }
 
 const UnlockWallet: React.FC<Props> = ({
@@ -30,6 +51,7 @@ const UnlockWallet: React.FC<Props> = ({
 }) => {
 	const spanRef = useRef<HTMLSpanElement | null>(null);
 	const dispatch = useDispatch();
+	const [showToastCopy, setShowToastCopy] = useState(false);
 
 	useEffect(() => {
 		console.log('dismissible', dismissible);
@@ -46,28 +68,30 @@ const UnlockWallet: React.FC<Props> = ({
 			};
 		}) => state.wallet
 	);
+
+	const unlockForm: UnlockForm = {
+		filled: false,
+		password: '',
+		validPassphrase: true
+	};
+
+	const [state, commit] = useReducer(unlockWalletReducer, unlockForm);
+
 	const { unlockingWallet, error } = wallet;
 
-	let unlockForm: UnlockForm = {
-		filled: false,
-		password: ''
+	const setter = (type: string) => (e: any) => {
+		const { target } = e;
+		const { value } = target;
+
+		commit({ type, payload: value });
 	};
-	function passwordChanged(e: any) {
-		unlockForm.password = e.target.value;
-		verifyInfo();
-	}
-	function verifyInfo() {
-		if (unlockForm.password.length > 0) {
-			unlockForm.filled = true;
-		}
-	}
 
 	const onSubmit = (e: any) => {
 		e.preventDefault();
 		dispatch(
 			doUnlockWallet({
 				wallet: selectedWallet,
-				password: unlockForm.password
+				password: state.password
 			})
 		);
 	};
@@ -78,7 +102,8 @@ const UnlockWallet: React.FC<Props> = ({
 		document.body.appendChild(textArea);
 		textArea.select();
 		document.execCommand("Copy");
-    	textArea.remove();
+		textArea.remove();
+		setShowToastCopy(true);
 	};
 
 	return (
@@ -119,11 +144,16 @@ const UnlockWallet: React.FC<Props> = ({
 							title="Label"
 							type="password"
 							placeholder="Enter your passphrase"
-							value={unlockForm.password}
-							onInput={(e) => {
-								passwordChanged(e);
-							}}
+							value={state.password}
+							onInput={setter(CHANGE_PASSPHRASE)}
+							onIonBlur={setter(CHANGE_PASSPHRASE)}
 						/>
+						{
+							!state.validPassphrase &&
+							<IonNote color="danger" className="ion-margin-top">
+								You must enter a Passphrase.
+							</IonNote>
+						}
 					</IonItem>
 					<IonItem>
 						<IonLabel position="stacked" className="text-error">
@@ -136,24 +166,19 @@ const UnlockWallet: React.FC<Props> = ({
 							type="submit"
 							color="gradient"
 							shape="round"
-							disabled={unlockingWallet}
+							disabled={unlockingWallet || !state.filled}
 						>
 							{unlockingWallet ? 'Loading..' : 'Unlock'}
 						</IonButton>
-						{/*{unlockedWallet ? (*/}
-						{/*	<IonButton*/}
-						{/*		color="secondary"*/}
-						{/*		shape="round"*/}
-						{/*		// routerLink="/phrase/instructions"*/}
-						{/*		onClick={() => {*/}
-						{/*			dismiss();*/}
-						{/*		}}*/}
-						{/*	>*/}
-						{/*		Cancel*/}
-						{/*	</IonButton>*/}
-						{/*) : null}*/}
 					</IonItem>
 				</form>
+				<IonToast
+					isOpen={showToastCopy}
+					color="primary"
+					onDidDismiss={() => setShowToastCopy(false)}
+					message="Wallet address has been copied to clipboard"
+					duration={300}
+				/>
 			</IonContent>
 		</IonModal>
 	);
