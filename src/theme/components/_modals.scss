@@ -97,8 +97,11 @@
   .modal-wrapper {
     min-height: 90vh !important;
     min-width: 95% !important;
-
-
+    ion-content {
+      .scroll-y {
+        overflow-y: hidden !important;
+      }
+    }
   }
 
 }

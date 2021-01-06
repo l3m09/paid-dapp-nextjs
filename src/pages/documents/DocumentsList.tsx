@@ -8,15 +8,10 @@ import {
 	IonCardTitle,
 	IonCardSubtitle,
 	IonCardHeader,
-	IonCard, IonTitle, IonHeader, IonToolbar, IonButtons, IonContent, IonLoading, IonList, IonItemDivider,
+	IonCard, IonTitle, IonHeader, IonToolbar, IonButtons, IonContent, IonLoading, IonList,
 } from '@ionic/react';
 
-import {
-	documentsOutline as documentsIcon
-} from 'ionicons/icons';
-
-import React, { Fragment, useEffect, useState } from 'react';
-import { useHistory } from 'react-router';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { closeCircle, checkmarkCircle } from 'ionicons/icons';
 import {
@@ -29,7 +24,6 @@ import { IonBadge } from '@ionic/react';
 import { Plugins } from '@capacitor/core';
 import { eddsa } from "elliptic";
 import { format } from 'date-fns';
-import { link } from 'fs';
 import { BlockchainFactory } from '../../utils/blockchainFactory';
 import { KeyStorageModel } from 'paid-universal-wallet/dist/key-storage/KeyStorageModel';
 
@@ -45,7 +39,8 @@ function PdfViewerModal(payload: {
 	url: string,
 	pdfContent: string
 }) {
-	const { show, closePdfViewer, url, pdfContent } = payload;
+	const { show, closePdfViewer, url } = payload;
+	
 	return (
 		<div id="modal-container">
 			<IonModal isOpen={show} cssClass="pdf-viewer-modal" onDidDismiss={() => {closePdfViewer()}}>
@@ -59,7 +54,7 @@ function PdfViewerModal(payload: {
 						</IonButtons>
 					</IonToolbar>
 				</IonHeader>
-				<IonContent color="primary">
+				<IonContent color="primary" scrollY={false}>
 					<iframe src={url} width="100%" height="100%" frameBorder="0"></iframe>
 				</IonContent>
 			</IonModal>
@@ -132,24 +127,9 @@ function SelectedDocument(payload: {
 	}
 
 	const { event } = selectedDocument;
-	const date = new Date(event.created_at * 1000);
-	const update = new Date(event.updated_at * 1000);
-	const date_values = [
-		date.getUTCFullYear(),
-		date.getUTCMonth()+1,
-		date.getUTCDate(),
-		date.getUTCHours(),
-		date.getUTCMinutes(),
-		date.getUTCSeconds()];
-	const update_values = [
-			update.getUTCFullYear(),
-			update.getUTCMonth()+1,
-			update.getUTCDate(),
-			update.getUTCHours(),
-			update.getUTCMinutes(),
-			update.getUTCSeconds()];
-	const created_date = `${date_values[1]}/${date_values[2]}/${date_values[0]} ${date_values[3]}:${date_values[4]}:${date_values[5]}`;
-	const updated_date = `${update_values[1]}/${update_values[2]}/${update_values[0]} ${update_values[3]}:${update_values[4]}:${update_values[5]}`;
+
+	const createdAt = format(new Date(event.created_at * 1000), 'MM/dd/yyyy kk:mm:ss');
+	const updatedAt = format(new Date(event.updated_at * 1000), 'MM/dd/yyyy kk:mm:ss');
 
 	return (
 		<div id="modal-container">
@@ -205,17 +185,11 @@ function SelectedDocument(payload: {
 						<div className="details-wrapper">
 							<IonItem>
 								<IonLabel position="stacked">Signed By</IonLabel>
-								<a href={`https://${networkText}.etherscan.io/address/${selectedDocument.event.from}`} target="_blank" rel="noopener noreferrer" >{selectedDocument.event.from}</a>
+								<a href={`https://${networkText}.etherscan.io/address/${selectedDocument.event.from}`} target="_blank">{selectedDocument.event.from}</a>
 							</IonItem>
-							{/*
-								<IonItem>
-									<IonLabel position="stacked">Signatory B</IonLabel>
-									<a href={`https://rinkeby.etherscan.io/address/${selectedDocument.event.to`}target="_blank">{selectedDocument.event.to}</a>
-								</IonItem>
-							*/}
 							<IonItem>
 								<IonLabel position="stacked">Transaction Hash</IonLabel>
-								<a href={`https://${networkText}.etherscan.io/tx/${selectedDocument.meta.transactionHash}`} target="_blank" rel="noopener noreferrer" >{selectedDocument.meta.transactionHash}</a>
+								<a href={`https://${networkText}.etherscan.io/tx/${selectedDocument.meta.transactionHash}`} target="_blank">{selectedDocument.meta.transactionHash}</a>
 							</IonItem>
 							<IonItem>
 								<IonLabel position="stacked">Document Signature</IonLabel>
@@ -223,11 +197,11 @@ function SelectedDocument(payload: {
 							</IonItem>
 							<IonItem>
 								<IonLabel position="stacked">Created on</IonLabel>
-								<span>{created_date}</span>
+								<span>{createdAt}</span>
 							</IonItem>
 							<IonItem>
 								<IonLabel position="stacked">Updated</IonLabel>
-								<span>{updated_date}</span>
+								<span>{updatedAt}</span>
 							</IonItem>
 						</div>
 					</IonCardContent>
@@ -253,8 +227,8 @@ function SelectedDocument(payload: {
 							}}
 							disabled={verifyButtonDisable || showSignedText}
 						>
-							{!showVerifyDocumentButton ? <span>Sign document</span> : null}
-							{showSignedText ? <span>Signature succesfully created</span> : null }
+							{ (!showVerifyDocumentButton) && <span>Sign document</span> }
+							{ showSignedText && <span>Signature succesfully created</span> }
 						</IonButton>
 					}
 					<IonButton
@@ -296,7 +270,6 @@ const DocumentsList: React.FC<Props> = ({
 	agreementTypes,
 	onClickAgreementType
 }) => {
-	const history = useHistory();
 	const dispatch = useDispatch();
 	const documentsState = useSelector((state: any) => state.documents);
 	const {
@@ -304,7 +277,6 @@ const DocumentsList: React.FC<Props> = ({
 		loading,
 	} = documentsState;
 	const [showModal, setShowModal] = useState(false);
-	const [showPopOver, setShowPopover] = useState(false);
 	const [showVerified, setShowVerified] = useState(false);
 	const [showNotVerified, setShowNotVerified] = useState(false);
 	const [verifyButtonDisable, setVerifyButtonDisable] = useState(false);
@@ -319,6 +291,7 @@ const DocumentsList: React.FC<Props> = ({
 		(state: { wallet: { currentWallet: any } }) => state.wallet
 	);
 	const { currentWallet } = wallet;
+
 	function showDocument(item: any) {
 		dispatch(doGetSelectedDocument(item));
 		setShowVerifyDocumentButton(!(item.event.to === currentWallet?.address && item.event.status === 0));
@@ -367,22 +340,6 @@ const DocumentsList: React.FC<Props> = ({
 		}
 	}
 
-	function trigger(id: string, name: string, status: string) {
-		return (
-			<button className="document-trigger">
-				<IonIcon icon={documentsIcon} />
-				<span className="document-id">{id}</span>
-				<span>{name}</span>
-				<span>{status === 'PARTY_INIT' ? 'Not signed' : 'Signed'}</span>
-			</button>
-		);
-	}
-
-	function chooseOption(type: string) {
-		setShowPopover(false);
-		history.push('/agreements/' + type.toLowerCase());
-	}
-
 	function closePdfViewer() {
 		setPdfViewerModal(false)
 	}
@@ -393,19 +350,20 @@ const DocumentsList: React.FC<Props> = ({
 		for await (const chunk of ipfs.cat(cid.toString())) {
 			fetchedContent = uint8ArrayToString(chunk);
 		}
+
 		const jsonContent = JSON.parse(fetchedContent);
 		const contentRef = jsonContent.contentRef;
+
 		setAgreementUrl(contentRef.cid);
-		console.log(contentRef.cid)
 		setPdfViewerModal(true);
+
 		let pdfContent = '';
+
 		for await (const chunk of ipfs.cat(contentRef.cid)) {
 			pdfContent = uint8ArrayToString(chunk);
 		}
-		setAgreementContent(pdfContent);
 
-		console.log(pdfContent);
-		console.log('showPdfViewerModal', showPdfViewerModal);
+		setAgreementContent(pdfContent);
 	}
 
 	const agreementTypesList = () => {
