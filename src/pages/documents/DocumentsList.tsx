@@ -8,16 +8,10 @@ import {
 	IonCardTitle,
 	IonCardSubtitle,
 	IonCardHeader,
-	IonCard, IonTitle, IonHeader, IonToolbar, IonButtons, IonContent, IonLoading,
+	IonCard, IonTitle, IonHeader, IonToolbar, IonButtons, IonContent, IonLoading, IonList,
 } from '@ionic/react';
 
-import {
-	documentsOutline as documentsIcon,
-	documentOutline as documentIcon,
-} from 'ionicons/icons';
-
 import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { closeCircle, checkmarkCircle } from 'ionicons/icons';
 import {
@@ -29,7 +23,7 @@ import {
 import { IonBadge } from '@ionic/react';
 import { Plugins } from '@capacitor/core';
 import { eddsa } from "elliptic";
-import { link } from 'fs';
+import { format } from 'date-fns';
 import { BlockchainFactory } from '../../utils/blockchainFactory';
 import { KeyStorageModel } from 'paid-universal-wallet/dist/key-storage/KeyStorageModel';
 
@@ -45,10 +39,8 @@ function PdfViewerModal(payload: {
 	url: string,
 	pdfContent: string
 }) {
-	const { show, closePdfViewer, url, pdfContent } = payload;
-	// if (!url) {
-	// 	return null;
-	// }
+	const { show, closePdfViewer, url } = payload;
+	
 	return (
 		<div id="modal-container">
 			<IonModal isOpen={show} cssClass="pdf-viewer-modal" onDidDismiss={() => {closePdfViewer()}}>
@@ -62,7 +54,7 @@ function PdfViewerModal(payload: {
 						</IonButtons>
 					</IonToolbar>
 				</IonHeader>
-				<IonContent color="primary">
+				<IonContent color="primary" scrollY={false}>
 					<iframe src={url} width="100%" height="100%" frameBorder="0"></iframe>
 				</IonContent>
 			</IonModal>
@@ -135,24 +127,9 @@ function SelectedDocument(payload: {
 	}
 
 	const { event } = selectedDocument;
-	const date = new Date(event.created_at * 1000);
-	const update = new Date(event.updated_at * 1000);
-	const date_values = [
-		date.getUTCFullYear(),
-		date.getUTCMonth()+1,
-		date.getUTCDate(),
-		date.getUTCHours(),
-		date.getUTCMinutes(),
-		date.getUTCSeconds()];
-	const update_values = [
-			update.getUTCFullYear(),
-			update.getUTCMonth()+1,
-			update.getUTCDate(),
-			update.getUTCHours(),
-			update.getUTCMinutes(),
-			update.getUTCSeconds()];
-	const created_date = `${date_values[1]}/${date_values[2]}/${date_values[0]} ${date_values[3]}:${date_values[4]}:${date_values[5]}`;
-	const updated_date = `${update_values[1]}/${update_values[2]}/${update_values[0]} ${update_values[3]}:${update_values[4]}:${update_values[5]}`;
+
+	const createdAt = format(new Date(event.created_at * 1000), 'MM/dd/yyyy kk:mm:ss');
+	const updatedAt = format(new Date(event.updated_at * 1000), 'MM/dd/yyyy kk:mm:ss');
 
 	return (
 		<div id="modal-container">
@@ -208,18 +185,10 @@ function SelectedDocument(payload: {
 						<div className="details-wrapper">
 							<IonItem>
 								<IonLabel position="stacked">Signed By</IonLabel>
-								{/* <span>{selectedDocument.event.from}</span> */}
 								<a href={`https://${networkText}.etherscan.io/address/${selectedDocument.event.from}`} target="_blank">{selectedDocument.event.from}</a>
 							</IonItem>
-							{/*
-								<IonItem>
-									<IonLabel position="stacked">Signatory B</IonLabel>
-									<a href={`https://rinkeby.etherscan.io/address/${selectedDocument.event.to`}target="_blank">{selectedDocument.event.to}</a>
-								</IonItem>
-							*/}
 							<IonItem>
 								<IonLabel position="stacked">Transaction Hash</IonLabel>
-								{/* <span>{selectedDocument.meta.transactionHash}</span> */}
 								<a href={`https://${networkText}.etherscan.io/tx/${selectedDocument.meta.transactionHash}`} target="_blank">{selectedDocument.meta.transactionHash}</a>
 							</IonItem>
 							<IonItem>
@@ -228,11 +197,11 @@ function SelectedDocument(payload: {
 							</IonItem>
 							<IonItem>
 								<IonLabel position="stacked">Created on</IonLabel>
-								<span>{created_date}</span>
+								<span>{createdAt}</span>
 							</IonItem>
 							<IonItem>
 								<IonLabel position="stacked">Updated</IonLabel>
-								<span>{updated_date}</span>
+								<span>{updatedAt}</span>
 							</IonItem>
 						</div>
 					</IonCardContent>
@@ -258,8 +227,8 @@ function SelectedDocument(payload: {
 							}}
 							disabled={verifyButtonDisable || showSignedText}
 						>
-							{!showVerifyDocumentButton ? <span>Sign document</span> : null}
-							{showSignedText ? <span>Signature succesfully created</span> : null }
+							{ (!showVerifyDocumentButton) && <span>Sign document</span> }
+							{ showSignedText && <span>Signature succesfully created</span> }
 						</IonButton>
 					}
 					<IonButton
@@ -288,11 +257,19 @@ interface Props {
 	documentsTo: [];
 	documentsFrom: [];
 	type: string;
-	counterType: string
+	counterType: string,
+	agreementTypes: [];
+	onClickAgreementType: any;
 }
 
-const DocumentsList: React.FC<Props> = ({documentsTo, documentsFrom, type, counterType}) => {
-	const history = useHistory();
+const DocumentsList: React.FC<Props> = ({
+	documentsTo, 
+	documentsFrom, 
+	type, 
+	counterType,
+	agreementTypes,
+	onClickAgreementType
+}) => {
 	const dispatch = useDispatch();
 	const documentsState = useSelector((state: any) => state.documents);
 	const {
@@ -300,7 +277,6 @@ const DocumentsList: React.FC<Props> = ({documentsTo, documentsFrom, type, count
 		loading,
 	} = documentsState;
 	const [showModal, setShowModal] = useState(false);
-	const [showPopOver, setShowPopover] = useState(false);
 	const [showVerified, setShowVerified] = useState(false);
 	const [showNotVerified, setShowNotVerified] = useState(false);
 	const [verifyButtonDisable, setVerifyButtonDisable] = useState(false);
@@ -315,6 +291,7 @@ const DocumentsList: React.FC<Props> = ({documentsTo, documentsFrom, type, count
 		(state: { wallet: { currentWallet: any } }) => state.wallet
 	);
 	const { currentWallet } = wallet;
+
 	function showDocument(item: any) {
 		dispatch(doGetSelectedDocument(item));
 		setShowVerifyDocumentButton(!(item.event.to == currentWallet?.address && item.event.status == 0));
@@ -363,46 +340,52 @@ const DocumentsList: React.FC<Props> = ({documentsTo, documentsFrom, type, count
 		}
 	}
 
-	function trigger(id: string, name: string, status: string) {
-		return (
-			<button className="document-trigger">
-				<IonIcon icon={documentsIcon} />
-				<span className="document-id">{id}</span>
-				<span>{name}</span>
-				<span>{status == 'PARTY_INIT' ? 'Not signed' : 'Signed'}</span>
-			</button>
-		);
-	}
-
-	function chooseOption(type: string) {
-		setShowPopover(false);
-		history.push('/agreements/' + type.toLowerCase());
-	}
-
 	function closePdfViewer() {
 		setPdfViewerModal(false)
 	}
+
 	async function openPdfViewer(cid:string, transactionHash: string) {
 		let fetchedContent = '';
 
 		for await (const chunk of ipfs.cat(cid.toString())) {
 			fetchedContent = uint8ArrayToString(chunk);
 		}
+
 		const jsonContent = JSON.parse(fetchedContent);
 		const contentRef = jsonContent.contentRef;
+
 		setAgreementUrl(contentRef.cid);
-		console.log(contentRef.cid)
 		setPdfViewerModal(true);
-		// let pdfContentHTML:HTMLElement = document.createElement('DIV');
+		
 		let pdfContent = '';
+
 		for await (const chunk of ipfs.cat(contentRef.cid)) {
 			pdfContent = uint8ArrayToString(chunk);
 		}
+
 		setAgreementContent(pdfContent);
-		// pdfContentHTML.innerHTML = pdfContent;
-		// window.open(pdfContentHTML);
-		console.log(pdfContent);
-		console.log('showPdfViewerModal', showPdfViewerModal);
+	}
+
+	const agreementTypesList = () => {
+		return <IonList>
+			{
+				agreementTypes.map((type: string, index: number) => {
+					return (
+						<IonItem
+							className="ion-text-center"
+							onClick={() => {
+								onClickAgreementType(type);
+							}}
+							key={index}
+						>
+							<IonLabel>
+								{type}
+							</IonLabel>
+						</IonItem>
+					);
+				})
+			}
+		</IonList>
 	}
 
 	return (
@@ -413,66 +396,61 @@ const DocumentsList: React.FC<Props> = ({documentsTo, documentsFrom, type, count
 					isOpen={loading}
 
 				/>
+				
 			<div className="documents-container">
-				<div className="table-header">
-					<div className="col">Document</div>
-					<div className="col">Company</div>
-					<div className="col">Counterparty</div>
-					<div className="col">Transaction Hash</div>
-					<div className="col">Valid</div>
-					<div className="col">Wallet From</div>
-					<div className="col">Wallet To</div>
-					<div className="col">Created</div>
-					<div className="col">Updated</div>
-					<div className="col">  State</div>
-				</div>
-				{documentsFrom.length
-					? documentsFrom.map((document: any, index: number) => {
-						const {data, meta, event} = document;
-						const date = new Date(event.created_at * 1000);
-						const update = new Date(event.updated_at * 1000);
-						const date_values = [
-							date.getUTCFullYear(),
-							date.getUTCMonth()+1,
-							date.getUTCDate(),
-							date.getUTCHours(),
-							date.getUTCMinutes(),
-							date.getUTCSeconds()];
-						const update_values = [
-								update.getUTCFullYear(),
-								update.getUTCMonth()+1,
-								update.getUTCDate(),
-								update.getUTCHours(),
-								update.getUTCMinutes(),
-								update.getUTCSeconds()];
-						const created_date = `${date_values[1]}/${date_values[2]}/${date_values[0]} ${date_values[3]}:${date_values[4]}:${date_values[5]}`;
-						const updated_date = `${update_values[1]}/${update_values[2]}/${update_values[0]} ${update_values[3]}:${update_values[4]}:${update_values[5]}`;
-						const statusClass = event.status == 0 ? (currentWallet?.address == event.from ? 'PENDING' :
-						'SIGN...') : (currentWallet?.address == event.from ? 'OUT' :
-						'IN');
-						return (
-							<div key={index} className="table-body" onClick={async () => {showDocument({data, meta, event})}}>
-								<div className="col">{(data.documentName?.length > 12) ? `${data.documentName.slice(0, 12)}...` : data.documentName}</div>
-								<div className="col">{data.partyAName}</div>
-								<div className="col">{data.partyBName}</div>
-								<div className="col">{meta.transactionHash.slice(0,15)}...</div>
-								<div className="col">{data.validUntil}</div>
-								<div className="col">{event.from.slice(0,15)}...</div>
-								<div className="col">{event.to.slice(0,15)}...</div>
-								<div className="col">{created_date}</div>
-								<div className="col">{updated_date}</div>
-								<div className="col">
-									{event.status == 0 && currentWallet?.address == event.from ? <IonBadge color="success">PENDING</IonBadge> :
-									(event.status == 0 && currentWallet?.address == event.to ? <IonBadge color="secondary">SIGN</IonBadge> : 
-									(event.status == 1 && currentWallet?.address == event.from ? <IonBadge color="warning">SIGNED</IonBadge> : 
-									event.status == 1 && currentWallet?.address == event.to ? <IonBadge color="primary">SIGNED</IonBadge> : null))}
-								</div>
-							</div>
-						);
-					})
-					: null
+				{
+					(documentsFrom.length > 0) &&
+					<>
+						<div className="table-header">
+							<div className="col">Document</div>
+							<div className="col">Company</div>
+							<div className="col">Counterparty</div>
+							<div className="col">Transaction Hash</div>
+							<div className="col">Valid</div>
+							<div className="col">Wallet From</div>
+							<div className="col">Wallet To</div>
+							<div className="col">Created</div>
+							<div className="col">Updated</div>
+							<div className="col">  State</div>
+						</div>
+						{
+							documentsFrom.map((document: any, index: number) => {
+								const {data, meta, event} = document;
+								const createdAt = format(new Date(event.created_at * 1000), 'MM/dd/yyyy kk:mm:ss');
+								const updatedAt = format(new Date(event.updated_at * 1000), 'MM/dd/yyyy kk:mm:ss');
+
+								return (
+									<div key={index} className="table-body" onClick={async () => {showDocument({data, meta, event})}}>
+										<div className="col">{(data.documentName?.length > 12) ? `${data.documentName.slice(0, 12)}...` : data.documentName}</div>
+										<div className="col">{data.partyAName}</div>
+										<div className="col">{data.partyBName}</div>
+										<div className="col">{meta.transactionHash.slice(0,15)}...</div>
+										<div className="col">{data.validUntil}</div>
+										<div className="col">{event.from.slice(0,15)}...</div>
+										<div className="col">{event.to.slice(0,15)}...</div>
+										<div className="col">{createdAt}</div>
+										<div className="col">{updatedAt}</div>
+										<div className="col">
+											{event.status == 0 && currentWallet?.address == event.from ? <IonBadge color="success">PENDING</IonBadge> :
+											(event.status == 0 && currentWallet?.address == event.to ? <IonBadge color="secondary">SIGN</IonBadge> : 
+											(event.status == 1 && currentWallet?.address == event.from ? <IonBadge color="warning">SIGNED</IonBadge> : 
+											event.status == 1 && currentWallet?.address == event.to ? <IonBadge color="primary">SIGNED</IonBadge> : null))}
+										</div>
+									</div>
+								);
+							})
+						}
+					</>
 				}
-				{(!documentsFrom.length ? <IonTitle color="primary">No documents found</IonTitle> : null)}
+				{
+					(!documentsFrom.length) &&
+					<div className="empty-documents-container">
+						<IonTitle color="primary">You don't have any agreements yet. Select a template from the list below to create one.</IonTitle>
+						{
+							agreementTypesList()
+						}
+					</div>
+				}
 			</div>
 
 			<SelectedDocument
