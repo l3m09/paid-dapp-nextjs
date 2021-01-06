@@ -106,6 +106,9 @@ const Wallets: React.FC = () => {
 													<div className="balanceContainer">
 														<span className="labelCoin">ETH</span>
 														<span className="amountCoin">{item.balance?.match(/^-?\d+(?:\.\d{0,4})?/)[0]}</span>
+														<br/>
+														<span className="labelCoin">PAID</span>
+														<span className="amountCoin">{0}</span>
 													</div>
 												}
 											</div>
@@ -126,6 +129,9 @@ const Wallets: React.FC = () => {
 													<div className="balanceContainer">
 														<span className="labelCoin">ETH</span>
 														<span className="amountCoin">{item.balance?.match(/^-?\d+(?:\.\d{0,4})?/)[0]}</span>
+														<br/>
+														<span className="labelCoin">PAID</span>
+														<span className="amountCoin">{0}</span>
 													</div>
 												}
 											</div>
