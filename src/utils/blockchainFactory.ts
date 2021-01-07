@@ -35,7 +35,6 @@ export class BlockchainFactory {
 		}
 
 		const mnemonicWallet = ethers.Wallet.fromMnemonic(mnemonic);
-		console.log(mnemonic);
 		const { privateKey } = mnemonicWallet;
 		//console.log(address,privateKey);
 		// if (keyService) {

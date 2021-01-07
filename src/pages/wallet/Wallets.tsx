@@ -15,7 +15,7 @@ import {
 } from '@ionic/react';
 import { checkmarkCircle, copy } from 'ionicons/icons';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { doSetSelectedWallet } from '../../redux/actions/wallet';
 import CreateWallet from './create-wallet/CreateWallet';
@@ -29,7 +29,7 @@ import { bold } from '../../redux/actions/template/agreement.html';
 import { promises } from 'fs';
 
 const metodofn = async (addrtoken:string, unlockedWallet:any) => {
-	const token = '0x312677f89B5301515CFcA95a3F8806797130720d'
+	const token = `${process.env.REACT_APP_ERC20_TOKEN}`;
 	const manager = BlockchainFactory.getWalletManager();
 	const storage = manager.getKeyStorage();
 	const rawWallet = await storage.find<KeyStorageModel>(unlockedWallet._id);
@@ -43,7 +43,6 @@ const metodofn = async (addrtoken:string, unlockedWallet:any) => {
 	const balanceverify = await methodFn.call({ from: address })
 	.then(async function (receipt: any) {
 		const resultado =  web3.utils.fromWei(receipt,'ether'); 
-		console.log('receipt', resultado );
 		return resultado;
 	});
 	return Promise.resolve(balanceverify).then((x:string) => {return x})
@@ -87,15 +86,16 @@ const Wallets: React.FC = () => {
 		setShowToastCopy(true);
 	};
 
-	const getBalance = async (addr, ulckwallet) => {
-		const resultado = await metodofn(addr, ulckwallet);
-		setBalance(resultado);
-	};
+	const getBalance = useCallback ( async (addr:string, ulckwallet:any) => {
+			const resultado =  await metodofn(addr, ulckwallet);
+			setBalance(resultado);
+	}, [unlockedWallet])
 
 	const showbalancetoken = (addrtoken:string) => {
 		if (unlockedWallet) {
 			getBalance(addrtoken, unlockedWallet)
-			console.log('showbalancetoken', balance);
+				.then( () => console.log('shwbalancetkn', balance))
+				.catch( (e) => console.log('shwbalanceerr', e.message))
 			return balance;
 		}
 		return '0';
@@ -132,8 +132,8 @@ const Wallets: React.FC = () => {
 								</IonTitle>
 								: ''
 							}
-							{wallets.map( (item: any, index: any) => {
-								let balancetoken:string;
+							{wallets.map( (item: any, index: any, flag:boolean) => {
+								let balancetoken:string = '';
 								if (unlockedWallet?.address === item.address) {
 									balancetoken = showbalancetoken(item.address);
 									return (
