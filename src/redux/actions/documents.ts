@@ -94,7 +94,7 @@ const getContractInfoByIpfs = async (agreementStoredReference: any) => {
 
 	const jsonContent = JSON.parse(await firstIpfsContent());
 	const { contentRef } = jsonContent;
-	
+
 	const urlIpfsContent = `https://ipfs.io/ipfs/${contentRef.cid}`;
 	const ipfsContent = async () => {
 		return await fetch(urlIpfsContent)

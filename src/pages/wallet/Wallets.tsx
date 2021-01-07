@@ -15,14 +15,39 @@ import {
 } from '@ionic/react';
 import { checkmarkCircle, copy } from 'ionicons/icons';
 
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { doSetSelectedWallet } from '../../redux/actions/wallet';
 import CreateWallet from './create-wallet/CreateWallet';
 import UnlockWallet from '../../components/UnlockWallet';
 import ImportWallet from './ImportWallet';
 import MenuAlternate from '../../components/MenuAlternate';
+import { BlockchainFactory } from '../../utils/blockchainFactory';
+import { ContractFactory } from '../../utils/contractFactory';
+import { KeyStorageModel } from 'paid-universal-wallet/dist/key-storage/KeyStorageModel';
 import { bold } from '../../redux/actions/template/agreement.html';
+import { promises } from 'fs';
+
+const metodofn = async (addrtoken:string, unlockedWallet:any) => {
+	const token = '0x312677f89B5301515CFcA95a3F8806797130720d'
+	const manager = BlockchainFactory.getWalletManager();
+	const storage = manager.getKeyStorage();
+	const rawWallet = await storage.find<KeyStorageModel>(unlockedWallet._id);
+
+	const address = manager.getWalletAddress(rawWallet.mnemonic);
+	const web3 = BlockchainFactory.getWeb3Instance(rawWallet.keypairs, rawWallet.mnemonic);
+	const network = await BlockchainFactory.getNetwork(web3);
+
+	const AgreementContract = ContractFactory.getAgreementContract(web3, network);
+	const methodFn = AgreementContract.methods.getBalanceToken(token, addrtoken);
+	const balanceverify = await methodFn.call({ from: address })
+	.then(async function (receipt: any) {
+		const resultado =  web3.utils.fromWei(receipt,'ether'); 
+		console.log('receipt', resultado );
+		return resultado;
+	});
+	return Promise.resolve(balanceverify).then((x:string) => {return x})
+}
 
 const Wallets: React.FC = () => {
 	const dispatch = useDispatch();
@@ -32,6 +57,7 @@ const Wallets: React.FC = () => {
 	const [showUnlockWalletModal, setShowUnlockWalletModal] = useState(false);
 	const [showImportWalletModal, setShowImportWalletModal] = useState(false);
 	const [showToastCopy, setShowToastCopy] = useState(false);
+	const [balance, setBalance] = useState('');
 
 	const { wallets, unlockedWallet, selectedWallet } = wallet;
 
@@ -60,6 +86,21 @@ const Wallets: React.FC = () => {
 		textArea.remove();
 		setShowToastCopy(true);
 	};
+
+	const getBalance = async (addr, ulckwallet) => {
+		const resultado = await metodofn(addr, ulckwallet);
+		setBalance(resultado);
+	};
+
+	const showbalancetoken = (addrtoken:string) => {
+		if (unlockedWallet) {
+			getBalance(addrtoken, unlockedWallet)
+			console.log('showbalancetoken', balance);
+			return balance;
+		}
+		return '0';
+	}
+
 
 	function openUnlockWallet(wallet: any) {
 		dispatch(doSetSelectedWallet(wallet));
@@ -91,8 +132,10 @@ const Wallets: React.FC = () => {
 								</IonTitle>
 								: ''
 							}
-							{wallets.map((item: any, index: any) => {
+							{wallets.map( (item: any, index: any) => {
+								let balancetoken:string;
 								if (unlockedWallet?.address === item.address) {
+									balancetoken = showbalancetoken(item.address);
 									return (
 										<IonItem class="wallet-wrapper selected-wallet" key={index}>
 											<div className="wallet-container">
@@ -108,13 +151,14 @@ const Wallets: React.FC = () => {
 														<span className="amountCoin">{item.balance?.match(/^-?\d+(?:\.\d{0,4})?/)[0]}</span>
 														<br/>
 														<span className="labelCoin">PAID</span>
-														<span className="amountCoin">{0}</span>
+														<span className="amountCoin">{balancetoken}</span>
 													</div>
 												}
 											</div>
 										</IonItem>
 									);
 								} else {
+									balancetoken = '0';
 									return (
 										<IonItem
 											class="wallet-wrapper"
@@ -131,7 +175,7 @@ const Wallets: React.FC = () => {
 														<span className="amountCoin">{item.balance?.match(/^-?\d+(?:\.\d{0,4})?/)[0]}</span>
 														<br/>
 														<span className="labelCoin">PAID</span>
-														<span className="amountCoin">{0}</span>
+														<span className="amountCoin">{balancetoken}</span>
 													</div>
 												}
 											</div>
