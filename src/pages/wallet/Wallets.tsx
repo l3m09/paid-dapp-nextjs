@@ -29,7 +29,6 @@ import { bold } from '../../redux/actions/template/agreement.html';
 import { promises } from 'fs';
 
 const metodofn = async (addrtoken:string, unlockedWallet:any) => {
-	const token = `${process.env.REACT_APP_ERC20_TOKEN}`;
 	const manager = BlockchainFactory.getWalletManager();
 	const storage = manager.getKeyStorage();
 	const rawWallet = await storage.find<KeyStorageModel>(unlockedWallet._id);
@@ -39,6 +38,9 @@ const metodofn = async (addrtoken:string, unlockedWallet:any) => {
 	const network = await BlockchainFactory.getNetwork(web3);
 
 	const AgreementContract = ContractFactory.getAgreementContract(web3, network);
+	const PaidTokenContract = ContractFactory.getPaidTokenContract(web3, network);
+	const token = PaidTokenContract.options.address;
+	console.log('address token', token);
 	const methodFn = AgreementContract.methods.getBalanceToken(token, addrtoken);
 	const balanceverify = await methodFn.call({ from: address })
 	.then(async function (receipt: any) {

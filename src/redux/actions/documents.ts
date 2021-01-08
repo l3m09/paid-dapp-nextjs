@@ -9,11 +9,15 @@ import { eddsa } from "elliptic";
 
 import { templateRender } from './template/template';
 import { DialogsActionTypes } from '../actionTypes/dialogs';
+import { PAIDTokenContract } from '../../contracts/paidtoken';
 
 const uint8ArrayToString = require('uint8arrays/to-string');
 const BigNumber = require('bignumber.js');
 const ipfsClient = require('ipfs-http-client');
 const fetch = require('node-fetch');
+
+// TODO: Get ipfs IP Public of Kubernets Enviroment Variable
+const ipfsnode = `${process.env.PAID_DAPP_IPFS_SERVICE_SERVICE_HOST}`;
 
 // TODO: Fix
 const ipfs = ipfsClient({ host: 'ipfs.infura.io', port: '5001', protocol: 'https', apiPath: '/api/v0' });
@@ -216,50 +220,76 @@ export const doCreateAgreement = (payload: {
 		// ----------------------------------------------------
 		// Estimate gas,  TODO encapsulate
 		const AgreementContract = ContractFactory.getAgreementContract(web3, network);
-		// withdraw PAID token
-		const paymentSA = web3.utils.toWei('1', 'ether')
-		const balancetest = AgreementContract.methods.getBalanceToken(
-			token,
-			address
-		).call().then((result:BN) => {
-			console.log('previo al cobro del token', paymentSA, result);
-		})
-		const methodtkn = AgreementContract.methods.withdraw(
-			token,
-			address,
-			recipientTKN,
+		const PaidTokenContract = ContractFactory.getPaidTokenContract(web3, network);
+		const token = PaidTokenContract.options.address;
+		const spender = AgreementContract.options.address;
+		PaidTokenContract.options.from = address;
+		console.log('Paidtokencontract', PaidTokenContract.defaultAccount, PaidTokenContract.options.from);
+		console.log('Agreementcontract', AgreementContract.defaultAccount, AgreementContract.options.from);
+		// Increase Allowance for withdraw PAID token
+		const paymentSA = web3.utils.toWei(payment, 'ether')
+		console.log('previo pago', paymentSA,'token address:',  token,'address wallet:', address, 'spender:', spender, 'recipient:', recipientTKN);
+		const metodoTkn = PaidTokenContract.methods.increaseAllowance(
+			spender,
 			paymentSA
-		).send({ from: address, gas:7e6+5e4, gasPrice: 50e9 })
+		);
+		// estimateGas for Send Tx to IncreaseAllowance
+		const gastkn = await metodoTkn.estimateGas();
+
+		Promise.resolve(gastkn).then(async (gastkn:any) => {
+			const agreementTransaction = await metodoTkn.send({ from: address, gas:gastkn+5e4, gasPrice: 50e9 })
 		   .on('receipt', async function (receipt: any) {
-			   console.log('resolve gaspaidtoken',receipt)
-		   })
-		   .on('error', function (error: any, receipt: any) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
+				console.log('resolve increaseAllowpaidtoken',receipt);
+				// Withdraw PAID Token
+				const metodoFn = AgreementContract.methods.withdraw(
+					token,
+					address,
+					recipientTKN,
+					paymentSA
+				);
+				// EstimageGas for Withdrawtoken
+			   	const gastx = await metodoFn.estimateGas();
+
+			   	Promise.resolve(gastx).then(async (gastx:any) => {
+					const withdrawTransaction = await metodoFn.send({ from: address, gas:gastx+5e4, gasPrice: 50e9 })
+					.on('receipt', async function (receipt: any) {
+						console.log('resolve withdrawpaidtoken',receipt);
+			   			// Create Agreements in the Smart Contract
+						const methodFn = AgreementContract.methods.partyCreate(
+							validUntil,
+							agreementForm.counterpartyWallet,
+							ipfsHash.toString(),
+							formId,
+							form,
+							'0x' + digest);
+						// estimategas for Create Smart Agreements
+						const gas = await methodFn.estimateGas();
+
+						Promise.resolve(gas).then(async (gas:any) => {
+							const agreementTransaction = await methodFn.send({ from: address, gas:gas+5e4, gasPrice: 50e9 })
+							.on('receipt', async function (receipt: any) {
+								dispatch(createAgreement());
+								slideNext();
+							})
+							.on('error', function (error: any, receipt: any) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.		
+								slideBack();
+								alert('Transaction failed');
+								throw new Error('Transaction failed');
+							});
+						});
+					})
+					.on('error', function (error: any, receipt: any) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
+						console.log(error, receipt);
+					 alert('Transaction failed');
+						throw new Error('Transaction failed');
+					});
+		   		});
+		   	})
+		   	.on('error', function (error: any, receipt: any) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
 			   	console.log(error, receipt);
 				alert('Transaction failed');
 			   	throw new Error('Transaction failed');
-		   });
-		// Create Agreements in the Smart Contract
-		const methodFn = AgreementContract.methods.partyCreate(
-			validUntil,
-			agreementForm.counterpartyWallet,
-			ipfsHash.toString(),
-			formId,
-			form,
-			'0x' + digest);
-
-		const gas = await methodFn.estimateGas();
-
-		Promise.resolve(gas).then(async (gas:any) => {
-			const agreementTransaction = await methodFn.send({ from: address, gas:gas+5e4, gasPrice: 50e9 })
-		   .on('receipt', async function (receipt: any) {
-			   dispatch(createAgreement());
-			   slideNext();
-		   })
-		   .on('error', function (error: any, receipt: any) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.		
-			   slideBack();
-			   alert('Transaction failed');
-			   throw new Error('Transaction failed');
-		   });
+		   	});
 		});
 	} catch (err) {
 		await payload.slideBack();
