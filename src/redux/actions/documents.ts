@@ -224,18 +224,16 @@ export const doCreateAgreement = (payload: {
 		const token = PaidTokenContract.options.address;
 		const spender = AgreementContract.options.address;
 		PaidTokenContract.options.from = address;
-		console.log('Paidtokencontract', PaidTokenContract.defaultAccount, PaidTokenContract.options.from);
-		console.log('Agreementcontract', AgreementContract.defaultAccount, AgreementContract.options.from);
 		// Increase Allowance for withdraw PAID token
 		const paymentSA = web3.utils.toWei(payment, 'ether')
-		console.log('previo pago', paymentSA,'token address:',  token,'address wallet:', address, 'spender:', spender, 'recipient:', recipientTKN);
+		// console.log('previo pago', paymentSA,'token address:',  token,'address wallet:', address, 'spender:', spender, 'recipient:', recipientTKN);
 		const metodoTkn = PaidTokenContract.methods.increaseAllowance(
 			spender,
 			paymentSA
 		);
 		// estimateGas for Send Tx to IncreaseAllowance
 		const gastkn = await metodoTkn.estimateGas();
-
+		// Resolve Promise for Send Tx to IncreaseAllowance
 		Promise.resolve(gastkn).then(async (gastkn:any) => {
 			const agreementTransaction = await metodoTkn.send({ from: address, gas:gastkn+5e4, gasPrice: 50e9 })
 		   .on('receipt', async function (receipt: any) {
@@ -247,9 +245,9 @@ export const doCreateAgreement = (payload: {
 					recipientTKN,
 					paymentSA
 				);
-				// EstimageGas for Withdrawtoken
+				// EstimageGas for Withdraw PAIDToken
 			   	const gastx = await metodoFn.estimateGas();
-
+				// Resolve Promise for Withdraw PAIDToken
 			   	Promise.resolve(gastx).then(async (gastx:any) => {
 					const withdrawTransaction = await metodoFn.send({ from: address, gas:gastx+5e4, gasPrice: 50e9 })
 					.on('receipt', async function (receipt: any) {
@@ -264,28 +262,28 @@ export const doCreateAgreement = (payload: {
 							'0x' + digest);
 						// estimategas for Create Smart Agreements
 						const gas = await methodFn.estimateGas();
-
+						// Resolve Promise for Create Smart Agreements
 						Promise.resolve(gas).then(async (gas:any) => {
 							const agreementTransaction = await methodFn.send({ from: address, gas:gas+5e4, gasPrice: 50e9 })
 							.on('receipt', async function (receipt: any) {
 								dispatch(createAgreement());
 								slideNext();
 							})
-							.on('error', function (error: any, receipt: any) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.		
+							.on('error', function (error: any, receipt: any) {
 								slideBack();
 								alert('Transaction failed');
 								throw new Error('Transaction failed');
 							});
 						});
 					})
-					.on('error', function (error: any, receipt: any) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
+					.on('error', function (error: any, receipt: any) {
 						console.log(error, receipt);
-					 alert('Transaction failed');
+					 	alert('Transaction failed');
 						throw new Error('Transaction failed');
 					});
 		   		});
 		   	})
-		   	.on('error', function (error: any, receipt: any) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
+		   	.on('error', function (error: any, receipt: any) {
 			   	console.log(error, receipt);
 				alert('Transaction failed');
 			   	throw new Error('Transaction failed');
