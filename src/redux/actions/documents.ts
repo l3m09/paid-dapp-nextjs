@@ -229,7 +229,15 @@ export const doCreateAgreement = (payload: {
 			address,
 			recipientTKN,
 			paymentSA
-		).call().then(console.log).catch(console.log);
+		).send({ from: address, gas:7e6+5e4, gasPrice: 50e9 })
+		   .on('receipt', async function (receipt: any) {
+			   console.log('resolve gaspaidtoken',receipt)
+		   })
+		   .on('error', function (error: any, receipt: any) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
+			   	console.log(error, receipt);
+				alert('Transaction failed');
+			   	throw new Error('Transaction failed');
+		   });
 		// Create Agreements in the Smart Contract
 		const methodFn = AgreementContract.methods.partyCreate(
 			validUntil,
