@@ -21,6 +21,8 @@ interface AgreementFormProps {
 const FormCounterparty: React.FC<AgreementFormProps> = ({ current }) => {
 	const dispatch = useDispatch();
 	const [filled, setFilled] = useState(false);
+	const [validEmail, setValidEmail] = useState(true);
+	const [validConfirmEmail, setValidConfirmEmail] = useState(true);
 	const [validName, setValidName] = useState(true);
 	const [validAddress, setValidAddress] = useState(true);
 	const [validPhone, setValidPhone] = useState(true);
@@ -44,6 +46,16 @@ const FormCounterparty: React.FC<AgreementFormProps> = ({ current }) => {
 		verifyInfo();
 	}, [agreementFormInfo]);
 
+	function emailChanged(e: any) {
+		setStartValidation(true);
+		dispatch(doSetAgreementFormInfo({counterpartyEmail: e.target.value}));
+	}
+
+	function confirmEmailChanged(e: any) {
+		setStartValidation(true);
+		dispatch(doSetAgreementFormInfo({counterpartyConfirmEmail: e.target.value}));
+	}
+
 	function nameChanged(e: any) {
 		setStartValidation(true);
 		dispatch(doSetAgreementFormInfo({ counterpartyName: e.target.value }));
@@ -65,13 +77,17 @@ const FormCounterparty: React.FC<AgreementFormProps> = ({ current }) => {
 	}
 
 	function verifyInfo() {
-		const { 
+		const {
+			counterpartyEmail,
+			counterpartyConfirmEmail,
 			counterpartyWallet, 
 			counterpartyName, 
 			counterpartyAddress, 
 			counterpartyPhone 
 		}  = agreementFormInfo;
 		setFilled(
+			/.+@.+\..+/.test(counterpartyEmail) &&
+			counterpartyEmail === counterpartyConfirmEmail &&
 			counterpartyWallet.length > 3 &&
 			counterpartyName.length > 3 &&
 			counterpartyAddress.length > 3 &&
@@ -79,6 +95,8 @@ const FormCounterparty: React.FC<AgreementFormProps> = ({ current }) => {
 		);
 		
 		if (startValidation) {
+			setValidEmail(/.+@.+\..+/.test(counterpartyEmail));
+			setValidConfirmEmail(counterpartyEmail === counterpartyConfirmEmail);
 			setValidName(counterpartyName.length > 3);
 			setValidAddress(counterpartyAddress.length > 3);
 			setValidPhone(counterpartyPhone.length > 3);
@@ -141,6 +159,46 @@ const FormCounterparty: React.FC<AgreementFormProps> = ({ current }) => {
 						!validName &&
 						<IonNote color="danger" className="ion-margin-top">
 							Full name must be at least 3 characters.
+						</IonNote>
+					}
+				</IonItem>
+				<IonItem>
+					<IonLabel position="stacked">Email</IonLabel>
+					<IonInput
+						title="Label"
+						type="text"
+						placeholder="Enter an email"
+						onInput={(e) => {
+							emailChanged(e);
+						}}
+						onIonBlur={(e) => {
+							emailChanged(e);
+						}}
+					/>
+					{
+						!validEmail &&
+						<IonNote color="danger" className="ion-margin-top">
+							You must enter a valid email.
+						</IonNote>
+					}
+				</IonItem>
+				<IonItem>
+					<IonLabel position="stacked">Confirm Email</IonLabel>
+					<IonInput
+						title="Label"
+						type="text"
+						placeholder="Confirm email"
+						onInput={(e) => {
+							confirmEmailChanged(e);
+						}}
+						onIonBlur={(e) => {
+							confirmEmailChanged(e);
+						}}
+					/>
+					{
+						!validConfirmEmail &&
+						<IonNote color="danger" className="ion-margin-top">
+							Email and confirm email do not match.
 						</IonNote>
 					}
 				</IonItem>

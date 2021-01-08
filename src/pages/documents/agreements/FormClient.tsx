@@ -16,6 +16,8 @@ interface AgreementFormProps {
 
 const FormClient: React.FC<AgreementFormProps> = ({ current }) => {
 	const [filled, setFilled] = useState(false);
+	const [validEmail, setValidEmail] = useState(true);
+	const [validConfirmEmail, setValidConfirmEmail] = useState(true);
 	const [validName, setValidName] = useState(true);
 	const [validAddress, setValidAddress] = useState(true);
 	const [validPhone, setValidPhone] = useState(true);
@@ -29,20 +31,38 @@ const FormClient: React.FC<AgreementFormProps> = ({ current }) => {
 		verifyInfo();
 	}, [agreementFormInfo]);
 
+	function emailChanged(e: any) {
+		dispatch(doSetAgreementFormInfo({email: e.target.value}));
+	}
+
+	function confirmEmailChanged(e: any) {
+		dispatch(doSetAgreementFormInfo({confirmEmail: e.target.value}));
+	}
+
 	function nameChanged(e: any) {
 		dispatch(doSetAgreementFormInfo({name: e.target.value}));
 	}
+
 	function addressChanged(e: any) {
 		dispatch(doSetAgreementFormInfo({address: e.target.value}));
 	}
+
 	function phoneChanged(e: any) {
 		dispatch(doSetAgreementFormInfo({phone: e.target.value}));
 	}
 
 	function verifyInfo() {
-		const { name, address, phone } = agreementFormInfo;
-		setFilled(name.length > 3 && address.length > 3 && phone.length > 3);
+		const { email, confirmEmail, name, address, phone } = agreementFormInfo;
+		setFilled(
+			/.+@.+\..+/.test(email) &&
+			email === confirmEmail &&
+			name.length > 3 && 
+			address.length > 3 && 
+			phone.length > 3
+		);
 		if (startValidation) {
+			setValidEmail(/.+@.+\..+/.test(email));
+			setValidConfirmEmail(email === confirmEmail);
 			setValidName(name.length > 3);
 			setValidAddress(address.length > 3);
 			setValidPhone(phone.length > 3);
@@ -83,6 +103,46 @@ const FormClient: React.FC<AgreementFormProps> = ({ current }) => {
 						!validName &&
 						<IonNote color="danger" className="ion-margin-top">
 							Full name must be at least 3 characters.
+						</IonNote>
+					}
+				</IonItem>
+				<IonItem>
+					<IonLabel position="stacked">Email</IonLabel>
+					<IonInput
+						title="Label"
+						type="text"
+						placeholder="Enter an email"
+						onInput={(e) => {
+							emailChanged(e);
+						}}
+						onIonBlur={(e) => {
+							emailChanged(e);
+						}}
+					/>
+					{
+						!validEmail &&
+						<IonNote color="danger" className="ion-margin-top">
+							You must enter a valid email.
+						</IonNote>
+					}
+				</IonItem>
+				<IonItem>
+					<IonLabel position="stacked">Confirm Email</IonLabel>
+					<IonInput
+						title="Label"
+						type="text"
+						placeholder="Confirm email"
+						onInput={(e) => {
+							confirmEmailChanged(e);
+						}}
+						onIonBlur={(e) => {
+							confirmEmailChanged(e);
+						}}
+					/>
+					{
+						!validConfirmEmail &&
+						<IonNote color="danger" className="ion-margin-top">
+							Email and confirm email do not match.
 						</IonNote>
 					}
 				</IonItem>
