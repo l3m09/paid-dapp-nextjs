@@ -42,7 +42,7 @@ const metodofn = async (addrtoken:string, unlockedWallet:any) => {
 	const methodFn = AgreementContract.methods.getBalanceToken(token, addrtoken);
 	const balanceverify = await methodFn.call({ from: address })
 	.then(async function (receipt: any) {
-		const resultado =  web3.utils.fromWei(receipt,'ether'); 
+		const resultado =  web3.utils.fromWei(receipt,'ether');
 		return resultado;
 	});
 	return Promise.resolve(balanceverify).then((x:string) => {return x})

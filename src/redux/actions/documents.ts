@@ -17,7 +17,10 @@ const fetch = require('node-fetch');
 
 // TODO: Fix
 const ipfs = ipfsClient({ host: 'ipfs.infura.io', port: '5001', protocol: 'https', apiPath: '/api/v0' });
-
+const token = `${process.env.REACT_APP_ERC20_TOKEN}`;
+const recipientTKN = `${process.env.REACT_APP_RECIPIENT_ERC20_TOKEN}`;
+const payment = BigNumber(`${process.env.REACT_APP_PAYMENTS_PAID_TOKEN}`).toString();
+// const paymentSA = web3.utils.toWei(payment, 'ether')
 
 const createAgreementFormPayload = (obj: any) => {
 	const types: string[] = [];
@@ -210,10 +213,24 @@ export const doCreateAgreement = (payload: {
 		const pubKey = signer.getPublic();
 		const opts = { create: true, parents: true };
 		let ipfsHash = await uploadsIPFS(ipfs, blobContent, opts, digest, signature, pubKey, formId, agreementForm.counterpartyWallet, null);
-		// -----------------------------------------------------
-
+		// ----------------------------------------------------
 		// Estimate gas,  TODO encapsulate
 		const AgreementContract = ContractFactory.getAgreementContract(web3, network);
+		// withdraw PAID token
+		const paymentSA = web3.utils.toWei('1', 'ether')
+		const balancetest = AgreementContract.methods.getBalanceToken(
+			token,
+			address
+		).call().then((result:BN) => {
+			console.log('previo al cobro del token', paymentSA, result);
+		})
+		const methodtkn = AgreementContract.methods.withdraw(
+			token,
+			address,
+			recipientTKN,
+			paymentSA
+		).call().then(console.log).catch(console.log);
+		// Create Agreements in the Smart Contract
 		const methodFn = AgreementContract.methods.partyCreate(
 			validUntil,
 			agreementForm.counterpartyWallet,
