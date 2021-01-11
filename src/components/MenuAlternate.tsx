@@ -40,7 +40,8 @@ const MenuAlternate:  React.FC = () =>{
 			const manager = BlockchainFactory.getWalletManager();
 			const storage = manager.getKeyStorage();
 			const rawWallet = storage.find<KeyStorageModel>(unlockedWallet._id);
-			rawWallet.then((rWallet) => {		
+			rawWallet.then((rWallet) => {	
+				debugger;	
 				const web3 = BlockchainFactory.getWeb3Instance(rWallet.keypairs, rWallet.mnemonic);
 				const network = BlockchainFactory.getNetwork(web3);
 				network.then((networkText) => {

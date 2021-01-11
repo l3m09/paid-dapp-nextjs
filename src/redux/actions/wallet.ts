@@ -87,8 +87,7 @@ const unlockWallet = (payload: any) => {
 };
 
 //Utils
-const getBalanceWallet = async (ks: KeyStorageModel, walletManager: WalletManager) => {
-	const address = walletManager.getWalletAddress(ks.mnemonic);
+const getBalanceWallet = async (ks: KeyStorageModel, address: string) => {
 	const web3 = BlockchainFactory.getWeb3Instance(ks.keypairs, ks.mnemonic);
 	const balancewei = await web3.eth.getBalance(address);
 	const balance = web3.utils.fromWei(balancewei);
@@ -104,6 +103,7 @@ export const doUnlockWallet = (payload: {
 	dispatch({ type: WalletActionTypes.UNLOCK_WALLET_LOADING });
 	try {
 		const { wallet, password } = payload;
+		debugger;
 		const walletManager = BlockchainFactory.getWalletManager();
 
 		const ks = await walletManager.unlockWallet(wallet._id, password);
@@ -115,7 +115,7 @@ export const doUnlockWallet = (payload: {
 		} else {
 			// const { address } = wallet;
 			BlockchainFactory.setKeystore(ks);
-			const balance = await getBalanceWallet(ks, walletManager);
+			const balance = await getBalanceWallet(ks, wallet.address);
 			const walletWithBalance = {...wallet, balance: balance ?? '0'};
 			const value = JSON.stringify(walletWithBalance);
 			const stored: any = await Storage.get({ key: 'WALLETS' });
@@ -242,7 +242,6 @@ export const doCreateWallet = (payload: {
 
 		const createdWallet = {
 			...referenceWallet,
-			mnemonic
 		};
 		const encoded = JSON.stringify(referenceWallet);
 		await Storage.set({ key: 'CURRENT_WALLET', value: encoded });
@@ -277,7 +276,7 @@ export const doImportWallet = (payload: {
 		const address = walletManager.getWalletAddress(mnemonic);
 	
 		const ks = await walletManager.unlockWallet(_id, password);
-		const balance = await getBalanceWallet(ks, walletManager);
+		const balance = await getBalanceWallet(ks, address);
 
 		const referenceWallet = {
 			_id,
@@ -295,8 +294,7 @@ export const doImportWallet = (payload: {
 		await Storage.set({ key: 'WALLETS', value: encodedWallets });
 
 		const createdWallet = {
-			...referenceWallet,
-			mnemonic
+			...referenceWallet
 		};
 		
 		dispatch(

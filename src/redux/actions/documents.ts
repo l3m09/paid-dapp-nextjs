@@ -168,8 +168,9 @@ export const doCreateAgreement = (payload: {
 		const storage = manager.getKeyStorage();
 		const rawWallet = await storage.find<KeyStorageModel>(unlockedWallet._id);
 		// const onchainWalletAddress = window.ethereum.selectedAddress;
-
-		const address = manager.getWalletAddress(rawWallet.mnemonic);
+		
+		console.log(rawWallet);
+		const address = unlockedWallet.address
 		const web3 = BlockchainFactory.getWeb3Instance(rawWallet.keypairs, rawWallet.mnemonic);
 		const network = await BlockchainFactory.getNetwork(web3);
 
@@ -535,20 +536,19 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 			const manager = BlockchainFactory.getWalletManager();
 			const storage = manager.getKeyStorage();
 			const rawWallet = await storage.find<KeyStorageModel>(unlockedWallet._id);
-			const address = manager.getWalletAddress(rawWallet.mnemonic);
+			const address = unlockedWallet.address;
 	
-			const chkbalance = manager.getWalletAddress(rawWallet.mnemonic);
 			const web3 = BlockchainFactory.getWeb3Instance(rawWallet.keypairs, rawWallet.mnemonic);
 			const network = await BlockchainFactory.getNetwork(web3);
 	
-			await web3.eth.getBalance(chkbalance).then((balancewei) =>{
+			await web3.eth.getBalance(address).then((balancewei) =>{
 				const balance = web3.utils.fromWei(balancewei);
 				const parsedBalance = BigNumber(balance).toNumber();
 				console.log(parsedBalance);
 				if ((parsedBalance <= 0.0009999999999)) {
 					throw new Error('The wallet should has balance to send a transaction.');
 				}
-				console.log('Current_Wallet_address', chkbalance,'agreementForm', document.data.agreementForm);
+				console.log('Current_Wallet_address', address,'agreementForm', document.data.agreementForm);
 			})
 	
 			const AgreementContract = ContractFactory.getAgreementContract(web3, network);
