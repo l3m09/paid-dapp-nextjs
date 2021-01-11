@@ -9,9 +9,13 @@ const initialState = {
 	selectedDocument: null,
 	agreementTypes: ['Mutual-NDA'],
 	agreementFormInfo: {
+		email: '',
+		confirmEmail: '',
 		name: '',
 		address: '',
 		phone: '',
+		counterpartyEmail: '',
+		counterpartyConfirmEmail: '',
 		counterpartyWallet: '',
 		counterpartyName: '',
 		counterpartyAddress: '',
