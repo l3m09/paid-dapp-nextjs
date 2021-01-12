@@ -26,6 +26,7 @@ import NdaCompleted from './nda/NdaCompleted';
 
 import { useDispatch } from 'react-redux';
 import { doSetAgreementFormInfo } from '../../../redux/actions/documents';
+import PreviewAgreement from './PreviewAgreement';
 
 interface AgreementsProps {
 	show: boolean;
@@ -88,12 +89,16 @@ const Agreements: React.FC<AgreementsProps> = () => {
 				<FormCounterparty current={slidesRef.current} />
 			</IonSlide>
 			<IonSlide>
+				<PreviewAgreement current={slidesRef.current} />
+			</IonSlide>
+			<IonSlide>
 				<NdaCompleted current={slidesRef.current} />
 			</IonSlide>
 		</IonSlides>
 	);
 
 	async function lockSwipes() {
+		await slidesRef.current?.update();
 		await slidesRef.current?.slideTo(0);
 		await slidesRef.current?.lockSwipeToPrev(true);
 		await slidesRef.current?.lockSwipeToNext(true);
