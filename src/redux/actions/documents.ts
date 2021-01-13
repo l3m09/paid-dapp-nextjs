@@ -628,7 +628,7 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 				.on('error', function (error: any, receipt: any) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.		
 					alert('Transaction failed');
 					dispatch({ type: DocumentsActionTypes.COUNTERPARTY_SIGNED_FAILURE });
-					throw new Error('Transaction failed');
+					//throw new Error('Transaction failed');
 				});
 			});
 		} else {
