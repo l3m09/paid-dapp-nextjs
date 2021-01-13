@@ -5,7 +5,7 @@ import {
 	IonButton,
 	IonNote
 } from '@ionic/react';
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { doSetAgreementFormInfo } from '../../../redux/actions/documents';
 
@@ -40,15 +40,15 @@ const FormClient: React.FC<AgreementFormProps> = ({ current }) => {
 	}
 
 	function nameChanged(e: any) {
-		dispatch(doSetAgreementFormInfo({name: e.target.value}));
+		dispatch(doSetAgreementFormInfo({ name: e.target.value }));
 	}
 
 	function addressChanged(e: any) {
-		dispatch(doSetAgreementFormInfo({address: e.target.value}));
+		dispatch(doSetAgreementFormInfo({ address: e.target.value }));
 	}
 
 	function phoneChanged(e: any) {
-		dispatch(doSetAgreementFormInfo({phone: e.target.value}));
+		dispatch(doSetAgreementFormInfo({ phone: e.target.value }));
 	}
 
 	function verifyInfo() {
@@ -70,14 +70,19 @@ const FormClient: React.FC<AgreementFormProps> = ({ current }) => {
 		setStartValidation(true);
 	}
 
+	useEffect(() => {
+		verifyInfo();
+	}, [agreementFormInfo]);
+
 	async function slideNext() {
 		await current.lockSwipeToNext(false);
 		current.slideNext();
+		await current.updateAutoHeight();
 		await current.lockSwipeToNext(true);
 	}
 
 	const onSubmit = () => {
-		slideNext().then(() => {});
+		slideNext().then(() => { });
 	};
 
 	return (

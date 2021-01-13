@@ -37,7 +37,10 @@ const Agreements: React.FC<AgreementsProps> = () => {
 	const slideOpts = {
 		initialSlide: 0,
 		speed: 400,
-		slidesPerView: 1
+		slidesPerView: 1,
+		autoHeight: true,
+		centeredSlides: true,
+		centeredSlidesBounds: true
 	};
 
 	useEffect(() => {
@@ -69,7 +72,11 @@ const Agreements: React.FC<AgreementsProps> = () => {
 		await slidesRef.current?.lockSwipeToNext(true);
 	}
 
-	lockSwipes().then(() => {});
+	useEffect(() => {
+		lockSwipes().then((r) => {});
+	}, [slidesRef]);
+
+	lockSwipes().then((r) => {});
 
 	async function toDocuments() {
 		dispatch(doSetAgreementFormInfo({
@@ -88,10 +95,28 @@ const Agreements: React.FC<AgreementsProps> = () => {
 			history.push('/documents');
 		});
 	}
+
+	// const ndaTemplate: any = (
+	// 	<IonSlides mode="md" pager={false} options={slideOpts} ref={slidesRef}> 
+	// 		<IonSlide>
+	// 			<NdaDescription current={slidesRef.current} />
+	// 		</IonSlide>
+	// 		<IonSlide >
+	// 			<FormClient current={slidesRef.current} />
+	// 		</IonSlide>
+	// 		<IonSlide >
+	// 			<FormCounterparty current={slidesRef.current} />
+	// 		</IonSlide>
+	// 		<IonSlide >
+	// 			<NdaCompleted current={slidesRef.current} />
+	// 		</IonSlide>
+	// 	</IonSlides>
+	// );
+
 	return (
 		<IonPage className="agreements-page content-page">
-			<IonContent fullscreen>
-
+			<IonContent fullscreen 
+				scrollEvents={true}>
 				<IonHeader translucent={false} mode="md">
 					<IonToolbar>
 						<IonTitle>Agreement</IonTitle>

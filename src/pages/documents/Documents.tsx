@@ -27,8 +27,8 @@ import {
 	documentsOutline as documentsIcon,
 } from 'ionicons/icons';
 
-import React, {useEffect, useRef, useState} from 'react';
-import { useParams, useHistory} from 'react-router';
+import React, {useEffect, useState, useRef} from 'react';
+import { useHistory } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import {
 	doGetDocuments,
@@ -38,13 +38,10 @@ import {
 import MenuAlternate from '../../components/MenuAlternate';
 import DocumentsList from './DocumentsList';
 import { IonText } from '@ionic/react';
-import { Plugins } from '@capacitor/core';
 import { BlockchainFactory } from './../../utils/blockchainFactory'
 import { KeyStorageModel } from 'universal-crypto-wallet/dist/key-storage/KeyStorageModel';
 import SuccessDialog from '../../components/SuccessDialog';
 import AgreementType from '../../models/AgreementType';
-
-const { Storage } = Plugins;
 
 function SelectedDocument(payload: {
 	show: boolean;
@@ -91,15 +88,15 @@ function SelectedDocument(payload: {
 						<div className="details-wrapper">
 							<IonItem>
 								<IonLabel position="stacked">Signatory A</IonLabel>
-								<a href={`https://${networkText}.etherscan.io/address/${selectedDocument.event.from}`} target="_blank">{selectedDocument.event.from}</a>
+								<a href={`https://${networkText}.etherscan.io/address/${selectedDocument.event.from}`} target="_blank" rel="noopener noreferrer" >{selectedDocument.event.from}</a>
 							</IonItem>
 							<IonItem>
 								<IonLabel position="stacked">Signatory B</IonLabel>
-								<a href={`https://${networkText}.etherscan.io/address/${selectedDocument.event.to}`} target="_blank">{selectedDocument.event.to}</a>
+								<a href={`https://${networkText}.etherscan.io/address/${selectedDocument.event.to}`} target="_blank" rel="noopener noreferrer" >{selectedDocument.event.to}</a>
 							</IonItem>
 							<IonItem>
 								<IonLabel position="stacked">Transaction Hash</IonLabel>
-								<a href={`https://${networkText}.etherscan.io/tx/${selectedDocument.meta.transactionHash}`} target="_blank">{selectedDocument.meta.transactionHash}</a>
+								<a href={`https://${networkText}.etherscan.io/tx/${selectedDocument.meta.transactionHash}`} target="_blank" rel="noopener noreferrer" >{selectedDocument.meta.transactionHash}</a>
 							</IonItem>
 						</div>
 					</IonCardContent>

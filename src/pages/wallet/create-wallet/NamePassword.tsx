@@ -70,7 +70,7 @@ const namePasswordReducer: React.Reducer<WalletInfo, ActionModel> = (state: Wall
 
 const NamePassword: React.FC<NamePasswordProps> = ({ current }) => {
 	const dispatch = useDispatch();
-	
+
 	let walletInfo: WalletInfo = { 
 		name: '', 
 		passphrase: '', 
@@ -98,6 +98,12 @@ const NamePassword: React.FC<NamePasswordProps> = ({ current }) => {
 			await current.lockSwipeToNext(false);
 			current.slideNext();
 			await current.lockSwipeToNext(true);
+		} else if (walletInfo.passphrase !== walletInfo.confirmPassphrase) {
+			alert('Passphrase is different Confirm Passphrase');
+		} else if (walletInfo.passphrase === '') {
+			alert('Passphrase is Empty');
+		} else if (walletInfo.confirmPassphrase === '') {
+			alert('Passphrase is Empty');
 		}
 	};
 

@@ -57,7 +57,6 @@ const UnlockWallet: React.FC<Props> = ({
 		console.log('dismissible', dismissible);
 	}, [dismissible]);
 
-	// const { type } = useParams<{ type: string }>();
 	const wallet = useSelector(
 		(state: {
 			wallet: {
