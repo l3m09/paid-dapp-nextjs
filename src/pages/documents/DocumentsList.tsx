@@ -293,7 +293,7 @@ const DocumentsList: React.FC<Props> = ({
 
 	function showDocument(item: any) {
 		dispatch(doGetSelectedDocument(item));
-		setShowVerifyDocumentButton(!(item.event.to === currentWallet?.address && item.event.status === 0));
+		setShowVerifyDocumentButton(!(item.event.to === currentWallet?.address && parseInt(item.event.status?.toString()) === 0));
 		setShowModal(true);
 		setShowNotVerified(false);
 		setShowVerified(false);
