@@ -1,8 +1,8 @@
-export const Ciia = `<p align="center"><strong><p id="companyName">{{companyName}}</p></strong></p>
+export const Ciia = `<div class="contract" style="width: 800px; background-color:white; color: black;"><h1 id="title" style="text-align: center;">CIIA</h1><p align="center"><strong><span id="partyName">{{partyName}}</v></strong></p>
 <p align="center"><strong><u>CONFIDENTIAL INFORMATION AND</u><br /> <u>INVENTION ASSIGNMENT AGREEMENT</u></strong></p>
-<p align="center"><em>Consultant Name:</em>____________________ (&ldquo;<u>Consultant</u>&rdquo;)</p>
-<p align="center"><em>Effective Date:____________________</em></p>
-<p>As a condition of becoming retained (or Consultant&rsquo;s consulting relationship being continued) by {{companyName}}, a <p id="state">{{state}}</p> <p id="typeOfCompany">{{typeOfCompany}}</p>, or any of its current or future subsidiaries, affiliates, successors or assigns (collectively, the &ldquo;<u>Company</u>&rdquo;), and in consideration of Consultant&rsquo;s consulting relationship with the Company and receipt of the compensation now and hereafter paid by the Company, Consultant agrees to the following:</p>
+<p align="center"><em>Consultant Name:</em> {{counterPartyName}} (&ldquo;<u>Consultant</u>&rdquo;)</p>
+<p align="center"><em>Effective Date: {{createDate}}</em></p>
+<p>As a condition of becoming retained (or Consultant&rsquo;s consulting relationship being continued) by {{partyName}}, or any of its current or future subsidiaries, affiliates, successors or assigns (collectively, the &ldquo;<u>Company</u>&rdquo;), and in consideration of Consultant&rsquo;s consulting relationship with the Company and receipt of the compensation now and hereafter paid by the Company, Consultant agrees to the following:</p>
 <ol>
 <li>
 <p><span style="font-size: small;"><u><strong><span style="font-size: medium;">Relationship</span></strong></u></span><strong>.</strong> This Confidential Information and Invention Assignment Agreement (this &ldquo;<u>Agreement</u>&rdquo;) will apply to Consultant&rsquo;s consulting relationship with the Company. If that relationship ends and the Company, within a year thereafter, either employs Consultant or re-engages Consultant as a consultant, this Agreement will also apply to such later employment or consulting relationship, unless the parties hereto otherwise agree in writing. Any such employment or consulting relationship between the parties hereto, whether commenced prior to, upon or after the date of this Agreement, is referred to herein as the &ldquo;<u>Relationship</u>.&rdquo;</p>
@@ -130,24 +130,28 @@ export const Ciia = `<p align="center"><strong><p id="companyName">{{companyName
 </ol>
 <p class="western" align="center"><em>[Signature Page Follows]</em></p>
 <p align="justify">The parties have executed this Agreement on the date first above written.</p>
-<p><strong>the company:</strong></p>
-<p>{{companyName}}</p>
-<p>By:<u> </u></p>
+<p><strong>THE COMPANY:</strong></p>
+<p>(Print Name)</p>
+<p>{{partyName}}</p>
 <p>(Signature)</p>
-<p>Name:<u> </u></p>
-<p>Title:<u> </u></p>
-<p>Address:<br /> <br /> </p>
-<p><u> <br /> </u><br /> </p>
-<p>&nbsp;</p>
+<p>_______________________________________</p>
+<p>Name: <span id="partyName">{{partyName}}</span></p>
+<p>Email: <span id="partyEmail">{{partyEmail}}</span></p>
+<p>Address: <span id="partyAddress">{{partyAddress}}</span><br /> <br /> </p>
+<p>Wallet: <span id="partyWallet">{{partyWallet}}</span></p>
 <p><br /> </p>
-<p><strong>Consultant</strong><strong>:</strong></p>
-<p><u> <br /> </u>(Print Name)</p>
-<p>&nbsp;</p>
+<p><br /> </p>
+<p><strong>CONSULTANT:</strong></p>
+<p>(Print Name)</p>
+<p>{{counterPartyName}}</p>
 <p>(Signature)</p>
-<p>Address:<br /> <br /> </p>
+<p>_______________________________________</p>
+<p>Name: <span id="counterPartyName">{{counterPartyName}}</span></p>
+<p>Email: <span id="counterPartyEmail">{{counterPartyEmail}}</span></p>
+<p>Address: <span id="counterPartyAddress">{{counterPartyAddress}}</span><br /> <br /> </p>
+<p>Wallet: <span id="counterPartyWallet">{{counterPartyWallet}}</span>
 <p><u> <br /> </u><br /> </p>
 <p><u> <br /> </u><br /> </p>
-<p>Email:<u> </u></p>
 <p align="center"><u><strong>EXHIBIT&nbsp;A</strong></u></p>
 <p align="center"><strong>LIST OF PRIOR INVENTIONS<br /> AND ORIGINAL WORKS OF AUTHORSHIP<br /> EXCLUDED UNDER SECTION&nbsp;(a) </strong></p>
 <p>The following is a list of all Inventions that, as of the Effective Date: (A) Consultant made, and/or (B) belong solely to Consultant or belong to Consultant jointly with others or in which Consultant has an interest, and that relate in any way to any of the Company&rsquo;s actual or proposed businesses, products, services, or research and development, and which are not assigned to the Company:</p>
@@ -230,4 +234,5 @@ export const Ciia = `<p align="center"><strong><p id="companyName">{{companyName
 <p><br /> </p>
 <p>Signature of Consultant agrees:<u> </u></p>
 <p>Print Name:<u> </u></p>
-<p>Date:<u> </u></p>`
+<p>Date:<u> </u></p>
+</div>`

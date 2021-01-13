@@ -70,6 +70,7 @@ disclosure, or which information would, under the circumstances, appear to a rea
 		<p>&nbsp;</p>
 		<p>_______________________________________</p>
 		<p>Name: {{partyName}}</p>
+		<p>Email: <span id="partyEmail">{{partyEmail}}</span></p>
 		<p>Address: <span id="partyAddress">{{partyAddress}}</span></p>
 		<p>Wallet: <span id="partyWallet">{{partyWallet}}</span></p>
 		<p>&nbsp;</p>
@@ -77,6 +78,7 @@ disclosure, or which information would, under the circumstances, appear to a rea
 		<p>&nbsp;</p>
 		<p>_______________________________________</p>
 		<p>Name: {{counterPartyName}}</p>
+		<p>Email: <span id="counterPartyEmail">{{counterPartyEmail}}</span></p>
 		<p>Address: <span id="counterPartyAddress">{{counterPartyAddress}}</span></p>
 		<p>Wallet: <span id="counterPartyWallet">{{counterPartyWallet}}</span></p>
 	</div>
