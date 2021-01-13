@@ -42,6 +42,7 @@ import { Plugins } from '@capacitor/core';
 import { BlockchainFactory } from './../../utils/blockchainFactory'
 import { KeyStorageModel } from 'universal-crypto-wallet/dist/key-storage/KeyStorageModel';
 import SuccessDialog from '../../components/SuccessDialog';
+import AgreementType from '../../models/AgreementType';
 
 const { Storage } = Plugins;
 
@@ -223,15 +224,15 @@ const Documents: React.FC = () => {
 						<IonItemDivider>
 							<IonItem>Select Agreement type</IonItem>
 						</IonItemDivider>
-						{agreementTypes.map((type: string, index: number) => {
+						{agreementTypes.map((type: AgreementType, index: number) => {
 							return (
 								<IonItem
 									onClick={() => {
-										chooseOption(type);
+										chooseOption(type.code);
 									}}
 									key={index}
 								>
-									{type}
+									{type.name}
 								</IonItem>
 							);
 						})}

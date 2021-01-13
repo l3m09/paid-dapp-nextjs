@@ -6,17 +6,18 @@ import {ReferalAgreement} from "./referral-agreement.html"
 import {Saft} from "./saft.html"
 
 enum contractsTemplates {
-    TemplateNda = "Nda",
-    TemplateAdvisorAgreem = "AdvisorAgreem",
-    TemplateCiia = "Ciia",
-    TemplateConsultingAgreement = "ConsultingAgreement",
-    TemplateReferalAgreement = "ReferalAgreement",
-    TemplateSaft = "ConsultingAgreement",
+    TemplateNda = "nda",
+    TemplateAdvisorAgreem = "advisoragreement",
+    TemplateCiia = "ciia",
+    TemplateConsultingAgreement = "consultingagreement",
+    TemplateReferalAgreement = "referalagreement",
+    TemplateSaft = "saftagreement",
 }
 
 interface contractTemplate {
+    title: string;
     interpolationFields: Object,
-    template: String
+    template: string
 }
 
 const findElementsInterpolation = (html:String) : Object => {
@@ -30,37 +31,45 @@ const findElementsInterpolation = (html:String) : Object => {
 }  
 
 export const getContractTemplate = (contractName:String) :contractTemplate => {
-    let contractTemplate 
+    let contractTemplate;
+    let title;
     try {
         switch (contractName) {
             case contractsTemplates.TemplateNda:
-                contractTemplate = Nda
+                title = 'MUTUAL NONDISCLOSURE AGREEMENT';
+                contractTemplate = Nda;
                 break;
         
             case contractsTemplates.TemplateAdvisorAgreem:
-                contractTemplate = AdvisorAgreem
+                title = 'ADVISOR AGREEMENT';
+                contractTemplate = AdvisorAgreem;
                 break;
         
             case contractsTemplates.TemplateCiia:
-                contractTemplate = Ciia
+                title = 'CONFIDENTIAL INFORMATION AND INVENTION ASSIGNMENT AGREEMENT';
+                contractTemplate = Ciia;
                 break;
         
             case contractsTemplates.TemplateConsultingAgreement:
-                contractTemplate = ConsultingAgreement
+                title = 'CONSULTING AGREEMENT';
+                contractTemplate = ConsultingAgreement;
                 break;
         
             case contractsTemplates.TemplateReferalAgreement:
-                contractTemplate = ReferalAgreement
+                title = 'SALES COMMISSION AGREEMENT';
+                contractTemplate = ReferalAgreement;
                 break;
         
             case contractsTemplates.TemplateSaft:
-                contractTemplate = Saft
+                title = 'SIMPLE AGREEMENT FOR FUTURE TOKENS';
+                contractTemplate = Saft;
                 break;
         
             default:
                 throw new Error("No template Found");
         }
         return {
+            title,
             interpolationFields: findElementsInterpolation(contractTemplate),
             template: contractTemplate
         };
