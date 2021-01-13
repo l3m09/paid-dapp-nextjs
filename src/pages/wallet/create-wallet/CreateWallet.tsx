@@ -12,8 +12,6 @@ import {
 } from '@ionic/react';
 import Instructions from './Instructions';
 import SeedPhrase from './SeedPhrase';
-// import Completed from './Completed';
-// import ConfirmPhrase from './ConfirmPhrase';
 import NamePassword from './NamePassword';
 
 interface CreateWalletProps {
@@ -29,6 +27,17 @@ const CreateWallet: React.FC<CreateWalletProps> = ({ show, dismiss }) => {
 		slidesPerView: 1
 	};
 
+	useEffect(() => {
+		const bootstrapAsync = async () => {
+			await slidesRef.current?.update();
+			await slidesRef.current?.slideTo(0);
+			await slidesRef.current?.lockSwipeToPrev(true);
+			await slidesRef.current?.lockSwipeToNext(true);	
+		};
+
+		bootstrapAsync();
+	}, [show]);
+
 	async function doDismiss() {
 		dismiss();
 		await slidesRef.current?.update();
@@ -36,6 +45,7 @@ const CreateWallet: React.FC<CreateWalletProps> = ({ show, dismiss }) => {
 		await slidesRef.current?.lockSwipeToPrev(false);
 		await slidesRef.current?.lockSwipeToNext(false);
 	}
+
 	return (
 		<IonModal
 			isOpen={show}
@@ -53,7 +63,7 @@ const CreateWallet: React.FC<CreateWalletProps> = ({ show, dismiss }) => {
 				</IonToolbar>
 			</IonHeader>
 			<IonContent fullscreen>
-				<IonSlides pager={false} options={slideOpts} ref={slidesRef}>
+				<IonSlides mode="md" pager={false} options={slideOpts} ref={slidesRef}>
 					<IonSlide>
 						<Instructions current={slidesRef.current} />
 					</IonSlide>
@@ -63,14 +73,6 @@ const CreateWallet: React.FC<CreateWalletProps> = ({ show, dismiss }) => {
 					<IonSlide>
 						<SeedPhrase current={slidesRef.current} />
 					</IonSlide>
-					{/*
-					<IonSlide>
-						<ConfirmPhrase current={slidesRef.current} />
-					</IonSlide>
-					*/}
-					{/*<IonSlide>*/}
-					{/*	<Completed current={slidesRef.current} dismiss={doDismiss} />*/}
-					{/*</IonSlide>*/}
 				</IonSlides>
 			</IonContent>
 		</IonModal>
