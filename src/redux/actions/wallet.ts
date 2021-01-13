@@ -114,6 +114,7 @@ export const doUnlockWallet = (payload: {
 		const walletManager = BlockchainFactory.getWalletManager();
 
 		const ks = await walletManager.unlockWallet(wallet._id, password);
+		
 		if (!ks) {
 			dispatch({
 				type: WalletActionTypes.UNLOCK_WALLET_FAILURE,

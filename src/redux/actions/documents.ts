@@ -140,6 +140,7 @@ export const doCreateAgreement = (payload: {
 	validUntil: number;
 	agreementFormTemplateId: string;
 	agreementForm: any;
+	template: string;
 	slideNext: () => Promise<void>;
 	slideBack: () => Promise<void>;
 }) => async (dispatch: any, getState: () => { wallet: any }) => {
@@ -149,6 +150,7 @@ export const doCreateAgreement = (payload: {
 			validUntil,
 			agreementFormTemplateId,
 			agreementForm,
+			template,
 			slideNext,
 			slideBack
 		} = payload;
@@ -181,16 +183,16 @@ export const doCreateAgreement = (payload: {
 			throw new Error('Invalid Counter Party Address');
 		}
 
-		const today = new Date();
-		const template = templateRender({
-			party_name: agreementForm.name,
-			party_wallet: address,
-			party_address: agreementForm.address,
-			counterparty_name: agreementForm.counterpartyName,
-			counterparty_wallet: agreementForm.counterpartyWallet,
-			counterparty_address: agreementForm.counterpartyAddress,
-			create_date: today.toLocaleDateString()
-		});
+		// const today = new Date();
+		// const template = templateRender({
+		// 	party_name: agreementForm.name,
+		// 	party_wallet: address,
+		// 	party_address: agreementForm.address,
+		// 	counterparty_name: agreementForm.counterpartyName,
+		// 	counterparty_wallet: agreementForm.counterpartyWallet,
+		// 	counterparty_address: agreementForm.counterpartyAddress,
+		// 	create_date: today.toLocaleDateString()
+		// });
 		await web3.eth.getBalance(address).then((balancewei) =>{
 			const balance = web3!.utils.fromWei(balancewei);
 			const parsedBalance = BigNumber(balance).toNumber();
@@ -202,7 +204,8 @@ export const doCreateAgreement = (payload: {
 		})
 
 		// ALICE SIDE
-		const content = template();
+		// const content = template();
+		const content = template;
 		const blobContent = base64StringToBlob(btoa(unescape(encodeURIComponent(content))), 'text/html');
 		const ceass = new CEASigningService();
 		ceass.useKeyStorage(rawWallet);
@@ -234,7 +237,6 @@ export const doCreateAgreement = (payload: {
 
 		Promise.resolve(gas).then(async (gas:any) => {
 			console.log(gas+5e4);
-			debugger;
 			const agreementTransaction = await methodFn.send({ from: address, gas:gas+5e4, gasPrice: 50e9 })
 			.on('receipt', async function (receipt: any) {
 				dispatch(createAgreement());
@@ -242,7 +244,6 @@ export const doCreateAgreement = (payload: {
 			})
 			.on('error', function (error: any, receipt: any) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.		
 				slideBack();
-				debugger;
 				console.log('Transaction failed', error, receipt);
 				alert('Transaction failed');
 				throw new Error('Transaction failed');

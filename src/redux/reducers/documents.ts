@@ -7,7 +7,32 @@ const initialState = {
 	documentsFrom: [],
 	documentsTo: [],
 	selectedDocument: null,
-	agreementTypes: ['Mutual-NDA'],
+	agreementTypes: [
+		{
+			code: 'nda',
+			name: 'Mutual-NDA'
+		},
+		{
+			code: 'advisorAgreement',
+			name: 'Advisor'
+		},
+		{
+			code: 'ciia',
+			name: 'CIIA'
+		},
+		{
+			code: 'consultingAgreement',
+			name: 'Consulting'
+		},
+		{
+			code: 'referalAgreement',
+			name: 'Referal'
+		},
+		{
+			code: 'saftAgreement',
+			name: 'SAFT'
+		}
+	],
 	agreementFormInfo: {
 		email: '',
 		confirmEmail: '',

@@ -26,6 +26,7 @@ import { eddsa } from "elliptic";
 import { format } from 'date-fns';
 import { BlockchainFactory } from '../../utils/blockchainFactory';
 import { KeyStorageModel } from 'universal-crypto-wallet/dist/key-storage/KeyStorageModel';
+import AgreementType from '../../models/AgreementType';
 
 const { Storage } = Plugins;
 
@@ -367,17 +368,17 @@ const DocumentsList: React.FC<Props> = ({
 	const agreementTypesList = () => {
 		return <IonList>
 			{
-				agreementTypes.map((type: string, index: number) => {
+				agreementTypes.map((type: AgreementType, index: number) => {
 					return (
 						<IonItem
 							className="ion-text-center"
 							onClick={() => {
-								onClickAgreementType(type);
+								onClickAgreementType(type.code);
 							}}
 							key={index}
 						>
 							<IonLabel>
-								{type}
+								{type.name}
 							</IonLabel>
 						</IonItem>
 					);

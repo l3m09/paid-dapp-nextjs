@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
 	IonButton,
 	IonTitle,
@@ -15,18 +15,12 @@ import { useParams, useHistory } from 'react-router';
 import FormClient from './FormClient';
 import FormCounterparty from './FormCounterparty';
 
-// import VehicleDescription from './vehicle/VehicleDescription';
-// import VehicleCompleted from './vehicle/VehicleCompleted';
-
-// import RentalDescription from './rental/RentalDescription';
-// import RentalCompleted from './rental/RentalCompleted';
-
 import NdaDescription from './nda/NdaDescription';
-import NdaCompleted from './nda/NdaCompleted';
 
 import { useDispatch } from 'react-redux';
 import { doSetAgreementFormInfo } from '../../../redux/actions/documents';
 import PreviewAgreement from './PreviewAgreement';
+import { getContractTemplate } from '../../../redux/actions/template/index';
 
 interface AgreementsProps {
 	show: boolean;
@@ -36,6 +30,7 @@ interface AgreementsProps {
 const Agreements: React.FC<AgreementsProps> = () => {
 	const dispatch = useDispatch();
 	const history = useHistory();
+	const [titleAgreement, setTitleAgreement] = useState('');
 	const { type } = useParams<{ type: string }>();
 
 	const slidesRef = useRef<HTMLIonSlidesElement | null>(null);
@@ -45,42 +40,15 @@ const Agreements: React.FC<AgreementsProps> = () => {
 		slidesPerView: 1
 	};
 
-	// const vehicleTemplate: any = (
-	// 	<IonSlides pager={false} options={slideOpts} ref={slidesRef}>
-	// 		<IonSlide>
-	// 			<VehicleDescription current={slidesRef.current} />
-	// 		</IonSlide>
-	// 		<IonSlide>
-	// 			<FormClient current={slidesRef.current} />
-	// 		</IonSlide>
-	// 		<IonSlide>
-	// 			<FormCounterparty current={slidesRef.current} />
-	// 		</IonSlide>
-	// 		<IonSlide>
-	// 			<VehicleCompleted current={slidesRef.current} />
-	// 		</IonSlide>
-	// 	</IonSlides>
-	// );
-	// const rentalTemplate: any = (
-	// 	<IonSlides pager={false} options={slideOpts} ref={slidesRef}>
-	// 		<IonSlide>
-	// 			<RentalDescription current={slidesRef.current} />
-	// 		</IonSlide>
-	// 		<IonSlide>
-	// 			<FormClient current={slidesRef.current} />
-	// 		</IonSlide>
-	// 		<IonSlide>
-	// 			<FormCounterparty current={slidesRef.current} />
-	// 		</IonSlide>
-	// 		<IonSlide>
-	// 			<RentalCompleted current={slidesRef.current} />
-	// 		</IonSlide>
-	// 	</IonSlides>
-	// );
-	const ndaTemplate: any = (
+	useEffect(() => {
+		const templateData = getContractTemplate(type);
+		setTitleAgreement(templateData.title);
+	}, [type]);
+
+	const documentSlides: any = (
 		<IonSlides pager={false} options={slideOpts} ref={slidesRef}>
 			<IonSlide>
-				<NdaDescription current={slidesRef.current} />
+				<NdaDescription title={titleAgreement} current={slidesRef.current} />
 			</IonSlide>
 			<IonSlide>
 				<FormClient current={slidesRef.current} />
@@ -90,9 +58,6 @@ const Agreements: React.FC<AgreementsProps> = () => {
 			</IonSlide>
 			<IonSlide>
 				<PreviewAgreement current={slidesRef.current} />
-			</IonSlide>
-			<IonSlide>
-				<NdaCompleted current={slidesRef.current} />
 			</IonSlide>
 		</IonSlides>
 	);
@@ -144,7 +109,9 @@ const Agreements: React.FC<AgreementsProps> = () => {
 					</IonToolbar>
 				</IonHeader>
 				<div>
-					{type === 'mutual-nda' ? ndaTemplate : null}
+					{
+						documentSlides
+					}
 				</div>
 			</IonContent>
 		</IonPage>
