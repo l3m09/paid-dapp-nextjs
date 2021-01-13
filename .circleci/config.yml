@@ -245,4 +245,6 @@ workflows:
             branches:
               only:
                 - master
-          context: cea-gcp
+          context: 
+            - cea-gcp
+            - cea-gcp-prod
