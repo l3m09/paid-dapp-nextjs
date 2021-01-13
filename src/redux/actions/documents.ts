@@ -17,7 +17,7 @@ const ipfsClient = require('ipfs-http-client');
 const fetch = require('node-fetch');
 
 // TODO: Get ipfs IP Public of Kubernets Enviroment Variable
-const ipfsnode = `${process.env.PAID_DAPP_IPFS_SERVICE_SERVICE_HOST}`;
+const ipfsnode = `${process.env.REACT_APP_PAID_DAPP_IPFS_SERVICE_SERVICE_HOST}`;
 
 // TODO: Fix
 const ipfs = ipfsClient({ host: 'ipfs.infura.io', port: '5001', protocol: 'https', apiPath: '/api/v0' });
@@ -226,7 +226,7 @@ export const doCreateAgreement = (payload: {
 		PaidTokenContract.options.from = address;
 		// Increase Allowance for withdraw PAID token
 		const paymentSA = web3.utils.toWei(payment, 'ether')
-		// console.log('previo pago', paymentSA,'token address:',  token,'address wallet:', address, 'spender:', spender, 'recipient:', recipientTKN);
+		console.log('previo pago', paymentSA,'token address:',  token,'address wallet:', address, 'spender:', spender, 'recipient:', recipientTKN);
 		const metodoTkn = PaidTokenContract.methods.increaseAllowance(
 			spender,
 			paymentSA
