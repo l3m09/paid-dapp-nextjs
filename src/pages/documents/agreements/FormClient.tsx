@@ -156,7 +156,7 @@ const FormClient: React.FC<AgreementFormProps> = ({ current }) => {
 					<IonInput
 						title="Label"
 						type="text"
-						placeholder="Enter your billing address"
+						placeholder="Enter your address"
 						onInput={(e) => {
 							addressChanged(e);
 						}}
