@@ -1,12 +1,12 @@
-module.exports = `<div class="contract" style="width: 800px; background-color:white; color: black;">
+export const Nda = `<div class="contract" style="width: 800px; background-color:white; color: black;">
 	<div style="text-align: center;">
-		<h3>{create_date}</h3>
+		<h3><p id="createDate">{{createDate}}</p></h3>
 	</div>
 	<div style="text-align: center;">
 		<h1>MUTUAL NONDISCLOSURE AGREEMENT</h1>	
 	</div>
 	<div>
-		<p>This Mutual Nondisclosure Agreement (this "Agreement") is made by and between {party_name} (the "Company"), and {counterparty_name} ("Counterparty").  Each party has disclosed and/or may further disclose its Confidential Information (as defined below) to the other in connection with the Relationship (as defined below) pursuant to the terms and conditions of this Agreement.  As used herein, the term "Discloser" shall refer to the Company whenever the context refers to the Company's Confidential Information being disclosed to Counterparty, which is referred to as "Recipient" in that context.  Conversely, the term "Discloser" shall refer to Counterparty whenever the context refers to Counterparty's Confidential Information being disclosed to the Company, which is referred to as "Recipient" in that context.</p>
+		<p>This Mutual Nondisclosure Agreement (this "Agreement") is made by and between <p id="partyName">{{partyName}}</p> (the "Company"), and <p id="counterPartyName">{{counterPartyName}}</p>  ("Counterparty").  Each party has disclosed and/or may further disclose its Confidential Information (as defined below) to the other in connection with the Relationship (as defined below) pursuant to the terms and conditions of this Agreement.  As used herein, the term "Discloser" shall refer to the Company whenever the context refers to the Company's Confidential Information being disclosed to Counterparty, which is referred to as "Recipient" in that context.  Conversely, the term "Discloser" shall refer to Counterparty whenever the context refers to Counterparty's Confidential Information being disclosed to the Company, which is referred to as "Recipient" in that context.</p>
 	</div>
 	
 	<div style="text-align: center;">
@@ -69,15 +69,15 @@ disclosure, or which information would, under the circumstances, appear to a rea
 		<p><b>THE COMPANY:</b></p>
 		<p>&nbsp;</p>
 		<p>_______________________________________</p>
-		<p>Name: {party_name}</p>
-		<p>Address: {party_address}</p>
-		<p>Wallet: {party_wallet}</p>
+		<p>Name: {{partyName}}</p>
+		<p>Address: <p id="partyAddress">{{partyAddress}}</p></p>
+		<p>Wallet: <p id="partyWallet">{{partyWallet}}</p></p>
 		<p>&nbsp;</p>
 		<p><b>COUNTERPARTY:</b></p>
 		<p>&nbsp;</p>
 		<p>_______________________________________</p>
-		<p>Name: {counterparty_name}</p>
-		<p>Address: {counterparty_address}</p>
-		<p>Wallet: {counterparty_wallet}</p>
+		<p>Name: {{counterPartyName}}</p>
+		<p>Address: <p id="counterPartyAddress">{{counterPartyAddress}}</p></p>
+		<p>Wallet: <p id="counterPartyWallet">{{counterPartyWallet}}</p></p>
 	</div>
 </div>`;

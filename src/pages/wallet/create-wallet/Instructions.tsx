@@ -23,7 +23,7 @@ const Instructions: React.FC<InstructionsProps> = ({ current }) => {
 		await current?.lockSwipeToNext(false);
 		console.log('next');
 		current?.slideNext();
-		// await current.lockSwipeToNext(true);
+		await current?.lockSwipeToNext(true);
 	}
 
 	return (
