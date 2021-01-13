@@ -6,7 +6,7 @@ import { ContractFactory } from '../../utils/contractFactory';
 import { base64StringToBlob } from 'blob-util';
 import { AlgorithmType, CEASigningService, WalletManager } from 'universal-crypto-wallet';
 import { eddsa } from "elliptic";
-
+import * as abiLib  from '../actions/template/abi-utils/abi-lib';
 import { templateRender } from './template/template';
 import { DialogsActionTypes } from '../actionTypes/dialogs';
 import { PAIDTokenContract } from '../../contracts/paidtoken';
@@ -16,7 +16,6 @@ const BigNumber = require('bignumber.js');
 const ipfsClient = require('ipfs-http-client');
 const fetch = require('node-fetch');
 const axios = require('axios');
-
 // TODO: Get ipfs IP Public of Kubernets Enviroment Variable
 const ipfsnode = `${process.env.REACT_APP_PAID_DAPP_IPFS_SERVICE_SERVICE_HOST}`;
 
@@ -223,7 +222,15 @@ export const doCreateAgreement = (payload: {
 			.toHex();
 		const pubKey = signer.getPublic();
 		const opts = { create: true, parents: true };
-		let ipfsHash = await uploadsIPFS(ipfs, blobContent, opts, digest, signature, pubKey, formId, agreementForm.counterpartyWallet, null);
+
+		
+		const elementsAbi = abiLib.getElementsAbi({
+			"address":address
+		});
+		
+		console.log('elementsAbi ',elementsAbi);
+
+		let ipfsHash = await uploadsIPFS(ipfs, blobContent, opts, digest, signature, pubKey, formId, agreementForm.counterpartyWallet, JSON.stringify(elementsAbi), null);
 		// ----------------------------------------------------
 		// Estimate gas,  TODO encapsulate
 		const AgreementContract = ContractFactory.getAgreementContract(web3, network);
@@ -323,16 +330,18 @@ export const doCreateAgreement = (payload: {
 };
 
 export const uploadsIPFS = async (ipfs: any, blobContent: any, opts: any,
-	_digest: string, sigArray: any, pubKey: any, _docId: any, counterpartyAddress: string, parent: any = null) => {
+	_digest: string, sigArray: any, pubKey: any, _docId: any, counterpartyAddress: string,
+	elementsAbi: any, parent: any = null) => {
 	const createCIDHash = (fileEntry: any) => {
 		return { path: fileEntry.path, cid: fileEntry.cid.toString() }
 	}
 
 	const fileContent = await ipfs.add(blobContent);
 	const fileSignature = await ipfs.add(sigArray);
+	const elementsAbiCID = await ipfs.add(elementsAbi);
 	const index = {
 		contentRef: createCIDHash(fileContent), sigRef: createCIDHash(fileSignature), digest: _digest,
-		publicKey: pubKey, parent: parent, docId: _docId, cpartyAddress: counterpartyAddress
+		publicKey: pubKey, parent: parent, docId: _docId, cpartyAddress: counterpartyAddress, elementsAbi: elementsAbiCID
 	};
 
 	const fileIndex = await ipfs.add(JSON.stringify(index));
@@ -641,8 +650,10 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 				.toHex();
 			const pubKey = signer.getPublic();
 			const opts = { create: true, parents: true };
-			let ipfsHash = await uploadsIPFS(ipfs, blobContent, opts, digest, signature, pubKey, formId, address, null);
-	
+			const elementsAbi = abiLib.getElementsAbi({
+				'address':address
+			});
+			let ipfsHash = await uploadsIPFS(ipfs, blobContent, opts, digest, signature, pubKey, formId, address, JSON.stringify(elementsAbi), null);
 	
 			const methodFn = AgreementContract.methods.counterPartiesSign(
 				agreementId,
