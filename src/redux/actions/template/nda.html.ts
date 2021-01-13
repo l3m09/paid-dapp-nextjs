@@ -3,7 +3,7 @@ export const Nda = `<div class="contract" style="width: 800px; background-color:
 		<h3><span id="createDate">{{createDate}}</span></h3>
 	</div>
 	<div style="text-align: center;">
-		<h1 id="tittle">MUTUAL NONDISCLOSURE AGREEMENT</h1>	
+		<h1 id="title">MUTUAL NONDISCLOSURE AGREEMENT</h1>	
 	</div>
 	<div>
 		<p>This Mutual Nondisclosure Agreement (this "Agreement") is made by and between <span id="partyName">{{partyName}}</span> (the "Company"), and <span id="counterPartyName">{{counterPartyName}}</span>  ("Counterparty").  Each party has disclosed and/or may further disclose its Confidential Information (as defined below) to the other in connection with the Relationship (as defined below) pursuant to the terms and conditions of this Agreement.  As used herein, the term "Discloser" shall refer to the Company whenever the context refers to the Company's Confidential Information being disclosed to Counterparty, which is referred to as "Recipient" in that context.  Conversely, the term "Discloser" shall refer to Counterparty whenever the context refers to Counterparty's Confidential Information being disclosed to the Company, which is referred to as "Recipient" in that context.</p>

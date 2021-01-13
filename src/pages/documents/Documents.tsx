@@ -224,10 +224,11 @@ const Documents: React.FC = () => {
 						{agreementTypes.map((type: AgreementType, index: number) => {
 							return (
 								<IonItem
+									key={index}
+									className="cursor-pointer"
 									onClick={() => {
 										chooseOption(type.code);
 									}}
-									key={index}
 								>
 									{type.name}
 								</IonItem>
