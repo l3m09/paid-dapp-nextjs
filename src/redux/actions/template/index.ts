@@ -15,20 +15,18 @@ enum contractsTemplates {
 }
 
 interface contractTemplate {
-    listInterpolation: Array<String>,
+    interpolationFields: Object,
     template: String
 }
 
-const findElementsInterpolation = (html:String) : Array<String> => {
-    let listElements : Array<String> = []
+const findElementsInterpolation = (html:String) : Object => {
+    let obj : Object = {}
     let regexExp = /\{\{[a-zA-Z0-9]+\}\}/gi
     html.match(regexExp)?.forEach(element => {
         let value = element.replace(/[^a-z0-9]/gi,"")
-        if (listElements.indexOf(value) < 0){
-            listElements.push(value)
-        }
+        obj[value] = ""
     });
-    return listElements
+    return obj
 }  
 
 export const getContractTemplate = (contractName:String) :contractTemplate => {
@@ -63,7 +61,7 @@ export const getContractTemplate = (contractName:String) :contractTemplate => {
                 throw new Error("No template Found");
         }
         return {
-            listInterpolation: findElementsInterpolation(contractTemplate),
+            interpolationFields: findElementsInterpolation(contractTemplate),
             template: contractTemplate
         };
     } catch (error) {
