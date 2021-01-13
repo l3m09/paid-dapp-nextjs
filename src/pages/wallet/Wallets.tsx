@@ -24,18 +24,20 @@ import ImportWallet from './ImportWallet';
 import MenuAlternate from '../../components/MenuAlternate';
 import { BlockchainFactory } from '../../utils/blockchainFactory';
 import { ContractFactory } from '../../utils/contractFactory';
-import { KeyStorageModel } from 'paid-universal-wallet/dist/key-storage/KeyStorageModel';
-import { bold } from '../../redux/actions/template/agreement.html';
-import { promises } from 'fs';
+import { KeyStorageModel } from 'universal-crypto-wallet/dist/key-storage/KeyStorageModel';
+// import { bold } from '../../redux/actions/template/agreement.html';
+// import { promises } from 'fs';
 
 const metodofn = async (addrtoken:string, unlockedWallet:any) => {
 	const manager = BlockchainFactory.getWalletManager();
 	const storage = manager.getKeyStorage();
 	const rawWallet = await storage.find<KeyStorageModel>(unlockedWallet._id);
 
-	const address = manager.getWalletAddress(rawWallet.mnemonic);
-	const web3 = BlockchainFactory.getWeb3Instance(rawWallet.keypairs, rawWallet.mnemonic);
-	const network = await BlockchainFactory.getNetwork(web3);
+	const address = unlockedWallet.address
+	const _walletModel = await BlockchainFactory.getWeb3Instance(unlockedWallet._id, unlockedWallet.password)!;
+	const walletModel = _walletModel!;
+	const web3 = walletModel.web3Instance;
+	const network = await BlockchainFactory.getNetwork(walletModel.provider.chainId);
 
 	const AgreementContract = ContractFactory.getAgreementContract(web3, network);
 	const PaidTokenContract = ContractFactory.getPaidTokenContract(web3, network);

@@ -27,7 +27,7 @@ import {
 	documentsOutline as documentsIcon,
 } from 'ionicons/icons';
 
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import { useHistory } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -39,8 +39,9 @@ import MenuAlternate from '../../components/MenuAlternate';
 import DocumentsList from './DocumentsList';
 import { IonText } from '@ionic/react';
 import { BlockchainFactory } from './../../utils/blockchainFactory'
-import { KeyStorageModel } from 'paid-universal-wallet/dist/key-storage/KeyStorageModel';
+import { KeyStorageModel } from 'universal-crypto-wallet/dist/key-storage/KeyStorageModel';
 import SuccessDialog from '../../components/SuccessDialog';
+import AgreementType from '../../models/AgreementType';
 
 function SelectedDocument(payload: {
 	show: boolean;
@@ -55,12 +56,10 @@ function SelectedDocument(payload: {
 
 	useEffect(() => {
 		if (unlockedWallet !== null) {
-			const manager = BlockchainFactory.getWalletManager();
-			const storage = manager.getKeyStorage();
-			const rawWallet = storage.find<KeyStorageModel>(unlockedWallet._id);
-			rawWallet.then((rWallet) => {
-				const web3 = BlockchainFactory.getWeb3Instance(rWallet.keypairs, rWallet.mnemonic);
-				const network = BlockchainFactory.getNetwork(web3);
+			const web3 = BlockchainFactory.getWeb3Instance(unlockedWallet._id, unlockedWallet.password);
+			web3.then((result) => {
+				const { provider } = result!;
+				const network = BlockchainFactory.getNetwork(provider.chainId);
 				network.then((networkText) => {
 					setNetWorkText(networkText.toUpperCase());
 				});
@@ -122,6 +121,7 @@ function SelectedDocument(payload: {
 const Documents: React.FC = () => {
 	const history = useHistory();
 	const dispatch = useDispatch();
+	const slidesRef = useRef<HTMLIonSlidesElement | null>(null);
 	const documentsState = useSelector((state: any) => state.documents);
 	const walletsState = useSelector((state: any) => state.wallet);
 	const {
@@ -132,12 +132,17 @@ const Documents: React.FC = () => {
 		agreementTypes
 	} = documentsState;
 	const wallet = useSelector((state: any) => state.wallet);
+	
 	const { currentWallet } = wallet;
 	const [showModal, setShowModal] = useState(false);
 	const [showPopOver, setShowPopover] = useState(false);
+	const [currentIndex, setCurrentIndex] = useState(0);
+
 	useEffect(() => {
 		dispatch(doGetDocuments(currentWallet));
-	}, [dispatch]);
+		slidesRef.current?.lockSwipes(true)
+	}, [dispatch, slidesRef, currentWallet]);
+
 	function showDocument(item: any) {
 		dispatch(doGetSelectedDocument(item));
 		setShowModal(true);
@@ -161,6 +166,25 @@ const Documents: React.FC = () => {
 	function chooseOption(type: string) {
 		setShowPopover(false);
 		history.push('/agreements/' + type.toLowerCase());
+	}
+
+	const slideOpts = {
+		initialSlide: 0,
+		speed: 400,
+		height: 500,
+		slidesPerView: 1,
+		navigation: {
+			nextEl: '.swipper-btn',
+			prevEl: '.swipper-btn'
+		}
+	};
+
+	async function slideTo(i: number) {
+		await slidesRef.current?.lockSwipes(false)
+		setCurrentIndex(i)
+		await slidesRef.current?.slideTo(i)
+		await slidesRef.current?.lockSwipes(true)
+
 	}
 
 	return (
@@ -197,15 +221,15 @@ const Documents: React.FC = () => {
 						<IonItemDivider>
 							<IonItem>Select Agreement type</IonItem>
 						</IonItemDivider>
-						{agreementTypes.map((type: string, index: number) => {
+						{agreementTypes.map((type: AgreementType, index: number) => {
 							return (
 								<IonItem
 									onClick={() => {
-										chooseOption(type);
+										chooseOption(type.code);
 									}}
 									key={index}
 								>
-									{type}
+									{type.name}
 								</IonItem>
 							);
 						})}

@@ -21,6 +21,7 @@ const Instructions: React.FC<InstructionsProps> = ({ current }) => {
 	async function slideNext() {
 		await current?.lockSwipeToNext(false);
 		current?.slideNext();
+		await current?.lockSwipeToNext(true);
 	}
 
 	return (

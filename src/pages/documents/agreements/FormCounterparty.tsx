@@ -9,10 +9,8 @@ import {
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-	doCreateAgreement,
 	doSetAgreementFormInfo
 } from '../../../redux/actions/documents';
-import { useParams } from 'react-router';
 
 interface AgreementFormProps {
 	current: any;
@@ -27,14 +25,15 @@ const FormCounterparty: React.FC<AgreementFormProps> = ({ current }) => {
 	const [validAddress, setValidAddress] = useState(true);
 	const [validPhone, setValidPhone] = useState(true);
 	const [validCounterpartyWallet, setValidCounterpartyWallet] = useState(true);
+	const [sameCurrentWallet, setSameCurrentWallet] = useState(false);
 	const [startValidation, setStartValidation] = useState(false);
 
-	const { type } = useParams<{ type: string }>();
 	const documentsState = useSelector((state: any) => state.documents);
 	const wallet = useSelector(
 		(state: { wallet: { currentWallet: any } }) => state.wallet
 	);
 	const { currentWallet } = wallet;
+
 
 	const {
 		loading,
@@ -87,6 +86,7 @@ const FormCounterparty: React.FC<AgreementFormProps> = ({ current }) => {
 		}  = agreementFormInfo;
 		setFilled(
 			/.+@.+\..+/.test(counterpartyEmail) &&
+			currentWallet.address !== counterpartyWallet &&
 			counterpartyEmail === counterpartyConfirmEmail &&
 			counterpartyWallet.length > 3 &&
 			counterpartyName.length > 3 &&
@@ -101,6 +101,7 @@ const FormCounterparty: React.FC<AgreementFormProps> = ({ current }) => {
 			setValidAddress(counterpartyAddress.length > 3);
 			setValidPhone(counterpartyPhone.length > 3);
 			setValidCounterpartyWallet(counterpartyWallet.length > 3);
+			setSameCurrentWallet(currentWallet.address === counterpartyWallet);
 		}
 	}
 
@@ -117,22 +118,6 @@ const FormCounterparty: React.FC<AgreementFormProps> = ({ current }) => {
 		await current.slidePrev();
 		await current.lockSwipeToPrev(true);
 	}
-
-	const onSubmit = async () => {
-		// e.preventDefault();
-		dispatch(doSetAgreementFormInfo({ createdAt: new Date().toDateString() }));
-		dispatch(
-			doCreateAgreement({
-				signatoryA: currentWallet.address,
-				signatoryB: agreementFormInfo.counterpartyWallet,
-				validUntil: 0,
-				agreementFormTemplateId: type,
-				agreementForm: agreementFormInfo,
-				slideNext: slideNext,
-				slideBack: slideBack
-			})
-		);
-	};
 
 	return (
 		<div className="agreement-content">
@@ -274,19 +259,25 @@ const FormCounterparty: React.FC<AgreementFormProps> = ({ current }) => {
 							You must enter a destination wallet address
 						</IonNote>
 					}
+					{
+						sameCurrentWallet &&
+						<IonNote color="danger" className="ion-margin-top">
+							Destination wallet address is matching with your current wallet
+						</IonNote>
+					}
 				</IonItem>
 				<IonItem class="form-options">
 					<IonButton
 						color="danger"
 						shape="round"
-						onClick= { () => slideBack()}
+						onClick= { () => slideBack() }
 					>
 					 Back
 					</IonButton>
 					<IonButton
 						// routerLink="/phrase/instructions"
 						onClick={() => {
-							onSubmit();
+							slideNext();
 						}}
 						color="gradient"
 						shape="round"

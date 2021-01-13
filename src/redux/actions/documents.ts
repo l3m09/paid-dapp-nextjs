@@ -1,10 +1,10 @@
-import { KeyStorageModel } from 'paid-universal-wallet/dist/key-storage/KeyStorageModel';
+import { KeyStorageModel } from 'universal-crypto-wallet/dist/key-storage/KeyStorageModel';
 import { DocumentsActionTypes } from '../actionTypes/documents';
 import { BigNumber as BN ,ethers } from 'ethers';
 import { BlockchainFactory } from '../../utils/blockchainFactory';
 import { ContractFactory } from '../../utils/contractFactory';
 import { base64StringToBlob } from 'blob-util';
-import { CEASigningService } from 'paid-universal-wallet';
+import { AlgorithmType, CEASigningService, WalletManager } from 'universal-crypto-wallet';
 import { eddsa } from "elliptic";
 
 import { templateRender } from './template/template';
@@ -145,6 +145,7 @@ export const doCreateAgreement = (payload: {
 	validUntil: number;
 	agreementFormTemplateId: string;
 	agreementForm: any;
+	template: string;
 	slideNext: () => Promise<void>;
 	slideBack: () => Promise<void>;
 }) => async (dispatch: any, getState: () => { wallet: any }) => {
@@ -154,6 +155,7 @@ export const doCreateAgreement = (payload: {
 			validUntil,
 			agreementFormTemplateId,
 			agreementForm,
+			template,
 			slideNext,
 			slideBack
 		} = payload;
@@ -172,28 +174,32 @@ export const doCreateAgreement = (payload: {
 		const manager = BlockchainFactory.getWalletManager();
 		const storage = manager.getKeyStorage();
 		const rawWallet = await storage.find<KeyStorageModel>(unlockedWallet._id);
-
-		const address = manager.getWalletAddress(rawWallet.mnemonic);
-		const web3 = BlockchainFactory.getWeb3Instance(rawWallet.keypairs, rawWallet.mnemonic);
-		const network = await BlockchainFactory.getNetwork(web3);
+		// const onchainWalletAddress = window.ethereum.selectedAddress;
+		
+		console.log(rawWallet);
+		const address = unlockedWallet.address
+		const _walletModel = await BlockchainFactory.getWeb3Instance(unlockedWallet._id, unlockedWallet.password)!;
+		const walletModel = _walletModel!;
+		const web3 = walletModel.web3Instance;
+		const network = await BlockchainFactory.getNetwork(walletModel.provider.chainId);
 
 		if (!web3.utils.isAddress(agreementForm.counterpartyWallet)) {
 			alert('Invalid Counter Party Address');
 			throw new Error('Invalid Counter Party Address');
 		}
 
-		const today = new Date();
-		const template = templateRender({
-			party_name: agreementForm.name,
-			party_wallet: address,
-			party_address: agreementForm.address,
-			counterparty_name: agreementForm.counterpartyName,
-			counterparty_wallet: agreementForm.counterpartyWallet,
-			counterparty_address: agreementForm.counterpartyAddress,
-			create_date: today.toLocaleDateString()
-		});
+		// const today = new Date();
+		// const template = templateRender({
+		// 	party_name: agreementForm.name,
+		// 	party_wallet: address,
+		// 	party_address: agreementForm.address,
+		// 	counterparty_name: agreementForm.counterpartyName,
+		// 	counterparty_wallet: agreementForm.counterpartyWallet,
+		// 	counterparty_address: agreementForm.counterpartyAddress,
+		// 	create_date: today.toLocaleDateString()
+		// });
 		await web3.eth.getBalance(address).then((balancewei) =>{
-			const balance = web3.utils.fromWei(balancewei);
+			const balance = web3!.utils.fromWei(balancewei);
 			const parsedBalance = BigNumber(balance).toNumber();
 			if ((parsedBalance <= 0.0009999999999)) {
 				throw new Error('The wallet should has balance to send a transaction.');
@@ -201,7 +207,8 @@ export const doCreateAgreement = (payload: {
 		})
 
 		// ALICE SIDE
-		const content = template();
+		// const content = template();
+		const content = template;
 		const blobContent = base64StringToBlob(btoa(unescape(encodeURIComponent(content))), 'text/html');
 		const ceass = new CEASigningService();
 		ceass.useKeyStorage(rawWallet);
@@ -330,11 +337,10 @@ export const doGetDocuments = (currentWallet: any) => async (
 			throw new Error('Not unlocked wallet found');
 		}
 
-		const manager = BlockchainFactory.getWalletManager();
-		const storage = manager.getKeyStorage();
-		const rawWallet = await storage.find<KeyStorageModel>(unlockedWallet._id);
-		const web3 = BlockchainFactory.getWeb3Instance(rawWallet.keypairs, rawWallet.mnemonic);
-		const network = await BlockchainFactory.getNetwork(web3);
+		const _walletModel = await BlockchainFactory.getWeb3Instance(unlockedWallet._id, unlockedWallet.password);
+		const walletModel = _walletModel!;
+		const web3 = walletModel.web3Instance;
+		const network = await BlockchainFactory.getNetwork(walletModel.provider.chainId);
 
 		const agreementContract = ContractFactory.getAgreementContract(web3, network);
 
@@ -569,13 +575,14 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 			const manager = BlockchainFactory.getWalletManager();
 			const storage = manager.getKeyStorage();
 			const rawWallet = await storage.find<KeyStorageModel>(unlockedWallet._id);
-			const address = manager.getWalletAddress(rawWallet.mnemonic);
+			const address = unlockedWallet.address;
 	
-			const chkbalance = manager.getWalletAddress(rawWallet.mnemonic);
-			const web3 = BlockchainFactory.getWeb3Instance(rawWallet.keypairs, rawWallet.mnemonic);
-			const network = await BlockchainFactory.getNetwork(web3);
+			const result = await BlockchainFactory.getWeb3Instance(unlockedWallet._id, unlockedWallet.password);
+			const walletModel = result!;
+			const web3 = walletModel.web3Instance;
+			const network = await BlockchainFactory.getNetwork(walletModel.provider.chainId);
 	
-			await web3.eth.getBalance(chkbalance).then((balancewei) =>{
+			await web3.eth.getBalance(address).then((balancewei) =>{
 				const balance = web3.utils.fromWei(balancewei);
 				const parsedBalance = BigNumber(balance).toNumber();
 				//console.log(parsedBalance);
