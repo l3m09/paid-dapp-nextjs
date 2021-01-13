@@ -22,7 +22,6 @@ import CreateWallet from './create-wallet/CreateWallet';
 import UnlockWallet from '../../components/UnlockWallet';
 import ImportWallet from './ImportWallet';
 import MenuAlternate from '../../components/MenuAlternate';
-import { bold } from '../../redux/actions/template/agreement.html';
 
 const Wallets: React.FC = () => {
 	const dispatch = useDispatch();
