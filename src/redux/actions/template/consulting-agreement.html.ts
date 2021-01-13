@@ -83,8 +83,6 @@ export const ConsultingAgreement = `<div class="contract" style="width: 800px; b
 <p align="center"><em>[Signature Page Follows]</em></p>
 <p>The parties have executed this Agreement as of the date first written above.</p>
 <p><strong>THE COMPANY:</strong></p>
-<p>(Print Name)</p>
-<p>{{partyName}}</p>
 <p>(Signature)</p>
 <p>_______________________________________</p>
 <p>Name: <span id="partyName">{{partyName}}</span></p>
@@ -93,7 +91,6 @@ export const ConsultingAgreement = `<div class="contract" style="width: 800px; b
 <p>Wallet: <span id="partyWallet">{{partyWallet}}</span></p>
 <p><u> <br /> </u><br /> </p>
 <p><strong>CONSULTANT:</strong></p>
-<p>(Print Name)</p>
 <p>(Signature)</p>
 <p>_______________________________________</p>
 <p>Name:<span id="counterPartyName">{{counterPartyName}}</span></p>

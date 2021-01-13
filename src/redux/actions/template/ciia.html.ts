@@ -131,8 +131,6 @@ export const Ciia = `<div class="contract" style="width: 800px; background-color
 <p class="western" align="center"><em>[Signature Page Follows]</em></p>
 <p align="justify">The parties have executed this Agreement on the date first above written.</p>
 <p><strong>THE COMPANY:</strong></p>
-<p>(Print Name)</p>
-<p>{{partyName}}</p>
 <p>(Signature)</p>
 <p>_______________________________________</p>
 <p>Name: <span id="partyName">{{partyName}}</span></p>
@@ -142,8 +140,6 @@ export const Ciia = `<div class="contract" style="width: 800px; background-color
 <p><br /> </p>
 <p><br /> </p>
 <p><strong>CONSULTANT:</strong></p>
-<p>(Print Name)</p>
-<p>{{counterPartyName}}</p>
 <p>(Signature)</p>
 <p>_______________________________________</p>
 <p>Name: <span id="counterPartyName">{{counterPartyName}}</span></p>
