@@ -92,6 +92,7 @@ const FormClient: React.FC<AgreementFormProps> = ({ current }) => {
 						title="Label"
 						type="text"
 						placeholder="Enter your name"
+						value="Luis Sanchez"
 						onInput={(e) => {
 							nameChanged(e);
 						}}
@@ -112,6 +113,7 @@ const FormClient: React.FC<AgreementFormProps> = ({ current }) => {
 						title="Label"
 						type="text"
 						placeholder="Enter an email"
+						value="luis@master.ventures"
 						onInput={(e) => {
 							emailChanged(e);
 						}}
@@ -132,6 +134,7 @@ const FormClient: React.FC<AgreementFormProps> = ({ current }) => {
 						title="Label"
 						type="text"
 						placeholder="Confirm email"
+						value="luis@master.ventures"
 						onInput={(e) => {
 							confirmEmailChanged(e);
 						}}
@@ -152,6 +155,7 @@ const FormClient: React.FC<AgreementFormProps> = ({ current }) => {
 						title="Label"
 						type="text"
 						placeholder="Enter your billing address"
+						value="Panama"
 						onInput={(e) => {
 							addressChanged(e);
 						}}
@@ -172,6 +176,7 @@ const FormClient: React.FC<AgreementFormProps> = ({ current }) => {
 						title="Label"
 						type="tel"
 						placeholder="Enter your phone number"
+						value="2342342342"
 						onInput={(e) => {
 							phoneChanged(e);
 						}}
@@ -194,7 +199,7 @@ const FormClient: React.FC<AgreementFormProps> = ({ current }) => {
 						}}
 						color="gradient"
 						shape="round"
-						disabled={!filled}
+						/*disabled={!filled}*/
 					>
 						{loading ? 'Loading..' : 'Confirm'}
 					</IonButton>

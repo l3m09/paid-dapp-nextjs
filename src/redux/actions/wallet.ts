@@ -1,8 +1,8 @@
 import { WalletActionTypes } from '../actionTypes/wallet';
 import { Plugins } from '@capacitor/core';
 import { BlockchainFactory } from '../../utils/blockchainFactory';
-import { KeyStorageModel } from 'paid-universal-wallet/dist/key-storage/KeyStorageModel';
-import { WalletManager } from 'paid-universal-wallet';
+import { KeyStorageModel } from 'universal-crypto-wallet/dist/key-storage/KeyStorageModel';
+import { WalletManager } from 'universal-crypto-wallet';
 const { Storage } = Plugins;
 
 // CREATORS
@@ -87,12 +87,20 @@ const unlockWallet = (payload: any) => {
 };
 
 //Utils
-const getBalanceWallet = async (ks: KeyStorageModel, address: string) => {
-	const web3 = BlockchainFactory.getWeb3Instance(ks.keypairs, ks.mnemonic);
-	const balancewei = await web3.eth.getBalance(address);
-	const balance = web3.utils.fromWei(balancewei);
-
-	return balance;
+const getBalanceWallet = async (walletId: string, password: string) => {
+	try{
+		const wallet = BlockchainFactory.getWalletManager();
+		const address = await wallet.getWalletAddress(walletId);
+		const _walletModel = await BlockchainFactory.getWeb3Instance(walletId, password);
+		const web3 = _walletModel!.web3Instance;
+		const balancewei = await web3.eth.getBalance(address);
+		const balance = web3.utils.fromWei(balancewei);
+	
+		return balance;
+	}
+	catch(ex){
+		console.log(ex);
+	}
 }
 
 // ACTIONS
@@ -103,7 +111,6 @@ export const doUnlockWallet = (payload: {
 	dispatch({ type: WalletActionTypes.UNLOCK_WALLET_LOADING });
 	try {
 		const { wallet, password } = payload;
-		debugger;
 		const walletManager = BlockchainFactory.getWalletManager();
 
 		const ks = await walletManager.unlockWallet(wallet._id, password);
@@ -115,8 +122,8 @@ export const doUnlockWallet = (payload: {
 		} else {
 			// const { address } = wallet;
 			BlockchainFactory.setKeystore(ks);
-			const balance = await getBalanceWallet(ks, wallet.address);
-			const walletWithBalance = {...wallet, balance: balance ?? '0'};
+			const balance = await getBalanceWallet(wallet._id, password);
+			const walletWithBalance = {...wallet, balance: balance ?? '0', password};
 			const value = JSON.stringify(walletWithBalance);
 			const stored: any = await Storage.get({ key: 'WALLETS' });
 			console.log('CURRENT_WALLET_ACTIONS', value);
@@ -230,19 +237,21 @@ export const doCreateWallet = (payload: {
 		const walletManager = BlockchainFactory.getWalletManager();
 		const wallet = await walletManager.createWallet(password, mnemonic);
 		const { _id, created } = wallet;
-		const address = walletManager.getWalletAddress(mnemonic);
+		const address = await walletManager.getWalletAddress(_id);
 
 		const referenceWallet = {
 			_id,
 			address,
 			name,
 			balance: '0',
-			created: created.toString()
+			created: created.toString(),
+			password
 		};
 
 		const createdWallet = {
 			...referenceWallet,
 		};
+		
 		const encoded = JSON.stringify(referenceWallet);
 		await Storage.set({ key: 'CURRENT_WALLET', value: encoded });
 		const stored = await Storage.get({ key: 'WALLETS' });
@@ -273,17 +282,16 @@ export const doImportWallet = (payload: {
 		const walletManager = BlockchainFactory.getWalletManager();
 		const wallet = await walletManager.createWallet(password, mnemonic);
 		const { _id, created } = wallet;
-		const address = walletManager.getWalletAddress(mnemonic);
-	
-		const ks = await walletManager.unlockWallet(_id, password);
-		const balance = await getBalanceWallet(ks, address);
+		const address = await walletManager.getWalletAddress(_id);
+		const balance = await getBalanceWallet(_id, password);
 
 		const referenceWallet = {
 			_id,
 			address,
 			name,
 			balance: balance ?? '0',
-			created: created.toString()
+			created: created.toString(),
+			password
 		};
 
 		const stored = await Storage.get({ key: 'WALLETS' });
