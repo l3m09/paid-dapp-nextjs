@@ -1,0 +1,924 @@
+{
+  "contractName": "WorkflowRegistry",
+  "abi": [
+    {
+      "inputs": [],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "id",
+          "type": "uint256"
+        }
+      ],
+      "name": "AgreementClosed",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "id",
+          "type": "uint256"
+        }
+      ],
+      "name": "AgreementCreated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "id",
+          "type": "uint256"
+        }
+      ],
+      "name": "AgreementDisputed",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "id",
+          "type": "uint256"
+        }
+      ],
+      "name": "AgreementModified",
+      "type": "event"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "agreements",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "address",
+              "name": "signatory",
+              "type": "address"
+            }
+          ],
+          "internalType": "struct AgreementModels.Party",
+          "name": "fromSigner",
+          "type": "tuple"
+        },
+        {
+          "components": [
+            {
+              "internalType": "address",
+              "name": "signatory",
+              "type": "address"
+            }
+          ],
+          "internalType": "struct AgreementModels.Party",
+          "name": "toSigner",
+          "type": "tuple"
+        },
+        {
+          "internalType": "bool",
+          "name": "escrowed",
+          "type": "bool"
+        },
+        {
+          "internalType": "uint256",
+          "name": "validUntil",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bytes",
+          "name": "agreementForm",
+          "type": "bytes"
+        },
+        {
+          "internalType": "uint256",
+          "name": "status",
+          "type": "uint256"
+        },
+        {
+          "components": [
+            {
+              "internalType": "string",
+              "name": "multiaddressReference",
+              "type": "string"
+            },
+            {
+              "internalType": "bytes",
+              "name": "digest",
+              "type": "bytes"
+            }
+          ],
+          "internalType": "struct AgreementModels.Content",
+          "name": "file",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "metadata": "{\"compiler\":{\"version\":\"0.6.10+commit.00c0fcaf\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"id\",\"type\":\"uint256\"}],\"name\":\"AgreementClosed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"id\",\"type\":\"uint256\"}],\"name\":\"AgreementCreated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"id\",\"type\":\"uint256\"}],\"name\":\"AgreementDisputed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"id\",\"type\":\"uint256\"}],\"name\":\"AgreementModified\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"agreements\",\"outputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"signatory\",\"type\":\"address\"}],\"internalType\":\"struct AgreementModels.Party\",\"name\":\"fromSigner\",\"type\":\"tuple\"},{\"components\":[{\"internalType\":\"address\",\"name\":\"signatory\",\"type\":\"address\"}],\"internalType\":\"struct AgreementModels.Party\",\"name\":\"toSigner\",\"type\":\"tuple\"},{\"internalType\":\"bool\",\"name\":\"escrowed\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"validUntil\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"agreementForm\",\"type\":\"bytes\"},{\"internalType\":\"uint256\",\"name\":\"status\",\"type\":\"uint256\"},{\"components\":[{\"internalType\":\"string\",\"name\":\"multiaddressReference\",\"type\":\"string\"},{\"internalType\":\"bytes\",\"name\":\"digest\",\"type\":\"bytes\"}],\"internalType\":\"struct AgreementModels.Content\",\"name\":\"file\",\"type\":\"tuple\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/home/esfera-ubuntu/Documents/projects/paid-contracts/contracts/WorkflowRegistry.sol\":\"WorkflowRegistry\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"details\":{\"constantOptimizer\":true,\"cse\":false,\"deduplicate\":false,\"jumpdestRemover\":true,\"orderLiterals\":false,\"peephole\":true,\"yul\":true,\"yulDetails\":{\"optimizerSteps\":\"dhfoDgvulfnTUtnIf[xarrscLMcCTUtTOntnfDIulLculVcul jjeulxarulrulxarrcLgvifCTUcarrLsTOtfDncarrIulc]jmuljuljul VcTOcul jmul\",\"stackAllocation\":true}},\"runs\":200},\"remappings\":[]},\"sources\":{\"/home/esfera-ubuntu/Documents/projects/paid-contracts/contracts/AgreementModels.sol\":{\"keccak256\":\"0xaf20cdfe80e34dd8f79e8bb5c8d89d4a80089a0b6d9bf321eade9d68d53c7616\",\"urls\":[\"bzz-raw://324fa1a29394ecee5f025bb6eaf1b25105f1ee7b71da028cd48e635836ecc817\",\"dweb:/ipfs/QmT3vAPj5zP18iAiofhMqj9WFL7KCHZQ3xEf67ZKZfoTPD\"]},\"/home/esfera-ubuntu/Documents/projects/paid-contracts/contracts/WorkflowRegistry.sol\":{\"keccak256\":\"0x53937444880bf125641df53a516dcf35b2885b0d00176ac6002786cf86df32cd\",\"urls\":[\"bzz-raw://068fd8fb9532cb450bb674e7bf52c3fe5efe41fa71f28413e3c6431327ed8d3e\",\"dweb:/ipfs/QmWgPRGvCNTg1LGRRQCxipFTvcPatCu6MKAYzebfK2gM1d\"]},\"@openzeppelin/contracts/GSN/Context.sol\":{\"keccak256\":\"0xdb26cbf4d028490f49831a7865c2fe1b28db44b535ca8d343785a3b768aae183\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://840b14ce0315c47d49ba328f1f9fa7654ded1c9e1559e6c5e777a7b2dc28bf0a\",\"dweb:/ipfs/QmTLLabn4wcfGro9LEmUXUN2nwKqZSotXMvjDCLXEnLtZP\"]},\"@openzeppelin/contracts/access/Ownable.sol\":{\"keccak256\":\"0x4bd6402ca6b3419008c2b482aff54e66836e8cb4eba2680e42ac5884ae6424fc\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://8f9f711fb8d0d92aeea1c327e3845d13ca1fa8f142e47f8723cd5b3106fb29a3\",\"dweb:/ipfs/QmVQUReDW9f4zGqhizwHnyU8EntMs95tbASdqkGncnikba\"]}},\"version\":1}",
+  "bytecode": "0x608060405234801561001057600080fd5b50610437806100206000396000f3fe608060405234801561001057600080fd5b506004361061002b5760003560e01c8063bd14de9614610030575b600080fd5b61004a6004803603810190610045919061030d565b610066565b60405161005d979695949392919061037b565b60405180910390f35b6001602052806000526040600020600091509050806000016040518060200160405290816000820160009054906101000a90046001600160a01b03166001600160a01b03166001600160a01b03168152505090806001016040518060200160405290816000820160009054906101000a90046001600160a01b03166001600160a01b03166001600160a01b031681525050908060020160009054906101000a900460ff1690806003015490806004018054600181600116156101000203166002900480601f0160208091040260200160405190810160405280929190818152602001828054600181600116156101000203166002900480156101a95780601f1061017e576101008083540402835291602001916101a9565b820191906000526020600020905b81548152906001019060200180831161018c57829003601f168201915b50505050509080600501549080600601604051806040016040529081600082018054600181600116156101000203166002900480601f01602080910402602001604051908101604052809291908181526020018280546001816001161561010002031660029004801561025d5780601f106102325761010080835404028352916020019161025d565b820191906000526020600020905b81548152906001019060200180831161024057829003601f168201915b50505050508152602001600182018054600181600116156101000203166002900480601f0160208091040260200160405190810160405280929190818152602001828054600181600116156101000203166002900480156102ff5780601f106102d4576101008083540402835291602001916102ff565b820191906000526020600020905b8154815290600101906020018083116102e257829003601f168201915b505050505081525050905087565b60006020828403121561031e578081fd5b8135905092915050565b60008151808452815b8181101561035357602080828601015181838801015250602081019050610331565b818111156103645782602083870101525b506020601f19601f83011685010191505092915050565b600060018060a01b03808a5116835280895116602084015250861515604083015285606083015260e060808301526103b660e0830186610328565b8460a084015282810360c08401528351604082526103d76040830182610328565b6020860151915082810360208401526103f08183610328565b93505050509897505050505050505056fea2646970667358221220549d1d502daa0f67761eb889dab717d7645094ce4d77c1c993110de02cd9a5ae64736f6c634300060a0033",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b506004361061002b5760003560e01c8063bd14de9614610030575b600080fd5b61004a6004803603810190610045919061030d565b610066565b60405161005d979695949392919061037b565b60405180910390f35b6001602052806000526040600020600091509050806000016040518060200160405290816000820160009054906101000a90046001600160a01b03166001600160a01b03166001600160a01b03168152505090806001016040518060200160405290816000820160009054906101000a90046001600160a01b03166001600160a01b03166001600160a01b031681525050908060020160009054906101000a900460ff1690806003015490806004018054600181600116156101000203166002900480601f0160208091040260200160405190810160405280929190818152602001828054600181600116156101000203166002900480156101a95780601f1061017e576101008083540402835291602001916101a9565b820191906000526020600020905b81548152906001019060200180831161018c57829003601f168201915b50505050509080600501549080600601604051806040016040529081600082018054600181600116156101000203166002900480601f01602080910402602001604051908101604052809291908181526020018280546001816001161561010002031660029004801561025d5780601f106102325761010080835404028352916020019161025d565b820191906000526020600020905b81548152906001019060200180831161024057829003601f168201915b50505050508152602001600182018054600181600116156101000203166002900480601f0160208091040260200160405190810160405280929190818152602001828054600181600116156101000203166002900480156102ff5780601f106102d4576101008083540402835291602001916102ff565b820191906000526020600020905b8154815290600101906020018083116102e257829003601f168201915b505050505081525050905087565b60006020828403121561031e578081fd5b8135905092915050565b60008151808452815b8181101561035357602080828601015181838801015250602081019050610331565b818111156103645782602083870101525b506020601f19601f83011685010191505092915050565b600060018060a01b03808a5116835280895116602084015250861515604083015285606083015260e060808301526103b660e0830186610328565b8460a084015282810360c08401528351604082526103d76040830182610328565b6020860151915082810360208401526103f08183610328565b93505050509897505050505050505056fea2646970667358221220549d1d502daa0f67761eb889dab717d7645094ce4d77c1c993110de02cd9a5ae64736f6c634300060a0033",
+  "immutableReferences": {},
+  "sourceMap": "220:1337:6:-:0;;;555:28;;;;;;;;;;220:1337;;;;;;",
+  "deployedSourceMap": "220:1337:6:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;492:56;;;;;;;;;;;;;;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;;;492:56:6;-1:-1:-1;;;;;492:56:6;-1:-1:-1;;;;;492:56:6;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;;;492:56:6;-1:-1:-1;;;;;492:56:6;-1:-1:-1;;;;;492:56:6;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::o;142:241:-1:-;;246:2;234:9;225:7;221:23;217:32;214:2;;;-1:-1;;252:12;214:2;85:6;72:20;304:63;;208:175;;;;;611:323;;743:5;4258:12;4533:6;4528:3;4521:19;-1:-1;5392:101;5406:6;5403:1;5400:13;5392:101;;;4570:4;;5482:1;852:5;5473:11;;5467:18;4570:4;5463:1;4565:3;5454:11;;5447:39;;4570:4;5425:1;5421:10;5416:15;;5392:101;;;5508:6;5505:1;5502:13;5499:2;;;-1:-1;4570:4;5564:6;4565:3;5555:16;;5548:27;5499:2;;4570:4;5680:7;;5684:2;921:6;5664:14;5660:28;4565:3;890:39;;883:46;;;691:243;;;;;2880:1284;;5185:42;;;;;;2646:16;2640:23;5174:54;458:3;451:37;5185:42;2646:16;2640:23;5174:54;3576:2;3565:9;3561:18;451:37;;592:5;5086:13;5079:21;3653:2;3642:9;3638:18;565:34;2861:5;3736:2;3725:9;3721:18;2831:37;3323:3;3773;3762:9;3758:19;3751:49;3814:76;3323:3;3312:9;3308:19;3876:6;3814:76;;;2861:5;3969:3;3958:9;3954:19;2831:37;4023:9;4017:4;4013:20;4007:3;3996:9;3992:19;3985:49;1934:16;1928:23;3653:2;1971:14;1964:38;2017:73;3653:2;1840:3;1836:14;2071:12;2017:73;;;3576:2;2170:5;2166:16;2160:23;2140:43;;2229:3;2223:4;2219:14;3576:2;2207:3;2203:14;2196:38;2249:71;2315:4;2301:12;2249:71;;;4040:114;;;;;3294:870;;;;;;;;;;",
+  "source": "pragma solidity ^0.6.10;\npragma experimental ABIEncoderV2;\n\nimport \"@openzeppelin/contracts/access/Ownable.sol\";\nimport \"./AgreementModels.sol\";\n// \n// @dev Contains agreements templates or documents created by user\n// \ncontract WorkflowRegistry is AgreementModels {\n    event AgreementCreated(uint256 indexed id);\n    event AgreementModified(uint256 indexed id);\n    event AgreementDisputed(uint256 indexed id);\n    event AgreementClosed(uint256 indexed id);\n\n    uint256 private count;\n    mapping (uint256 => AgreementDocument) public agreements;\n\n    constructor() public {\n    }\n\n    // // Registers a PAID workflow contract\n    // // With states and steps to execute\n    // // Add msg.sender as owner\n    // // Each step/status pair gets and id\n    // function createWorkflow(\n    //     address signatoryA,\n    //     address signatoryB,\n    //     uint validUntil,\n    //     string memory multiaddrReference,\n    //     bytes memory signature,\n    //     bytes memory digest\n    // ) \n    // public returns (uint) {\n    //     count++;\n    //     agreements[count] = AgreementDocument({\n    //         fromSigner: Party({ signatory: signatoryA }),\n    //         toSigner: Party({ signatory: signatoryB }),\n    //         signed: false,\n    //         escrowed: false,\n    //         validUntil: 0,\n    //         file: Content({\n    //             multiaddressReference: multiaddrReference,\n    //             signature: signature,\n    //             digest: digest\n    //         })\n            \n    //     });\n    //     return count;\n    // }\n}",
+  "sourcePath": "/home/esfera-ubuntu/Documents/projects/paid-contracts/contracts/WorkflowRegistry.sol",
+  "ast": {
+    "absolutePath": "/home/esfera-ubuntu/Documents/projects/paid-contracts/contracts/WorkflowRegistry.sol",
+    "exportedSymbols": {
+      "WorkflowRegistry": [
+        506
+      ]
+    },
+    "id": 507,
+    "license": null,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 474,
+        "literals": [
+          "solidity",
+          "^",
+          "0.6",
+          ".10"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:6"
+      },
+      {
+        "id": 475,
+        "literals": [
+          "experimental",
+          "ABIEncoderV2"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "25:33:6"
+      },
+      {
+        "absolutePath": "@openzeppelin/contracts/access/Ownable.sol",
+        "file": "@openzeppelin/contracts/access/Ownable.sol",
+        "id": 476,
+        "nodeType": "ImportDirective",
+        "scope": 507,
+        "sourceUnit": 952,
+        "src": "60:52:6",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "/home/esfera-ubuntu/Documents/projects/paid-contracts/contracts/AgreementModels.sol",
+        "file": "./AgreementModels.sol",
+        "id": 477,
+        "nodeType": "ImportDirective",
+        "scope": 507,
+        "sourceUnit": 312,
+        "src": "113:31:6",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "abstract": false,
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 478,
+              "name": "AgreementModels",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 311,
+              "src": "249:15:6",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_AgreementModels_$311",
+                "typeString": "contract AgreementModels"
+              }
+            },
+            "id": 479,
+            "nodeType": "InheritanceSpecifier",
+            "src": "249:15:6"
+          }
+        ],
+        "contractDependencies": [
+          311
+        ],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 506,
+        "linearizedBaseContracts": [
+          506,
+          311
+        ],
+        "name": "WorkflowRegistry",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "anonymous": false,
+            "documentation": null,
+            "id": 483,
+            "name": "AgreementCreated",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 482,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 481,
+                  "indexed": true,
+                  "mutability": "mutable",
+                  "name": "id",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 483,
+                  "src": "294:18:6",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 480,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "294:7:6",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "293:20:6"
+            },
+            "src": "271:43:6"
+          },
+          {
+            "anonymous": false,
+            "documentation": null,
+            "id": 487,
+            "name": "AgreementModified",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 486,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 485,
+                  "indexed": true,
+                  "mutability": "mutable",
+                  "name": "id",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 487,
+                  "src": "343:18:6",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 484,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "343:7:6",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "342:20:6"
+            },
+            "src": "319:44:6"
+          },
+          {
+            "anonymous": false,
+            "documentation": null,
+            "id": 491,
+            "name": "AgreementDisputed",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 490,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 489,
+                  "indexed": true,
+                  "mutability": "mutable",
+                  "name": "id",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 491,
+                  "src": "392:18:6",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 488,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "392:7:6",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "391:20:6"
+            },
+            "src": "368:44:6"
+          },
+          {
+            "anonymous": false,
+            "documentation": null,
+            "id": 495,
+            "name": "AgreementClosed",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 494,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 493,
+                  "indexed": true,
+                  "mutability": "mutable",
+                  "name": "id",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 495,
+                  "src": "439:18:6",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 492,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "439:7:6",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "438:20:6"
+            },
+            "src": "417:42:6"
+          },
+          {
+            "constant": false,
+            "id": 497,
+            "mutability": "mutable",
+            "name": "count",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 506,
+            "src": "465:21:6",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 496,
+              "name": "uint256",
+              "nodeType": "ElementaryTypeName",
+              "src": "465:7:6",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": null,
+            "visibility": "private"
+          },
+          {
+            "constant": false,
+            "functionSelector": "bd14de96",
+            "id": 501,
+            "mutability": "mutable",
+            "name": "agreements",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 506,
+            "src": "492:56:6",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_mapping$_t_uint256_$_t_struct$_AgreementDocument_$310_storage_$",
+              "typeString": "mapping(uint256 => struct AgreementModels.AgreementDocument)"
+            },
+            "typeName": {
+              "id": 500,
+              "keyType": {
+                "id": 498,
+                "name": "uint256",
+                "nodeType": "ElementaryTypeName",
+                "src": "501:7:6",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                }
+              },
+              "nodeType": "Mapping",
+              "src": "492:38:6",
+              "typeDescriptions": {
+                "typeIdentifier": "t_mapping$_t_uint256_$_t_struct$_AgreementDocument_$310_storage_$",
+                "typeString": "mapping(uint256 => struct AgreementModels.AgreementDocument)"
+              },
+              "valueType": {
+                "contractScope": null,
+                "id": 499,
+                "name": "AgreementDocument",
+                "nodeType": "UserDefinedTypeName",
+                "referencedDeclaration": 310,
+                "src": "512:17:6",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_AgreementDocument_$310_storage_ptr",
+                  "typeString": "struct AgreementModels.AgreementDocument"
+                }
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 504,
+              "nodeType": "Block",
+              "src": "576:7:6",
+              "statements": []
+            },
+            "documentation": null,
+            "id": 505,
+            "implemented": true,
+            "kind": "constructor",
+            "modifiers": [],
+            "name": "",
+            "nodeType": "FunctionDefinition",
+            "overrides": null,
+            "parameters": {
+              "id": 502,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "566:2:6"
+            },
+            "returnParameters": {
+              "id": 503,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "576:0:6"
+            },
+            "scope": 506,
+            "src": "555:28:6",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "public"
+          }
+        ],
+        "scope": 507,
+        "src": "220:1337:6"
+      }
+    ],
+    "src": "0:1557:6"
+  },
+  "legacyAST": {
+    "absolutePath": "/home/esfera-ubuntu/Documents/projects/paid-contracts/contracts/WorkflowRegistry.sol",
+    "exportedSymbols": {
+      "WorkflowRegistry": [
+        506
+      ]
+    },
+    "id": 507,
+    "license": null,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 474,
+        "literals": [
+          "solidity",
+          "^",
+          "0.6",
+          ".10"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:6"
+      },
+      {
+        "id": 475,
+        "literals": [
+          "experimental",
+          "ABIEncoderV2"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "25:33:6"
+      },
+      {
+        "absolutePath": "@openzeppelin/contracts/access/Ownable.sol",
+        "file": "@openzeppelin/contracts/access/Ownable.sol",
+        "id": 476,
+        "nodeType": "ImportDirective",
+        "scope": 507,
+        "sourceUnit": 952,
+        "src": "60:52:6",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "/home/esfera-ubuntu/Documents/projects/paid-contracts/contracts/AgreementModels.sol",
+        "file": "./AgreementModels.sol",
+        "id": 477,
+        "nodeType": "ImportDirective",
+        "scope": 507,
+        "sourceUnit": 312,
+        "src": "113:31:6",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "abstract": false,
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 478,
+              "name": "AgreementModels",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 311,
+              "src": "249:15:6",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_AgreementModels_$311",
+                "typeString": "contract AgreementModels"
+              }
+            },
+            "id": 479,
+            "nodeType": "InheritanceSpecifier",
+            "src": "249:15:6"
+          }
+        ],
+        "contractDependencies": [
+          311
+        ],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 506,
+        "linearizedBaseContracts": [
+          506,
+          311
+        ],
+        "name": "WorkflowRegistry",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "anonymous": false,
+            "documentation": null,
+            "id": 483,
+            "name": "AgreementCreated",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 482,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 481,
+                  "indexed": true,
+                  "mutability": "mutable",
+                  "name": "id",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 483,
+                  "src": "294:18:6",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 480,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "294:7:6",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "293:20:6"
+            },
+            "src": "271:43:6"
+          },
+          {
+            "anonymous": false,
+            "documentation": null,
+            "id": 487,
+            "name": "AgreementModified",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 486,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 485,
+                  "indexed": true,
+                  "mutability": "mutable",
+                  "name": "id",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 487,
+                  "src": "343:18:6",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 484,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "343:7:6",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "342:20:6"
+            },
+            "src": "319:44:6"
+          },
+          {
+            "anonymous": false,
+            "documentation": null,
+            "id": 491,
+            "name": "AgreementDisputed",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 490,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 489,
+                  "indexed": true,
+                  "mutability": "mutable",
+                  "name": "id",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 491,
+                  "src": "392:18:6",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 488,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "392:7:6",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "391:20:6"
+            },
+            "src": "368:44:6"
+          },
+          {
+            "anonymous": false,
+            "documentation": null,
+            "id": 495,
+            "name": "AgreementClosed",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 494,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 493,
+                  "indexed": true,
+                  "mutability": "mutable",
+                  "name": "id",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 495,
+                  "src": "439:18:6",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 492,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "439:7:6",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "438:20:6"
+            },
+            "src": "417:42:6"
+          },
+          {
+            "constant": false,
+            "id": 497,
+            "mutability": "mutable",
+            "name": "count",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 506,
+            "src": "465:21:6",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 496,
+              "name": "uint256",
+              "nodeType": "ElementaryTypeName",
+              "src": "465:7:6",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": null,
+            "visibility": "private"
+          },
+          {
+            "constant": false,
+            "functionSelector": "bd14de96",
+            "id": 501,
+            "mutability": "mutable",
+            "name": "agreements",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 506,
+            "src": "492:56:6",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_mapping$_t_uint256_$_t_struct$_AgreementDocument_$310_storage_$",
+              "typeString": "mapping(uint256 => struct AgreementModels.AgreementDocument)"
+            },
+            "typeName": {
+              "id": 500,
+              "keyType": {
+                "id": 498,
+                "name": "uint256",
+                "nodeType": "ElementaryTypeName",
+                "src": "501:7:6",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                }
+              },
+              "nodeType": "Mapping",
+              "src": "492:38:6",
+              "typeDescriptions": {
+                "typeIdentifier": "t_mapping$_t_uint256_$_t_struct$_AgreementDocument_$310_storage_$",
+                "typeString": "mapping(uint256 => struct AgreementModels.AgreementDocument)"
+              },
+              "valueType": {
+                "contractScope": null,
+                "id": 499,
+                "name": "AgreementDocument",
+                "nodeType": "UserDefinedTypeName",
+                "referencedDeclaration": 310,
+                "src": "512:17:6",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_AgreementDocument_$310_storage_ptr",
+                  "typeString": "struct AgreementModels.AgreementDocument"
+                }
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 504,
+              "nodeType": "Block",
+              "src": "576:7:6",
+              "statements": []
+            },
+            "documentation": null,
+            "id": 505,
+            "implemented": true,
+            "kind": "constructor",
+            "modifiers": [],
+            "name": "",
+            "nodeType": "FunctionDefinition",
+            "overrides": null,
+            "parameters": {
+              "id": 502,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "566:2:6"
+            },
+            "returnParameters": {
+              "id": 503,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "576:0:6"
+            },
+            "scope": 506,
+            "src": "555:28:6",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "public"
+          }
+        ],
+        "scope": 507,
+        "src": "220:1337:6"
+      }
+    ],
+    "src": "0:1557:6"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.6.10+commit.00c0fcaf.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.3.2",
+  "updatedAt": "2020-12-12T15:58:25.735Z",
+  "devdoc": {
+    "methods": {}
+  },
+  "userdoc": {
+    "methods": {}
+  }
+}

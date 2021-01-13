@@ -1,2 +1,4 @@
-# paid-dapp
-This is the readme file
+# install
+`make up`
+
+# TODO (README for Dapp)

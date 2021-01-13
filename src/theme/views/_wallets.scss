@@ -1,0 +1,278 @@
+.wallets-page {
+
+  .wallets-title {
+    position: relative;
+    padding: 20px 0;
+
+   @media (min-width: 767px) {
+     &:after {
+       content: "";
+       position: absolute;
+       bottom: 0;
+       left: 50%;
+       transform: translateX(-50%);
+       height: 1px;
+       width: 850px;
+       background-color: var(--ion-color-primary);
+
+     }
+   }
+
+    h5 {
+      width: 100%;
+      text-align: center;
+      color: white;
+    }
+
+  }
+
+  //ion-item-group,
+  //ion-item-divider {
+  //  width: 95%;
+  //  margin-left: 2.5%;
+  //}
+  .wallets-container {
+    margin-top: 1vh;
+
+    .no-wallet-selected {
+      margin-bottom: 15px;
+      font-size: 1em;
+      margin-top: -5px;
+
+    }
+
+    .wallet-wrapper {
+      margin-bottom: 1vh;
+
+      .wallet-container {
+        background: $brand-secondary;
+        width: 100%;
+        border-radius: 10px;
+        padding: 10px;
+        color: black;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        box-shadow: 1px 1px 1px $brand-secondary;
+
+        &:hover {
+          background: var(--ion-color-gradient);
+          cursor: pointer;
+
+        }
+
+        span {
+          width: 100%;
+          text-align: center;
+          margin-bottom: 1vh;
+
+          &.amount {
+            font-size: 1.4em;
+            text-shadow: 1px 1px 1px #dedede;
+          }
+
+          &.label {
+
+          }
+
+          &.type {
+
+          }
+
+          &.address {
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+            margin-bottom: 0;
+
+          }
+        }
+
+        .icon-copy {
+          cursor: pointer;
+        }
+
+      }
+
+      .balanceContainer {
+        display: flex;
+        align-self: flex-start;
+        margin-top: 15px;
+        padding-top: 5px;
+        border-top: 1px solid #ad8f8f;
+        width: 100%;
+
+        .labelCoin {
+          width: 40px;
+        }
+
+        .amountCoin {
+          margin-left: 10px;
+          text-align: left;
+        }
+      }
+
+      &.selected-wallet {
+        position: relative;
+
+        .wallet-container {
+          background: $bg-gradient;
+          color: white;
+          touch-action: none;
+
+          .current-tag {
+            position: absolute;
+            top: 5px;
+            right: 25px;
+            font-size: 0.9em;
+
+          }
+
+          &:hover {
+            cursor: initial;
+          }
+
+
+        }
+
+      }
+
+    }
+
+
+  }
+
+  .wallets-list-wrapper {
+
+    @media (min-width: 767px) {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+
+      ion-item-group {
+        width: 50%;
+        max-width: 400px;
+        height: 70vh;
+        padding-top: 20px;
+
+        &:first-child{
+          border-right: 1px solid var(--ion-color-primary);
+        }
+
+      }
+
+    }
+
+    ion-item-divider {
+      margin-bottom: 20px;
+      min-height: 20px;
+      border-color: $brand-secondary;
+
+      @media (min-width: 767px) {
+        display: none;
+
+      }
+
+    }
+
+  }
+
+}
+
+.wallet-content {
+
+  form {
+
+    ion-item {
+      display: flex;
+      flex-direction: column;
+      //margin-top: 5vh;
+
+      .item-inner {
+        border: none;
+      }
+      span {
+        width: 100%;
+        text-align: center;
+        font-weight: bold;
+        font-size: 0.9em;
+      }
+
+    }
+
+    ion-label {
+      font-weight: bold;
+      padding-bottom: 5vh;
+    }
+
+    ion-input {
+      border: 1px solid #8880A8;
+      border-radius: 5px;
+      font-size: 0.9em;
+
+      input {
+        padding: 5px 10px !important;
+        height: 45px;
+
+      }
+
+    }
+
+    ion-textarea {
+      border: 2px solid #8880A8;
+      border-radius: 10px;
+      min-height: 80px;
+      padding: 10px 20px;
+      text-align: justify;
+
+      textarea {
+        min-height: 80px;
+        line-height: 1.5;
+        font-weight: bold !important;
+        font-size: 0.9em !important;
+
+      }
+
+    }
+
+    .textarea-hint {
+      margin-top: 5px;
+    }
+
+    .form-options {
+     margin-top: 15px;
+
+   }
+
+  }
+
+  .what-is {
+    width: 100%;
+    text-align: center;
+    margin-top: 15vh;
+
+    ion-router-link {
+      color: $brand-primary;
+
+    }
+  }
+
+  ion-title, ion-text {
+    width: 100%;
+    text-align: center;
+    //margin-top: 2vh;
+
+    &.import-information {
+      font-size: 1em;
+      font-weight: 500;
+      margin-top: 5vh;
+
+    }
+
+  }
+
+
+}
+
+
