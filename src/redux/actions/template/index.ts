@@ -14,15 +14,24 @@ enum contractsTemplates {
     TemplateSaft = "ConsultingAgreement",
 }
 
-const findElementsInterpolation = (html:String) : Array<String> => {
-    let listElements = []
-    let regexExp = /\{\{[a-zA-Z]+\}\}/gi
-    
+interface contractTemplate {
+    listInterpolation: Array<String>,
+    template: String
+}
 
+const findElementsInterpolation = (html:String) : Array<String> => {
+    let listElements : Array<String> = []
+    let regexExp = /\{\{[a-zA-Z0-9]+\}\}/gi
+    html.match(regexExp)?.forEach(element => {
+        let value = element.replace(/[^a-z0-9]/gi,"")
+        if (listElements.indexOf(value) < 0){
+            listElements.push(value)
+        }
+    });
     return listElements
 }  
 
-export const getContractTemplate = (contractName:String) :Object => {
+export const getContractTemplate = (contractName:String) :contractTemplate => {
     let contractTemplate 
     try {
         switch (contractName) {
@@ -54,7 +63,7 @@ export const getContractTemplate = (contractName:String) :Object => {
                 throw new Error("No template Found");
         }
         return {
-            listInterpolation: [],
+            listInterpolation: findElementsInterpolation(contractTemplate),
             template: contractTemplate
         };
     } catch (error) {
