@@ -26,7 +26,7 @@ const initialState = {
 		},
 		{
 			code: 'referalAgreement',
-			name: 'Referal'
+			name: 'Referral'
 		},
 		{
 			code: 'saftAgreement',

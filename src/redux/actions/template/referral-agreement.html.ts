@@ -1,8 +1,16 @@
-export const ReferalAgreement = `<p lang="x-none"><img src="file:///tmp/lu3143m6nflh.tmp/lu3143m6nfm1_tmp_5818bcb1de4a4214.gif" width="8" height="9" name="_tx_id_2_" align="bottom" border="0" /></p>
-<p lang="x-none" align="center"><span id="Frame1" dir="ltr"></span><strong><span style="font-size: large;"><span lang="en-US">SALES COMMISSION</span></span><span style="font-size: large;"><span lang="en-US"> AGREEMENT</span></span></strong></p>
+export const ReferalAgreement = `<div class="contract" style="width: 800px; background-color:white; color: black;">
+<h1 id="title" style="text-align: center;">REFERRAL AGREEMENT</h1>
+<p lang="x-none"><img src="file:///tmp/lu3143m6nflh.tmp/lu3143m6nfm1_tmp_5818bcb1de4a4214.gif" width="8" height="9" name="_tx_id_2_" align="bottom" border="0" /></p>
+<p lang="x-none" align="center"><span id="Frame1" dir="ltr"></span><strong><span style="font-size: large;">
+
+<div style="text-align: center;">
+    <h1 id="tittle"><span lang="en-US">SALES COMMISSION</span></h1>	
+</div>
+    
+</span><span style="font-size: large;"><span lang="en-US"> AGREEMENT</span></span></strong></p>
 <p align="left">&nbsp;</p>
 <p class="western" align="justify">&nbsp;</p>
-<p class="western" lang="x-none" align="justify"><span lang="en-US">This Sales Commission Agreement (the &ldquo;</span><span lang="en-US"><strong>Agreement</strong></span><span lang="en-US">&rdquo;) is effective <p id="date">{{date}}</p> (the &ldquo;</span><span lang="en-US"><strong>Effective Date</strong></span><span lang="en-US">&rdquo;), by and between <p id="companyName">{{companyName}}</p> a </span><span lang="en-US"><p id="state">{{state}}</p></span> <span lang="en-US"><p id="typeOfCompany">{{typeOfCompany}}</p></span> <span lang="en-US">and </span><span lang="en-US"><p id="providerName">{{providerName}}</p></span> <span lang="en-US">{{state}}</span> <span lang="en-US">{{typeOfCompany}}</span> <span lang="en-US">(the &ldquo;</span><span lang="en-US"><strong>Provider</strong></span><span lang="en-US">&rdquo;).</span></p>
+<p class="western" lang="x-none" align="justify"><span lang="en-US">This Sales Commission Agreement (the &ldquo;</span><span lang="en-US"><strong>Agreement</strong></span><span lang="en-US">&rdquo;) is effective <span id="date">{{date}}</<span> (the &ldquo;</span><span lang="en-US"><strong>Effective Date</strong></span><span lang="en-US">&rdquo;), by and between <span id="partyName">{{partyName}}</span> <span lang="en-US">and </span><span lang="en-US"><span id="counterPartyName">{{counterPartyName}}</span></span> <span lang="en-US">{{state}}</span> <span lang="en-US">{{typeOfCompany}}</span> <span lang="en-US">(the &ldquo;</span><span lang="en-US"><strong>Provider</strong></span><span lang="en-US">&rdquo;).</span></p>
 <p class="western" align="justify">&nbsp;</p>
 <p lang="x-none" align="center"><a name="OLE_LINK4"></a> <span style="font-family: 'Courier New', serif;"><span style="font-size: small;"><span style="font-family: 'Times New Roman', serif;"><span style="font-size: medium;"><span lang="en-US"><strong>RECITALS</strong></span></span></span></span></span></p>
 <ol>
@@ -210,38 +218,22 @@ export const ReferalAgreement = `<p lang="x-none"><img src="file:///tmp/lu3143m6
 <p>&nbsp;</p>
 <p class="western" lang="x-none"><span lang="en-US"> IN WITNESS WHEREOF, each party to this Agreement has caused it to be executed on the Effective Date.</span></p>
 <p class="western" align="justify">&nbsp;</p>
-<p class="western" lang="x-none" align="justify"><span style="color: #000000;"><span lang="en-US"><strong>COMPANY:</strong></span></span></p>
-<p class="western" align="justify">&nbsp;</p>
-<h1 class="western" lang="x-none"><span style="font-family: 'Times New Roman', serif;"><span style="font-size: medium;"><span lang="en-US">{companyName}} </span></span></span></h1>
-<p class="western" align="justify">&nbsp;</p>
-<p class="western">&nbsp;</p>
-<p lang="x-none"><span style="font-family: 'Courier New', serif;"><span style="font-size: small;"><span style="font-family: 'Times New Roman', serif;"><span style="font-size: medium;"><span lang="en-US">By: ________________________________ </span></span></span></span></span></p>
-<p class="western" lang="x-none"><span style="color: #000000;"><span lang="en-US"> (Signature) </span></span></p>
+<p class="western" lang="x-none" align="justify"><span style="color: #000000;"><span lang="en-US"><strong>THE COMPANY:</strong></span></span></p>
+<p>(Signature)</p>
+<p>_______________________________________</p>
+<p>Name: <span id="partyName">{{partyName}}</span></p>
+<p>Email: <span id="partyEmail">{{partyEmail}}</span></p>
+<p>Address: <span id="partyAddress">{{partyAddress}}</span></p>
+<p>Wallet: <span id="partyWallet">{{partyWallet}}</span></p>
 <p>&nbsp;</p>
-<p class="western" lang="x-none" align="justify"><span style="color: #000000;"><span lang="en-US">Name: ______________________________</span></span></p>
-<p class="western" align="justify">&nbsp;</p>
-<p class="western" lang="x-none" align="justify"><span style="color: #000000;"><span lang="en-US">Title: ______________________________ </span></span></p>
-<p class="western" align="justify">&nbsp;</p>
-<p class="western" lang="x-none" align="justify"><span lang="en-US">Email: ______________________________</span></p>
-<p class="western" lang="x-none" align="justify">&nbsp;</p>
-<p class="western" align="justify">&nbsp;</p>
 <p class="western" lang="x-none"><span lang="en-US"> IN WITNESS WHEREOF, each party to this Agreement has caused it to be executed on the Effective Date.</span></p>
-<p class="western" align="justify">&nbsp;</p>
-<p class="western" align="justify">&nbsp;</p>
-<p class="western" lang="x-none" align="justify"><span style="color: #000000;"><span lang="en-US"><strong>PROVIDER:</strong></span></span></p>
-<p class="western" align="justify">&nbsp;</p>
-<h1 class="western" lang="x-none"><span style="font-family: 'Times New Roman', serif;"><span style="font-size: medium;"><span lang="en-US">{{providerName}} </span></span></span></h1>
-<p class="western" align="justify">&nbsp;</p>
-<p class="western">&nbsp;</p>
-<p lang="x-none"><span style="font-family: 'Courier New', serif;"><span style="font-size: small;"><span style="font-family: 'Times New Roman', serif;"><span style="font-size: medium;"><span lang="en-US">By: ________________________________ </span></span></span></span></span></p>
-<p class="western" lang="x-none"><span style="color: #000000;"><span lang="en-US"> (Signature) </span></span></p>
+<p>(Signature)</p>
+<p>_______________________________________</p>
+<p>Name: <span id="counterPartyName">{{counterPartyName}}</span></p>
+<p>Email: <span id="counterPartyEmail">{{counterPartyEmail}}</span></p>
+<p>Address: <span id="counterPartyAddress">{{counterPartyAddress}}</span></p>
+<p>Wallet: <span id="counterPartyWallet">{{counterPartyWallet}}</span>
 <p>&nbsp;</p>
-<p class="western" lang="x-none" align="justify"><span style="color: #000000;"><span lang="en-US">Name: ______________________________</span></span></p>
-<p class="western" align="justify">&nbsp;</p>
-<p class="western" lang="x-none" align="justify"><span style="color: #000000;"><span lang="en-US">Title: ______________________________ </span></span></p>
-<p class="western" align="justify">&nbsp;</p>
-<p class="western" lang="x-none" align="justify"><span lang="en-US">Email: ______________________________</span></p>
-<p class="western" align="justify">&nbsp;</p>
 <p lang="x-none" align="center"><span style="font-family: 'Courier New', serif;"><span style="font-size: small;"><span style="font-family: 'Times New Roman', serif;"><span style="font-size: medium;"><span lang="en-US"><u><strong>SCHEDULE A</strong></u></span></span></span></span></span></p>
 <p lang="x-none" align="center"><span style="font-family: 'Courier New', serif;"><span style="font-size: small;"><span style="font-family: 'Times New Roman', serif;"><span style="font-size: medium;"><span lang="en-US"><u><strong>SERVICES TO BE PROVIDED</strong></u></span></span></span></span></span></p>
 <p>&nbsp;</p>
@@ -261,4 +253,4 @@ export const ReferalAgreement = `<p lang="x-none"><img src="file:///tmp/lu3143m6
 <p>The Company and Provider agree to rely upon reports generated by the Company as conclusive evidence of the amount of commission owed to Provider pursuant to this <u>Schedule B</u>. Company shall generate and deliver such reports monthly and will pay all amounts due within 30 days of delivery of such reports to Provider.</p>
 <p class="western" lang="x-none"><span lang="en-US">As used in this </span><span lang="en-US"><u>Schedule B</u></span><span lang="en-US">, &ldquo;Net Revenue&rdquo; means all revenue actually received by the Company, less any applicable taxes or fees payable by the Company. For the avoidance of doubt, Net Revenue shall not include amounts that are (a) billed but not collected, or (b) not yet billed. </span></p>
 <p class="western">&nbsp;</p>
-<p class="western" lang="x-none">&nbsp;</p>`;
+<p class="western" lang="x-none">&nbsp;</p></div>`;
