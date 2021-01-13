@@ -9,10 +9,8 @@ import {
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-	doCreateAgreement,
 	doSetAgreementFormInfo
 } from '../../../redux/actions/documents';
-import { useParams } from 'react-router';
 
 interface AgreementFormProps {
 	current: any;
@@ -29,12 +27,7 @@ const FormCounterparty: React.FC<AgreementFormProps> = ({ current }) => {
 	const [validCounterpartyWallet, setValidCounterpartyWallet] = useState(true);
 	const [startValidation, setStartValidation] = useState(false);
 
-	const { type } = useParams<{ type: string }>();
 	const documentsState = useSelector((state: any) => state.documents);
-	const wallet = useSelector(
-		(state: { wallet: { currentWallet: any } }) => state.wallet
-	);
-	const { currentWallet } = wallet;
 
 	const {
 		loading,
@@ -115,22 +108,6 @@ const FormCounterparty: React.FC<AgreementFormProps> = ({ current }) => {
 		await current.slidePrev();
 		await current.lockSwipeToPrev(true);
 	}
-
-	const onSubmit = async () => {
-		// e.preventDefault();
-		dispatch(doSetAgreementFormInfo({ createdAt: new Date().toDateString() }));
-		dispatch(
-			doCreateAgreement({
-				signatoryA: currentWallet.address,
-				signatoryB: agreementFormInfo.counterpartyWallet,
-				validUntil: 0,
-				agreementFormTemplateId: type,
-				agreementForm: agreementFormInfo,
-				slideNext: slideNext,
-				slideBack: slideBack
-			})
-		);
-	};
 
 	return (
 		<div className="agreement-content">
@@ -283,14 +260,14 @@ const FormCounterparty: React.FC<AgreementFormProps> = ({ current }) => {
 					<IonButton
 						color="danger"
 						shape="round"
-						onClick= { () => slideBack()}
+						onClick= { () => slideBack() }
 					>
 					 Back
 					</IonButton>
 					<IonButton
 						// routerLink="/phrase/instructions"
 						onClick={() => {
-							onSubmit();
+							slideNext();
 						}}
 						color="gradient"
 						shape="round"

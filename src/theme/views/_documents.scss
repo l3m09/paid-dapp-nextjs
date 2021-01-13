@@ -237,9 +237,8 @@
             max-width: 85%;
             .swiper-wrapper {
                 min-height: 80vh;
-                ion-slide {
-                    //max-width: 80%;
-                    //min-height: 80vh;
+                .swiper-slide:not(.swiper-slide-active) > div {
+                    display: none;
                 }
             }
         }
@@ -252,6 +251,7 @@
     .swiper-slide.swiper-slide-active {
         visibility: visible;
     }
+
     .agreement-content {
         position: relative;
         width: 100%;
