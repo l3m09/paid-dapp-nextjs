@@ -104,6 +104,7 @@ jobs:
       image: ubuntu-1604:202007-01
       docker_layer_caching: true
     steps:
+      - gcp-gke/install
       - gcp-gke/update-kubeconfig-with-credentials:
           cluster: $GKE_CLUSTER_PROD
           perform-login: true
