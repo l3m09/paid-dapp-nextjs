@@ -34,15 +34,12 @@ const PreviewAgreement: FC<PreviewAgreementProps> = ({ current }) => {
         const dataInfos = new Map([
             ['date', today.toLocaleDateString()],
             ['createDate', today.toLocaleDateString()],
-            ['companyName', agreementFormInfo?.name],
             ['partyName', agreementFormInfo?.name],
             ['partyAddress', agreementFormInfo?.address],
             ['partyWallet', currentWallet?.address],
             ['counterPartyName', agreementFormInfo?.counterpartyName],
             ['counterPartyAddress', agreementFormInfo?.counterpartyAddress],
-            ['counterPartyWallet', agreementFormInfo?.counterpartyWallet],
-            ['advisorName', agreementFormInfo?.counterpartyName],
-            ['providerName', agreementFormInfo?.counterpartyName],
+            ['counterPartyWallet', agreementFormInfo?.counterpartyWallet]
         ]);
 
         return dataInfos.get(dataName);

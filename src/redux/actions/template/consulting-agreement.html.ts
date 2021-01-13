@@ -1,8 +1,8 @@
-export const ConsultingAgreement = ` <p align="center"><strong><p id="companyName">{{companyName}}</p></strong></p>
+export const ConsultingAgreement = `<div class="contract" style="width: 800px; background-color:white; color: black;"><h1 id="title" style="text-align: center;">CONSULTING AGREEMENT</h1><p align="center"><strong><span id="partyName">{{partyName}}</span></strong></p>
 <p align="center"><u><strong>CONSULTING AGREEMENT</strong></u></p>
-<p>This Consulting Agreement (this &ldquo;<u>Agreement</u>&rdquo;) is made as of ____________________, by and between {{companyName}}, a <p id="state">{{state}}</p> <p id="typeOfCompany">{{typeOfCompany}}</p> (the &ldquo;<u>Company</u>&rdquo;), and ____________________ (&ldquo;<u>Consultant</u>&rdquo;).</p>
+<p>This Consulting Agreement (this &ldquo;<u>Agreement</u>&rdquo;) is made as of {{date}}, by and between {{partyName}}, (the &ldquo;<u>Company</u>&rdquo;), and {{counterPartyName}}(&ldquo;<u>Consultant</u>&rdquo;).</p>
 <ol>
-<li>
+<li> 
 <p><u><strong>Consulting Relationship</strong></u><strong>.</strong> During the term of this Agreement, Consultant will provide consulting services to the Company as described on <u>Exhibit&nbsp;A</u> hereto (the &ldquo;<u>Services</u>&rdquo;). Consultant represents that Consultant is duly licensed (as applicable) and has the qualifications, the experience and the ability to properly perform the Services. Consultant shall use Consultant&rsquo;s best efforts to perform the Services such that the results are satisfactory to the Company.</p>
 </li>
 <li>
@@ -82,22 +82,25 @@ export const ConsultingAgreement = ` <p align="center"><strong><p id="companyNam
 </ol>
 <p align="center"><em>[Signature Page Follows]</em></p>
 <p>The parties have executed this Agreement as of the date first written above.</p>
-<p><strong>the company:</strong></p>
-<p>{{companyName}}</p>
-<p>By:<u> </u></p>
+<p><strong>THE COMPANY:</strong></p>
+<p>(Print Name)</p>
+<p>{{partyName}}</p>
 <p>(Signature)</p>
-<p>Name:<u> </u></p>
-<p>Title:<u> </u></p>
-<p>Address:<br /> <br /> </p>
+<p>_______________________________________</p>
+<p>Name: <span id="partyName">{{partyName}}</span></p>
+<p>Email: <span id="partyEmail">{{partyEmail}}</span></p>
+<p>Address: <span id="partyAddress">{{partyAddress}}</span><br /> <br /> </p>
+<p>Wallet: <span id="partyWallet">{{partyWallet}}</span></p>
 <p><u> <br /> </u><br /> </p>
-<p>&nbsp;</p>
 <p><strong>CONSULTANT:</strong></p>
-<p><u> </u><br /> (Print Name)</p>
-<p><u> <br /> </u>(Signature)</p>
-<p>Address:<br /> <br /> </p>
+<p>(Print Name)</p>
+<p>(Signature)</p>
+<p>_______________________________________</p>
+<p>Name:<span id="counterPartyName">{{counterPartyName}}</span></p>
+<p>Email: <span id="counterPartyEmail">{{counterPartyEmail}}</span></p>
+<p>Address: <span id="counterPartyAddress">{{counterPartyAddress}}</span><br /> <br /> </p>
+<p>Wallet: <span id="counterPartyWallet">{{counterPartyWallet}}</span>
 <p><u> <br /> </u><br /> </p>
-<p><u> <br /> </u><br /> </p>
-<p>Email:<u> </u></p>
 <p class="western">&nbsp;</p>
 <p align="center"><u><strong>EXHIBIT A</strong></u></p>
 <p align="center"><strong>DESCRIPTION OF CONSULTING SERVICES</strong></p>
@@ -167,4 +170,5 @@ export const ConsultingAgreement = ` <p align="center"><strong><p id="companyNam
 <p>Print Name of Consultant: <u> </u></p>
 <p>Date: <u> </u></p>
 <p><br /> </p>
-<p><em><u><strong>Instructions</strong></u></em><u>:</u> If no companies need to be excluded under Section 8, please check &ldquo;No Conflicts&rdquo; and sign and date above.</p>`
+<p><em><u><strong>Instructions</strong></u></em><u>:</u> If no companies need to be excluded under Section 8, please check &ldquo;No Conflicts&rdquo; and sign and date above.</p>
+</div>`
