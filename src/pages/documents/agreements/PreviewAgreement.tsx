@@ -37,9 +37,9 @@ const PreviewAgreement: FC<PreviewAgreementProps> = ({ current }) => {
             ['partyName', agreementFormInfo?.name],
             ['partyAddress', agreementFormInfo?.address],
             ['partyWallet', currentWallet?.address],
-            ['counterPartyName', agreementFormInfo?.counterpartyName],
             ['counterPartyAddress', agreementFormInfo?.counterpartyAddress],
-            ['counterPartyWallet', agreementFormInfo?.counterpartyWallet]
+            ['counterPartyWallet', agreementFormInfo?.counterpartyWallet],
+            ['counterPartyName', agreementFormInfo?.counterpartyName],
         ]);
 
         return dataInfos.get(dataName);
