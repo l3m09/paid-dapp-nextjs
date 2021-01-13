@@ -269,6 +269,10 @@ ion-input, ion-textarea {
   border: $grey-border;
 }
 
+.cursor-pointer {
+  cursor: pointer;
+}
+
 .item-interactive.item-has-focus {
   --highlight-background: none !important;
 }

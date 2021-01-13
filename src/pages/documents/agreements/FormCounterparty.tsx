@@ -130,7 +130,7 @@ const FormCounterparty: React.FC<AgreementFormProps> = ({ current }) => {
 					<IonInput
 						title="Label"
 						type="text"
-						placeholder="Enter your name"
+						placeholder="Enter a name"
 						onInput={
 							(e) => {
 								nameChanged(e);
@@ -194,7 +194,7 @@ const FormCounterparty: React.FC<AgreementFormProps> = ({ current }) => {
 					<IonInput
 						title="Label"
 						type="text"
-						placeholder="Enter your billing address"
+						placeholder="Enter an address"
 						onInput={
 							(e) => {
 								addressChanged(e);
@@ -218,7 +218,7 @@ const FormCounterparty: React.FC<AgreementFormProps> = ({ current }) => {
 					<IonInput
 						title="Label"
 						type="tel"
-						placeholder="Enter your phone number"
+						placeholder="Enter a phone number"
 						onInput={
 							(e) => {
 								phoneChanged(e);
