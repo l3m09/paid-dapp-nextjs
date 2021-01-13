@@ -404,13 +404,10 @@ const DocumentsList: React.FC<Props> = ({
 							<div className="col">Document</div>
 							<div className="col">Company</div>
 							<div className="col">Counterparty</div>
-							<div className="col">Transaction Hash</div>
 							<div className="col">Valid</div>
-							<div className="col">Wallet From</div>
-							<div className="col">Wallet To</div>
 							<div className="col">Created</div>
 							<div className="col">Updated</div>
-							<div className="col">  State</div>
+							<div className="col">State</div>
 						</div>
 						{
 							documentsFrom.map((document: any, index: number) => {
@@ -423,10 +420,7 @@ const DocumentsList: React.FC<Props> = ({
 										<div className="col">{(data.documentName?.length > 12) ? `${data.documentName.slice(0, 12)}...` : data.documentName}</div>
 										<div className="col">{data.partyAName}</div>
 										<div className="col">{data.partyBName}</div>
-										<div className="col">{meta.transactionHash.slice(0,15)}...</div>
 										<div className="col">{data.validUntil}</div>
-										<div className="col">{event.from.slice(0,15)}...</div>
-										<div className="col">{event.to.slice(0,15)}...</div>
 										<div className="col">{createdAt}</div>
 										<div className="col">{updatedAt}</div>
 										<div className="col">
