@@ -110,27 +110,8 @@ const getContractInfoByIpfs = async (agreementStoredReference: any) => {
 
 	const doc = new DOMParser().parseFromString(await ipfsContent(), 'text/html');
 	const documentName = doc.querySelector('h1')?.textContent ?? '';
-	const paragraphs = doc.querySelectorAll('p');
-
-	let countNameParty = 0;
-	let partyAName = '';
-	let partyBName = '';
-
-	paragraphs.forEach((paragraphElement) => {
-		if (paragraphElement) {
-			const { textContent } = paragraphElement;
-			if ((textContent != null && textContent.indexOf('Name: ') > -1) &&
-			countNameParty < 2) {
-				const name = textContent.trim().split(':')[1] ?? '';
-				if (countNameParty === 0) {
-					partyAName = name;
-				} else {
-					partyBName = name;
-				}
-				countNameParty++;
-			}
-		}
-	});
+	let partyAName = doc.querySelector('#partyName')?.textContent ?? '';
+	let partyBName = doc.querySelector('#counterPartyName')?.textContent ?? '';
 
 	return { documentName, partyAName, partyBName};
 }

@@ -1,7 +1,7 @@
 export const AdvisorAgreem = `<div class="contract" style="width: 800px; background-color:white; color: black;"><h1 id="title" style="text-align: center;">ADVISOR AGREEMENT</h1><h1 class="western" style="text-align: center;"><span style="font-size: medium;"><span lang="en-US"><strong>&nbsp;<span id="partyName">{{partyName}}</span></strong></span></span>
 </h1>
 <p align="center"><u><strong>Advisor Agreement</strong></u></p>
-<p>This Advisor Agreement (this &ldquo;<u>Agreement</u>&rdquo;) is entered into as of <span id="date">{{date}}</span>, by and between {{partyName}} (the &ldquo;<u>Company</u>&rdquo;), and <span id="counterPartyName">{{counterPartyName}}</span> (&ldquo;<u>Advisor</u>&rdquo;).</p>
+<p>This Advisor Agreement (this &ldquo;<u>Agreement</u>&rdquo;) is entered into as of <span id="createDate">{{date}}</span>, by and between {{partyName}} (the &ldquo;<u>Company</u>&rdquo;), and <span id="counterPartyName">{{counterPartyName}}</span> (&ldquo;<u>Advisor</u>&rdquo;).</p>
 <p align="justify">The parties agree as follows:</p>
 <ol>
     <li>

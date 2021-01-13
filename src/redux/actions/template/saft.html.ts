@@ -1,7 +1,7 @@
 export const Saft = `<div class="contract" style="width: 800px; background-color:white; color: black;"><p class="western" align="center"><strong><span id="partyName">{{partyName}}</span></strong></p>
 <p class="western" align="center">
 <div style="text-align: center;">
-		<h1 id="tittle">SAFT</h1>	
+		<h1 id="title">SAFT</h1>	
 </div>
 </p>
 <p class="western" align="center"><strong>(Simple Agreement for Future Tokens)</strong></p>
