@@ -40,7 +40,7 @@ import DocumentsList from './DocumentsList';
 import { IonText } from '@ionic/react';
 import { Plugins } from '@capacitor/core';
 import { BlockchainFactory } from './../../utils/blockchainFactory'
-import { KeyStorageModel } from 'paid-universal-wallet/dist/key-storage/KeyStorageModel';
+import { KeyStorageModel } from 'universal-crypto-wallet/dist/key-storage/KeyStorageModel';
 import SuccessDialog from '../../components/SuccessDialog';
 
 const { Storage } = Plugins;
@@ -58,12 +58,10 @@ function SelectedDocument(payload: {
 
 	useEffect(() => {
 		if (unlockedWallet !== null) {
-			const manager = BlockchainFactory.getWalletManager();
-			const storage = manager.getKeyStorage();
-			const rawWallet = storage.find<KeyStorageModel>(unlockedWallet._id);
-			rawWallet.then((rWallet) => {
-				const web3 = BlockchainFactory.getWeb3Instance(rWallet.keypairs, rWallet.mnemonic);
-				const network = BlockchainFactory.getNetwork(web3);
+			const web3 = BlockchainFactory.getWeb3Instance(unlockedWallet._id, unlockedWallet.password);
+			web3.then((result) => {
+				const { provider } = result!;
+				const network = BlockchainFactory.getNetwork(provider.chainId);
 				network.then((networkText) => {
 					setNetWorkText(networkText.toUpperCase());
 				});
@@ -136,6 +134,7 @@ const Documents: React.FC = () => {
 		agreementTypes
 	} = documentsState;
 	const wallet = useSelector((state: any) => state.wallet);
+	
 	const { currentWallet } = wallet;
 	const [showModal, setShowModal] = useState(false);
 	const [showPopOver, setShowPopover] = useState(false);

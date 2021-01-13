@@ -25,7 +25,7 @@ import { Plugins } from '@capacitor/core';
 import { eddsa } from "elliptic";
 import { format } from 'date-fns';
 import { BlockchainFactory } from '../../utils/blockchainFactory';
-import { KeyStorageModel } from 'paid-universal-wallet/dist/key-storage/KeyStorageModel';
+import { KeyStorageModel } from 'universal-crypto-wallet/dist/key-storage/KeyStorageModel';
 
 const { Storage } = Plugins;
 
@@ -108,12 +108,10 @@ function SelectedDocument(payload: {
 
 	useEffect(() => {
 		if (unlockedWallet !== null) {
-			const manager = BlockchainFactory.getWalletManager();
-			const storage = manager.getKeyStorage();
-			const rawWallet = storage.find<KeyStorageModel>(unlockedWallet._id);
-			rawWallet.then((rWallet) => {
-				const web3 = BlockchainFactory.getWeb3Instance(rWallet.keypairs, rWallet.mnemonic);
-				const network = BlockchainFactory.getNetwork(web3);
+			const web3 = BlockchainFactory.getWeb3Instance(unlockedWallet._id, unlockedWallet.password);
+			web3.then((result) => {
+				const { provider } = result!;
+				const network = BlockchainFactory.getNetwork(provider.chainId);
 				network.then((networkText) => {
 					setNetWorkText(networkText.toUpperCase());
 				});

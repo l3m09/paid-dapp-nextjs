@@ -1,4 +1,4 @@
-const template = require('./agreement.html.js');
+const template = require('./nda.html.ts');
 
 export const templateRender = (payload: {
 	party_name: any;
