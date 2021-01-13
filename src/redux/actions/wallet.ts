@@ -294,6 +294,8 @@ export const doImportWallet = (payload: {
 			password
 		};
 
+		const encoded = JSON.stringify(referenceWallet);
+		await Storage.set({ key: 'CURRENT_WALLET', value: encoded });
 		const stored = await Storage.get({ key: 'WALLETS' });
 		const encodedList = stored.value ? stored.value : `[]`;
 		const wallets: any[] = JSON.parse(encodedList);
@@ -306,12 +308,7 @@ export const doImportWallet = (payload: {
 		};
 		
 		dispatch(
-			importWallet({
-				_id,
-				address,
-				balance: balance ?? '0',
-				name
-			})
+			importWallet(referenceWallet)
 		);
 		dispatch(unlockWallet(createdWallet));
 	} catch (err) {

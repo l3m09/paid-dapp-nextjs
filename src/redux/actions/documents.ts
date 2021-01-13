@@ -234,6 +234,7 @@ export const doCreateAgreement = (payload: {
 
 		Promise.resolve(gas).then(async (gas:any) => {
 			console.log(gas+5e4);
+			debugger;
 			const agreementTransaction = await methodFn.send({ from: address, gas:gas+5e4, gasPrice: 50e9 })
 			.on('receipt', async function (receipt: any) {
 				dispatch(createAgreement());
