@@ -104,8 +104,6 @@ export const AdvisorAgreem = `<div class="contract" style="width: 800px; backgro
 <p align="center"><em>[Signature Page Follows]</em></p>
 <p>The parties have executed this Agreement as of the date first written above.</p>
 <p><strong>THE COMPANY:</strong></p>
-<p>(Print Name)</p>
-<p>{{partyName}}</p>
 <p>(Signature)</p>
 <p>________________________________________ </p>
 <p>Name: <span id="partyName">{{partyName}}</span></p>
@@ -114,8 +112,6 @@ export const AdvisorAgreem = `<div class="contract" style="width: 800px; backgro
 <p>Wallet: <span id="partyWallet">{{partyWallet}}</span></p>
 <br /> <br /> 
 <p><strong>ADVISOR:</strong></p>
-<p>(Print Name)</p>
-<p>{{counterPartyName}}</p>
 <p>(Signature)</p>
 <br /> ________________________________________ 
 <p>Name: <span id="counterPartyName">{{counterPartyName}}</span></p>
