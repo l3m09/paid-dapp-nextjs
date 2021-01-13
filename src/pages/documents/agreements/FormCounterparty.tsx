@@ -93,7 +93,7 @@ const FormCounterparty: React.FC<AgreementFormProps> = ({ current }) => {
 			counterpartyAddress.length > 3 &&
 			counterpartyPhone.length > 3
 		);
-		
+
 		if (startValidation) {
 			setValidEmail(/.+@.+\..+/.test(counterpartyEmail));
 			setValidConfirmEmail(counterpartyEmail === counterpartyConfirmEmail);
@@ -107,12 +107,14 @@ const FormCounterparty: React.FC<AgreementFormProps> = ({ current }) => {
 
 	async function slideNext() {
 		await current.lockSwipeToNext(false);
+		await current.updateAutoHeight();
 		await current.slideNext();
 		await current.lockSwipeToNext(true);
 	}
 
 	async function slideBack() {
 		await current.lockSwipeToPrev(false);
+		await current.updateAutoHeight();
 		await current.slidePrev();
 		await current.lockSwipeToPrev(true);
 	}

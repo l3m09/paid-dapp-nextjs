@@ -1,7 +1,7 @@
-export const AdvisorAgreem = `<h1 class="western" style="text-align: center;"><span style="font-size: medium;"><span lang="en-US"><strong>&nbsp;<p id="companyName">{{companyName}}</p></strong></span></span>
+export const AdvisorAgreem = `<div class="contract" style="width: 800px; background-color:white; color: black;"><h1 id="title" style="text-align: center;">ADVISOR AGREEMENT</h1><h1 class="western" style="text-align: center;"><span style="font-size: medium;"><span lang="en-US"><strong>&nbsp;<span id="partyName">{{partyName}}</span></strong></span></span>
 </h1>
 <p align="center"><u><strong>Advisor Agreement</strong></u></p>
-<p>This Advisor Agreement (this &ldquo;<u>Agreement</u>&rdquo;) is entered into as of <p id="date">{{date}}</p>, by and between {{companyName}}, a <p id="state">{{state}}</p> <p id="typeOfCompany">{{typeOfCompany}}</p> (the &ldquo;<u>Company</u>&rdquo;), and <p id="advisorName">{{advisorName}}</p> (&ldquo;<u>Advisor</u>&rdquo;).</p>
+<p>This Advisor Agreement (this &ldquo;<u>Agreement</u>&rdquo;) is entered into as of <span id="date">{{date}}</span>, by and between {{partyName}} (the &ldquo;<u>Company</u>&rdquo;), and <span id="counterPartyName">{{counterPartyName}}</span> (&ldquo;<u>Advisor</u>&rdquo;).</p>
 <p align="justify">The parties agree as follows:</p>
 <ol>
     <li>
@@ -9,7 +9,7 @@ export const AdvisorAgreem = `<h1 class="western" style="text-align: center;"><s
     </li>
     <li>
         <p><u><strong>Compensation</strong></u>. Advisor shall not be entitled to receive any cash compensation for the Services provided hereunder. However, subject to the approval of the Company&rsquo;s Board of Directors, Advisor will be granted [a nonstatutory
-            option] <strong>OR</strong> [a right] to purchase __________ shares of the Company&rsquo;s common stock. The <p id="options">{{options}}</p> <strong>OR</strong> <p id="purchaseRight">{{purchaseRight}}</p> will be subject to the terms and conditions applicable to {{options}} <strong>OR</strong>            [restricted stock purchase awards] granted under the Company&rsquo;s [STOCK PLAN NAME] (the &ldquo;<u>Plan</u>&rdquo;), as described in that plan and the applicable [stock option] <strong>OR</strong> [restricted stock purchase] agreement,
+            option] <strong>OR</strong> [a right] to purchase __________ shares of the Company&rsquo;s common stock. The <span id="options">{{options}}</span> <strong>OR</strong> <span id="purchaseRight">{{purchaseRight}}</span> will be subject to the terms and conditions applicable to {{options}} <strong>OR</strong>            [restricted stock purchase awards] granted under the Company&rsquo;s [STOCK PLAN NAME] (the &ldquo;<u>Plan</u>&rdquo;), as described in that plan and the applicable [stock option] <strong>OR</strong> [restricted stock purchase] agreement,
             which Advisor will be required to sign (the &ldquo;<u>Stock Agreement</u>&rdquo;).</p>
     </li>
 </ol>
@@ -103,132 +103,20 @@ export const AdvisorAgreem = `<h1 class="western" style="text-align: center;"><s
 </ol>
 <p align="center"><em>[Signature Page Follows]</em></p>
 <p>The parties have executed this Agreement as of the date first written above.</p>
-<p><strong>the company:</strong></p>
-<p>{{companyName}}</p>
-<p>By:<u> </u></p>
+<p><strong>THE COMPANY:</strong></p>
 <p>(Signature)</p>
-<p>Name:<u> </u></p>
-<p>Title:<u> </u></p>
-<p>Address:<br /> ____________________<br /> ____________________ <br /> <br /> </p>
-<p><strong>Advisor:</strong></p>
-<p>{{advisorName}}</p>
-<p><u> <br /> </u>(Signature)</p>
-<p>Address:<br /> ____________________<br /> ____________________<br /> Email: ________________</p>
+<p>________________________________________ </p>
+<p>Name: <span id="partyName">{{partyName}}</span></p>
+<p>Email: <span id="partyEmail">{{partyEmail}}</span></p>
+<p>Address: <span id="partyAddress">{{partyAddress}}</span></p>
+<p>Wallet: <span id="partyWallet">{{partyWallet}}</span></p>
+<br /> <br /> 
+<p><strong>ADVISOR:</strong></p>
+<p>(Signature)</p>
+<br /> ________________________________________ 
+<p>Name: <span id="counterPartyName">{{counterPartyName}}</span></p>
+<p>Email: <span id="counterPartyEmail">{{counterPartyEmail}}</span></p>
+<p>Address: <span id="counterPartyAddress">{{counterPartyAddress}}</span>
+<p>Wallet: <span id="counterPartyWallet">{{counterPartyWallet}}</span>
 <p align="center"><br /> </p>
-<h1 class="western" style="text-align: center;"><span style="font-size: medium;"><span lang="en-US"><strong>&nbsp;[Company Name]</strong></span></span>
-</h1>
-<p align="center"><u><strong>Advisor Agreement</strong></u></p>
-<p>This Advisor Agreement (this &ldquo;<u>Agreement</u>&rdquo;) is entered into as of {{date}}, by and between <p id="companyName">{{companyName}}</p>, a {{state}} {{typeOfCompany}} (the &ldquo;<u>Company</u>&rdquo;), and {{advisorName}} (&ldquo;<u>Advisor</u>&rdquo;).</p>
-<p align="justify">The parties agree as follows:</p>
-<ol>
-    <li>
-        <p><u><strong>Services</strong></u>. Advisor agrees to act as an advisor to the Company and to provide advice and assistance to the Company as is mutually agreed by the parties (collectively, the &ldquo;<u>Services</u>&rdquo;).</p>
-    </li>
-    <li>
-        <p><u><strong>Compensation</strong></u>. Advisor shall not be entitled to receive any cash compensation for the Services provided hereunder. However, subject to the approval of the Company&rsquo;s Board of Directors, Advisor will be granted [a nonstatutory
-            option] <strong>OR</strong> [a right] to purchase __________ shares of the Company&rsquo;s common stock. The [option] <strong>OR</strong> [purchase right] will be subject to the terms and conditions applicable to [options] <strong>OR</strong>            [restricted stock purchase awards] granted under the Company&rsquo;s [STOCK PLAN NAME] (the &ldquo;<u>Plan</u>&rdquo;), as described in that plan and the applicable [stock option] <strong>OR</strong> [restricted stock purchase] agreement,
-            which Advisor will be required to sign (the &ldquo;<u>Stock Agreement</u>&rdquo;).</p>
-    </li>
-</ol>
-<p>So long as Advisor&rsquo;s Continuous Service Status (as defined in the Plan) does not terminate, Advisor will vest in [25]% of the shares on the [12]-month anniversary of Advisor&rsquo;s vesting commencement date and [1/48<sup>th</sup>] of the total
-    shares will vest in monthly installments thereafter during continuous service, as described in the Stock Agreement. [<em>Single Trigger Acceleration:</em> Upon a Change of Control (as defined in the Stock Agreement or Plan), ____% of Advisor&rsquo;s
-    then unvested shares will immediately vest (<em>i.e.,</em> single trigger acceleration).] <strong>OR</strong> [<em>Double Trigger Acceleration:</em> If Advisor&rsquo;s services are terminated by the Company in connection with or following the consummation
-    of a Change of Control (as defined in the Stock Agreement or Plan), then ____% of Advisor&rsquo;s then unvested shares will immediately vest (<em>i.e.,</em> double trigger acceleration). The [exercise] <strong>OR</strong> [purchase] price per share
-    will be equal to the fair market value per share on the date the [option] <strong>OR</strong> [restricted stock purchase award] is granted, as determined by the Company&rsquo;s Board of Directors in good faith [compliance with applicable guidance
-    in order to avoid having the option be treated as deferred compensation under Section 409A of the Internal Revenue Code of 1986, as amended]. There is no guarantee that the Internal Revenue Service will agree with this value. Advisor should consult
-    with Advisor&rsquo;s own tax advisor concerning the tax risks associated with accepting [an option] <strong>OR</strong> [a right] to purchase the Company&rsquo;s common stock. Advisor shall have no right to any compensation except as set forth in
-    this Section 2.</p>
-<ol start="3">
-    <li>
-        <p><u><strong>Expenses</strong></u>. The Company shall reimburse Advisor for reasonable expenses incurred in the course of performing services hereunder, provided, however, that all expenses shall be approved in advance by the Company. As a condition
-            to receipt of reimbursement, Advisor shall be required to submit to the Company reasonable evidence that the amount involved was both reasonable and necessary to the Services provided under this Agreement.</p>
-    </li>
-    <li>
-        <p><u><strong>Term and Termination</strong></u>. The term of this Agreement shall be for a period of [#] years from the date hereof and may be renewed by mutual agreement of the parties; <u>provided</u>, <u>however</u>, that this Agreement may be
-            terminated by either party for any reason upon five (5) business days prior written notice without further obligation or liability.</p>
-    </li>
-    <li>
-        <p><u><strong>Independent Contractor</strong></u>. Advisor&rsquo;s relationship with the Company will be that of an independent contractor and not that of an employee. Advisor will not be eligible for any employee benefits, nor will the Company make
-            deductions from payments made to Advisor for employment or income taxes, all of which will be Advisor&rsquo;s responsibility. Advisor agrees to indemnify and hold the Company harmless from any liability for, or assessment of, any such taxes
-            imposed on the Company by relevant taxing authorities. Advisor will have no authority to enter into contracts that bind the Company or create obligations on the part of the Company without the prior written authorization of the Company.</p>
-    </li>
-    <li>
-        <p align="justify"><u><strong>Nondisclosure of Confidential Information</strong></u>.</p>
-        <ol type="a">
-            <li>
-                <p><u><strong>Agreement Not to Disclose</strong></u><strong>.</strong> Advisor agrees not to use any Confidential Information (as defined below) disclosed to Advisor by the Company for Advisor&rsquo;s own use or for any purpose other than
-                    to carry out discussions concerning, and the undertaking of, the Services. Advisor shall not disclose or permit disclosure of any Confidential Information of the Company to third parties. Advisor agrees to take all reasonable measures
-                    to protect the secrecy of and avoid disclosure or use of Confidential Information of the Company in order to prevent it from falling into the public domain or the possession of persons other than those persons authorized under this
-                    Agreement to have any such information. Advisor further agrees to notify the Company in writing of any actual or suspected misuse, misappropriation or unauthorized disclosure of the Company&rsquo;s Confidential Information which may
-                    come to Advisor&rsquo;s attention.</p>
-            </li>
-            <li>
-                <p><u><strong>Definition of Confidential Information</strong></u><strong>.</strong> &ldquo;<u>Confidential Information</u>&rdquo; means any information, technical data or know-how (whether disclosed before or after the date of this Agreement),
-                    including, but not limited to, information relating to business and product or service plans, financial projections, customer lists, business forecasts, sales and merchandising, human resources, patents, patent applications, computer
-                    object or source code, research, inventions, processes, designs, drawings, engineering, marketing or finance to be confidential or proprietary or which information would, under the circumstances, appear to a reasonable person to be
-                    confidential or proprietary. Confidential Information does not include information, technical data or know-how which: (i)&nbsp;is in the possession of Advisor at the time of disclosure, as shown by Advisor&rsquo;s files and records
-                    immediately prior to the time of disclosure; or (ii)&nbsp;becomes part of the public knowledge or literature, not as a direct or indirect result of any improper inaction or action of Advisor.</p>
-            </li>
-            <li>
-                <p><u><strong>Exceptions</strong></u><strong>.</strong> Notwithstanding the above, Advisor shall not have liability to the Company or any of its subsidiaries with regard to any Confidential Information of the Company which Advisor can prove:</p>
-                <ol type="i">
-                    <li>
-                        <p>is disclosed with the prior written approval of the Company; or</p>
-                    </li>
-                    <li>
-                        <p>is disclosed pursuant to the order or requirement of a court, administrative agency, or other governmental body; provided, however, that Advisor shall provide prompt notice of such court order or requirement to the Company to enable
-                            the Company or its appropriate subsidiary to seek a protective order or otherwise prevent or restrict such disclosure.</p>
-                    </li>
-                </ol>
-            </li>
-        </ol>
-    </li>
-    <li>
-        <p><u><strong>No Duplication; Return of Materials</strong></u>. Advisor agrees, except as otherwise expressly authorized by the Company, not to make any copies or duplicates of any of the Company&rsquo;s Confidential Information. Any materials or
-            documents that have been furnished by the Company to Advisor in connection with the Services shall be promptly returned by Advisor to the Company, accompanied by <u>all</u> copies of such documentation, within ten days after the earlier of
-            (a)&nbsp;the date on which the Services have been concluded or (b)&nbsp;the date of written request of the Company.</p>
-    </li>
-    <li>
-        <p><u><strong>No Rights Granted</strong></u>. Nothing in this Agreement shall be construed as granting any rights under any patent, copyright or other intellectual property right of the Company, nor shall this Agreement grant Advisor any rights in
-            or to the Company&rsquo;s Confidential Information, except the limited right to use the Confidential Information in connection with the Services.</p>
-    </li>
-    <li>
-        <p><u><strong>Assignment of Inventions</strong></u>. To the extent that, in connection with performing the Services, Advisor jointly or solely conceives, develops, or reduces to practice any inventions, original works of authorship, developments,
-            concepts, know-how, improvements or trade secrets, whether or not patentable or registrable under copyright or similar laws, Advisor hereby assigns all rights, titles and interest to such inventions to the Company.</p>
-    </li>
-    <li>
-        <p><u><strong>Duty to Assist</strong></u>. As requested by the Company, Advisor shall take all steps reasonably necessary to assist the Company in obtaining and enforcing in its own name any patent, copyright or other protection which the Company
-            elects to obtain or enforce for its inventions, original works of authorship, developments, concepts, know-how, improvements and trade secrets. Advisor&rsquo;s obligation to assist the Company in obtaining and enforcing patents, copyrights
-            and other protections shall continue beyond the termination of Advisor&rsquo;s relationship with the Company, but the Company shall compensate Advisor at a reasonable rate after the termination of such relationship for time actually spent
-            at the Company&rsquo;s request providing such assistance.</p>
-    </li>
-    <li>
-        <p><u><strong>No Conflicts</strong></u>. Advisor represents that Advisor&rsquo;s compliance with the terms of this Agreement and provision of Services hereunder will not violate any duty which Advisor may have to any other person or entity (such
-            as a present or former employer), including obligations concerning providing services to others, confidentiality of proprietary information and assignment of inventions, ideas, patents or copyrights, and Advisor agrees that Advisor will not
-            do anything in the performance of Services hereunder that would violate any such duty. In addition, Advisor agrees that, during the term of this Agreement, prior to performing any services for or otherwise participating in a company developing
-            or commercializing new software, services, methods, devices, or other technology that may be competitive with the Company, Advisor shall first notify the Company in writing. It is understood that in such event, the Company will review whether
-            Advisor&rsquo;s activities are consistent with Advisor continuing to provide Services to the Company.</p>
-    </li>
-    <li>
-        <p><u><strong>Miscellaneous</strong></u>. Any term of this Agreement may be amended or waived only with the written consent of the parties. This Agreement, including any exhibits hereto, constitutes the sole agreement of the parties and supersedes
-            all oral negotiations and prior writings with respect to the subject matter hereof. Any notice required or permitted by this Agreement shall be in writing and shall be deemed sufficient upon delivery, when delivered personally or by overnight
-            courier or sent by e-mail or fax (with customary confirmation of receipt), or 48 hours after being deposited in the U.S. mail as certified or registered mail (airmail if sent internationally) with postage prepaid, addressed to the party to
-            be notified at such party&rsquo;s address or fax number as set forth on the signature page herein, or as subsequently modified by written notice. The validity, interpretation, construction and performance of this Agreement shall be governed
-            by the laws of the state of [STATE], without giving effect to the principles of conflict of laws. This Agreement may be executed in counterparts, each of which shall be deemed an original, but all of which together will constitute one and
-            the same instrument.</p>
-    </li>
-</ol>
-<p align="center"><em>[Signature Page Follows]</em></p>
-<p>The parties have executed this Agreement as of the date first written above.</p>
-<p><strong>the company:</strong></p>
-<p>{{companyName}}</p>
-<p>By:<u> </u></p>
-<p>(Signature)</p>
-<p>Name:<u> </u></p>
-<p>Title:<u> </u></p>
-<p>Address:<br /> ____________________<br /> ____________________ <br /> <br /> </p>
-<p><strong>Advisor:</strong></p>
-<p>{{advisorName}}</p>
-<p><u> <br /> </u>(Signature)</p>
-<p>Address:<br /> ____________________<br /> ____________________<br /> Email: ________________</p>
-<p align="center"><br /> </p>`
+</div>`

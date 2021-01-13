@@ -73,9 +73,9 @@
                 background: var(--ion-color-gradient);
                 cursor: pointer;
             }
-            &.in {
-                // background-color: ;
-            }
+            // &.in {
+            //     // background-color: ;
+            // }
             .pending-container{
                 background-color: green;
                 margin-left: -20px;
@@ -222,14 +222,12 @@
         }
     }
 }
-
-.agreements-popover {
-    .popover-wrapper {}
-    .popover-content {
-        //background-color: white;
-    }
-}
-
+// .agreements-popover {
+//     // .popover-wrapper {}
+//     // .popover-content {
+//     //     //background-color: white;
+//     // }
+// }
 .agreements-page {
     ion-slides {
         //background-color: white;
@@ -242,12 +240,12 @@
                 }
             }
         }
+        height: auto!important;
     }
 
     .swiper-slide {
         visibility: hidden;
     }
-    
     .swiper-slide.swiper-slide-active {
         visibility: visible;
     }
@@ -493,6 +491,13 @@
                 margin-bottom: 20px;
             }
         }
+        // .button-wrapper {
+        //     //position: fixed;
+        //     //bottom: 2vh;
+        //     //left: 0;
+        //     //right: 0;
+        //     //.complete-button {}
+        // }
         .name-password-form {
             ion-item {
                 display: flex;
@@ -518,14 +523,14 @@
                 margin: 25px 0 15px;
             }
             .form-options {
-                height: initial;
+                height: fit-content;
                 display: flex;
                 flex-direction: column;
                 margin-top: 50px;
                 //position: fixed;
                 //bottom: 2vh;
                 //width: 100%;
-                ion-button {}
+                //ion-button {}
             }
         }
     }

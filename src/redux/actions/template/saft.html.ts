@@ -6,7 +6,7 @@ export const Saft = `<div class="contract" style="width: 800px; background-color
 </p>
 <p class="western" align="center"><strong>(Simple Agreement for Future Tokens)</strong></p>
 <p class="western">&nbsp;</p>
-<p class="western" align="justify">THIS CERTIFIES THAT in exchange for the payment by the undersigned purchaser (the &ldquo;<em><strong>Purchaser</strong></em>&rdquo;) of [__________] U.S. Dollars (the &ldquo;<em><strong>Purchase Amount</strong></em>&rdquo;) on or about <span id="date">{{date}}</span>, {{partyName}}, a <span id="typeOfCompany">{{typeOfCompany}}</span> formed pursuant to the laws of [NON-U.S. JURISDICTION] (the &ldquo;<em><strong>Company</strong></em>&rdquo;), hereby issues to the Purchaser the right (the &ldquo;<em><strong>Right</strong></em>&rdquo;) to certain units of [_______] tokens (the &ldquo;<em><strong>Token</strong></em>&rdquo;), subject to the terms set forth below.</p>
+<p class="western" align="justify">THIS CERTIFIES THAT in exchange for the payment by the undersigned purchaser (the &ldquo;<em><strong>Purchaser</strong></em>&rdquo;) of [__________] U.S. Dollars (the &ldquo;<em><strong>Purchase Amount</strong></em>&rdquo;) on or about <span id="date">{{date}}</span>, {{counterPartyName}}, a <span id="typeOfCompany">{{typeOfCompany}}</span> formed pursuant to the laws of [NON-U.S. JURISDICTION] (the &ldquo;<em><strong>Company</strong></em>&rdquo;), hereby issues to the Purchaser the right (the &ldquo;<em><strong>Right</strong></em>&rdquo;) to certain units of [_______] tokens (the &ldquo;<em><strong>Token</strong></em>&rdquo;), subject to the terms set forth below.</p>
 <p class="western" align="justify"><strong>1. </strong><em><strong>Events</strong></em></p>
 <p class="western" align="justify">&nbsp;</p>
 <p class="western" align="justify">(a) <u><strong>Network Launch</strong></u>. If there is a Network Launch before the expiration or termination of this instrument, the Company will automatically issue to the Purchaser a number of units of the Token equal to the Purchase Amount divided by the Discount Price.</p>
@@ -61,36 +61,20 @@ export const Saft = `<div class="contract" style="width: 800px; background-color
 <p class="western" align="center">(<em>Signature page follows</em>)</p>
 <p class="western"><strong>IN WITNESS WHEREOF</strong>, the undersigned have caused this instrument to be duly executed and delivered.</p>
 <p class="western">&nbsp;</p>
-<p class="western"><strong> {{partyName}}</strong></p>
-<p class="western">&nbsp;</p>
-<p class="western">By:<u> </u></p>
-<p class="western">&nbsp;</p>
-<p class="western">Name: <u> </u></p>
-<p class="western">&nbsp;</p>
-<p class="western">Title:<u> </u></p>
-<p class="western">&nbsp;</p>
-<p class="western">Address:</p>
-<p class="western">&nbsp;</p>
-<p class="western">&nbsp;</p>
-<p class="western">&nbsp;</p>
-<p class="western">&nbsp;</p>
-<p class="western">&nbsp;</p>
+<p>(Signature)</p>
+<p>________________________________________ </p>
+<p>Name: <span id="partyName">{{partyName}}</span></p>
+<p>Email: <span id="partyEmail">{{partyEmail}}</span></p>
+<p>Address: <span id="partyAddress">{{partyAddress}}</span></p>
+<p>Wallet: <span id="partyWallet">{{partyWallet}}</span></p>
 <p class="western">&nbsp;</p>
 <p class="western"><strong>PURCHASER:</strong></p>
-<p class="western">&nbsp;</p>
-<p class="western">By:<u> </u></p>
-<p class="western">&nbsp;</p>
-<p class="western">Name: <u> </u></p>
-<p class="western">&nbsp;</p>
-<p class="western">Title:<u> </u></p>
-<p class="western">&nbsp;</p>
-<p class="western">Address:</p>
-<p class="western">&nbsp;</p>
-<p class="western">&nbsp;</p>
-<p class="western">&nbsp;</p>
-<p class="western">&nbsp;</p>
-<p class="western">&nbsp;</p>
-<p class="western">Email:<u> </u></p>
+<p>(Signature)</p>
+<p>________________________________________</p>
+<p>Name: <span id="counterPartyName">{{counterPartyName}}</span></p>
+<p>Email: <span id="counterPartyEmail">{{counterPartyEmail}}</span></p>
+<p>Address: <span id="counterPartyAddress">{{counterPartyAddress}}</span>
+<p>Wallet: <span id="counterPartyWallet">{{counterPartyWallet}}</span>
 <p class="western">&nbsp;</p>
 <p class="western">&nbsp;</p>
 <p class="western" align="center">&nbsp;</p>

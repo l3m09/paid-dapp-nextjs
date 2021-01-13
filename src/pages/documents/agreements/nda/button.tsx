@@ -7,7 +7,7 @@ const MobileShare = () => {
     if (win_nav.share) {
       win_nav
         .share({
-          title: "`${postTitle} | ${siteTitle}`",
+          title: `${postTitle} | ${siteTitle}`,
           text: `Check out ${postTitle} on ${siteTitle}`,
           url: document.location.href,
         })

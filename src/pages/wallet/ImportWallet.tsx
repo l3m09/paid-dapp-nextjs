@@ -123,13 +123,19 @@ const ImportWallet: React.FC<Props> = ({show, dismiss}) => {
                 password: passphrase,
                 mnemonic
             }));
-        }
+        } else if (walletInfo.passphrase !== walletInfo.confirmPassphrase) {
+			alert('Passphrase is different Confirm Passphrase');
+		} else if (walletInfo.passphrase === '') {
+			alert('Passphrase is Empty');
+		} else if (walletInfo.confirmPassphrase === '') {
+			alert('Passphrase is Empty');
+		}
     }
 
 	async function doDismiss() {
         dismiss();
     }
-    
+
     return (
         <IonModal cssClass="import-modal" isOpen={show} onDidDismiss={() => {doDismiss()}}>
             <IonHeader translucent={false} mode="md">
