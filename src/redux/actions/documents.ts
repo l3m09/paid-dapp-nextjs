@@ -277,6 +277,7 @@ export const doGetDocuments = (currentWallet: any) => async (
 ) => {
 	dispatch({ type: DocumentsActionTypes.GET_DOCUMENTS_LOADING });
 	try {
+		debugger;
 		const { address } = currentWallet;
 		const { wallet } = getState();
 		const { unlockedWallet } = wallet;

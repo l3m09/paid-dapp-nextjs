@@ -91,9 +91,6 @@ const Agreements: React.FC<AgreementsProps> = () => {
 			<IonSlide>
 				<PreviewAgreement current={slidesRef.current} />
 			</IonSlide>
-			<IonSlide>
-				<NdaCompleted current={slidesRef.current} />
-			</IonSlide>
 		</IonSlides>
 	);
 

@@ -25,9 +25,15 @@ const FormCounterparty: React.FC<AgreementFormProps> = ({ current }) => {
 	const [validAddress, setValidAddress] = useState(true);
 	const [validPhone, setValidPhone] = useState(true);
 	const [validCounterpartyWallet, setValidCounterpartyWallet] = useState(true);
+	const [sameCurrentWallet, setSameCurrentWallet] = useState(false);
 	const [startValidation, setStartValidation] = useState(false);
 
 	const documentsState = useSelector((state: any) => state.documents);
+	const wallet = useSelector(
+		(state: { wallet: { currentWallet: any } }) => state.wallet
+	);
+	const { currentWallet } = wallet;
+
 
 	const {
 		loading,
@@ -80,6 +86,7 @@ const FormCounterparty: React.FC<AgreementFormProps> = ({ current }) => {
 		}  = agreementFormInfo;
 		setFilled(
 			/.+@.+\..+/.test(counterpartyEmail) &&
+			currentWallet.address !== counterpartyWallet &&
 			counterpartyEmail === counterpartyConfirmEmail &&
 			counterpartyWallet.length > 3 &&
 			counterpartyName.length > 3 &&
@@ -94,6 +101,7 @@ const FormCounterparty: React.FC<AgreementFormProps> = ({ current }) => {
 			setValidAddress(counterpartyAddress.length > 3);
 			setValidPhone(counterpartyPhone.length > 3);
 			setValidCounterpartyWallet(counterpartyWallet.length > 3);
+			setSameCurrentWallet(currentWallet.address === counterpartyWallet);
 		}
 	}
 
@@ -247,6 +255,12 @@ const FormCounterparty: React.FC<AgreementFormProps> = ({ current }) => {
 						!validCounterpartyWallet &&
 						<IonNote color="danger" className="ion-margin-top">
 							You must enter a destination wallet address
+						</IonNote>
+					}
+					{
+						sameCurrentWallet &&
+						<IonNote color="danger" className="ion-margin-top">
+							Destination wallet address is matching with your current wallet
 						</IonNote>
 					}
 				</IonItem>

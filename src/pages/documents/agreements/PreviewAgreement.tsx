@@ -1,12 +1,13 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { renderToString } from 'react-dom/server';
 import TemplateComponent from 'react-mustache-template-component';
 import { IonButton, IonItem } from '@ionic/react';
 import {
     doSetAgreementFormInfo,
 	doCreateAgreement,
 } from '../../../redux/actions/documents';
-import { useParams } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 import { templateRender } from '../../../redux/actions/template/template';
 
 interface PreviewAgreementProps {
@@ -14,6 +15,7 @@ interface PreviewAgreementProps {
 }
 
 const PreviewAgreement: FC<PreviewAgreementProps> = ({ current }) => {
+    const history = useHistory();
     const dispatch = useDispatch();
     const documentState = useSelector((state: any) => state.documents);
     const wallet = useSelector(
@@ -41,9 +43,22 @@ const PreviewAgreement: FC<PreviewAgreementProps> = ({ current }) => {
     }, [agreementFormInfo]);
 
     async function slideNext() {
+		dispatch(doSetAgreementFormInfo({
+			name: '',
+			address: '',
+			phone: '',
+			counterpartyWallet: '',
+			counterpartyName: '',
+			counterpartyAddress: '',
+			counterpartyPhone: '',
+			createdAt: null
+		}));
+
+		await current.lockSwipeToPrev(false);
 		await current.lockSwipeToNext(false);
-		await current.slideNext();
-		await current.lockSwipeToNext(true);
+		await current.slideTo(0).then(() => {
+			history.push('/documents');
+		});
     }
     
     async function slideBack() {
@@ -64,7 +79,9 @@ const PreviewAgreement: FC<PreviewAgreementProps> = ({ current }) => {
 				slideNext: slideNext,
 				slideBack: slideBack
 			})
-		);
+        );
+        // console.log('template', renderToString(<TemplateComponent template={agreementDocument} />));
+        //console.log('type template', type);
 	};
     
     return (
@@ -72,10 +89,10 @@ const PreviewAgreement: FC<PreviewAgreementProps> = ({ current }) => {
             <h5 className="agreement-form-title">
                 Preview Document
             </h5>
-            <IonItem class="form-options">
+            <IonItem class="form-options preview-document">
                 <TemplateComponent template={agreementDocument} />
             </IonItem>
-            <IonItem class="form-options">
+            <IonItem class="form-options preview-document-buttons">
                 <IonButton
                     color="danger"
                     shape="round"
@@ -89,7 +106,7 @@ const PreviewAgreement: FC<PreviewAgreementProps> = ({ current }) => {
                     disabled={loading}
                     onClick={ () => onSubmit() }
                 >
-                    {loading ? 'Loading..' : 'Confirm'}
+                    {loading ? 'Loading..' : 'Accept'}
                 </IonButton>
             </IonItem>
         </div>
