@@ -1,5 +1,8 @@
 # install
 
+## Env variables 
+
+Copy `.env.example` to `.env` and replace to the proper values
 ## Using Docker
 ```bash
 make up
