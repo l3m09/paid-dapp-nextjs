@@ -17,7 +17,28 @@ spec:
         app: dapp
     spec:
       containers:
-        - image: gcr.io/vivid-plateau-278712/paid-dapp:cicd-development-latest
+        - image: gcr.io/vivid-plateau-278712/paid-dapp:develop-latest
           name: dapp
+          env:
+            - name: REACT_APP_RECIPIENT_ERC20_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: paid-dapp
+                  key: recipient-erc20-token
+            - name: REACT_APP_PAYMENTS_PAID_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: paid-dapp
+                  key: payments-paid-token
+            - name: REACT_APP_APIKEY
+              valueFrom:
+                secretKeyRef:
+                  name: paid-dapp
+                  key: apikey
+            - name: REACT_APP_PAID_DAPP_IPFS_SERVICE_SERVICE_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: paid-dapp
+                  key: paid-dapp-ipfs-service-service-host
           ports:
             - containerPort: 80
