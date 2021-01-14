@@ -50,9 +50,9 @@ const Agreements: React.FC<AgreementsProps> = () => {
 
 	const documentSlides: any = (
 		<IonSlides pager={false} options={slideOpts} ref={slidesRef}>
-			<IonSlide>
+			{/* <IonSlide>
 				<NdaDescription title={titleAgreement} current={slidesRef.current} />
-			</IonSlide>
+			</IonSlide> */}
 			<IonSlide>
 				<FormClient current={slidesRef.current} />
 			</IonSlide>
