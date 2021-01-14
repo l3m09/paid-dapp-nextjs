@@ -13,7 +13,7 @@ COPY android android
 COPY ios ios
 COPY public public
 COPY src src
-COPY *.js *.json .env ./
+COPY *.js *.json ./
 
 # Use the base stage to produce a build
 FROM base as build
