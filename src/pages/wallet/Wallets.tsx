@@ -29,10 +29,6 @@ import { KeyStorageModel } from 'universal-crypto-wallet/dist/key-storage/KeySto
 // import { promises } from 'fs';
 
 const metodofn = async (addrtoken:string, unlockedWallet:any) => {
-	const manager = BlockchainFactory.getWalletManager();
-	const storage = manager.getKeyStorage();
-	const rawWallet = await storage.find<KeyStorageModel>(unlockedWallet._id);
-
 	const address = unlockedWallet.address
 	const _walletModel = await BlockchainFactory.getWeb3Instance(unlockedWallet._id, unlockedWallet.password)!;
 	const walletModel = _walletModel!;

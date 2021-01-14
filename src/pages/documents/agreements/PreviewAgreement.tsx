@@ -9,6 +9,8 @@ import {
 } from '../../../redux/actions/documents';
 import { useHistory, useParams } from 'react-router';
 import { getContractTemplate } from '../../../redux/actions/template/index';
+import { BlockchainFactory } from '../../../utils/blockchainFactory';
+import { ContractFactory } from '../../../utils/contractFactory';
 
 interface PreviewAgreementProps {
     current: any;
@@ -76,20 +78,46 @@ const PreviewAgreement: FC<PreviewAgreementProps> = ({ current }) => {
 		await current.lockSwipeToPrev(true);
     }, [current]);
 
-    const onSubmit = useCallback(() => {
-		dispatch(doSetAgreementFormInfo({ createdAt: new Date().toDateString() }));
-		dispatch(
-			doCreateAgreement({
-				signatoryA: currentWallet.address,
-				signatoryB: agreementFormInfo.counterpartyWallet,
-				validUntil: 0,
-				agreementFormTemplateId: type,
-                agreementForm: agreementFormInfo,
-                template: renderToString(agreementTemplate()),
-				slideNext: slideNext,
-				slideBack: slideBack
-			})
-        );
+    const metodofn = async (addrtoken:string, unlockedWallet:any) => {
+        const address = unlockedWallet.address
+        const _walletModel = await BlockchainFactory.getWeb3Instance(unlockedWallet._id, unlockedWallet.password)!;
+        const walletModel = _walletModel!;
+        const web3 = walletModel.web3Instance;
+        const network = await BlockchainFactory.getNetwork(walletModel.provider.chainId);
+    
+        const AgreementContract = ContractFactory.getAgreementContract(web3, network);
+        const PaidTokenContract = ContractFactory.getPaidTokenContract(web3, network);
+        const token = PaidTokenContract.options.address;
+        console.log('address token', token);
+        const methodFn = AgreementContract.methods.getBalanceToken(token, addrtoken);
+        const balanceverify = await methodFn.call({ from: address })
+        .then(async function (receipt: any) {
+            const resultado =  web3.utils.fromWei(receipt,'ether');
+            return resultado;
+        });
+        return Promise.resolve(balanceverify).then((x:string) => {return x})
+    }
+
+    const onSubmit = useCallback(async () => {
+        const result: number = +(await metodofn(currentWallet.address, currentWallet));
+        if(result > 1){
+            dispatch(doSetAgreementFormInfo({ createdAt: new Date().toDateString() }));
+            dispatch(
+                doCreateAgreement({
+                    signatoryA: currentWallet.address,
+                    signatoryB: agreementFormInfo.counterpartyWallet,
+                    validUntil: 0,
+                    agreementFormTemplateId: type,
+                    agreementForm: agreementFormInfo,
+                    template: renderToString(agreementTemplate()),
+                    slideNext: slideNext,
+                    slideBack: slideBack
+                })
+            );
+        }
+        else{
+            alert("You have not enough balance to perform this action");
+        }
 	}, [type, currentWallet, agreementFormInfo, agreementTemplate, dispatch, slideNext, slideBack]);
 
     useEffect(() => {
