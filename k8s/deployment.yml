@@ -20,6 +20,11 @@ spec:
         - image: gcr.io/vivid-plateau-278712/paid-dapp:develop-latest
           name: dapp
           env:
+            - name: REACT_APP_WEB3_WSS
+              valueFrom:
+                configMapKeyRef:
+                  name: paid-dapp
+                  key: web3-wss
             - name: REACT_APP_RECIPIENT_ERC20_TOKEN
               valueFrom:
                 secretKeyRef:
@@ -45,5 +50,10 @@ spec:
                 configMapKeyRef:
                   name: paid-dapp
                   key: waku-server
+            - name: REACT_APP_IPFS_PAID_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: paid-dapp
+                  key: ipfs-paid-host
           ports:
             - containerPort: 80
