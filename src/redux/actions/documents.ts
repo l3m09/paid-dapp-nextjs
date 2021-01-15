@@ -21,7 +21,6 @@ const ipfsnode = `${process.env.REACT_APP_PAID_DAPP_IPFS_SERVICE_SERVICE_HOST}`;
 
 // TODO: Fix
 const ipfs = ipfsClient({ host: 'ipfs.infura.io', port: '5001', protocol: 'https', apiPath: '/api/v0' });
-const token = `${process.env.REACT_APP_ERC20_TOKEN}`;
 const apiUrl = `${process.env.REACT_APP_WAKU_SERVER}`;
 const recipientTKN = `${process.env.REACT_APP_RECIPIENT_ERC20_TOKEN}`;
 const payment = BigNumber(`${process.env.REACT_APP_PAYMENTS_PAID_TOKEN}`).toString();
@@ -265,7 +264,7 @@ export const doCreateAgreement = (payload: {
 					recipientTKN,
 					paymentSA
 				);
-				// EstimageGas for Withdraw PAIDToken
+				// EstimateGas for Withdraw PAIDToken
 			   	const gastx = await metodoFn.estimateGas();
 				// Resolve Promise for Withdraw PAIDToken
 			   	Promise.resolve(gastx).then(async (gastx:any) => {
