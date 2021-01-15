@@ -93,9 +93,7 @@ const Wallets: React.FC = () => {
 
 	const showbalancetoken = (addrtoken:string) => {
 		if (unlockedWallet) {
-			getBalance(addrtoken, unlockedWallet)
-				.then( () => console.log('shwbalancetkn', balance))
-				.catch( (e) => console.log('shwbalanceerr', e.message))
+			getBalance(addrtoken, unlockedWallet);
 			return balance;
 		}
 		return '0';

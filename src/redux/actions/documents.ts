@@ -22,6 +22,7 @@ const ipfsnode = `${process.env.REACT_APP_PAID_DAPP_IPFS_SERVICE_SERVICE_HOST}`;
 // TODO: Fix
 const ipfs = ipfsClient({ host: 'ipfs.infura.io', port: '5001', protocol: 'https', apiPath: '/api/v0' });
 const token = `${process.env.REACT_APP_ERC20_TOKEN}`;
+const apiUrl = `${process.env.REACT_APP_WAKU_SERVER}`;
 const recipientTKN = `${process.env.REACT_APP_RECIPIENT_ERC20_TOKEN}`;
 const payment = BigNumber(`${process.env.REACT_APP_PAYMENTS_PAID_TOKEN}`).toString();
 // const paymentSA = web3.utils.toWei(payment, 'ether')
@@ -225,12 +226,17 @@ export const doCreateAgreement = (payload: {
 
 		
 		const elementsAbi = abiLib.getElementsAbi({
-			"address":address
+			"partyAddress":address
 		});
+		const elementsParties = {
+			"partyName":agreementForm.name,
+			"partyEmail":agreementForm.email,
+			"counterpartyName":agreementForm.counterpartyName,
+			"coutnerpartyEmail":agreementForm.counterpartyEmail
+		};
 		
-		console.log('elementsAbi ',elementsAbi);
-
-		let ipfsHash = await uploadsIPFS(ipfs, blobContent, opts, digest, signature, pubKey, formId, agreementForm.counterpartyWallet, JSON.stringify(elementsAbi), null);
+		let ipfsHash = await uploadsIPFS(ipfs, blobContent, opts, digest, signature, pubKey, formId, agreementForm.counterpartyWallet, 
+			JSON.stringify(elementsAbi), JSON.stringify(elementsParties), null);
 		// ----------------------------------------------------
 		// Estimate gas,  TODO encapsulate
 		const AgreementContract = ContractFactory.getAgreementContract(web3, network);
@@ -280,7 +286,7 @@ export const doCreateAgreement = (payload: {
 						Promise.resolve(gas).then(async (gas:any) => {
 							const agreementTransaction = await methodFn.send({ from: address, gas:gas+5e4, gasPrice: 50e9 })
 							.on('receipt', async function (receipt: any) {
-								axios.post('https://dev-api.paidnetwork.com/email/new-agreement', {
+								axios.post(apiUrl + 'email/new-agreement', {
 									'counterParty': {
 										name: agreementForm.counterpartyName,
 										email: agreementForm.counterpartyEmail
@@ -331,17 +337,19 @@ export const doCreateAgreement = (payload: {
 
 export const uploadsIPFS = async (ipfs: any, blobContent: any, opts: any,
 	_digest: string, sigArray: any, pubKey: any, _docId: any, counterpartyAddress: string,
-	elementsAbi: any, parent: any = null) => {
+	elementsAbi: any, elementsParties:any, parent: any = null) => {
 	const createCIDHash = (fileEntry: any) => {
 		return { path: fileEntry.path, cid: fileEntry.cid.toString() }
 	}
 
 	const fileContent = await ipfs.add(blobContent);
 	const fileSignature = await ipfs.add(sigArray);
-	const elementsAbiCID = await ipfs.add(elementsAbi);
+	const _elementsAbi = await ipfs.add(elementsAbi);
+	const _elementsParties = await ipfs.add(elementsParties);
 	const index = {
 		contentRef: createCIDHash(fileContent), sigRef: createCIDHash(fileSignature), digest: _digest,
-		publicKey: pubKey, parent: parent, docId: _docId, cpartyAddress: counterpartyAddress, elementsAbi: elementsAbiCID
+		publicKey: pubKey, parent: parent, docId: _docId, cpartyAddress: counterpartyAddress, elementsAbi: createCIDHash(_elementsAbi),
+		elementsParties: createCIDHash(_elementsParties)
 	};
 
 	const fileIndex = await ipfs.add(JSON.stringify(index));
@@ -630,7 +638,6 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 	
 			const contentRef = jsonContent.contentRef;
 			// let pdfContent = '';
-			console.log(contentRef.cid);
 			// for await (const chunk of ipfs.cat(contentRef.cid)) {
 			// 	pdfContent = uint8ArrayToString(chunk);
 			// }
@@ -653,7 +660,15 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 			const elementsAbi = abiLib.getElementsAbi({
 				'address':address
 			});
-			let ipfsHash = await uploadsIPFS(ipfs, blobContent, opts, digest, signature, pubKey, formId, address, JSON.stringify(elementsAbi), null);
+			const urlParties = `https://ipfs.io/ipfs/${jsonContent.elementsParties.cid}`;
+			const partiesContent = async () => {
+				return await fetch(urlParties)
+				.then(res => res.text())
+			}
+
+			const partiesContentStr : string = await partiesContent();
+
+			let ipfsHash = await uploadsIPFS(ipfs, blobContent, opts, digest, signature, pubKey, formId, address, JSON.stringify(elementsAbi), partiesContentStr, null);
 	
 			const methodFn = AgreementContract.methods.counterPartiesSign(
 				agreementId,
@@ -667,16 +682,16 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 			Promise.resolve(gas).then(async (gas:any) => {
 				const agreementTransaction = await methodFn.send({ from: address, gas:gas+5e4, gasPrice: 50e9 })
 				.on('receipt', async function (receipt: any) {
-
-					axios.post('https://dev-api.paidnetwork.com/email/accept-agreement', {
+					const parties = JSON.parse(partiesContentStr);
+					axios.post(apiUrl + 'email/accept-agreement', {
 						// counterparty field is the SENDER
 						'counterParty': {
-							'name': form.name,
-							'email': form.email
+							'name': parties.partyName,
+							'email': parties.partyEmail
 						},
 						// party field is the TARGET
 						'party':{
-							'name': form.counterpartyName
+							'name': parties.counterpartyName
 						}
 					})
 					.then(function (response) {

@@ -114,8 +114,8 @@ function SelectedDocument(payload: {
 			const web3 = BlockchainFactory.getWeb3Instance(unlockedWallet._id, unlockedWallet.password);
 			web3.then((result) => {
 				const { network } = result!;
-				const Network = BlockchainFactory.getNetwork(network);
-				Network.then((networkText) => {
+				const _network = BlockchainFactory.getNetwork(network);
+				_network.then((networkText) => {
 					setNetWorkText(networkText.toUpperCase());
 				});
 			});

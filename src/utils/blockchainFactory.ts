@@ -40,9 +40,10 @@ export class BlockchainFactory {
 		if (!BlockchainFactory._web3) {
 			BlockchainFactory._web3 = new Web3 ( new Web3.providers.WebsocketProvider(BlockchainFactory.wssUrl, BlockchainFactory.options));
 		}
-		
-		BlockchainFactory._wallet = await BlockchainFactory._walletManager?.createBlockchainWallet(
-			BlockchainFactory.wssUrl, BlockchainFactory.options, walletId, password) as any;
+		if (!BlockchainFactory._wallet) {
+			BlockchainFactory._wallet = await BlockchainFactory._walletManager?.createBlockchainWallet(BlockchainFactory.wssUrl, BlockchainFactory.options, 
+				walletId, password) as any;
+		}
 		/*const mnemonicWallet = ethers.Wallet.fromMnemonic(mnemonic);
 		const { privateKey } = mnemonicWallet;
 		console.log(address,privateKey);*/

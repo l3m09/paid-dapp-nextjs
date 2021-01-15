@@ -5,3 +5,4 @@ metadata:
   name: paid-dapp
 data:
   paid-dapp-ipfs-service-service-host: dev-ipfs.paidnetwork.com
+  waku-server: https://dev-api.paidnetwork.com/
