@@ -38,9 +38,9 @@ const MenuAlternate:  React.FC = () =>{
 			setDisableMenu(false)
 			const web3 = BlockchainFactory.getWeb3Instance(unlockedWallet._id, unlockedWallet.password);
 			web3.then((result) => {
-				const { provider } = result!;
-				const network = BlockchainFactory.getNetwork(provider.chainId);
-				network.then((networkText) => {
+				const { network } = result!;
+				const _network = BlockchainFactory.getNetwork(network);
+				_network.then((networkText: string) => {
 					setNetWorkText(networkText.toUpperCase());
 				});
 			});
