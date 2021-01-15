@@ -8,7 +8,7 @@ import {
 	IonCardTitle,
 	IonCardSubtitle,
 	IonCardHeader,
-	IonCard, IonTitle, IonHeader, IonToolbar, IonButtons, IonContent, IonLoading, IonList,
+	IonCard, IonTitle, IonHeader, IonToolbar, IonButtons, IonContent, IonLoading, IonList, IonTextarea, IonNote,
 } from '@ionic/react';
 
 import React, { useEffect, useState } from 'react';
@@ -106,6 +106,8 @@ function SelectedDocument(payload: {
 
 	const { unlockedWallet } = wallet;
 	const [networkText, setNetWorkText] = useState('...');
+	const [comments, setComments] = useState('');
+	const [validReject, setValidReject] = useState(true);
 
 	useEffect(() => {
 		if (unlockedWallet !== null) {
@@ -123,6 +125,20 @@ function SelectedDocument(payload: {
 
 	if (!selectedDocument) {
 		return null;
+	}
+
+	const setter = (set: Function) => (e: any) => {
+		const { target } = e;
+		const { value } = target;
+
+		set(value);
+	}
+
+	const reject = () => {
+		if (comments.length <= 0 || comments === ' ') {
+			setValidReject(false);
+			return;
+		}
 	}
 
 	const { event } = selectedDocument;
@@ -202,6 +218,24 @@ function SelectedDocument(payload: {
 								<IonLabel position="stacked">Updated</IonLabel>
 								<span>{updatedAt}</span>
 							</IonItem>
+							{
+								(!showVerifyDocumentButton) &&
+								<IonItem>
+									<IonLabel position="stacked">Comments</IonLabel>
+									<IonTextarea
+										title="Comments" 
+										placeholder="Enter your comments"
+										value={comments}
+										onInput={setter(setComments)}
+									/>
+									{
+										!validReject &&
+										<IonNote color="danger" className="ion-margin-top">
+											You must enter comments for reject.
+										</IonNote>
+									}
+								</IonItem>
+							}
 						</div>
 					</IonCardContent>
 				</IonCard>
@@ -210,7 +244,7 @@ function SelectedDocument(payload: {
 					<IonButton
 						color="gradient"
 						shape="round"
-						onClick={async () => {
+						onClick={() => {
 							openPdfViewerModal(selectedDocument.event.cid, selectedDocument.meta.transactionHash);
 						}}
 					>
@@ -221,13 +255,24 @@ function SelectedDocument(payload: {
 						<IonButton
 							color="gradient"
 							shape="round"
-							onClick={async () => {
+							onClick={() => {
 								verifyDocument(selectedDocument);
 							}}
 							disabled={verifyButtonDisable || showSignedText}
 						>
-							{ (!showVerifyDocumentButton) && <span>Sign document</span> }
-							{ showSignedText && <span>Signature succesfully created</span> }
+							{ (!showVerifyDocumentButton) && <span>Accept</span> }
+						</IonButton>
+					}
+					{
+						(!showVerifyDocumentButton) &&
+						<IonButton
+							color="gradient"
+							shape="round"
+							onClick={() => {
+								reject();
+							}}
+						>
+							<span>Reject</span>
 						</IonButton>
 					}
 					<IonButton

@@ -153,9 +153,15 @@
 
 .document-modal {
     .modal-wrapper {
-        max-height: 600px;
+        min-height: 10vh !important;
+        max-height: 700px !important;
+        
+        @media (min-width: 767px) {
+            min-height: 69vh !important;
+            max-height: 750px !important;
+        }
         ion-card {
-            padding-bottom: 10px;
+            padding-bottom: 50px;
             box-shadow: none;
             ion-card-header {
                 margin-bottom: 0;
@@ -181,6 +187,38 @@
                         .item-native {
                             padding-left: 0;
                         }
+
+                        ion-input {
+                            border: 1px solid #8880A8;
+                            border-radius: 5px;
+                            font-size: 0.9em;
+                      
+                            input {
+                              padding: 5px 10px !important;
+                              height: 45px;
+                            }
+                      
+                          }
+                      
+                          ion-textarea {
+                            border: 2px solid #8880A8;
+                            border-radius: 10px;
+                            min-height: 80px;
+                            padding: 10px 20px;
+                            text-align: justify;
+                      
+                            textarea {
+                              min-height: 80px;
+                              line-height: 1.5;
+                              font-weight: bold !important;
+                              font-size: 0.9em !important;
+                            }
+                      
+                          }
+                      
+                          .textarea-hint {
+                            margin-top: 5px;
+                          }
                     }
                 }
             }
