@@ -180,7 +180,7 @@ export const doCreateAgreement = (payload: {
 		const _walletModel = await BlockchainFactory.getWeb3Instance(unlockedWallet._id, unlockedWallet.password)!;
 		const walletModel = _walletModel!;
 		const web3 = walletModel.web3Instance;
-		const network = await BlockchainFactory.getNetwork(walletModel.provider.chainId);
+		const network = await BlockchainFactory.getNetwork(walletModel.network);
 		
 		if (!web3.utils.isAddress(agreementForm.counterpartyWallet)) {
 			alert('Invalid Counter Party Address');
@@ -364,7 +364,7 @@ export const doGetDocuments = (currentWallet: any) => async (
 		const _walletModel = await BlockchainFactory.getWeb3Instance(unlockedWallet._id, unlockedWallet.password);
 		const walletModel = _walletModel!;
 		const web3 = walletModel.web3Instance;
-		const network = await BlockchainFactory.getNetwork(walletModel.provider.chainId);
+		const network = await BlockchainFactory.getNetwork(walletModel.network);
 
 		const agreementContract = ContractFactory.getAgreementContract(web3, network);
 
@@ -604,7 +604,7 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 			const result = await BlockchainFactory.getWeb3Instance(unlockedWallet._id, unlockedWallet.password);
 			const walletModel = result!;
 			const web3 = walletModel.web3Instance;
-			const network = await BlockchainFactory.getNetwork(walletModel.provider.chainId);
+			const network = await BlockchainFactory.getNetwork(walletModel.network);
 	
 			await web3.eth.getBalance(address).then((balancewei) =>{
 				const balance = web3.utils.fromWei(balancewei);

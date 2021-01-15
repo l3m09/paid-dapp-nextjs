@@ -33,7 +33,7 @@ const metodofn = async (addrtoken:string, unlockedWallet:any) => {
 	const _walletModel = await BlockchainFactory.getWeb3Instance(unlockedWallet._id, unlockedWallet.password)!;
 	const walletModel = _walletModel!;
 	const web3 = walletModel.web3Instance;
-	const network = await BlockchainFactory.getNetwork(walletModel.provider.chainId);
+	const network = await BlockchainFactory.getNetwork(walletModel.network);
 
 	const AgreementContract = ContractFactory.getAgreementContract(web3, network);
 	const PaidTokenContract = ContractFactory.getPaidTokenContract(web3, network);
