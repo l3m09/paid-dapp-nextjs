@@ -4,5 +4,7 @@ kind: ConfigMap
 metadata:
   name: paid-dapp
 data:
+  web3-wss: wss://confident-goodall:math-prize-elite-afar-woozy-ride@ws-nd-381-933-831.p2pify.com
   paid-dapp-ipfs-service-service-host: dev-ipfs.paidnetwork.com
   waku-server: https://dev-api.paidnetwork.com/
+  ipfs-paid-host: ipfs.infura.io
