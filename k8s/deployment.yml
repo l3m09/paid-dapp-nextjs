@@ -40,5 +40,10 @@ spec:
                 configMapKeyRef:
                   name: paid-dapp
                   key: paid-dapp-ipfs-service-service-host
+            - name: REACT_APP_WAKU_SERVER
+              valueFrom:
+                configMapKeyRef:
+                  name: paid-dapp
+                  key: waku-server
           ports:
             - containerPort: 80
