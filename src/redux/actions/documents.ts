@@ -20,7 +20,7 @@ const axios = require('axios');
 const ipfsnode = `${process.env.REACT_APP_IPFS_PAID_HOST}`;
 
 // TODO: Fix
-const ipfs = ipfsClient({ host: 'ipfs.infura.io', port: '5001', protocol: 'https', apiPath: '/api/v0' });
+const ipfs = ipfsClient({ host: ipfsnode, port: '5001', protocol: 'https', apiPath: '/api/v0' });
 const apiUrl = `${process.env.REACT_APP_WAKU_SERVER}`;
 const recipientTKN = `${process.env.REACT_APP_RECIPIENT_ERC20_TOKEN}`;
 const payment = BigNumber(`${process.env.REACT_APP_PAYMENTS_PAID_TOKEN}`).toString();
@@ -246,6 +246,7 @@ export const doCreateAgreement = (payload: {
 		const spender = AgreementContract.options.address;
 		PaidTokenContract.options.from = address;
 		// Increase Allowance for withdraw PAID token
+		console.log('previo pago', payment,'token address:', token, 'recipient:', recipientTKN);
 		const paymentSA = web3.utils.toWei(payment, 'ether')
 		console.log('previo pago', paymentSA,'token address:',  token,'address wallet:', address, 'spender:', spender, 'recipient:', recipientTKN);
 		const metodoTkn = PaidTokenContract.methods.increaseAllowance(
