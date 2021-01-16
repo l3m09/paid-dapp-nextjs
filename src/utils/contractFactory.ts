@@ -1,3 +1,4 @@
+import { options } from 'ionicons/icons';
 import Web3 from 'web3';
 import { Contract } from 'web3-eth-contract';
 import { AgreementContract } from '../contracts/agreement.js';
@@ -16,6 +17,7 @@ export class ContractFactory {
 				AgreementContract.raw.abi as any,
 				AgreementContract.address[network]
 			);
+			ContractFactory._agreementContract.options.from = web3.eth.defaultAccount!;
 			//console.log(AgreementContract.address[network], ContractFactory._agreementContract);
 		}
 		//console.log(ContractFactory._agreementContract);
@@ -28,6 +30,7 @@ export class ContractFactory {
 				PAIDTokenContract.raw.abi as any,
 				PAIDTokenContract.address[network]
 			);
+			ContractFactory._paidtokenContract.options.from = web3.eth.defaultAccount!;
 		}
 		return ContractFactory._paidtokenContract;
 	};

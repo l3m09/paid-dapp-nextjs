@@ -1,6 +1,6 @@
 import { KeyStorageModel } from 'universal-crypto-wallet/dist/key-storage/KeyStorageModel';
 import { DocumentsActionTypes } from '../actionTypes/documents';
-import { BigNumber as BN ,ethers } from 'ethers';
+import { BigNumber as BN, ethers } from 'ethers';
 import { BlockchainFactory } from '../../utils/blockchainFactory';
 import { ContractFactory } from '../../utils/contractFactory';
 import { base64StringToBlob } from 'blob-util';
@@ -12,7 +12,8 @@ import { DialogsActionTypes } from '../actionTypes/dialogs';
 import { PAIDTokenContract } from '../../contracts/paidtoken';
 
 const uint8ArrayToString = require('uint8arrays/to-string');
-const BigNumber = require('bignumber.js');
+// const BigNumber = require('bignumber.js');
+const BigNumber = require('ethers');
 const ipfsClient = require('ipfs-http-client');
 const fetch = require('node-fetch');
 const axios = require('axios');
@@ -180,7 +181,6 @@ export const doCreateAgreement = (payload: {
 		const _walletModel = await BlockchainFactory.getWeb3Instance(unlockedWallet._id, unlockedWallet.password)!;
 		const walletModel = _walletModel!;
 		const web3 = walletModel.web3Instance;
-		web3.eth.defaultAccount = address;
 		const network = await BlockchainFactory.getNetwork(walletModel.network);
 		
 		if (!web3.utils.isAddress(agreementForm.counterpartyWallet)) {
@@ -244,8 +244,6 @@ export const doCreateAgreement = (payload: {
 		const PaidTokenContract = ContractFactory.getPaidTokenContract(web3, network);
 		const token = PaidTokenContract.options.address;
 		const spender = AgreementContract.options.address;
-		PaidTokenContract.options.from = address;
-		AgreementContract.options.from = address;
 		// Increase Allowance for withdraw PAID token
 		// const paymentSA = web3.utils.toWei(payment, 'ether')
 		console.log('previo pago', payment,'token address:',  token,'address wallet:', address, 'spender:', spender, 'recipient:', recipientTKN);

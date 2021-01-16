@@ -90,7 +90,7 @@ const unlockWallet = (payload: any) => {
 const getBalanceWallet = async (walletId: string, password: string) => {
 	try{
 		const wallet = BlockchainFactory.getWalletManager();
-		const address = await wallet.getWalletAddress(walletId);
+		const address = await wallet.getWalletAddress(walletId, password);
 		const _walletModel = await BlockchainFactory.getWeb3Instance(walletId, password);
 		const web3 = _walletModel!.web3Instance;
 		const balancewei = await web3.eth.getBalance(address);
@@ -238,7 +238,7 @@ export const doCreateWallet = (payload: {
 		const walletManager = BlockchainFactory.getWalletManager();
 		const wallet = await walletManager.createWallet(password, mnemonic);
 		const { _id, created } = wallet;
-		const address = await walletManager.getWalletAddress(_id);
+		const address = await walletManager.getWalletAddress(_id, password);
 
 		const referenceWallet = {
 			_id,
@@ -283,7 +283,7 @@ export const doImportWallet = (payload: {
 		const walletManager = BlockchainFactory.getWalletManager();
 		const wallet = await walletManager.createWallet(password, mnemonic);
 		const { _id, created } = wallet;
-		const address = await walletManager.getWalletAddress(_id);
+		const address = await walletManager.getWalletAddress(_id, password);
 		const balance = await getBalanceWallet(_id, password);
 
 		const referenceWallet = {
