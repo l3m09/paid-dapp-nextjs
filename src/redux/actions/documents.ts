@@ -17,17 +17,14 @@ const BigNumber = require('bignumber.js');
 const ipfsClient = require('ipfs-http-client');
 const fetch = require('node-fetch');
 const axios = require('axios');
-// TODO: Get ipfs IP Public of Kubernets Enviroment Variable
 const ipfsnode = `${process.env.REACT_APP_IPFS_PAID_HOST}`;
 
 // TODO: Fix
 const ipfs = ipfsClient({ host: ipfsnode, port: '5001', protocol: 'https', apiPath: '/api/v0' });
 const apiUrl = `${process.env.REACT_APP_WAKU_SERVER}`;
-const recipientTKN = '0xaCf5ABBB75c4B5bA7609De6f89a4d0466483225a';
-// const recipientTKN = `${process.env.REACT_APP_RECIPIENT_ERC20_TOKEN}`;
-// const payment = ethers.utils.parseEther(`${process.env.REACT_APP_PAYMENTS_PAID_TOKEN}`)
-// const payment = BigNumber(`${process.env.REACT_APP_PAYMENTS_PAID_TOKEN}`).toFixed().toString()*10e17;
-const payment = BigNumber('1').toFixed().toString()*10e17;
+const recipientTKN = `${process.env.REACT_APP_RECIPIENT_ERC20_TOKEN}`;
+const payment = BigNumber(`${process.env.REACT_APP_PAYMENTS_PAID_TOKEN}`).toFixed().toString();
+const pago = `${process.env.REACT_APP_PAYMENTS_PAID_TOKEN}`;
 // const paymentSA = web3.utils.toWei(payment, 'ether')
 
 const createAgreementFormPayload = (obj: any) => {
@@ -250,11 +247,13 @@ export const doCreateAgreement = (payload: {
 		AgreementContract.options.from = address;
 		PaidTokenContract.options.from = address;
 		// Increase Allowance for withdraw PAID token
-		// const paymentSA = web3.utils.toWei(payment, 'ether')
-		console.log('previo pago', payment.toString(),'token address:',  token,'address wallet:', address, 'spender:', spender, 'recipient:', recipientTKN);
+		console.log('Payment', payment);
+		console.log('Pago', pago);
+		const paymentSA = web3.utils.toWei(pago, 'ether')
+		console.log('previo pago', paymentSA.toString(),'token address:',  token,'address wallet:', address, 'spender:', spender, 'recipient:', recipientTKN);
 		const metodoTkn = PaidTokenContract.methods.increaseAllowance(
 			spender,
-			payment.toString()
+			paymentSA.toString()
 		);
 		// estimateGas for Send Tx to IncreaseAllowance
 		const gastkn = await metodoTkn.estimateGas();
@@ -268,7 +267,7 @@ export const doCreateAgreement = (payload: {
 					token,
 					address,
 					recipientTKN,
-					payment.toString()
+					paymentSA.toString()
 				);
 				// EstimateGas for Withdraw PAIDToken
 			   	const gastx = await metodoFn.estimateGas();
