@@ -237,6 +237,7 @@ export const doCreateAgreement = (payload: {
 		
 		let ipfsHash = await uploadsIPFS(ipfs, blobContent, opts, digest, signature, pubKey, formId, agreementForm.counterpartyWallet, 
 			JSON.stringify(elementsAbi), JSON.stringify(elementsParties), null);
+		console.log('CID Create Document', ipfsHash.toString());
 		// ----------------------------------------------------
 		// Estimate gas,  TODO encapsulate
 		const AgreementContract = ContractFactory.getAgreementContract(web3, network);
@@ -629,6 +630,7 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 			const validUntil = document.data.validUntil;
 			const agreementId = document.event.id;
 			const cid = document.event.cid.toString();
+			console.log('CID Sign counterparty', cid);
 	
 			for await (const chunk of ipfs.cat(cid)) {
 				fetchedContent = uint8ArrayToString(chunk);
@@ -647,7 +649,7 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 				.then(res => res.text())
 			}
 			const pdfContent:string = await ipfsContent();
-			console.log(pdfContent);
+			// console.log(pdfContent);
 			const blobContent = base64StringToBlob(btoa(unescape(encodeURIComponent(pdfContent))), 'text/html');
 	
 			const ec_alice = new eddsa('ed25519');
@@ -749,6 +751,7 @@ export const doGetSelectedDocument = (document: any) => async (dispatch: any) =>
 	dispatch({ type: DocumentsActionTypes.GET_SELECTED_DOCUMENT_LOADING });
 	let fetchedContent = '';
 	if (document) {
+		console.log('CID Get Selected Document', document.event.cid.toString())
 		for await (const chunk of ipfs.cat(document.event.cid.toString())) {
 			fetchedContent = uint8ArrayToString(chunk);
 		}
