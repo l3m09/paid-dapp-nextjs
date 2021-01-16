@@ -17,6 +17,12 @@ COPY *.js *.json ./
 
 # Use the base stage to produce a build
 FROM base as build
+# Specify variables at build-time for Vue
+ARG REACT_APP_WEB3_WSS
+ARG REACT_APP_RECIPIENT_ERC20_TOKEN
+ARG REACT_APP_PAYMENTS_PAID_TOKEN
+ARG REACT_APP_WAKU_SERVER
+ARG REACT_APP_IPFS_PAID_HOST
 # Execute npm to create a production build
 RUN npm run build
 
