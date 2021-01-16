@@ -6,10 +6,9 @@ import { ethers, providers, Wallet } from 'ethers';
 import Web3 from 'web3';
 
 export class BlockchainFactory {
-	// static GETH_URL =
-	// 	'https://rinkeby.infura.io/v3/6d8bfebd6db24c3cb3f3d50839e1c5be';
-	// 	//'http://127.0.0.1:7545';
-	private static wssUrl = 'wss://kind-lalande:arrest-cursor-slogan-prism-carbon-neon@ws-nd-233-385-399.p2pify.com';
+	
+	// private static wssUrl = 'wss://kind-lalande:arrest-cursor-slogan-prism-carbon-neon@ws-nd-233-385-399.p2pify.com';
+	private static wssUrl = `${process.env.REACT_APP_WEB3_WSS}`;;
 	// private static url : string = 'https://rinkeby.infura.io/v3/c01c014a022d43488fa1b30dc034a159';
 	private static _web3: Web3 | null = null;
 	private static _walletManager: WalletManager | null = null;

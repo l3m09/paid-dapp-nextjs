@@ -20,12 +20,10 @@ const axios = require('axios');
 const ipfsnode = `${process.env.REACT_APP_IPFS_PAID_HOST}`;
 
 // TODO: Fix
-const ipfs = ipfsClient({ host: 'ipfs.infura.io', port: '5001', protocol: 'https', apiPath: '/api/v0' });
-// const apiUrl = `${process.env.REACT_APP_WAKU_SERVER}`;
-// const recipientTKN = `${process.env.REACT_APP_RECIPIENT_ERC20_TOKEN}`;
-const recipientTKN = '0xaCf5ABBB75c4B5bA7609De6f89a4d0466483225a';
-// const payment = BigNumber(`${process.env.REACT_APP_PAYMENTS_PAID_TOKEN}`).toString();
-const payment = '1';
+const ipfs = ipfsClient({ host: ipfsnode, port: '5001', protocol: 'https', apiPath: '/api/v0' });
+const apiUrl = `${process.env.REACT_APP_WAKU_SERVER}`;
+const recipientTKN = `${process.env.REACT_APP_RECIPIENT_ERC20_TOKEN}`;
+const payment = BigNumber(`${process.env.REACT_APP_PAYMENTS_PAID_TOKEN}`).toString();
 // const paymentSA = web3.utils.toWei(payment, 'ether')
 
 const createAgreementFormPayload = (obj: any) => {
@@ -290,7 +288,7 @@ export const doCreateAgreement = (payload: {
 						Promise.resolve(gas).then(async (gas:any) => {
 							const agreementTransaction = await methodFn.send({ from: address, gas:gas+5e4, gasPrice: 50e9 })
 							.on('receipt', async function (receipt: any) {
-								axios.post('https://dev-api.paidnetwork.com/email/new-agreement', {
+								axios.post(apiUrl+'email/new-agreement', {
 									'counterParty': {
 										name: agreementForm.counterpartyName,
 										email: agreementForm.counterpartyEmail
@@ -690,7 +688,7 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 				const agreementTransaction = await methodFn.send({ from: address, gas:gas+5e4, gasPrice: 50e9 })
 				.on('receipt', async function (receipt: any) {
 					const parties = JSON.parse(partiesContentStr);
-					axios.post('https://dev-api.paidnetwork.com/email/accept-agreement', {
+					axios.post(apiUrl+'email/accept-agreement', {
 						// counterparty field is the SENDER
 						'counterParty': {
 							'name': parties.partyName,
