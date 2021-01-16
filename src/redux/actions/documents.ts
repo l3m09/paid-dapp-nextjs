@@ -24,8 +24,8 @@ const ipfsnode = `${process.env.REACT_APP_IPFS_PAID_HOST}`;
 const ipfs = ipfsClient({ host: ipfsnode, port: '5001', protocol: 'https', apiPath: '/api/v0' });
 const apiUrl = `${process.env.REACT_APP_WAKU_SERVER}`;
 const recipientTKN = `${process.env.REACT_APP_RECIPIENT_ERC20_TOKEN}`;
-const payment = ethers.utils.parseEther(`${process.env.REACT_APP_PAYMENTS_PAID_TOKEN}`)
-// const payment = BigNumber(`${process.env.REACT_APP_PAYMENTS_PAID_TOKEN}`).toFixed().toString()*10e17;
+// const payment = ethers.utils.parseEther(`${process.env.REACT_APP_PAYMENTS_PAID_TOKEN}`)
+const payment = BigNumber(`${process.env.REACT_APP_PAYMENTS_PAID_TOKEN}`).toFixed().toString()*10e17;
 // const paymentSA = web3.utils.toWei(payment, 'ether')
 
 const createAgreementFormPayload = (obj: any) => {
@@ -183,7 +183,7 @@ export const doCreateAgreement = (payload: {
 		const walletModel = _walletModel!;
 		const web3 = walletModel.web3Instance;
 		const network = await BlockchainFactory.getNetwork(walletModel.network);
-		
+
 		if (!web3.utils.isAddress(agreementForm.counterpartyWallet)) {
 			alert('Invalid Counter Party Address');
 			throw new Error('Invalid Counter Party Address');
@@ -245,6 +245,8 @@ export const doCreateAgreement = (payload: {
 		const PaidTokenContract = ContractFactory.getPaidTokenContract(web3, network);
 		const token = PaidTokenContract.options.address;
 		const spender = AgreementContract.options.address;
+		AgreementContract.options.from = address;
+		PaidTokenContract.options.from = address;
 		// Increase Allowance for withdraw PAID token
 		// const paymentSA = web3.utils.toWei(payment, 'ether')
 		console.log('previo pago', payment.toString(),'token address:',  token,'address wallet:', address, 'spender:', spender, 'recipient:', recipientTKN);
@@ -613,7 +615,6 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 			const result = await BlockchainFactory.getWeb3Instance(unlockedWallet._id, unlockedWallet.password);
 			const walletModel = result!;
 			const web3 = walletModel.web3Instance;
-			web3.eth.defaultAccount = address;
 			const network = await BlockchainFactory.getNetwork(walletModel.network);
 	
 			await web3.eth.getBalance(address).then((balancewei) =>{
