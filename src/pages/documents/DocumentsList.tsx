@@ -111,7 +111,7 @@ function SelectedDocument(payload: {
 	const [validReject, setValidReject] = useState(true);
 
 	useEffect(() => {
-		if (unlockedWallet !== null) {
+		if (unlockedWallet) {
 			const web3 = BlockchainFactory.getWeb3Instance(unlockedWallet._id, unlockedWallet.password);
 			web3.then((result) => {
 				const { network } = result!;
@@ -332,9 +332,7 @@ const DocumentsList: React.FC<Props> = ({
 	const [reloadDocuments, setReloadDocument] = useState(false);
 	const [showVerifyDocumentButton, setShowVerifyDocumentButton] = useState(false);
 	const [forceVerifyDocument, setForceVerifyDocument] = useState(false);
- 	const wallet = useSelector(
-		(state: { wallet: { currentWallet: any } }) => state.wallet
-	);
+	const wallet = useSelector((state: any) => state.wallet);
 	const { currentWallet } = wallet;
 
 	function showDocument(item: any) {

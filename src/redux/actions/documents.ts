@@ -685,9 +685,11 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 				'0x' + digest);
 	
 			const gas = await methodFn.estimateGas();
+			
 			Promise.resolve(gas).then(async (gas:any) => {
 				const agreementTransaction = await methodFn.send({ from: address, gas:gas+5e4, gasPrice: 50e9 })
 				.on('receipt', async function (receipt: any) {
+					console.log(receipt);
 					const parties = JSON.parse(partiesContentStr);
 					axios.post(apiUrl+'email/accept-agreement', {
 						// counterparty field is the SENDER
