@@ -21,10 +21,11 @@ const ipfsnode = `${process.env.REACT_APP_IPFS_PAID_HOST}`;
 
 // TODO: Fix
 const ipfs = ipfsClient({ host: 'ipfs.infura.io', port: '5001', protocol: 'https', apiPath: '/api/v0' });
-const apiUrl = `${process.env.REACT_APP_WAKU_SERVER}`;
-const recipientTKN = `${process.env.REACT_APP_RECIPIENT_ERC20_TOKEN}`;
-const payment = BigNumber(`${process.env.REACT_APP_PAYMENTS_PAID_TOKEN}`).toString();
-// const payment = '1';
+// const apiUrl = `${process.env.REACT_APP_WAKU_SERVER}`;
+// const recipientTKN = `${process.env.REACT_APP_RECIPIENT_ERC20_TOKEN}`;
+const recipientTKN = '0xaCf5ABBB75c4B5bA7609De6f89a4d0466483225a';
+// const payment = BigNumber(`${process.env.REACT_APP_PAYMENTS_PAID_TOKEN}`).toString();
+const payment = '1';
 // const paymentSA = web3.utils.toWei(payment, 'ether')
 
 const createAgreementFormPayload = (obj: any) => {
@@ -181,6 +182,7 @@ export const doCreateAgreement = (payload: {
 		const _walletModel = await BlockchainFactory.getWeb3Instance(unlockedWallet._id, unlockedWallet.password)!;
 		const walletModel = _walletModel!;
 		const web3 = walletModel.web3Instance;
+		web3.eth.defaultAccount = address;
 		const network = await BlockchainFactory.getNetwork(walletModel.network);
 		
 		if (!web3.utils.isAddress(agreementForm.counterpartyWallet)) {
@@ -245,8 +247,8 @@ export const doCreateAgreement = (payload: {
 		const token = PaidTokenContract.options.address;
 		const spender = AgreementContract.options.address;
 		PaidTokenContract.options.from = address;
+		AgreementContract.options.from = address;
 		// Increase Allowance for withdraw PAID token
-		console.log('previo pago', payment,'token address:', token, 'recipient:', recipientTKN);
 		const paymentSA = web3.utils.toWei(payment, 'ether')
 		console.log('previo pago', paymentSA,'token address:',  token,'address wallet:', address, 'spender:', spender, 'recipient:', recipientTKN);
 		const metodoTkn = PaidTokenContract.methods.increaseAllowance(
@@ -288,7 +290,7 @@ export const doCreateAgreement = (payload: {
 						Promise.resolve(gas).then(async (gas:any) => {
 							const agreementTransaction = await methodFn.send({ from: address, gas:gas+5e4, gasPrice: 50e9 })
 							.on('receipt', async function (receipt: any) {
-								axios.post(apiUrl + 'email/new-agreement', {
+								axios.post('https://dev-api.paidnetwork.com/email/new-agreement', {
 									'counterParty': {
 										name: agreementForm.counterpartyName,
 										email: agreementForm.counterpartyEmail
@@ -614,6 +616,7 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 			const result = await BlockchainFactory.getWeb3Instance(unlockedWallet._id, unlockedWallet.password);
 			const walletModel = result!;
 			const web3 = walletModel.web3Instance;
+			web3.eth.defaultAccount = address;
 			const network = await BlockchainFactory.getNetwork(walletModel.network);
 	
 			await web3.eth.getBalance(address).then((balancewei) =>{
@@ -626,6 +629,7 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 			})
 	
 			const AgreementContract = ContractFactory.getAgreementContract(web3, network);
+			AgreementContract.options.from = address;
 			const form = document.data.agreementForm;
 			const formId = document.event.agreementFormTemplateId;
 			const validUntil = document.data.validUntil;
@@ -677,7 +681,7 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 				agreementId,
 				validUntil,
 				ipfsHash.toString(),
-				formId, 	
+				formId,
 				form,
 				'0x' + digest);
 	
@@ -686,7 +690,7 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 				const agreementTransaction = await methodFn.send({ from: address, gas:gas+5e4, gasPrice: 50e9 })
 				.on('receipt', async function (receipt: any) {
 					const parties = JSON.parse(partiesContentStr);
-					axios.post(apiUrl + 'email/accept-agreement', {
+					axios.post('https://dev-api.paidnetwork.com/email/accept-agreement', {
 						// counterparty field is the SENDER
 						'counterParty': {
 							'name': parties.partyName,
@@ -703,7 +707,7 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 					.catch(function (error) {
 						console.log('email error: ',error);
 					});
-					/*					
+					/*
 					CODE FOR REJECTION
 					axios.post('https://dev-api.paidnetwork.com/email/reject-agreement', {
 						// counterparty field is the SENDER
