@@ -23,8 +23,8 @@ const ipfsnode = `${process.env.REACT_APP_IPFS_PAID_HOST}`;
 const ipfs = ipfsClient({ host: 'ipfs.infura.io', port: '5001', protocol: 'https', apiPath: '/api/v0' });
 const apiUrl = `${process.env.REACT_APP_WAKU_SERVER}`;
 const recipientTKN = `${process.env.REACT_APP_RECIPIENT_ERC20_TOKEN}`;
-// const payment = BigNumber(`${process.env.REACT_APP_PAYMENTS_PAID_TOKEN}`).toString();
-const payment = '1';
+const payment = BigNumber(`${process.env.REACT_APP_PAYMENTS_PAID_TOKEN}`).toString();
+// const payment = '1';
 // const paymentSA = web3.utils.toWei(payment, 'ether')
 
 const createAgreementFormPayload = (obj: any) => {
