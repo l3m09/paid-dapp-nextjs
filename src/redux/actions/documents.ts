@@ -23,7 +23,7 @@ const ipfsnode = `${process.env.REACT_APP_IPFS_PAID_HOST}`;
 const ipfs = ipfsClient({ host: ipfsnode, port: '5001', protocol: 'https', apiPath: '/api/v0' });
 const apiUrl = `${process.env.REACT_APP_WAKU_SERVER}`;
 const recipientTKN = `${process.env.REACT_APP_RECIPIENT_ERC20_TOKEN}`;
-const payment = BigNumber(`${process.env.REACT_APP_PAYMENTS_PAID_TOKEN}`).toString();
+const payment = BigNumber(`${process.env.REACT_APP_PAYMENTS_PAID_TOKEN}`).toFixed().toString()*10e18;
 // const paymentSA = web3.utils.toWei(payment, 'ether')
 
 const createAgreementFormPayload = (obj: any) => {
@@ -247,11 +247,11 @@ export const doCreateAgreement = (payload: {
 		PaidTokenContract.options.from = address;
 		AgreementContract.options.from = address;
 		// Increase Allowance for withdraw PAID token
-		const paymentSA = web3.utils.toWei(payment, 'ether')
-		console.log('previo pago', paymentSA,'token address:',  token,'address wallet:', address, 'spender:', spender, 'recipient:', recipientTKN);
+		// const paymentSA = web3.utils.toWei(payment, 'ether')
+		console.log('previo pago', payment,'token address:',  token,'address wallet:', address, 'spender:', spender, 'recipient:', recipientTKN);
 		const metodoTkn = PaidTokenContract.methods.increaseAllowance(
 			spender,
-			paymentSA
+			payment.toString()
 		);
 		// estimateGas for Send Tx to IncreaseAllowance
 		const gastkn = await metodoTkn.estimateGas();
@@ -265,7 +265,7 @@ export const doCreateAgreement = (payload: {
 					token,
 					address,
 					recipientTKN,
-					paymentSA
+					payment.toString()
 				);
 				// EstimateGas for Withdraw PAIDToken
 			   	const gastx = await metodoFn.estimateGas();
