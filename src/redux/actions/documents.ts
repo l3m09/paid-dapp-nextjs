@@ -12,8 +12,8 @@ import { DialogsActionTypes } from '../actionTypes/dialogs';
 import { PAIDTokenContract } from '../../contracts/paidtoken';
 
 const uint8ArrayToString = require('uint8arrays/to-string');
-// const BigNumber = require('bignumber.js');
-const BigNumber = require('ethers');
+const BigNumber = require('bignumber.js');
+// const BigNumber = require('ethers');
 const ipfsClient = require('ipfs-http-client');
 const fetch = require('node-fetch');
 const axios = require('axios');
@@ -24,7 +24,8 @@ const ipfsnode = `${process.env.REACT_APP_IPFS_PAID_HOST}`;
 const ipfs = ipfsClient({ host: ipfsnode, port: '5001', protocol: 'https', apiPath: '/api/v0' });
 const apiUrl = `${process.env.REACT_APP_WAKU_SERVER}`;
 const recipientTKN = `${process.env.REACT_APP_RECIPIENT_ERC20_TOKEN}`;
-const payment = BigNumber(`${process.env.REACT_APP_PAYMENTS_PAID_TOKEN}`).toFixed().toString()*10e17;
+const payment = ethers.utils.parseEther(`${process.env.REACT_APP_PAYMENTS_PAID_TOKEN}`)
+// const payment = BigNumber(`${process.env.REACT_APP_PAYMENTS_PAID_TOKEN}`).toFixed().toString()*10e17;
 // const paymentSA = web3.utils.toWei(payment, 'ether')
 
 const createAgreementFormPayload = (obj: any) => {
@@ -246,7 +247,7 @@ export const doCreateAgreement = (payload: {
 		const spender = AgreementContract.options.address;
 		// Increase Allowance for withdraw PAID token
 		// const paymentSA = web3.utils.toWei(payment, 'ether')
-		console.log('previo pago', payment,'token address:',  token,'address wallet:', address, 'spender:', spender, 'recipient:', recipientTKN);
+		console.log('previo pago', payment.toString(),'token address:',  token,'address wallet:', address, 'spender:', spender, 'recipient:', recipientTKN);
 		const metodoTkn = PaidTokenContract.methods.increaseAllowance(
 			spender,
 			payment.toString()

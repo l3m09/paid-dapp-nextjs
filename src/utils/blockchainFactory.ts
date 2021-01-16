@@ -21,7 +21,7 @@ export class BlockchainFactory {
 			// Useful if requests are large
 			maxReceivedFrameSize: 10000000,   // bytes - default: 1MiB
 			maxReceivedMessageSize: 80000000, // bytes - default: 8MiB
-	   
+
 			// Useful to keep a connection alive
 			keepalive: true,
 			keepaliveInterval: 60000 // ms
@@ -39,10 +39,8 @@ export class BlockchainFactory {
 		if (!BlockchainFactory._web3) {
 			BlockchainFactory._web3 = new Web3 ( new Web3.providers.WebsocketProvider(BlockchainFactory.wssUrl, BlockchainFactory.options));
 		}
-		if (!BlockchainFactory._wallet) {
 			BlockchainFactory._wallet = await BlockchainFactory._walletManager?.createBlockchainWallet(BlockchainFactory.wssUrl, BlockchainFactory.options, 
 				walletId, password) as any;
-		}
 		/*const mnemonicWallet = ethers.Wallet.fromMnemonic(mnemonic);
 		const { privateKey } = mnemonicWallet;
 		console.log(address,privateKey);*/
@@ -67,38 +65,10 @@ export class BlockchainFactory {
 	};
 
 
-	// public static getProvider(): any | null {
-	// 	if (!BlockchainFactory._provider) {
-	// 		BlockchainFactory._provider = BlockchainFactory.web3.currentProvider;
-	// 	}
-	// 	return BlockchainFactory._provider;
-	// }
-
-	// public static getWalletManager(): WalletManager {
-	// 	if (!BlockchainFactory._walletManager) {
-	// 		BlockchainFactory._walletManager = createWalletManager();
-	// 	}
-
-	// 	return BlockchainFactory._walletManager;
-	// }
-
 	public static setKeystore(keystore: KeyStorageModel): void {
 		BlockchainFactory._keystore = keystore;
 	}
 
-	// public static async getWallet(): Promise<any | null> {
-	// 	if (!BlockchainFactory._keystore) {
-	// 		return null;
-	// 	}
-	// 	const { keypairs } = BlockchainFactory._keystore;
-	// 	const provider = BlockchainFactory.getProvider();
-	// 	const manager = BlockchainFactory.getWalletManager();
-	// 	const privateKey =
-	// 		manager.getKeyService()?.getPrivateKey(AlgorithmType.ES256K, keypairs) ||
-	// 		'';
-	// 	const wallet = Wallet.fromMnemonic(mnemonic);
-	// 	return wallet.connect(provider);
-	// }
 
 	public static getNetwork = async (network:number) => {
 		switch (network) {
@@ -120,17 +90,5 @@ export class BlockchainFactory {
 		}
 	}
 
-	// public static async getWallet2(): Promise<any | null> {
-	// 	if (!BlockchainFactory._keystore) {
-	// 		return null;
-	// 	}
-	// 	const { mnemonic } = BlockchainFactory._keystore;
-	// 	const provider = BlockchainFactory.getProvider();
-	// 	// const manager = BlockchainFactory.getWalletManager();
-	// 	// const privateKey =
-	// 	// 	manager.getKeyService()?.getPrivateKey(AlgorithmType.ES256K, keypairs) ||
-	// 	// 	'';
-	// 	const wallet = Wallet.fromMnemonic(mnemonic);
-	// 	return { wallet: wallet.connect(provider), keystore: BlockchainFactory._keystore };
-	// }
+
 }
