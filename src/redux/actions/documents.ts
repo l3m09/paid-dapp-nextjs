@@ -17,7 +17,7 @@ const ipfsClient = require('ipfs-http-client');
 const fetch = require('node-fetch');
 const axios = require('axios');
 // TODO: Get ipfs IP Public of Kubernets Enviroment Variable
-const ipfsnode = `${process.env.REACT_APP_PAID_DAPP_IPFS_SERVICE_SERVICE_HOST}`;
+const ipfsnode = `${process.env.REACT_APP_IPFS_PAID_HOST}`;
 
 // TODO: Fix
 const ipfs = ipfsClient({ host: 'ipfs.infura.io', port: '5001', protocol: 'https', apiPath: '/api/v0' });
