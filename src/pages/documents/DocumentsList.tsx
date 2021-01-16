@@ -35,7 +35,7 @@ const ipfsClient = require('ipfs-http-client');
 // TODO: Get ipfs IP Public of Kubernets Enviroment Variable
 const ipfsnode = `${process.env.REACT_APP_IPFS_PAID_HOST}`;
 
-const ipfs = ipfsClient({ host: ipfsnode, port: '5001', protocol: 'https', apiPath: '/api/v0' });
+const ipfs = ipfsClient({ host: 'ipfs.infura.io', port: '5001', protocol: 'https', apiPath: '/api/v0' });
 
 function PdfViewerModal(payload: {
 	show: boolean;
