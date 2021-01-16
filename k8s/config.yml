@@ -8,5 +8,3 @@ data:
   paid-dapp-ipfs-service-service-host: dev-ipfs.paidnetwork.com
   waku-server: https://dev-api.paidnetwork.com/
   ipfs-paid-host: ipfs.infura.io
-  recipient-erc20-token: '0xaCf5ABBB75c4B5bA7609De6f89a4d0466483225a'
-  payments-paid-token: 1

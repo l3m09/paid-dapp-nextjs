@@ -23,9 +23,11 @@ const ipfsnode = `${process.env.REACT_APP_IPFS_PAID_HOST}`;
 // TODO: Fix
 const ipfs = ipfsClient({ host: ipfsnode, port: '5001', protocol: 'https', apiPath: '/api/v0' });
 const apiUrl = `${process.env.REACT_APP_WAKU_SERVER}`;
-const recipientTKN = `${process.env.REACT_APP_RECIPIENT_ERC20_TOKEN}`;
+const recipientTKN = '0xaCf5ABBB75c4B5bA7609De6f89a4d0466483225a';
+// const recipientTKN = `${process.env.REACT_APP_RECIPIENT_ERC20_TOKEN}`;
 // const payment = ethers.utils.parseEther(`${process.env.REACT_APP_PAYMENTS_PAID_TOKEN}`)
-const payment = BigNumber(`${process.env.REACT_APP_PAYMENTS_PAID_TOKEN}`).toFixed().toString()*10e17;
+// const payment = BigNumber(`${process.env.REACT_APP_PAYMENTS_PAID_TOKEN}`).toFixed().toString()*10e17;
+const payment = BigNumber('1').toFixed().toString()*10e17;
 // const paymentSA = web3.utils.toWei(payment, 'ether')
 
 const createAgreementFormPayload = (obj: any) => {
@@ -612,8 +614,8 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 			const rawWallet = await storage.find<KeyStorageModel>(unlockedWallet._id);
 			const address = unlockedWallet.address;
 	
-			const result = await BlockchainFactory.getWeb3Instance(unlockedWallet._id, unlockedWallet.password);
-			const walletModel = result!;
+			const _walletModel = await BlockchainFactory.getWeb3Instance(unlockedWallet._id, unlockedWallet.password)!;
+			const walletModel = _walletModel!;
 			const web3 = walletModel.web3Instance;
 			const network = await BlockchainFactory.getNetwork(walletModel.network);
 	

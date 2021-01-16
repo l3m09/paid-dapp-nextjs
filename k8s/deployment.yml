@@ -27,12 +27,12 @@ spec:
                   key: web3-wss
             - name: REACT_APP_RECIPIENT_ERC20_TOKEN
               valueFrom:
-                configMapKeyRef:
+                secretKeyRef:
                   name: paid-dapp
                   key: recipient-erc20-token
             - name: REACT_APP_PAYMENTS_PAID_TOKEN
               valueFrom:
-                configMapKeyRef:
+                secretKeyRef:
                   name: paid-dapp
                   key: payments-paid-token
             - name: REACT_APP_APIKEY
