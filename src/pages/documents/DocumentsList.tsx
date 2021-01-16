@@ -103,9 +103,7 @@ function SelectedDocument(payload: {
 		showSignedText,
 		showVerifyDocumentButton
 	} = payload;
-	const wallet = useSelector(
-		(state: { wallet: { unlockedWallet: any } }) => state.wallet
-	);
+	const wallet = useSelector((state: any) => state.wallet);
 
 	const { unlockedWallet } = wallet;
 	const [networkText, setNetWorkText] = useState('...');
