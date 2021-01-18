@@ -294,12 +294,12 @@ export const doCreateAgreement = (payload: {
 									console.log('email error: ',error);
 								});
 								dispatch(createAgreement());
-								dispatch(openSuccessDialog('You create successfully the agreement'));
+								dispatch(openSuccessDialog('You have created an agreement successfully'));
 								slideNext();
 							})
 							.on('error', function (error: any, receipt: any) {
 								slideBack();
-								dispatch(openSuccessDialog('Failed to Create Smart Agreement'));
+								dispatch(openSuccessDialog('The agreement was not created successfully'));
 								// throw new Error('Transaction failed');
 							});
 						});
