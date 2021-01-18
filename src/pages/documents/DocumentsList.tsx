@@ -156,96 +156,99 @@ function SelectedDocument(payload: {
 	return (
 		<div id="modal-container">
 			<IonModal isOpen={show} cssClass="document-modal" onDidDismiss={() => {closeShowDocument()}}>
-				<IonCard>
-					<IonCardHeader>
-						<IonCardTitle className="document-title-modal">
-							<div>
-								{`${selectedDocument.data?.documentName} ( ${selectedDocument.data?.partyAName} - ${selectedDocument.data?.partyBName} )`}
-							</div>
-							{
-								showVerifyDocumentButton &&
+				<IonContent scrollY>
+
+					<IonCard>
+						<IonCardHeader>
+							<IonCardTitle className="document-title-modal">
 								<div>
-									<IonButton
-										className="small-button font-size-13"
-										color="primary"
-										onClick={async () => {
-											verifyDocument(selectedDocument);
-										}}
-										disabled={verifyButtonDisable}
-									>
-										<span>Verify document</span>
-									</IonButton>
-									{ showVerified ? <span className="icon-wrapper">
-										<IonIcon
-											ios={checkmarkCircle}
-											md={checkmarkCircle}
-											color="primary"
-											className="font-size-20"
-										/>
-									</span> : null }
-									{ showNotVerified ? <span className="icon-wrapper">
-										<IonIcon
-											ios={closeCircle}
-											md={closeCircle}
-											color="secondary"
-											className="font-size-20"
-										/>
-									</span> : null }
+									{`${selectedDocument.data?.documentName} ( ${selectedDocument.data?.partyAName} - ${selectedDocument.data?.partyBName} )`}
 								</div>
-							}
-						</IonCardTitle>
-						<IonCardSubtitle>
-						</IonCardSubtitle>
-					</IonCardHeader>
-					<IonCardContent>
-						<div>
-							Expires in {(selectedDocument.data.validUntil > 1) ?
-							`${selectedDocument.data.validUntil} days` :
-							`${selectedDocument.data.validUntil} day`}
-						</div>
-						<h2>Details</h2>
-						<div className="details-wrapper">
-							<IonItem>
-								<IonLabel position="stacked">Signed By</IonLabel>
-								<a href={`https://${networkText}.etherscan.io/address/${selectedDocument.event.from}`} target="_blank">{selectedDocument.event.from}</a>
-							</IonItem>
-							<IonItem>
-								<IonLabel position="stacked">Transaction Hash</IonLabel>
-								<a href={`https://${networkText}.etherscan.io/tx/${selectedDocument.meta.transactionHash}`} target="_blank">{selectedDocument.meta.transactionHash}</a>
-							</IonItem>
-							<IonItem>
-								<IonLabel position="stacked">Document Signature</IonLabel>
-								<span>{selectedDocument.signature}</span>
-							</IonItem>
-							<IonItem>
-								<IonLabel position="stacked">Created on</IonLabel>
-								<span>{createdAt}</span>
-							</IonItem>
-							<IonItem>
-								<IonLabel position="stacked">Updated</IonLabel>
-								<span>{updatedAt}</span>
-							</IonItem>
-							{
-								(!showVerifyDocumentButton) &&
+								{
+									showVerifyDocumentButton &&
+									<div>
+										<IonButton
+											className="small-button font-size-13"
+											color="primary"
+											onClick={async () => {
+												verifyDocument(selectedDocument);
+											}}
+											disabled={verifyButtonDisable}
+										>
+											<span>Verify document</span>
+										</IonButton>
+										{ showVerified ? <span className="icon-wrapper">
+											<IonIcon
+												ios={checkmarkCircle}
+												md={checkmarkCircle}
+												color="primary"
+												className="font-size-20"
+											/>
+										</span> : null }
+										{ showNotVerified ? <span className="icon-wrapper">
+											<IonIcon
+												ios={closeCircle}
+												md={closeCircle}
+												color="secondary"
+												className="font-size-20"
+											/>
+										</span> : null }
+									</div>
+								}
+							</IonCardTitle>
+							<IonCardSubtitle>
+							</IonCardSubtitle>
+						</IonCardHeader>
+						<IonCardContent>
+							<div>
+								Expires in {(selectedDocument.data.validUntil > 1) ?
+								`${selectedDocument.data.validUntil} days` :
+								`${selectedDocument.data.validUntil} day`}
+							</div>
+							<h2>Details</h2>
+							<div className="details-wrapper">
 								<IonItem>
-									<IonLabel position="stacked">Comments</IonLabel>
-									<IonTextarea
-										title="Comments" 
-										placeholder="Enter your comments"
-										value={comments}
-										onInput={setter(setComments)}
-									/>
-									{
-										!validReject &&
-										<IonNote color="danger" className="ion-margin-top">
-											You must enter comments for reject.
-										</IonNote>
-									}
+									<IonLabel position="stacked">Signed By</IonLabel>
+									<a href={`https://${networkText}.etherscan.io/address/${selectedDocument.event.from}`} target="_blank">{selectedDocument.event.from}</a>
 								</IonItem>
-							}
-						</div>
-					</IonCardContent>
-				</IonCard>
+								<IonItem>
+									<IonLabel position="stacked">Transaction Hash</IonLabel>
+									<a href={`https://${networkText}.etherscan.io/tx/${selectedDocument.meta.transactionHash}`} target="_blank">{selectedDocument.meta.transactionHash}</a>
+								</IonItem>
+								<IonItem>
+									<IonLabel position="stacked">Document Signature</IonLabel>
+									<span>{selectedDocument.signature}</span>
+								</IonItem>
+								<IonItem>
+									<IonLabel position="stacked">Created on</IonLabel>
+									<span>{createdAt}</span>
+								</IonItem>
+								<IonItem>
+									<IonLabel position="stacked">Updated</IonLabel>
+									<span>{updatedAt}</span>
+								</IonItem>
+								{
+									(!showVerifyDocumentButton) &&
+									<IonItem>
+										<IonLabel position="stacked">Comments</IonLabel>
+										<IonTextarea
+											title="Comments" 
+											placeholder="Enter your comments"
+											value={comments}
+											onInput={setter(setComments)}
+										/>
+										{
+											!validReject &&
+											<IonNote color="danger" className="ion-margin-top">
+												You must enter comments for reject.
+											</IonNote>
+										}
+									</IonItem>
+								}
+							</div>
+						</IonCardContent>
+					</IonCard>
+				</IonContent>
 				<hr />
 				<IonItem className="modal-actions">
 					<IonButton
