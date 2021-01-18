@@ -1,6 +1,6 @@
 SHELL=/bin/bash
 
-include makefile.env
+include .env
 export
 
 .PHONY: up
@@ -8,7 +8,12 @@ up: build network run
 
 .PHONY: build
 build:
-	docker build -t paid-dapp --target production .
+	docker build -t paid-dapp --target=production \
+		--build-arg=REACT_APP_WEB3_WSS=${REACT_APP_WEB3_WSS} \
+		--build-arg=REACT_APP_RECIPIENT_ERC20_TOKEN=${REACT_APP_RECIPIENT_ERC20_TOKEN} \
+		--build-arg=REACT_APP_PAYMENTS_PAID_TOKEN=${REACT_APP_PAYMENTS_PAID_TOKEN} \
+		--build-arg=REACT_APP_WAKU_SERVER=${REACT_APP_WAKU_SERVER} \
+		--build-arg=REACT_APP_IPFS_PAID_HOST=${REACT_APP_IPFS_PAID_HOST} .
 
 .PHONY: network
 network:
@@ -18,6 +23,14 @@ network:
 .PHONY: run
 run:
 	docker container run -d \
-     	--name paid-dapp-web \
+     	--name paid-dapp \
       	--network paid-net \
-      	-p 8080:80 paid-dapp
+      	-p 3000:80 paid-dapp
+
+.PHONY: down
+down: 
+	docker container rm -f paid-dapp
+
+.PHONY: logs
+logs:
+	docker logs -f --tail 10 paid-dapp
