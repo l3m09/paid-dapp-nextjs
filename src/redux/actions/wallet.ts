@@ -147,7 +147,7 @@ export const doUnlockWallet = (payload: {
 	} catch (err) {
 		dispatch({
 			type: WalletActionTypes.UNLOCK_WALLET_FAILURE,
-			payload: err.msg
+			payload: err.message
 		});
 	}
 };
@@ -189,7 +189,10 @@ export const doGetWallets = () => async (dispatch: any) => {
 			dispatch(getWallets((JSON.parse(stored.value))));
 		}
 	} catch (err) {
-		dispatch({ type: WalletActionTypes.GET_WALLETS_FAILURE, payload: err.msg });
+		dispatch({ 
+			type: WalletActionTypes.GET_WALLETS_FAILURE, 
+			payload: err.message 
+		});
 	}
 };
 
@@ -206,7 +209,7 @@ export const doGetCurrentWallet = () => async (dispatch: any) => {
 	} catch (err) {
 		dispatch({
 			type: WalletActionTypes.GET_CURRENT_WALLET_FAILURE,
-			payload: err.msg
+			payload: err.message
 		});
 	}
 };
@@ -222,7 +225,7 @@ export const doSetCurrentWallet = (wallet: any) => async (dispatch: any) => {
 	} catch (err) {
 		dispatch({
 			type: WalletActionTypes.SET_CURRENT_WALLET_FAILURE,
-			payload: err.msg
+			payload: err.message
 		});
 	}
 };
@@ -262,7 +265,7 @@ export const doCreateWallet = (payload: {
 	} catch (err) {
 		dispatch({
 			type: WalletActionTypes.CREATE_WALLET_FAILURE,
-			payload: err.msg
+			payload: err.message
 		});
 	}
 };
@@ -333,7 +336,7 @@ export const doExportWallet = (payload: any) => async (dispatch: any) => {
 		console.log(err);
 		dispatch({
 			type: WalletActionTypes.EXPORT_WALLET_FAILURE,
-			payload: err.msg
+			payload: err.message
 		});
 	}
 };
