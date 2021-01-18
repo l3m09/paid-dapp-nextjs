@@ -100,6 +100,7 @@ const PreviewAgreement: FC<PreviewAgreementProps> = ({ current }) => {
 
     const onSubmit = useCallback(async () => {
         const result: number = +(await metodofn(currentWallet.address, currentWallet));
+        console.log('type agreementID', type, 'result balance', result);
         if(result > 1){
             dispatch(doSetAgreementFormInfo({ createdAt: new Date().toDateString() }));
             dispatch(

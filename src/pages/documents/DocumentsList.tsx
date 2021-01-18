@@ -17,7 +17,8 @@ import { closeCircle, checkmarkCircle } from 'ionicons/icons';
 import {
 	doGetSelectedDocument,
 	doSignCounterpartyDocument,
-	doGetDocuments
+	doGetDocuments,
+	doRejectCounterpartyDocument
 } from '../../redux/actions/documents';
 
 import { IonBadge } from '@ionic/react';
@@ -76,7 +77,8 @@ function SelectedDocument(payload: {
 	showPdfViewerModal: boolean;
 	selectedDocument: any;
 	closeShowDocument: () => void;
-	verifyDocument: (document: any) => void; 
+	verifyDocument: (document: any) => void;
+	rejectDocument: (document: any, comments: string) => void;
 	openPdfViewerModal: (cid : string, transactionHash: string) => void;
 	closePdfViewerModal: () => void;
 	agreementsurl: string;
@@ -97,6 +99,7 @@ function SelectedDocument(payload: {
 		openPdfViewerModal, 
 		closePdfViewerModal,
 		verifyDocument,
+		rejectDocument,
 		showVerified,
 		showNotVerified,
 		verifyButtonDisable,
@@ -135,9 +138,12 @@ function SelectedDocument(payload: {
 		set(value);
 	}
 
-	const reject = () => {
+	const reject = (document: any) => {
 		if (comments.length <= 0 || comments === ' ') {
 			setValidReject(false);
+			return;
+		} else {
+			rejectDocument(document, comments);
 			return;
 		}
 	}
@@ -270,7 +276,7 @@ function SelectedDocument(payload: {
 							color="gradient"
 							shape="round"
 							onClick={() => {
-								reject();
+								reject(selectedDocument);
 							}}
 						>
 							<span>Reject</span>
@@ -372,6 +378,13 @@ const DocumentsList: React.FC<Props> = ({
 			setShowVerifyDocumentButton(true);
 		}
 		setVerifyButtonDisable(false);
+	}
+
+	function rejectDocument(document: any, comments: string) {
+		dispatch(doRejectCounterpartyDocument(document, comments));
+		setForceVerifyDocument(true);
+		setReloadDocument(true);
+		setShowVerifyDocumentButton(true);
 	}
 
 	function closeShowDocument() {
@@ -500,6 +513,7 @@ const DocumentsList: React.FC<Props> = ({
 				agreementsurl={showAgreementsUrl}
 				agreementContent = {agreementContent}
 				verifyDocument = {verifyDocument}
+				rejectDocument = {rejectDocument}
 				showVerified = {showVerified}
 				showNotVerified = {showNotVerified}
 				verifyButtonDisable={verifyButtonDisable}
