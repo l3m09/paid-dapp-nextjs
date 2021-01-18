@@ -310,7 +310,7 @@ export const doImportWallet = (payload: {
 	} catch (err) {
 		dispatch({
 			type: WalletActionTypes.IMPORT_WALLET_FAILURE,
-			payload: err.msg
+			payload: err.message
 		});
 	}
 };
