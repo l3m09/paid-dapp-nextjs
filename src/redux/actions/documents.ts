@@ -270,7 +270,7 @@ export const doCreateAgreement = (payload: {
 		   .on('receipt', async function (receipt: any) {
 				console.log('resolve increaseAllowpaidtoken',receipt);
 				// Withdraw PAID Token
-				const metodoFn = AgreementContract.methods.withdraw(
+				const metodoFn = AgreementContract.methods.payPaidServices(
 					token,
 					address,
 					recipientTKN,
