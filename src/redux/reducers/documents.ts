@@ -86,6 +86,18 @@ export const DocumentsReducer = function (state = initialState, action: any) {
 			return { ...state, error: payload, loading: false  };
 		}
 
+		case DocumentsActionTypes.COUNTERPARTY_REJECT_SIGNED_LOADING: {
+			return { ...state, loading: true };
+		}
+
+		case DocumentsActionTypes.COUNTERPARTY_REJECT_SIGNED_SUCCESS: {
+			return { ...state, showVerified: true, selectedDocument: payload, loading: false };
+		}
+
+		case DocumentsActionTypes.COUNTERPARTY_REJECT_SIGNED_FAILURE: {
+			return { ...state, error: payload, loading: false  };
+		}
+
 		case DocumentsActionTypes.GET_SELECTED_DOCUMENT_LOADING: {
 			return { ...state, loading: true };
 		}

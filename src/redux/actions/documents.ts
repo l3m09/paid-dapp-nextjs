@@ -66,6 +66,13 @@ const getSelectedSignedDocument = (document: any) => {
 	};
 };
 
+const getSelectedRejectDocument = (document: any) => {
+	return {
+		type: DocumentsActionTypes.COUNTERPARTY_REJECT_SIGNED_SUCCESS,
+		payload: document
+	};
+};
+
 const openSuccessDialog = (message: string) => {
 	return {
 		type: DialogsActionTypes.OPEN_SUCCESS_DIALOG,
@@ -213,7 +220,7 @@ export const doCreateAgreement = (payload: {
 			"partyName":agreementForm.name,
 			"partyEmail":agreementForm.email,
 			"counterpartyName":agreementForm.counterpartyName,
-			"coutnerpartyEmail":agreementForm.counterpartyEmail
+			"counterpartyEmail":agreementForm.counterpartyEmail
 		};
 		
 		let ipfsHash = await uploadsIPFS(ipfs, blobContent, opts, digest, signature, pubKey, formId, agreementForm.counterpartyWallet, 
@@ -287,26 +294,27 @@ export const doCreateAgreement = (payload: {
 									console.log('email error: ',error);
 								});
 								dispatch(createAgreement());
+								dispatch(openSuccessDialog('You create successfully the agreement'));
 								slideNext();
 							})
 							.on('error', function (error: any, receipt: any) {
 								slideBack();
-								alert('Transaction failed');
-								throw new Error('Transaction failed');
+								dispatch(openSuccessDialog('Failed to Create Smart Agreement'));
+								// throw new Error('Transaction failed');
 							});
 						});
 					})
 					.on('error', function (error: any, receipt: any) {
 						console.log(error, receipt);
-					 	alert('Transaction failed');
-						throw new Error('Transaction failed');
+						dispatch(openSuccessDialog('Failed to Create Smart Agreement'));
+						// throw new Error('Transaction failed');
 					});
 		   		});
 		   	})
 		   	.on('error', function (error: any, receipt: any) {
 			   	console.log(error, receipt);
-				alert('Transaction failed');
-			   	throw new Error('Transaction failed');
+				   dispatch(openSuccessDialog('Failed to Create Smart Agreement'));
+			   	// throw new Error('Transaction failed');
 		   	});
 		});
 	} catch (err) {
@@ -711,10 +719,11 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 					});
 					*/
 					dispatch(getSelectedSignedDocument(document));
-					dispatch(openSuccessDialog('You have successfully sign the agreement'));
+					dispatch(openSuccessDialog('You have successfully sign the Smart Agreement'));
 				})
 				.on('error', function (error: any, receipt: any) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.		
-					alert('Transaction failed');
+					// alert('Transaction failed');
+					dispatch(openSuccessDialog('Failed Sign the Smart Agreement'));
 					dispatch({ type: DocumentsActionTypes.COUNTERPARTY_SIGNED_FAILURE });
 					//throw new Error('Transaction failed');
 				});
@@ -728,6 +737,187 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 		console.log('ln545', err);
 		dispatch({
 			type: DocumentsActionTypes.COUNTERPARTY_SIGNED_FAILURE,
+			payload: err.msg
+		});
+	}
+
+}
+
+export const doRejectCounterpartyDocument = (document: any, comments: string) => async (dispatch: any, getState: () => { wallet: any }) => {
+	dispatch({ type: DocumentsActionTypes.COUNTERPARTY_REJECT_SIGNED_LOADING });
+	try {
+		let fetchedContent = '';
+		if(document){
+			const { wallet } = getState();
+			const { unlockedWallet } = wallet;
+			if (!unlockedWallet) {
+				throw new Error('Not unlocked wallet found');
+			}
+
+			const manager = BlockchainFactory.getWalletManager();
+			const storage = manager.getKeyStorage();
+			const rawWallet = await storage.find<KeyStorageModel>(unlockedWallet._id);
+			const address = unlockedWallet.address;
+
+			// const _walletModel = await BlockchainFactory.getWeb3Instance(unlockedWallet._id, unlockedWallet.password)!;
+			// const walletModel = _walletModel!;
+			// const web3 = walletModel.web3Instance;
+			// const network = await BlockchainFactory.getNetwork(walletModel.network);
+
+			// await web3.eth.getBalance(address).then((balancewei) =>{
+			// 	const balance = web3.utils.fromWei(balancewei);
+			// 	const parsedBalance = BigNumber(balance).toNumber();
+			// 	//console.log(parsedBalance);
+			// 	if ((parsedBalance <= 0.0009999999999)) {
+			// 		throw new Error('The wallet should has balance to send a transaction.');
+			// 	}
+			// })
+
+			// const AgreementContract = ContractFactory.getAgreementContract(web3, network);
+			// AgreementContract.options.from = address;
+			const form = document.data.agreementForm;
+			const formId = document.event.agreementFormTemplateId;
+			const validUntil = document.data.validUntil;
+			const agreementId = document.event.id;
+			const cid = document.event.cid.toString();
+			console.log('CID Reject counterparty', cid);
+
+			for await (const chunk of ipfs.cat(cid)) {
+				fetchedContent = uint8ArrayToString(chunk);
+			}
+			const jsonContent = JSON.parse(fetchedContent);
+			const digest = jsonContent.digest;
+
+			const contentRef = jsonContent.contentRef;
+			// let pdfContent = '';
+			// for await (const chunk of ipfs.cat(contentRef.cid)) {
+			// 	pdfContent = uint8ArrayToString(chunk);
+			// }
+			const urlIpfsContent = `https://ipfs.io/ipfs/${contentRef.cid}`;
+			const ipfsContent = async () => {
+				return await fetch(urlIpfsContent)
+				.then(res => res.text())
+			}
+			const pdfContent:string = await ipfsContent();
+			// console.log(pdfContent);
+			const blobContent = base64StringToBlob(btoa(unescape(encodeURIComponent(pdfContent))), 'text/html');
+
+			const ec_alice = new eddsa('ed25519');
+			const signer = ec_alice.keyFromSecret(rawWallet.keypairs.ED25519);
+			const signature = signer
+				.sign(digest)
+				.toHex();
+			const pubKey = signer.getPublic();
+			const opts = { create: true, parents: true };
+			const elementsAbi = abiLib.getElementsAbi({
+				'address':address
+			});
+			const urlParties = `https://ipfs.io/ipfs/${jsonContent.elementsParties.cid}`;
+			const partiesContent = async () => {
+				return await fetch(urlParties)
+				.then(res => res.text())
+			}
+
+			const partiesContentStr : string = await partiesContent();
+
+			// let ipfsHash = await uploadsIPFS(ipfs, blobContent, opts, digest, signature, pubKey, formId, address, JSON.stringify(elementsAbi), partiesContentStr, null);
+			// Sending Notification of CounterParty Reject Smart Agreements
+			const parties = JSON.parse(partiesContentStr);
+			// Sending Notification
+			axios.post(apiUrl+'email/reject-agreement', {
+				// counterparty field is the SENDER
+				'counterParty': {
+					'name': parties.counterpartyName,
+					'email': parties.counterpartyEmail,
+					'comments': comments
+				},
+				// party field is the TARGET
+				'party':{
+					'name': parties.partyName
+				}
+			})
+			.then(function (response) {
+				console.log('email response: ', response);
+			})
+			.catch(function (error) {
+				console.log('email error: ',error);
+				dispatch(openSuccessDialog('Error Sending Reject Notification'));
+			});
+			dispatch(getSelectedRejectDocument(document));
+			dispatch(openSuccessDialog('You Reject the Smart Agreement'));
+
+		// 	const methodFn = AgreementContract.methods.counterPartiesSign(
+		// 		agreementId,
+		// 		validUntil,
+		// 		ipfsHash.toString(),
+		// 		formId,
+		// 		form,
+		// 		'0x' + digest);
+
+		// 	const gas = await methodFn.estimateGas();
+
+		// 	Promise.resolve(gas).then(async (gas:any) => {
+		// 		const agreementTransaction = await methodFn.send({ from: address, gas:gas+5e4, gasPrice: 50e9 })
+		// 		.on('receipt', async function (receipt: any) {
+		// 			console.log(receipt);
+		// 			const parties = JSON.parse(partiesContentStr);
+		// 			axios.post(apiUrl+'email/accept-agreement', {
+		// 				// counterparty field is the SENDER
+		// 				'counterParty': {
+		// 					'name': parties.partyName,
+		// 					'email': parties.partyEmail
+		// 				},
+		// 				// party field is the TARGET
+		// 				'party':{
+		// 					'name': parties.counterpartyName
+		// 				}
+		// 			})
+		// 			.then(function (response) {
+		// 				console.log('email response: ', response);
+		// 			})
+		// 			.catch(function (error) {
+		// 				console.log('email error: ',error);
+		// 			});
+		// 			/*
+		// 			CODE FOR REJECTION
+		// 			axios.post('https://dev-api.paidnetwork.com/email/reject-agreement', {
+		// 				// counterparty field is the SENDER
+		// 				'counterParty': {
+		// 					name: form.name,
+		// 					email: form.email,
+		// 					'comments': {COMMENTS}
+		// 				},
+		// 				// party field is the TARGET
+		// 				'party':{
+		// 					'name': form.counterpartyName
+		// 				}
+		// 			})
+		// 			.then(function (response) {
+		// 				console.log('email response: ', response);
+		// 			})
+		// 			.catch(function (error) {
+		// 				console.log('email error: ',error);
+		// 			});
+		// 			*/
+		// 			dispatch(getSelectedSignedDocument(document));
+		// 			dispatch(openSuccessDialog('You have successfully sign the agreement'));
+		// 		})
+		// 		.on('error', function (error: any, receipt: any) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.		
+		// 			alert('Transaction failed');
+		// 			dispatch({ type: DocumentsActionTypes.COUNTERPARTY_SIGNED_FAILURE });
+		// 			//throw new Error('Transaction failed');
+		// 		});
+		// 	});
+		// } else {
+		// 	alert('Document Don\'t exist');
+		// 	throw new Error('Document Don\'t exist');
+		}
+	} catch (err) {
+		// alert(err.message);
+		console.log('ln545', err);
+		dispatch(openSuccessDialog('Failed Reject Notification'));
+		dispatch({
+			type: DocumentsActionTypes.COUNTERPARTY_REJECT_SIGNED_FAILURE,
 			payload: err.msg
 		});
 	}
