@@ -738,10 +738,11 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 					});
 					*/
 					dispatch(getSelectedSignedDocument(document));
-					dispatch(openSuccessDialog('You have successfully sign the agreement'));
+					dispatch(openSuccessDialog('You have successfully sign the Smart Agreement'));
 				})
 				.on('error', function (error: any, receipt: any) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.		
-					alert('Transaction failed');
+					// alert('Transaction failed');
+					dispatch(openSuccessDialog('Failed Sign the Smart Agreement'));
 					dispatch({ type: DocumentsActionTypes.COUNTERPARTY_SIGNED_FAILURE });
 					//throw new Error('Transaction failed');
 				});
@@ -931,8 +932,9 @@ export const doRejectCounterpartyDocument = (document: any, comments: string) =>
 		// 	throw new Error('Document Don\'t exist');
 		}
 	} catch (err) {
-		alert(err.message);
+		// alert(err.message);
 		console.log('ln545', err);
+		dispatch(openSuccessDialog('Failed Reject Notification'));
 		dispatch({
 			type: DocumentsActionTypes.COUNTERPARTY_REJECT_SIGNED_FAILURE,
 			payload: err.msg
