@@ -51,8 +51,18 @@ const UnlockWallet: React.FC<Props> = ({
 	dismiss
 }) => {
 	const spanRef = useRef<HTMLSpanElement | null>(null);
+	const passphraseRef = useRef<HTMLIonInputElement | null>(null);
 	const dispatch = useDispatch();
 	const [showToastCopy, setShowToastCopy] = useState(false);
+
+	useEffect(() => {
+		const bootstrapAsync = async () => {
+			const element = await passphraseRef.current?.getInputElement();
+			element?.focus();
+		};
+
+		setTimeout(() => bootstrapAsync(), 500);
+	}, []);
 
 	useEffect(() => {
 		console.log('dismissible', dismissible);
@@ -147,6 +157,7 @@ const UnlockWallet: React.FC<Props> = ({
 							value={state.password}
 							onInput={setter(CHANGE_PASSPHRASE)}
 							onIonBlur={setter(CHANGE_PASSPHRASE)}
+							ref={passphraseRef}
 						/>
 						{
 							!state.validPassphrase &&
