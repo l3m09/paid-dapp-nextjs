@@ -12,6 +12,7 @@ import React, { Reducer, useEffect, useReducer, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ActionModel from '../models/ActionModel';
 import { doUnlockWallet } from '../redux/actions/wallet';
+import { TOAST_DURATION_WALLET_ADDRESS_COPY } from '../utils/constants';
 
 interface Props {
 	show: boolean;
@@ -176,7 +177,7 @@ const UnlockWallet: React.FC<Props> = ({
 					color="primary"
 					onDidDismiss={() => setShowToastCopy(false)}
 					message="Wallet address has been copied to clipboard"
-					duration={300}
+					duration={TOAST_DURATION_WALLET_ADDRESS_COPY}
 				/>
 			</IonContent>
 		</IonModal>
