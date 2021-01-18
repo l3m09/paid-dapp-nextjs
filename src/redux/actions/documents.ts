@@ -318,22 +318,22 @@ export const doCreateAgreement = (payload: {
 							})
 							.on('error', function (error: any, receipt: any) {
 								slideBack();
-								alert('Transaction failed');
-								throw new Error('Transaction failed');
+								dispatch(openSuccessDialog('Failed to Create Smart Agreement'));
+								// throw new Error('Transaction failed');
 							});
 						});
 					})
 					.on('error', function (error: any, receipt: any) {
 						console.log(error, receipt);
-					 	alert('Transaction failed');
-						throw new Error('Transaction failed');
+						dispatch(openSuccessDialog('Failed to Create Smart Agreement'));
+						// throw new Error('Transaction failed');
 					});
 		   		});
 		   	})
 		   	.on('error', function (error: any, receipt: any) {
 			   	console.log(error, receipt);
-				alert('Transaction failed');
-			   	throw new Error('Transaction failed');
+				   dispatch(openSuccessDialog('Failed to Create Smart Agreement'));
+			   	// throw new Error('Transaction failed');
 		   	});
 		});
 	} catch (err) {
