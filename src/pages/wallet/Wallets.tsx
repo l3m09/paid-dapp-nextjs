@@ -24,29 +24,8 @@ import ImportWallet from './ImportWallet';
 import MenuAlternate from '../../components/MenuAlternate';
 import { BlockchainFactory } from '../../utils/blockchainFactory';
 import { ContractFactory } from '../../utils/contractFactory';
-import { KeyStorageModel } from 'universal-crypto-wallet/dist/key-storage/KeyStorageModel';
 // import { bold } from '../../redux/actions/template/agreement.html';
 // import { promises } from 'fs';
-
-const metodofn = async (addrtoken:string, unlockedWt:any) => {
-	const address = unlockedWt.address
-	const _walletModel = await BlockchainFactory.getWeb3Instance(unlockedWt._id, unlockedWt.password)!;
-	const walletModel = _walletModel!;
-	const web3 = walletModel.web3Instance;
-	const network = await BlockchainFactory.getNetwork(walletModel.network);
-
-	const AgreementContract = ContractFactory.getAgreementContract(web3, network);
-	const PaidTokenContract = ContractFactory.getPaidTokenContract(web3, network);
-	const token = PaidTokenContract.options.address;
-	console.log('address token', token);
-	const methodFn = AgreementContract.methods.getBalanceToken(token, addrtoken);
-	const balanceverify = await methodFn.call({ from: address })
-	.then(async function (receipt: any) {
-		const resultado =  web3.utils.fromWei(receipt,'ether');
-		return resultado;
-	});
-	return Promise.resolve(balanceverify).then((x:string) => {return x})
-}
 
 const Wallets: React.FC = () => {
 	const dispatch = useDispatch();
@@ -86,19 +65,6 @@ const Wallets: React.FC = () => {
 		setShowToastCopy(true);
 	};
 
-	const getBalance = async (addr:string, ulckwallet:any) => {
-			const resultado =  await metodofn(addr, ulckwallet);
-			setBalance(resultado);
-	}
-
-	const showbalancetoken = (addrtoken:string) => {
-		if (unlockedWallet) {
-			getBalance(addrtoken, unlockedWallet).catch((err) => {console.log('Error get balance',err)})
-			return balance;
-		}
-		return '0';
-	}
-
 
 	function openUnlockWallet(wallet: any) {
 		dispatch(doSetSelectedWallet(wallet));
@@ -131,9 +97,7 @@ const Wallets: React.FC = () => {
 								: ''
 							}
 							{wallets.map( (item: any, index: any, flag:boolean) => {
-								let balancetoken:string = '';
 								if (unlockedWallet?.address === item.address) {
-									balancetoken = showbalancetoken(item.address);
 									return (
 										<IonItem class="wallet-wrapper selected-wallet" key={index}>
 											<div className="wallet-container">
@@ -149,14 +113,13 @@ const Wallets: React.FC = () => {
 														<span className="amountCoin">{item.balance?.match(/^-?\d+(?:\.\d{0,4})?/)[0]}</span>
 														<br/>
 														<span className="labelCoin">PAID</span>
-														<span className="amountCoin">{balancetoken}</span>
+														<span className="amountCoin">{item.balanceToken?.match(/^-?\d+(?:\.\d{0,4})?/)[0]}</span>
 													</div>
 												}
 											</div>
 										</IonItem>
 									);
 								} else {
-									balancetoken = '0';
 									return (
 										<IonItem
 											class="wallet-wrapper"
@@ -173,7 +136,7 @@ const Wallets: React.FC = () => {
 														<span className="amountCoin">{item.balance?.match(/^-?\d+(?:\.\d{0,4})?/)[0]}</span>
 														<br/>
 														<span className="labelCoin">PAID</span>
-														<span className="amountCoin">{balancetoken}</span>
+														<span className="amountCoin">{item.balanceToken}</span>
 													</div>
 												}
 											</div>
