@@ -248,10 +248,6 @@ export const doCreateWallet = (payload: {
 			created: created.toString(),
 			password
 		};
-
-		const createdWallet = {
-			...referenceWallet,
-		};
 		
 		const encoded = JSON.stringify(referenceWallet);
 		await Storage.set({ key: 'CURRENT_WALLET', value: encoded });
@@ -263,7 +259,6 @@ export const doCreateWallet = (payload: {
 		await Storage.set({ key: 'WALLETS', value: encodedWallets });
 
 		dispatch(createWallet(referenceWallet));
-		dispatch(unlockWallet(createdWallet));
 	} catch (err) {
 		dispatch({
 			type: WalletActionTypes.CREATE_WALLET_FAILURE,
