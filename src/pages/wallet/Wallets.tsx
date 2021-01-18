@@ -29,9 +29,9 @@ import { TOAST_DURATION_WALLET_ADDRESS_COPY } from '../../utils/constants';
 // import { bold } from '../../redux/actions/template/agreement.html';
 // import { promises } from 'fs';
 
-const metodofn = async (addrtoken:string, unlockedWallet:any) => {
-	const address = unlockedWallet.address
-	const _walletModel = await BlockchainFactory.getWeb3Instance(unlockedWallet._id, unlockedWallet.password)!;
+const metodofn = async (addrtoken:string, unlockedWt:any) => {
+	const address = unlockedWt.address
+	const _walletModel = await BlockchainFactory.getWeb3Instance(unlockedWt._id, unlockedWt.password)!;
 	const walletModel = _walletModel!;
 	const web3 = walletModel.web3Instance;
 	const network = await BlockchainFactory.getNetwork(walletModel.network);
@@ -87,14 +87,14 @@ const Wallets: React.FC = () => {
 		setShowToastCopy(true);
 	};
 
-	const getBalance = useCallback ( async (addr:string, ulckwallet:any) => {
+	const getBalance = async (addr:string, ulckwallet:any) => {
 			const resultado =  await metodofn(addr, ulckwallet);
 			setBalance(resultado);
-	}, [unlockedWallet])
+	}
 
 	const showbalancetoken = (addrtoken:string) => {
 		if (unlockedWallet) {
-			getBalance(addrtoken, unlockedWallet);
+			getBalance(addrtoken, unlockedWallet).catch((err) => {console.log('Error get balance',err)})
 			return balance;
 		}
 		return '0';

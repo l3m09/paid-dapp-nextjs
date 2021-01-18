@@ -1,6 +1,6 @@
 import { KeyStorageModel } from 'universal-crypto-wallet/dist/key-storage/KeyStorageModel';
 import { DocumentsActionTypes } from '../actionTypes/documents';
-import { BigNumber as BN ,ethers } from 'ethers';
+import { BigNumber as BN, ethers } from 'ethers';
 import { BlockchainFactory } from '../../utils/blockchainFactory';
 import { ContractFactory } from '../../utils/contractFactory';
 import { base64StringToBlob } from 'blob-util';
@@ -13,17 +13,18 @@ import { PAIDTokenContract } from '../../contracts/paidtoken';
 
 const uint8ArrayToString = require('uint8arrays/to-string');
 const BigNumber = require('bignumber.js');
+// const BigNumber = require('ethers');
 const ipfsClient = require('ipfs-http-client');
 const fetch = require('node-fetch');
 const axios = require('axios');
-// TODO: Get ipfs IP Public of Kubernets Enviroment Variable
-const ipfsnode = `${process.env.REACT_APP_PAID_DAPP_IPFS_SERVICE_SERVICE_HOST}`;
+const ipfsnode = `${process.env.REACT_APP_IPFS_PAID_HOST}`;
 
 // TODO: Fix
-const ipfs = ipfsClient({ host: 'ipfs.infura.io', port: '5001', protocol: 'https', apiPath: '/api/v0' });
-const token = `${process.env.REACT_APP_ERC20_TOKEN}`;
+const ipfs = ipfsClient({ host: ipfsnode, port: '5001', protocol: 'https', apiPath: '/api/v0' });
+const apiUrl = `${process.env.REACT_APP_WAKU_SERVER}`;
 const recipientTKN = `${process.env.REACT_APP_RECIPIENT_ERC20_TOKEN}`;
-const payment = BigNumber(`${process.env.REACT_APP_PAYMENTS_PAID_TOKEN}`).toString();
+const payment = BigNumber(`${process.env.REACT_APP_PAYMENTS_PAID_TOKEN}`).toFixed().toString();
+const pago = `${process.env.REACT_APP_PAYMENTS_PAID_TOKEN}`;
 // const paymentSA = web3.utils.toWei(payment, 'ether')
 
 const createAgreementFormPayload = (obj: any) => {
@@ -162,7 +163,7 @@ export const doCreateAgreement = (payload: {
 		const walletModel = _walletModel!;
 		const web3 = walletModel.web3Instance;
 		const network = await BlockchainFactory.getNetwork(walletModel.network);
-		
+
 		if (!web3.utils.isAddress(agreementForm.counterpartyWallet)) {
 			alert('Invalid Counter Party Address');
 			throw new Error('Invalid Counter Party Address');
@@ -217,19 +218,23 @@ export const doCreateAgreement = (payload: {
 		
 		let ipfsHash = await uploadsIPFS(ipfs, blobContent, opts, digest, signature, pubKey, formId, agreementForm.counterpartyWallet, 
 			JSON.stringify(elementsAbi), JSON.stringify(elementsParties), null);
+		console.log('CID Create Document', ipfsHash.toString());
 		// ----------------------------------------------------
 		// Estimate gas,  TODO encapsulate
 		const AgreementContract = ContractFactory.getAgreementContract(web3, network);
 		const PaidTokenContract = ContractFactory.getPaidTokenContract(web3, network);
 		const token = PaidTokenContract.options.address;
 		const spender = AgreementContract.options.address;
+		AgreementContract.options.from = address;
 		PaidTokenContract.options.from = address;
 		// Increase Allowance for withdraw PAID token
-		const paymentSA = web3.utils.toWei(payment, 'ether')
-		console.log('previo pago', paymentSA,'token address:',  token,'address wallet:', address, 'spender:', spender, 'recipient:', recipientTKN);
+		console.log('Payment', payment);
+		console.log('Pago', pago);
+		const paymentSA = web3.utils.toWei(pago, 'ether')
+		console.log('previo pago', paymentSA.toString(),'token address:',  token,'address wallet:', address, 'spender:', spender, 'recipient:', recipientTKN);
 		const metodoTkn = PaidTokenContract.methods.increaseAllowance(
 			spender,
-			paymentSA
+			paymentSA.toString()
 		);
 		// estimateGas for Send Tx to IncreaseAllowance
 		const gastkn = await metodoTkn.estimateGas();
@@ -243,9 +248,9 @@ export const doCreateAgreement = (payload: {
 					token,
 					address,
 					recipientTKN,
-					paymentSA
+					paymentSA.toString()
 				);
-				// EstimageGas for Withdraw PAIDToken
+				// EstimateGas for Withdraw PAIDToken
 			   	const gastx = await metodoFn.estimateGas();
 				// Resolve Promise for Withdraw PAIDToken
 			   	Promise.resolve(gastx).then(async (gastx:any) => {
@@ -266,7 +271,7 @@ export const doCreateAgreement = (payload: {
 						Promise.resolve(gas).then(async (gas:any) => {
 							const agreementTransaction = await methodFn.send({ from: address, gas:gas+5e4, gasPrice: 50e9 })
 							.on('receipt', async function (receipt: any) {
-								axios.post('https://dev-api.paidnetwork.com/email/new-agreement', {
+								axios.post(apiUrl+'email/new-agreement', {
 									'counterParty': {
 										name: agreementForm.counterpartyName,
 										email: agreementForm.counterpartyEmail
@@ -589,8 +594,8 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 			const rawWallet = await storage.find<KeyStorageModel>(unlockedWallet._id);
 			const address = unlockedWallet.address;
 	
-			const result = await BlockchainFactory.getWeb3Instance(unlockedWallet._id, unlockedWallet.password);
-			const walletModel = result!;
+			const _walletModel = await BlockchainFactory.getWeb3Instance(unlockedWallet._id, unlockedWallet.password)!;
+			const walletModel = _walletModel!;
 			const web3 = walletModel.web3Instance;
 			const network = await BlockchainFactory.getNetwork(walletModel.network);
 	
@@ -604,11 +609,13 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 			})
 	
 			const AgreementContract = ContractFactory.getAgreementContract(web3, network);
+			AgreementContract.options.from = address;
 			const form = document.data.agreementForm;
 			const formId = document.event.agreementFormTemplateId;
 			const validUntil = document.data.validUntil;
 			const agreementId = document.event.id;
 			const cid = document.event.cid.toString();
+			console.log('CID Sign counterparty', cid);
 	
 			for await (const chunk of ipfs.cat(cid)) {
 				fetchedContent = uint8ArrayToString(chunk);
@@ -627,7 +634,7 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 				.then(res => res.text())
 			}
 			const pdfContent:string = await ipfsContent();
-			console.log(pdfContent);
+			// console.log(pdfContent);
 			const blobContent = base64StringToBlob(btoa(unescape(encodeURIComponent(pdfContent))), 'text/html');
 	
 			const ec_alice = new eddsa('ed25519');
@@ -654,16 +661,18 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 				agreementId,
 				validUntil,
 				ipfsHash.toString(),
-				formId, 	
+				formId,
 				form,
 				'0x' + digest);
 	
 			const gas = await methodFn.estimateGas();
+			
 			Promise.resolve(gas).then(async (gas:any) => {
 				const agreementTransaction = await methodFn.send({ from: address, gas:gas+5e4, gasPrice: 50e9 })
 				.on('receipt', async function (receipt: any) {
+					console.log(receipt);
 					const parties = JSON.parse(partiesContentStr);
-					axios.post('https://dev-api.paidnetwork.com/email/accept-agreement', {
+					axios.post(apiUrl+'email/accept-agreement', {
 						// counterparty field is the SENDER
 						'counterParty': {
 							'name': parties.partyName,
@@ -680,7 +689,7 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 					.catch(function (error) {
 						console.log('email error: ',error);
 					});
-					/*					
+					/*
 					CODE FOR REJECTION
 					axios.post('https://dev-api.paidnetwork.com/email/reject-agreement', {
 						// counterparty field is the SENDER
@@ -729,6 +738,7 @@ export const doGetSelectedDocument = (document: any) => async (dispatch: any) =>
 	dispatch({ type: DocumentsActionTypes.GET_SELECTED_DOCUMENT_LOADING });
 	let fetchedContent = '';
 	if (document) {
+		console.log('CID Get Selected Document', document.event.cid.toString())
 		for await (const chunk of ipfs.cat(document.event.cid.toString())) {
 			fetchedContent = uint8ArrayToString(chunk);
 		}

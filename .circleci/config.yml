@@ -19,7 +19,12 @@ jobs:
             echo "export CIRCLE_BRANCH=$( echo ${CIRCLE_BRANCH} | sed 's_/_-_' )" >> $BASH_ENV
       - gcp-gcr/build-image:
           image: $CIRCLE_PROJECT_REPONAME
-          extra_build_args: "--target build"
+          extra_build_args: "--target build 
+            --build-arg REACT_APP_WEB3_WSS=$REACT_APP_WEB3_WSS 
+            --build-arg REACT_APP_RECIPIENT_ERC20_TOKEN=$REACT_APP_RECIPIENT_ERC20_TOKEN 
+            --build-arg REACT_APP_PAYMENTS_PAID_TOKEN=$REACT_APP_PAYMENTS_PAID_TOKEN 
+            --build-arg REACT_APP_WAKU_SERVER=$REACT_APP_WAKU_SERVER
+            --build-arg REACT_APP_IPFS_PAID_HOST=$REACT_APP_IPFS_PAID_HOST"
           tag: "$CIRCLE_BRANCH-$CIRCLE_SHA1"
       - slack/status:
           fail_only: true
@@ -37,7 +42,12 @@ jobs:
             echo "export CIRCLE_BRANCH=$( echo ${CIRCLE_BRANCH} | sed 's_/_-_' )" >> $BASH_ENV
       - gcp-gcr/build-image:
           image: $CIRCLE_PROJECT_REPONAME
-          extra_build_args: "--target unit-test"
+          extra_build_args: "--target unit-test 
+            --build-arg REACT_APP_WEB3_WSS=$REACT_APP_WEB3_WSS 
+            --build-arg REACT_APP_RECIPIENT_ERC20_TOKEN=$REACT_APP_RECIPIENT_ERC20_TOKEN 
+            --build-arg REACT_APP_PAYMENTS_PAID_TOKEN=$REACT_APP_PAYMENTS_PAID_TOKEN 
+            --build-arg REACT_APP_WAKU_SERVER=$REACT_APP_WAKU_SERVER
+            --build-arg REACT_APP_IPFS_PAID_HOST=$REACT_APP_IPFS_PAID_HOST"
           tag: "$CIRCLE_BRANCH-$CIRCLE_SHA1"
       - slack/status:
           fail_only: true
@@ -65,7 +75,12 @@ jobs:
             echo "export CIRCLE_BRANCH=$( echo ${CIRCLE_BRANCH} | sed 's_/_-_' )" >> $BASH_ENV
       - gcp-gcr/build-image:
           image: "$CIRCLE_PROJECT_REPONAME"
-          extra_build_args: "--target production" 
+          extra_build_args: "--target production 
+            --build-arg REACT_APP_WEB3_WSS=$REACT_APP_WEB3_WSS 
+            --build-arg REACT_APP_RECIPIENT_ERC20_TOKEN=$REACT_APP_RECIPIENT_ERC20_TOKEN 
+            --build-arg REACT_APP_PAYMENTS_PAID_TOKEN=$REACT_APP_PAYMENTS_PAID_TOKEN 
+            --build-arg REACT_APP_WAKU_SERVER=$REACT_APP_WAKU_SERVER
+            --build-arg REACT_APP_IPFS_PAID_HOST=$REACT_APP_IPFS_PAID_HOST" 
           tag: "$CIRCLE_BRANCH-$CIRCLE_SHA1"
       - gcp-gcr/gcr-auth
       - gcp-gcr/push-image:

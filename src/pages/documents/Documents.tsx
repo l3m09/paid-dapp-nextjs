@@ -55,7 +55,7 @@ function SelectedDocument(payload: {
 	const { show, selectedDocument, closeShowDocument } = payload;
 
 	useEffect(() => {
-		if (unlockedWallet !== null) {
+		if (unlockedWallet) {
 			const web3 = BlockchainFactory.getWeb3Instance(unlockedWallet._id, unlockedWallet.password);
 			web3.then((result) => {
 				const { network } = result!;

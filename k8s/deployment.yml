@@ -5,7 +5,7 @@ metadata:
   labels:
     app: dapp
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: dapp
@@ -17,7 +17,7 @@ spec:
         app: dapp
     spec:
       containers:
-        - image: gcr.io/vivid-plateau-278712/paid-dapp:cicd-development-latest
+        - image: gcr.io/vivid-plateau-278712/paid-dapp:develop-latest
           name: dapp
           ports:
             - containerPort: 80
