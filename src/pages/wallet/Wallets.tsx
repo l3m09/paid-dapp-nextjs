@@ -22,8 +22,7 @@ import CreateWallet from './create-wallet/CreateWallet';
 import UnlockWallet from '../../components/UnlockWallet';
 import ImportWallet from './ImportWallet';
 import MenuAlternate from '../../components/MenuAlternate';
-import { BlockchainFactory } from '../../utils/blockchainFactory';
-import { ContractFactory } from '../../utils/contractFactory';
+import { TOAST_DURATION_WALLET_ADDRESS_COPY } from '../../utils/constants';
 // import { bold } from '../../redux/actions/template/agreement.html';
 // import { promises } from 'fs';
 
@@ -188,7 +187,7 @@ const Wallets: React.FC = () => {
 					color="primary"
 					onDidDismiss={() => setShowToastCopy(false)}
 					message="Wallet address has been copied to clipboard"
-					duration={300}
+					duration={TOAST_DURATION_WALLET_ADDRESS_COPY}
 				/>
 			</IonContent>
 		</IonPage>

@@ -91,7 +91,7 @@ const importWalletReducer: Reducer<WalletInfo, ActionModel> = (state: WalletInfo
 const ImportWallet: React.FC<Props> = ({show, dismiss}) => {
     const dispatch = useDispatch();
     const wallet = useSelector((state: any) => state.wallet);
-    const { importingWallet } = wallet;
+    const { importingWallet, error } = wallet;
 
     let walletInfo: WalletInfo = { 
         name: '', 
@@ -221,6 +221,11 @@ const ImportWallet: React.FC<Props> = ({show, dismiss}) => {
                             !state.validMnemonic &&
                             <IonNote color="danger" className="ion-margin-top">
                                 You must enter the Phrase.
+                            </IonNote>
+                        }{
+                            (error?.length > 0) &&
+                            <IonNote color="danger" className="ion-margin-top">
+                                { error }
                             </IonNote>
                         }
                         <IonText className="textarea-hint">
