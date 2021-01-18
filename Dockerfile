@@ -39,9 +39,8 @@ FROM build as unit-test
 # Use the current stable nginx image for production stage
 FROM nginx:1.19.5-alpine as production
 # Customize Nginx
-# TODO: Resolve nginx rewrite
-# COPY ./.devops/nginx.conf /etc/nginx/nginx.conf
-# COPY ./.devops/default.conf /etc/nginx/conf.d/default.conf
+COPY ./.devops/nginx.conf /etc/nginx/nginx.conf
+COPY ./.devops/default.conf /etc/nginx/conf.d/default.conf
 # Copy build directory from build stage
 COPY --from=build /app/build /usr/share/nginx/html
 # Define the network port that this container will listen on at runtime.
