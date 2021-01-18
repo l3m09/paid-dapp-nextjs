@@ -737,7 +737,7 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 		console.log('ln545', err);
 		dispatch({
 			type: DocumentsActionTypes.COUNTERPARTY_SIGNED_FAILURE,
-			payload: err.msg
+			payload: err.message
 		});
 	}
 
