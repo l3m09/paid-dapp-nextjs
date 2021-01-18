@@ -17,7 +17,8 @@ const initialState = {
 	settingCurrentWallet: false,
 	gettingCurrentWallet: false,
 	unlockingWallet: false,
-	unlockedWallet: null
+	unlockedWallet: null,
+	timeout: null
 };
 
 export const WalletReducer = function (state = initialState, action: any) {
@@ -161,7 +162,7 @@ export const WalletReducer = function (state = initialState, action: any) {
 
 		case WalletActionTypes.UNLOCK_WALLET_LOADING:
 			return { ...state, unlockingWallet: true };
-
+		
 		case WalletActionTypes.UNLOCK_WALLET_SUCCESS:
 			return {
 				...state,

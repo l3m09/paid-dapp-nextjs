@@ -14,7 +14,10 @@ import {
 } from 'ionicons/icons';
 import {useSelector} from 'react-redux';
 import { BlockchainFactory } from '../utils/blockchainFactory';
+import { Sessions } from '../utils/sessions';
+import { useHistory } from 'react-router';
 import { KeyStorageModel } from 'universal-crypto-wallet/dist/key-storage/KeyStorageModel';
+import { Session } from 'inspector';
 
 interface AppPage {
 	url: string;
@@ -25,6 +28,7 @@ interface AppPage {
 }
 
 const MenuAlternate:  React.FC = () =>{
+	const history = useHistory();
 	const location = useLocation();
 	const wallet = useSelector((state: any) => state.wallet);
 	const { unlockedWallet } = wallet;
@@ -32,11 +36,16 @@ const MenuAlternate:  React.FC = () =>{
 	const [disableMenu, setDisableMenu] = useState(true);
 	const [networkText, setNetWorkText] = useState('...');
 
-
 	useEffect(() => {
 		if (unlockedWallet !== null) {
 			setDisableMenu(false)
-			const web3 = BlockchainFactory.getWeb3Instance(unlockedWallet._id, unlockedWallet.password);
+			const web3 = BlockchainFactory.getWeb3Instance(unlockedWallet.address, unlockedWallet._id, unlockedWallet.password);
+			if(!Sessions.getTimeoutBool()){
+				Sessions.setTimeoutCall();				
+			}
+			else{
+				history.push('/wallets');
+			}
 			web3.then((result) => {
 				const { network } = result!;
 				const _network = BlockchainFactory.getNetwork(network);
