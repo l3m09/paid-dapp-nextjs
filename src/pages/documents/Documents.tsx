@@ -42,6 +42,7 @@ import { BlockchainFactory } from './../../utils/blockchainFactory'
 import { KeyStorageModel } from 'universal-crypto-wallet/dist/key-storage/KeyStorageModel';
 import SuccessDialog from '../../components/SuccessDialog';
 import AgreementType from '../../models/AgreementType';
+import { Sessions } from '../../utils/sessions';
 
 function SelectedDocument(payload: {
 	show: boolean;
@@ -56,7 +57,7 @@ function SelectedDocument(payload: {
 
 	useEffect(() => {
 		if (unlockedWallet) {
-			const web3 = BlockchainFactory.getWeb3Instance(unlockedWallet._id, unlockedWallet.password);
+			const web3 = BlockchainFactory.getWeb3Instance(unlockedWallet. address, unlockedWallet._id, unlockedWallet.password);
 			web3.then((result) => {
 				const { network } = result!;
 				const _network = BlockchainFactory.getNetwork(network);
@@ -139,7 +140,13 @@ const Documents: React.FC = () => {
 	const [currentIndex, setCurrentIndex] = useState(0);
 
 	useEffect(() => {
-		dispatch(doGetDocuments(currentWallet));
+		if(!Sessions.getTimeoutBool()){
+			Sessions.setTimeoutCall();			
+			dispatch(doGetDocuments(currentWallet));
+		}
+		else{
+			history.push('/wallets');
+		}
 		slidesRef.current?.lockSwipes(true)
 	}, [dispatch, slidesRef, currentWallet]);
 
@@ -166,6 +173,17 @@ const Documents: React.FC = () => {
 	function chooseOption(type: string) {
 		setShowPopover(false);
 		history.push('/agreements/' + type.toLowerCase());
+	}
+
+	function runShowPopover(show: boolean){		
+		debugger;
+		if(!Sessions.getTimeoutBool()){
+			Sessions.setTimeoutCall();
+		}
+		else{
+			history.push('/wallets');
+		}
+		setShowPopover(show);
 	}
 
 	const slideOpts = {
@@ -242,7 +260,7 @@ const Documents: React.FC = () => {
 					/>
 					<IonFab vertical="bottom" horizontal="end" slot="fixed">
 						<IonFabButton color="gradient" onClick={() => {
-							setShowPopover(true);
+							runShowPopover(true);
 						}}>
 							<IonIcon icon={add}/>
 						</IonFabButton>

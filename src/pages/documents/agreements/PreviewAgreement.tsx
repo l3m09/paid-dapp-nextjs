@@ -80,7 +80,7 @@ const PreviewAgreement: FC<PreviewAgreementProps> = ({ current }) => {
 
     const metodofn = async (addrtoken:string, unlockedWallet:any) => {
         const address = unlockedWallet.address
-        const _walletModel = await BlockchainFactory.getWeb3Instance(unlockedWallet._id, unlockedWallet.password)!;
+        const _walletModel = await BlockchainFactory.getWeb3Instance(address, unlockedWallet._id, unlockedWallet.password)!;
         const walletModel = _walletModel!;
         const web3 = walletModel.web3Instance;
         const network = await BlockchainFactory.getNetwork(walletModel.network);
