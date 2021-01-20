@@ -61,7 +61,9 @@ const UnlockWallet: React.FC<Props> = ({
 			element?.focus();
 		};
 
-		setTimeout(() => bootstrapAsync(), 500);
+		const timerBootstrapAsync = setTimeout(() => bootstrapAsync(), 500);
+
+		return () => { clearTimeout(timerBootstrapAsync); }
 	}, []);
 
 	useEffect(() => {

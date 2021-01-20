@@ -1,23 +1,24 @@
 import {
 	IonButtons,
 	IonIcon,
+	IonImg,
 	IonItem,
 	IonLabel,
+	IonSelect,
+	IonSelectOption,
 } from '@ionic/react';
 
 import React, {useEffect, useState} from 'react';
 import { useLocation } from 'react-router-dom';
 import {
-	documentOutline,
 	documentSharp,
-	listCircleOutline
+	globeSharp,
+	walletSharp
 } from 'ionicons/icons';
 import {useSelector} from 'react-redux';
 import { BlockchainFactory } from '../utils/blockchainFactory';
 import { Sessions } from '../utils/sessions';
 import { useHistory } from 'react-router';
-import { KeyStorageModel } from 'universal-crypto-wallet/dist/key-storage/KeyStorageModel';
-import { Session } from 'inspector';
 
 interface AppPage {
 	url: string;
@@ -25,6 +26,12 @@ interface AppPage {
 	mdIcon: string;
 	title: string;
 	disabled: boolean;
+}
+
+const customAlertTokens = {
+	header: 'Select Payment Method',
+	cssClass: 'select-tokens-alert',
+	translucent: true
 }
 
 const MenuAlternate:  React.FC = () =>{
@@ -35,6 +42,7 @@ const MenuAlternate:  React.FC = () =>{
 
 	const [disableMenu, setDisableMenu] = useState(true);
 	const [networkText, setNetWorkText] = useState('...');
+	const [selectedToken, setSelectedToken] = useState('paid');
 
 	useEffect(() => {
 		if (unlockedWallet !== null) {
@@ -60,21 +68,21 @@ const MenuAlternate:  React.FC = () =>{
 		{
 			title: 'Network: ' + networkText,
 			url: '/wallets',
-			iosIcon: listCircleOutline,
-			mdIcon: listCircleOutline,
+			iosIcon: globeSharp,
+			mdIcon: globeSharp,
 			disabled: false
 		},
 		{
 			title: 'Wallets',
 			url: '/wallets',
-			iosIcon: listCircleOutline,
-			mdIcon: listCircleOutline,
+			iosIcon: walletSharp,
+			mdIcon: walletSharp,
 			disabled: false
 		},
 		{
 			title: 'Smart Agreements Log',
 			url: '/documents',
-			iosIcon: documentOutline,
+			iosIcon: documentSharp,
 			mdIcon: documentSharp,
 			disabled: false
 		},
@@ -95,17 +103,46 @@ const MenuAlternate:  React.FC = () =>{
 						lines="none"
 						detail={false}
 					>
-										<span className="icon-wrapper">
-											<IonIcon
-												ios={appPage.iosIcon}
-												md={appPage.mdIcon}
-												color="gradient"
-											/>
-										</span>
+						<div className="icon-wrapper">
+							<IonIcon
+								ios={appPage.iosIcon}
+								md={appPage.mdIcon}
+								color="gradient"
+							/>
+						</div>
 						<IonLabel color="gradient">{appPage.title}</IonLabel>
 					</IonItem>
 				);
 			})}
+			<IonItem
+				disabled={disableMenu}
+			>
+				<div className="icon-wrapper">
+					<IonImg
+						src="/assets/icon/icon.png"
+					/>
+				</div>
+				<IonLabel color="gradient">
+					{
+						selectedToken === "paid" ?
+						('PAID Tokens') :
+						('DAI')
+					}
+				</IonLabel>
+				<IonSelect
+					interfaceOptions={customAlertTokens}
+					interface="alert"
+					value={selectedToken}
+					onIonChange={ (e) => setSelectedToken(e.detail.value) }
+				>
+					<IonSelectOption value="paid">
+						PAID Tokens  {unlockedWallet.balanceToken}
+					</IonSelectOption>
+					<IonSelectOption value="dai">
+						DAI  2521
+					</IonSelectOption>
+				</IonSelect>
+			</IonItem>
 		</IonButtons>
 	);
 };
