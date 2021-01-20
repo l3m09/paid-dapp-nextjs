@@ -136,7 +136,7 @@ const MenuAlternate:  React.FC = () =>{
 					onIonChange={ (e) => setSelectedToken(e.detail.value) }
 				>
 					<IonSelectOption value="paid">
-						PAID Tokens  {unlockedWallet.balanceToken}
+						PAID Tokens  {unlockedWallet?.balanceToken}
 					</IonSelectOption>
 					<IonSelectOption value="dai">
 						DAI  2521
