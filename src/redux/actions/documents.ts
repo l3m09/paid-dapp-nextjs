@@ -7,9 +7,9 @@ import { base64StringToBlob } from 'blob-util';
 import { AlgorithmType, CEASigningService, WalletManager } from 'universal-crypto-wallet';
 import { eddsa } from "elliptic";
 import * as abiLib  from '../actions/template/abi-utils/abi-lib';
-import { templateRender } from './template/template';
+// import { templateRender } from './template/template';
 import { DialogsActionTypes } from '../actionTypes/dialogs';
-import { PAIDTokenContract } from '../../contracts/paidtoken';
+// import { PAIDTokenContract } from '../../contracts/paidtoken';
 
 const uint8ArrayToString = require('uint8arrays/to-string');
 const BigNumber = require('bignumber.js');

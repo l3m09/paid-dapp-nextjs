@@ -112,7 +112,7 @@ const Wallets: React.FC = () => {
 														<span className="amountCoin">{item.balance?.match(/^-?\d+(?:\.\d{0,4})?/)[0]}</span>
 														<br/>
 														<span className="labelCoin">PAID</span>
-														<span className="amountCoin">{item.balanceToken?.match(/^-?\d+(?:\.\d{0,4})?/)[0]}</span>
+														<span className="amountCoin">{item.balanceToken?.match(/^-?\d+(?:\.\d{0,4})?/)[0]}&nbsp;&nbsp;&nbsp;</span>
 														<br/>
 														<span className="labelCoin">DAI</span>
 														<span className="amountCoin">{item.balanceDaiToken?.match(/^-?\d+(?:\.\d{0,4})?/)[0]}</span>
@@ -138,7 +138,7 @@ const Wallets: React.FC = () => {
 														<span className="amountCoin">{item.balance?.match(/^-?\d+(?:\.\d{0,4})?/)[0]}</span>
 														<br/>
 														<span className="labelCoin">PAID</span>
-														<span className="amountCoin">{item.balanceToken.match(/^-?\d+(?:\.\d{0,4})?/)[0]}</span>
+														<span className="amountCoin">{item.balanceToken.match(/^-?\d+(?:\.\d{0,4})?/)[0]}&nbsp;&nbsp;&nbsp;</span>
 														<br/>
 														<span className="labelCoin">DAI</span>
 														<span className="amountCoin">{item.balanceDaiToken.match(/^-?\d+(?:\.\d{0,4})?/)[0]}</span>

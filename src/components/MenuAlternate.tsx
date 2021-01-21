@@ -49,7 +49,7 @@ const MenuAlternate:  React.FC = () =>{
 			setDisableMenu(false)
 			const web3 = BlockchainFactory.getWeb3Instance(unlockedWallet.address, unlockedWallet._id, unlockedWallet.password);
 			if(!Sessions.getTimeoutBool()){
-				Sessions.setTimeoutCall();				
+				Sessions.setTimeoutCall();
 			}
 			else{
 				history.push('/wallets');
