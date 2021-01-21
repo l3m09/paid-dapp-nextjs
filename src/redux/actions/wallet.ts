@@ -3,6 +3,7 @@ import { Plugins } from '@capacitor/core';
 import { BlockchainFactory } from '../../utils/blockchainFactory';
 import { ContractFactory } from '../../utils/contractFactory';
 import { Sessions } from '../../utils/sessions';
+import { wallet } from 'ionicons/icons';
 const { Storage } = Plugins;
 
 // CREATORS
@@ -53,9 +54,17 @@ const getCurrentWallet = (payload: any) => {
 	};
 };
 
+
 const setSelectedWallet = (payload: any) => {
 	return {
 		type: WalletActionTypes.SET_SELECTED_WALLET_SUCCESS,
+		payload
+	};
+};
+
+const setCurrentToken = (payload: any) => {
+	return {
+		type: WalletActionTypes.SET_SELECTED_WALLET_TOKEN_SUCCESS,
 		payload
 	};
 };
@@ -269,6 +278,21 @@ export const doSetCurrentWallet = (wallet: any) => async (dispatch: any) => {
 	} catch (err) {
 		dispatch({
 			type: WalletActionTypes.SET_CURRENT_WALLET_FAILURE,
+			payload: err.message
+		});
+	}
+};
+
+export const doSetCurrentToken = (token: string) => async (dispatch: any) => {
+	dispatch({ type: WalletActionTypes.SET_SELECTED_WALLET_TOKEN_LOADING });
+	try {
+		const value = token
+		await Storage.set({ key: 'CURRENT_TOKEN', value });
+		console.log('CURRENT_TOKEN', token);
+		dispatch(setCurrentToken(value));
+	} catch (err) {
+		dispatch({
+			type: WalletActionTypes.SET_SELECTED_WALLET_TOKEN_FAILURE,
 			payload: err.message
 		});
 	}

@@ -155,7 +155,7 @@ export const doCreateAgreement = (payload: {
 		const form = createAgreementFormPayload(agreementForm);
 
 		const { wallet } = getState();
-		const { unlockedWallet } = wallet;
+		const { unlockedWallet, selectedToken } = wallet;
 		if (!unlockedWallet) {
 			throw new Error('Not unlocked wallet found');
 		}
@@ -228,28 +228,44 @@ export const doCreateAgreement = (payload: {
 		console.log('CID Create Document', ipfsHash.toString());
 		// ----------------------------------------------------
 		// Estimate gas,  TODO encapsulate
+		let token:string = '';
 		const AgreementContract = ContractFactory.getAgreementContract(web3, network);
-		const PaidTokenContract = ContractFactory.getPaidTokenContract(web3, network);
-		const token = PaidTokenContract.options.address;
+		
 		const spender = AgreementContract.options.address;
 		AgreementContract.options.from = address;
-		PaidTokenContract.options.from = address;
 		// Increase Allowance for withdraw PAID token
 		console.log('Payment', payment);
 		console.log('Pago', pago);
+		let metodoTkn:any;
 		const paymentSA = web3.utils.toWei(pago, 'ether')
-		console.log('previo pago', paymentSA.toString(),'token address:',  token,'address wallet:', address, 'spender:', spender, 'recipient:', recipientTKN);
-		const metodoTkn = PaidTokenContract.methods.increaseAllowance(
-			spender,
-			paymentSA.toString()
-		);
+		if (selectedToken === 'paid') {
+			const PaidTokenContract = ContractFactory.getPaidTokenContract(web3, network);
+			token = PaidTokenContract.options.address;
+			PaidTokenContract.options.from = address;
+			console.log('previo pago', paymentSA.toString(),'token address:',  token,'address wallet:', address, 'spender:', spender, 'recipient:', recipientTKN);
+			metodoTkn = PaidTokenContract.methods.increaseAllowance(
+				spender,
+				paymentSA.toString()
+			);
+		} else if (selectedToken === 'dai') {
+			const DaiTokenContract = ContractFactory.getDaiTokenContract(web3, network);
+			token = DaiTokenContract.options.address;
+			DaiTokenContract.options.from = address;
+			console.log('previo pago', paymentSA.toString(),'token address:',  token,'address wallet:', address, 'spender:', spender, 'recipient:', recipientTKN);
+			metodoTkn = DaiTokenContract.methods.approve(
+				spender,
+				paymentSA.toString()
+			);
+		} else {
+			dispatch(openSuccessDialog('Please Select the Token to use'));
+		}
 		// estimateGas for Send Tx to IncreaseAllowance
 		const gastkn = await metodoTkn.estimateGas();
 		// Resolve Promise for Send Tx to IncreaseAllowance
 		Promise.resolve(gastkn).then(async (gastkn:any) => {
 			const agreementTransaction = await metodoTkn.send({ from: address, gas:gastkn+5e4, gasPrice: 50e9 })
 		   .on('receipt', async function (receipt: any) {
-				console.log('resolve increaseAllowpaidtoken',receipt);
+				console.log('resolve increaseAllow'+selectedToken+'token',receipt);
 				// Withdraw PAID Token
 				const metodoFn = AgreementContract.methods.payPaidServices(
 					token,
@@ -263,7 +279,7 @@ export const doCreateAgreement = (payload: {
 			   	Promise.resolve(gastx).then(async (gastx:any) => {
 					const withdrawTransaction = await metodoFn.send({ from: address, gas:gastx+5e4, gasPrice: 50e9 })
 					.on('receipt', async function (receipt: any) {
-						console.log('resolve withdrawpaidtoken',receipt);
+						console.log('resolve withdraw'+selectedToken+'token',receipt);
 			   			// Create Agreements in the Smart Contract
 						const methodFn = AgreementContract.methods.partyCreate(
 							validUntil,
@@ -697,27 +713,6 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 					.catch(function (error) {
 						console.log('email error: ',error);
 					});
-					/*
-					CODE FOR REJECTION
-					axios.post('https://dev-api.paidnetwork.com/email/reject-agreement', {
-						// counterparty field is the SENDER
-						'counterParty': {
-							name: form.name,
-							email: form.email,
-							'comments': {COMMENTS}
-						},
-						// party field is the TARGET
-						'party':{
-							'name': form.counterpartyName
-						}
-					})
-					.then(function (response) {
-						console.log('email response: ', response);
-					})
-					.catch(function (error) {
-						console.log('email error: ',error);
-					});
-					*/
 					dispatch(getSelectedSignedDocument(document));
 					dispatch(openSuccessDialog('You have successfully sign the Smart Agreement'));
 				})

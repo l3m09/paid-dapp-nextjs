@@ -34,7 +34,6 @@ const Wallets: React.FC = () => {
 	const [showUnlockWalletModal, setShowUnlockWalletModal] = useState(false);
 	const [showImportWalletModal, setShowImportWalletModal] = useState(false);
 	const [showToastCopy, setShowToastCopy] = useState(false);
-	const [balance, setBalance] = useState('');
 
 	const { wallets, unlockedWallet, selectedWallet } = wallet;
 

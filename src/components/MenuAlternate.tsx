@@ -15,8 +15,9 @@ import {
 	globeSharp,
 	walletSharp
 } from 'ionicons/icons';
-import {useSelector} from 'react-redux';
+import { useDispatch, useSelector} from 'react-redux';
 import { BlockchainFactory } from '../utils/blockchainFactory';
+import { doSetCurrentToken} from '../redux/actions/wallet';
 import { Sessions } from '../utils/sessions';
 import { useHistory } from 'react-router';
 
@@ -37,13 +38,21 @@ const customAlertTokens = {
 const MenuAlternate:  React.FC = () =>{
 	const history = useHistory();
 	const location = useLocation();
+	const dispatch = useDispatch();
 	const wallet = useSelector((state: any) => state.wallet);
-	const { unlockedWallet } = wallet;
+	const { unlockedWallet, selectedToken } = wallet;
 
 	const [disableMenu, setDisableMenu] = useState(true);
 	const [networkText, setNetWorkText] = useState('...');
-	const [selectedToken, setSelectedToken] = useState('paid');
+	const [selectToken, setSelectToken] = useState(selectedToken);
 
+	const doSetSelectedToken = (token:string) => {
+		setSelectToken(token);
+		dispatch(doSetCurrentToken(token));
+	}
+
+	
+	
 	useEffect(() => {
 		if (unlockedWallet !== null) {
 			setDisableMenu(false)
@@ -124,22 +133,22 @@ const MenuAlternate:  React.FC = () =>{
 				</div>
 				<IonLabel color="gradient">
 					{
-						selectedToken === "paid" ?
+						selectToken === "paid" ?
 						('PAID Tokens') :
-						('DAI')
+						('DAI Tokens')
 					}
 				</IonLabel>
 				<IonSelect
 					interfaceOptions={customAlertTokens}
 					interface="alert"
-					value={selectedToken}
-					onIonChange={ (e) => setSelectedToken(e.detail.value) }
+					value={selectToken}
+					onIonChange={ (e) => doSetSelectedToken(e.detail.value) }
 				>
 					<IonSelectOption value="paid">
 						PAID Tokens  {unlockedWallet?.balanceToken}
 					</IonSelectOption>
 					<IonSelectOption value="dai">
-						DAI  2521
+						DAI Tokens {unlockedWallet?.balanceDaiToken}
 					</IonSelectOption>
 				</IonSelect>
 			</IonItem>
