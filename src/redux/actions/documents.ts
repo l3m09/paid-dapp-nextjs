@@ -7,9 +7,7 @@ import { base64StringToBlob } from 'blob-util';
 import { AlgorithmType, CEASigningService, WalletManager } from 'universal-crypto-wallet';
 import { eddsa } from "elliptic";
 import * as abiLib  from '../actions/template/abi-utils/abi-lib';
-// import { templateRender } from './template/template';
 import { DialogsActionTypes } from '../actionTypes/dialogs';
-// import { PAIDTokenContract } from '../../contracts/paidtoken';
 
 const uint8ArrayToString = require('uint8arrays/to-string');
 const BigNumber = require('bignumber.js');
@@ -23,9 +21,7 @@ const ipfsnode = `${process.env.REACT_APP_IPFS_PAID_HOST}`;
 const ipfs = ipfsClient({ host: ipfsnode, port: '5001', protocol: 'https', apiPath: '/api/v0' });
 const apiUrl = `${process.env.REACT_APP_WAKU_SERVER}`;
 const recipientTKN = `${process.env.REACT_APP_RECIPIENT_ERC20_TOKEN}`;
-const payment = BigNumber(`${process.env.REACT_APP_PAYMENTS_PAID_TOKEN}`).toFixed().toString();
 const pago = `${process.env.REACT_APP_PAYMENTS_PAID_TOKEN}`;
-// const paymentSA = web3.utils.toWei(payment, 'ether')
 
 const createAgreementFormPayload = (obj: any) => {
 	const types: string[] = [];
@@ -162,9 +158,8 @@ export const doCreateAgreement = (payload: {
 
 		const manager = BlockchainFactory.getWalletManager();
 		const storage = manager.getKeyStorage();
+		debugger;
 		const rawWallet = await storage.find<KeyStorageModel>(unlockedWallet._id);
-		// const onchainWalletAddress = window.ethereum.selectedAddress;
-		
 		const address = unlockedWallet.address
 		const _walletModel = await BlockchainFactory.getWeb3Instance(unlockedWallet.address, unlockedWallet._id, unlockedWallet.password)!;
 		const walletModel = _walletModel!;
@@ -234,7 +229,6 @@ export const doCreateAgreement = (payload: {
 		const spender = AgreementContract.options.address;
 		AgreementContract.options.from = address;
 		// Increase Allowance for withdraw PAID token
-		console.log('Payment', payment);
 		console.log('Pago', pago);
 		let metodoTkn:any;
 		const paymentSA = web3.utils.toWei(pago, 'ether')
@@ -616,8 +610,6 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 			const manager = BlockchainFactory.getWalletManager();
 			const storage = manager.getKeyStorage();
 			const address = unlockedWallet.address;
-			debugger;
-			const rawWallet = await storage.find<KeyStorageModel>(unlockedWallet._id);
 
 			const _walletModel = await BlockchainFactory.getWeb3Instance(unlockedWallet.address, unlockedWallet._id, unlockedWallet.password)!;
 			const walletModel = _walletModel!;
@@ -662,6 +654,8 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 			const blobContent = base64StringToBlob(btoa(unescape(encodeURIComponent(pdfContent))), 'text/html');
 	
 			const ec_alice = new eddsa('ed25519');
+			debugger;
+			const rawWallet = await storage.find<KeyStorageModel>(unlockedWallet._id);
 			const signer = ec_alice.keyFromSecret(rawWallet.keypairs.ED25519);
 			const signature = signer
 				.sign(digest)
