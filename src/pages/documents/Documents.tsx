@@ -176,7 +176,6 @@ const Documents: React.FC = () => {
 	}
 
 	function runShowPopover(show: boolean){		
-		debugger;
 		if(!Sessions.getTimeoutBool()){
 			Sessions.setTimeoutCall();
 		}

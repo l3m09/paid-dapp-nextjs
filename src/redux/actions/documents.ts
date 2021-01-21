@@ -612,17 +612,17 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 			if (!unlockedWallet) {
 				throw new Error('Not unlocked wallet found');
 			}
-	
+			debugger;
 			const manager = BlockchainFactory.getWalletManager();
 			const storage = manager.getKeyStorage();
-			const rawWallet = await storage.find<KeyStorageModel>(unlockedWallet._id);
 			const address = unlockedWallet.address;
-	
+			debugger;
+			const rawWallet = await storage.find<KeyStorageModel>(unlockedWallet._id);
+
 			const _walletModel = await BlockchainFactory.getWeb3Instance(unlockedWallet.address, unlockedWallet._id, unlockedWallet.password)!;
 			const walletModel = _walletModel!;
 			const web3 = walletModel.web3Instance;
 			const network = await BlockchainFactory.getNetwork(walletModel.network);
-	
 			await web3.eth.getBalance(address).then((balancewei) =>{
 				const balance = web3.utils.fromWei(balancewei);
 				const parsedBalance = BigNumber(balance).toNumber();
