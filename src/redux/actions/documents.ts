@@ -1,3 +1,4 @@
+import { KeyStorage } from 'universal-crypto-wallet/dist/key-storage';
 import { KeyStorageModel } from 'universal-crypto-wallet/dist/key-storage/KeyStorageModel';
 import { DocumentsActionTypes } from '../actionTypes/documents';
 import { BigNumber as BN, ethers } from 'ethers';
@@ -157,9 +158,8 @@ export const doCreateAgreement = (payload: {
 		}
 
 		const manager = BlockchainFactory.getWalletManager();
-		const storage = manager.getKeyStorage();
-		debugger;
-		const rawWallet = await storage.find<KeyStorageModel>(unlockedWallet._id);
+		const storage: KeyStorage = manager.getKeyStorage();
+		const rawWallet: KeyStorageModel = await storage.find<KeyStorageModel>(unlockedWallet._id);
 		const address = unlockedWallet.address
 		const _walletModel = await BlockchainFactory.getWeb3Instance(unlockedWallet.address, unlockedWallet._id, unlockedWallet.password)!;
 		const walletModel = _walletModel!;
@@ -606,9 +606,9 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 			if (!unlockedWallet) {
 				throw new Error('Not unlocked wallet found');
 			}
-			debugger;
 			const manager = BlockchainFactory.getWalletManager();
-			const storage = manager.getKeyStorage();
+			const storage: KeyStorage = manager.getKeyStorage();
+			const rawWallet: KeyStorageModel = await storage.find<KeyStorageModel>(unlockedWallet._id);
 			const address = unlockedWallet.address;
 
 			const _walletModel = await BlockchainFactory.getWeb3Instance(unlockedWallet.address, unlockedWallet._id, unlockedWallet.password)!;
@@ -654,8 +654,6 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 			const blobContent = base64StringToBlob(btoa(unescape(encodeURIComponent(pdfContent))), 'text/html');
 	
 			const ec_alice = new eddsa('ed25519');
-			debugger;
-			const rawWallet = await storage.find<KeyStorageModel>(unlockedWallet._id);
 			const signer = ec_alice.keyFromSecret(rawWallet.keypairs.ED25519);
 			const signature = signer
 				.sign(digest)
@@ -744,8 +742,8 @@ export const doRejectCounterpartyDocument = (document: any, comments: string) =>
 			}
 
 			const manager = BlockchainFactory.getWalletManager();
-			const storage = manager.getKeyStorage();
-			const rawWallet = await storage.find<KeyStorageModel>(unlockedWallet._id);
+			const storage: KeyStorage = manager.getKeyStorage();
+			const rawWallet: KeyStorageModel = await storage.find<KeyStorageModel>(unlockedWallet._id);
 			const address = unlockedWallet.address;
 
 			// const _walletModel = await BlockchainFactory.getWeb3Instance(unlockedWallet._id, unlockedWallet.password)!;
@@ -809,7 +807,7 @@ export const doRejectCounterpartyDocument = (document: any, comments: string) =>
 
 			const partiesContentStr : string = await partiesContent();
 
-			// let ipfsHash = await uploadsIPFS(ipfs, blobContent, opts, digest, signature, pubKey, formId, address, JSON.stringify(elementsAbi), partiesContentStr, null);
+			let ipfsHash = await uploadsIPFS(ipfs, blobContent, opts, digest, signature, pubKey, formId, address, JSON.stringify(elementsAbi), partiesContentStr, null);
 			// Sending Notification of CounterParty Reject Smart Agreements
 			const parties = JSON.parse(partiesContentStr);
 			// Sending Notification
