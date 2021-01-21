@@ -176,15 +176,6 @@ export const WalletReducer = function (state = initialState, action: any) {
 		case WalletActionTypes.SET_SELECTED_WALLET_TOKEN_FAILURE:
 			return { ...state, error: payload, gettingCurrentToken: false };
 
-		// case WalletActionTypes.GET_SELECTED_WALLET_TOKEN_LOADING:
-		// 	return { ...state, settingCurrentToken: true };
-
-		// case WalletActionTypes.GET_SELECTED_WALLET_TOKEN_SUCCESS:
-		// 	return { ...state, currentWallet: payload, gettingCurrentToken: false };
-
-		// case WalletActionTypes.GET_SELECTED_WALLET_TOKEN_FAILURE:
-		// 	return { ...state, error: payload, gettingCurrentToken: false };
-
 		case WalletActionTypes.UNLOCK_WALLET_LOADING:
 			return { ...state, unlockingWallet: true };
 		

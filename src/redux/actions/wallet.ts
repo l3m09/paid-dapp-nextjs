@@ -286,10 +286,10 @@ export const doSetCurrentWallet = (wallet: any) => async (dispatch: any) => {
 export const doSetCurrentToken = (token: string) => async (dispatch: any) => {
 	dispatch({ type: WalletActionTypes.SET_SELECTED_WALLET_TOKEN_LOADING });
 	try {
-		const value = token
+		const value = token;
 		await Storage.set({ key: 'CURRENT_TOKEN', value });
 		console.log('CURRENT_TOKEN', token);
-		dispatch(setCurrentToken(value));
+		dispatch(setCurrentToken(token));
 	} catch (err) {
 		dispatch({
 			type: WalletActionTypes.SET_SELECTED_WALLET_TOKEN_FAILURE,

@@ -51,8 +51,6 @@ const MenuAlternate:  React.FC = () =>{
 		dispatch(doSetCurrentToken(token));
 	}
 
-	
-	
 	useEffect(() => {
 		if (unlockedWallet !== null) {
 			setDisableMenu(false)
