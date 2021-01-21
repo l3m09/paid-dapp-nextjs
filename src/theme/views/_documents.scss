@@ -285,6 +285,11 @@
     .agreement-content {
         position: relative;
         width: 100%;
+
+        .content-form-client {
+            height: 100vh;
+        }
+        
         .text-primary {
             color: $brand-primary;
         }
@@ -523,17 +528,16 @@
                 margin-bottom: 20px;
             }
         }
-        // .button-wrapper {
-        //     //position: fixed;
-        //     //bottom: 2vh;
-        //     //left: 0;
-        //     //right: 0;
-        //     //.complete-button {}
-        // }
+        
         .name-password-form {
             ion-item {
                 display: flex;
                 flex-direction: column;
+                
+                &.item-checkbox {
+                    margin: 25px 0;
+                }
+
                 input {
                     border: 1px solid $grey-border;
                     border-radius: 5px;
@@ -553,6 +557,10 @@
             ion-label {
                 font-weight: bold;
                 margin: 25px 0 15px;
+
+                &.checkbox-label {
+                    margin: 0;
+                }
             }
             .form-options {
                 height: fit-content;

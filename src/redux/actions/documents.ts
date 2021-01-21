@@ -6,11 +6,14 @@ import { ContractFactory } from '../../utils/contractFactory';
 import { base64StringToBlob } from 'blob-util';
 import { AlgorithmType, CEASigningService, WalletManager } from 'universal-crypto-wallet';
 import { eddsa } from "elliptic";
+import { Plugins } from '@capacitor/core';
 import * as abiLib  from '../actions/template/abi-utils/abi-lib';
 import { templateRender } from './template/template';
 import { DialogsActionTypes } from '../actionTypes/dialogs';
 import { PAIDTokenContract } from '../../contracts/paidtoken';
+import { STORAGE_KEY_MY_INFO_KEPT } from '../../utils/constants';
 
+const { Storage } = Plugins;
 const uint8ArrayToString = require('uint8arrays/to-string');
 const BigNumber = require('bignumber.js');
 // const BigNumber = require('ethers');
@@ -74,6 +77,13 @@ const getSelectedRejectDocument = (document: any) => {
 };
 
 const openSuccessDialog = (message: string) => {
+	return {
+		type: DialogsActionTypes.OPEN_SUCCESS_DIALOG,
+		payload: message
+	}
+}
+
+const openErrorDialog = (message: string) => {
 	return {
 		type: DialogsActionTypes.OPEN_SUCCESS_DIALOG,
 		payload: message
@@ -967,5 +977,57 @@ export const doSetAgreementFormInfo = (formInfo: any) => async (
 		dispatch(setAgreementFormInfo(formInfo));
 	} catch (err) {
 		console.log(err);
+	}
+};
+
+export const doSetKeepMyInfo = (agreementFormInfo: any) => (dispatch: any) => {
+	dispatch({ type: DocumentsActionTypes.SET_KEEP_MY_INFO });
+	try {
+		if (agreementFormInfo != null) {
+			const { email, confirmEmail, name, address, phone } = agreementFormInfo;
+			const myInfoString = JSON.stringify({
+				email,
+				confirmEmail,
+				name,
+				address,
+				phone
+			});
+			Storage.set({ key: STORAGE_KEY_MY_INFO_KEPT, value: myInfoString });
+		} else {
+			Storage.remove({ key: STORAGE_KEY_MY_INFO_KEPT });
+		}
+		dispatch({ type: DocumentsActionTypes.SET_KEEP_MY_INFO_SUCCESS, payload: agreementFormInfo != null });
+	} catch (err) {
+		dispatch(openErrorDialog(err.message));
+		dispatch({ type: DocumentsActionTypes.SET_KEEP_MY_INFO_FAILURE });
+	}
+};
+
+export const doLoadMyInfoKept = () => async (dispatch: any) => {
+	dispatch({ type: DocumentsActionTypes.SET_KEEP_MY_INFO });
+	try {
+		const myInfoString = await Storage.get({ key: STORAGE_KEY_MY_INFO_KEPT });
+		const formInfo = (myInfoString.value != null) ?
+		(JSON.parse(myInfoString.value)) : 
+		({
+			email: '',
+			confirmEmail: '',
+			name: '',
+			address: '',
+			phone: '',
+			counterpartyEmail: '',
+			counterpartyConfirmEmail: '',
+			counterpartyWallet: '',
+			counterpartyName: '',
+			counterpartyAddress: '',
+			counterpartyPhone: '',
+			createdAt: null
+		});
+
+		dispatch(setAgreementFormInfo(formInfo));
+		dispatch({ type: DocumentsActionTypes.SET_KEEP_MY_INFO_SUCCESS, payload: myInfoString.value != null });
+	} catch (err) {
+		dispatch(openErrorDialog(err.message));
+		dispatch({ type: DocumentsActionTypes.SET_KEEP_MY_INFO_FAILURE });
 	}
 };
