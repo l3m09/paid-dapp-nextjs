@@ -1,3 +1,4 @@
+import { KeyStorage } from 'universal-crypto-wallet/dist/key-storage';
 import { KeyStorageModel } from 'universal-crypto-wallet/dist/key-storage/KeyStorageModel';
 import { DocumentsActionTypes } from '../actionTypes/documents';
 import { BigNumber as BN, ethers } from 'ethers';
@@ -7,9 +8,7 @@ import { base64StringToBlob } from 'blob-util';
 import { AlgorithmType, CEASigningService, WalletManager } from 'universal-crypto-wallet';
 import { eddsa } from "elliptic";
 import * as abiLib  from '../actions/template/abi-utils/abi-lib';
-import { templateRender } from './template/template';
 import { DialogsActionTypes } from '../actionTypes/dialogs';
-import { PAIDTokenContract } from '../../contracts/paidtoken';
 
 const uint8ArrayToString = require('uint8arrays/to-string');
 const BigNumber = require('bignumber.js');
@@ -23,9 +22,7 @@ const ipfsnode = `${process.env.REACT_APP_IPFS_PAID_HOST}`;
 const ipfs = ipfsClient({ host: ipfsnode, port: '5001', protocol: 'https', apiPath: '/api/v0' });
 const apiUrl = `${process.env.REACT_APP_WAKU_SERVER}`;
 const recipientTKN = `${process.env.REACT_APP_RECIPIENT_ERC20_TOKEN}`;
-const payment = BigNumber(`${process.env.REACT_APP_PAYMENTS_PAID_TOKEN}`).toFixed().toString();
 const pago = `${process.env.REACT_APP_PAYMENTS_PAID_TOKEN}`;
-// const paymentSA = web3.utils.toWei(payment, 'ether')
 
 const createAgreementFormPayload = (obj: any) => {
 	const types: string[] = [];
@@ -155,16 +152,14 @@ export const doCreateAgreement = (payload: {
 		const form = createAgreementFormPayload(agreementForm);
 
 		const { wallet } = getState();
-		const { unlockedWallet } = wallet;
+		const { unlockedWallet, selectedToken } = wallet;
 		if (!unlockedWallet) {
 			throw new Error('Not unlocked wallet found');
 		}
 
 		const manager = BlockchainFactory.getWalletManager();
-		const storage = manager.getKeyStorage();
-		const rawWallet = await storage.find<KeyStorageModel>(unlockedWallet._id);
-		// const onchainWalletAddress = window.ethereum.selectedAddress;
-		
+		const storage: KeyStorage = manager.getKeyStorage();
+		const rawWallet: KeyStorageModel = await storage.find<KeyStorageModel>(unlockedWallet._id);
 		const address = unlockedWallet.address
 		const _walletModel = await BlockchainFactory.getWeb3Instance(unlockedWallet.address, unlockedWallet._id, unlockedWallet.password)!;
 		const walletModel = _walletModel!;
@@ -228,28 +223,43 @@ export const doCreateAgreement = (payload: {
 		console.log('CID Create Document', ipfsHash.toString());
 		// ----------------------------------------------------
 		// Estimate gas,  TODO encapsulate
+		let token:string = '';
 		const AgreementContract = ContractFactory.getAgreementContract(web3, network);
-		const PaidTokenContract = ContractFactory.getPaidTokenContract(web3, network);
-		const token = PaidTokenContract.options.address;
+		
 		const spender = AgreementContract.options.address;
 		AgreementContract.options.from = address;
-		PaidTokenContract.options.from = address;
 		// Increase Allowance for withdraw PAID token
-		console.log('Payment', payment);
 		console.log('Pago', pago);
+		let metodoTkn:any;
 		const paymentSA = web3.utils.toWei(pago, 'ether')
-		console.log('previo pago', paymentSA.toString(),'token address:',  token,'address wallet:', address, 'spender:', spender, 'recipient:', recipientTKN);
-		const metodoTkn = PaidTokenContract.methods.increaseAllowance(
-			spender,
-			paymentSA.toString()
-		);
+		if (selectedToken === 'paid') {
+			const PaidTokenContract = ContractFactory.getPaidTokenContract(web3, network);
+			token = PaidTokenContract.options.address;
+			PaidTokenContract.options.from = address;
+			console.log('previo pago', paymentSA.toString(),'token address:',  token,'address wallet:', address, 'spender:', spender, 'recipient:', recipientTKN);
+			metodoTkn = PaidTokenContract.methods.increaseAllowance(
+				spender,
+				paymentSA.toString()
+			);
+		} else if (selectedToken === 'dai') {
+			const DaiTokenContract = ContractFactory.getDaiTokenContract(web3, network);
+			token = DaiTokenContract.options.address;
+			DaiTokenContract.options.from = address;
+			console.log('previo pago', paymentSA.toString(),'token address:',  token,'address wallet:', address, 'spender:', spender, 'recipient:', recipientTKN);
+			metodoTkn = DaiTokenContract.methods.approve(
+				spender,
+				paymentSA.toString()
+			);
+		} else {
+			dispatch(openSuccessDialog('Please Select the Token to use'));
+		}
 		// estimateGas for Send Tx to IncreaseAllowance
 		const gastkn = await metodoTkn.estimateGas();
 		// Resolve Promise for Send Tx to IncreaseAllowance
 		Promise.resolve(gastkn).then(async (gastkn:any) => {
 			const agreementTransaction = await metodoTkn.send({ from: address, gas:gastkn+5e4, gasPrice: 50e9 })
 		   .on('receipt', async function (receipt: any) {
-				console.log('resolve increaseAllowpaidtoken',receipt);
+				console.log('resolve increaseAllow'+selectedToken+'token',receipt);
 				// Withdraw PAID Token
 				const metodoFn = AgreementContract.methods.payPaidServices(
 					token,
@@ -263,7 +273,7 @@ export const doCreateAgreement = (payload: {
 			   	Promise.resolve(gastx).then(async (gastx:any) => {
 					const withdrawTransaction = await metodoFn.send({ from: address, gas:gastx+5e4, gasPrice: 50e9 })
 					.on('receipt', async function (receipt: any) {
-						console.log('resolve withdrawpaidtoken',receipt);
+						console.log('resolve withdraw'+selectedToken+'token',receipt);
 			   			// Create Agreements in the Smart Contract
 						const methodFn = AgreementContract.methods.partyCreate(
 							validUntil,
@@ -596,17 +606,15 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 			if (!unlockedWallet) {
 				throw new Error('Not unlocked wallet found');
 			}
-	
 			const manager = BlockchainFactory.getWalletManager();
-			const storage = manager.getKeyStorage();
-			const rawWallet = await storage.find<KeyStorageModel>(unlockedWallet._id);
+			const storage: KeyStorage = manager.getKeyStorage();
+			const rawWallet: KeyStorageModel = await storage.find<KeyStorageModel>(unlockedWallet._id);
 			const address = unlockedWallet.address;
-	
+
 			const _walletModel = await BlockchainFactory.getWeb3Instance(unlockedWallet.address, unlockedWallet._id, unlockedWallet.password)!;
 			const walletModel = _walletModel!;
 			const web3 = walletModel.web3Instance;
 			const network = await BlockchainFactory.getNetwork(walletModel.network);
-	
 			await web3.eth.getBalance(address).then((balancewei) =>{
 				const balance = web3.utils.fromWei(balancewei);
 				const parsedBalance = BigNumber(balance).toNumber();
@@ -697,27 +705,6 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 					.catch(function (error) {
 						console.log('email error: ',error);
 					});
-					/*
-					CODE FOR REJECTION
-					axios.post('https://dev-api.paidnetwork.com/email/reject-agreement', {
-						// counterparty field is the SENDER
-						'counterParty': {
-							name: form.name,
-							email: form.email,
-							'comments': {COMMENTS}
-						},
-						// party field is the TARGET
-						'party':{
-							'name': form.counterpartyName
-						}
-					})
-					.then(function (response) {
-						console.log('email response: ', response);
-					})
-					.catch(function (error) {
-						console.log('email error: ',error);
-					});
-					*/
 					dispatch(getSelectedSignedDocument(document));
 					dispatch(openSuccessDialog('You have successfully sign the Smart Agreement'));
 				})
@@ -755,8 +742,8 @@ export const doRejectCounterpartyDocument = (document: any, comments: string) =>
 			}
 
 			const manager = BlockchainFactory.getWalletManager();
-			const storage = manager.getKeyStorage();
-			const rawWallet = await storage.find<KeyStorageModel>(unlockedWallet._id);
+			const storage: KeyStorage = manager.getKeyStorage();
+			const rawWallet: KeyStorageModel = await storage.find<KeyStorageModel>(unlockedWallet._id);
 			const address = unlockedWallet.address;
 
 			// const _walletModel = await BlockchainFactory.getWeb3Instance(unlockedWallet._id, unlockedWallet.password)!;
@@ -820,7 +807,7 @@ export const doRejectCounterpartyDocument = (document: any, comments: string) =>
 
 			const partiesContentStr : string = await partiesContent();
 
-			// let ipfsHash = await uploadsIPFS(ipfs, blobContent, opts, digest, signature, pubKey, formId, address, JSON.stringify(elementsAbi), partiesContentStr, null);
+			let ipfsHash = await uploadsIPFS(ipfs, blobContent, opts, digest, signature, pubKey, formId, address, JSON.stringify(elementsAbi), partiesContentStr, null);
 			// Sending Notification of CounterParty Reject Smart Agreements
 			const parties = JSON.parse(partiesContentStr);
 			// Sending Notification

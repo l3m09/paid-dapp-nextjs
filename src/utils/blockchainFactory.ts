@@ -39,7 +39,7 @@ export class BlockchainFactory {
 		/*if (!BlockchainFactory._web3) {
 			BlockchainFactory._web3 = new Web3 ( new Web3.providers.WebsocketProvider(BlockchainFactory.wssUrl, BlockchainFactory.options));
 		}*/
-		if(!BlockchainFactory._wallet || (BlockchainFactory._wallet && BlockchainFactory._wallet.walletInstance.address != walletAddress)){
+		if(!BlockchainFactory._wallet || (BlockchainFactory._wallet.walletInstance.address !== walletAddress)){
 			BlockchainFactory._wallet = await BlockchainFactory._walletManager?.createBlockchainWallet(BlockchainFactory.wssUrl, BlockchainFactory.options, 
 				walletId, password) as any;
 		}

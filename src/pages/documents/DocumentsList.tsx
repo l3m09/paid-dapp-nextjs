@@ -114,6 +114,10 @@ function SelectedDocument(payload: {
 	const [validReject, setValidReject] = useState(true);
 
 	useEffect(() => {
+		setComments('');
+	}, [show]);
+
+	useEffect(() => {
 		if (unlockedWallet) {
 			const web3 = BlockchainFactory.getWeb3Instance(unlockedWallet.address, unlockedWallet._id, unlockedWallet.password);
 			web3.then((result) => {

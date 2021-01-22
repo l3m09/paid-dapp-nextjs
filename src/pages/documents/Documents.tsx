@@ -176,7 +176,6 @@ const Documents: React.FC = () => {
 	}
 
 	function runShowPopover(show: boolean){		
-		debugger;
 		if(!Sessions.getTimeoutBool()){
 			Sessions.setTimeoutCall();
 		}
@@ -213,7 +212,7 @@ const Documents: React.FC = () => {
 						<IonButtons slot="start">
 							<IonMenuButton/>
 						</IonButtons>
-						<IonTitle>Documents | <IonText color="primary"> {currentWallet?.address.slice(0,10)}...</IonText></IonTitle>
+						<IonTitle>Documents | <IonText color="primary"> {currentWallet?.address.slice(0,7)}...</IonText></IonTitle>
 						<MenuAlternate/>
 					</IonToolbar>
 				</IonHeader>

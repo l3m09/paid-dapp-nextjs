@@ -1,23 +1,25 @@
 import {
 	IonButtons,
 	IonIcon,
+	IonImg,
 	IonItem,
 	IonLabel,
+	IonSelect,
+	IonSelectOption,
 } from '@ionic/react';
 
 import React, {useEffect, useState} from 'react';
 import { useLocation } from 'react-router-dom';
 import {
-	documentOutline,
 	documentSharp,
-	listCircleOutline
+	globeSharp,
+	walletSharp
 } from 'ionicons/icons';
-import {useSelector} from 'react-redux';
+import { useDispatch, useSelector} from 'react-redux';
 import { BlockchainFactory } from '../utils/blockchainFactory';
+import { doSetCurrentToken} from '../redux/actions/wallet';
 import { Sessions } from '../utils/sessions';
 import { useHistory } from 'react-router';
-import { KeyStorageModel } from 'universal-crypto-wallet/dist/key-storage/KeyStorageModel';
-import { Session } from 'inspector';
 
 interface AppPage {
 	url: string;
@@ -27,21 +29,34 @@ interface AppPage {
 	disabled: boolean;
 }
 
+const customAlertTokens = {
+	header: 'Select Payment Method',
+	cssClass: 'select-tokens-alert',
+	translucent: true
+}
+
 const MenuAlternate:  React.FC = () =>{
 	const history = useHistory();
 	const location = useLocation();
+	const dispatch = useDispatch();
 	const wallet = useSelector((state: any) => state.wallet);
-	const { unlockedWallet } = wallet;
+	const { unlockedWallet, selectedToken } = wallet;
 
 	const [disableMenu, setDisableMenu] = useState(true);
 	const [networkText, setNetWorkText] = useState('...');
+	const [selectToken, setSelectToken] = useState(selectedToken);
+
+	const doSetSelectedToken = (token:string) => {
+		setSelectToken(token);
+		dispatch(doSetCurrentToken(token));
+	}
 
 	useEffect(() => {
 		if (unlockedWallet !== null) {
 			setDisableMenu(false)
 			const web3 = BlockchainFactory.getWeb3Instance(unlockedWallet.address, unlockedWallet._id, unlockedWallet.password);
 			if(!Sessions.getTimeoutBool()){
-				Sessions.setTimeoutCall();				
+				Sessions.setTimeoutCall();
 			}
 			else{
 				history.push('/wallets');
@@ -60,21 +75,21 @@ const MenuAlternate:  React.FC = () =>{
 		{
 			title: 'Network: ' + networkText,
 			url: '/wallets',
-			iosIcon: listCircleOutline,
-			mdIcon: listCircleOutline,
+			iosIcon: globeSharp,
+			mdIcon: globeSharp,
 			disabled: false
 		},
 		{
 			title: 'Wallets',
 			url: '/wallets',
-			iosIcon: listCircleOutline,
-			mdIcon: listCircleOutline,
+			iosIcon: walletSharp,
+			mdIcon: walletSharp,
 			disabled: false
 		},
 		{
 			title: 'Smart Agreements Log',
 			url: '/documents',
-			iosIcon: documentOutline,
+			iosIcon: documentSharp,
 			mdIcon: documentSharp,
 			disabled: false
 		},
@@ -95,17 +110,46 @@ const MenuAlternate:  React.FC = () =>{
 						lines="none"
 						detail={false}
 					>
-										<span className="icon-wrapper">
-											<IonIcon
-												ios={appPage.iosIcon}
-												md={appPage.mdIcon}
-												color="gradient"
-											/>
-										</span>
+						<div className="icon-wrapper">
+							<IonIcon
+								ios={appPage.iosIcon}
+								md={appPage.mdIcon}
+								color="gradient"
+							/>
+						</div>
 						<IonLabel color="gradient">{appPage.title}</IonLabel>
 					</IonItem>
 				);
 			})}
+			<IonItem
+				disabled={disableMenu}
+			>
+				<div className="icon-wrapper">
+					<IonImg
+						src="/assets/icon/icon.png"
+					/>
+				</div>
+				<IonLabel color="gradient">
+					{
+						selectToken === "paid" ?
+						('PAID Tokens') :
+						('DAI Tokens')
+					}
+				</IonLabel>
+				<IonSelect
+					interfaceOptions={customAlertTokens}
+					interface="alert"
+					value={selectToken}
+					onIonChange={ (e) => doSetSelectedToken(e.detail.value) }
+				>
+					<IonSelectOption value="paid">
+						PAID Tokens  {unlockedWallet?.balanceToken}
+					</IonSelectOption>
+					<IonSelectOption value="dai">
+						DAI Tokens {unlockedWallet?.balanceDaiToken}
+					</IonSelectOption>
+				</IonSelect>
+			</IonItem>
 		</IonButtons>
 	);
 };

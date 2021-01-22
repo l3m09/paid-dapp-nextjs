@@ -34,7 +34,6 @@ const Wallets: React.FC = () => {
 	const [showUnlockWalletModal, setShowUnlockWalletModal] = useState(false);
 	const [showImportWalletModal, setShowImportWalletModal] = useState(false);
 	const [showToastCopy, setShowToastCopy] = useState(false);
-	const [balance, setBalance] = useState('');
 
 	const { wallets, unlockedWallet, selectedWallet } = wallet;
 
@@ -112,7 +111,10 @@ const Wallets: React.FC = () => {
 														<span className="amountCoin">{item.balance?.match(/^-?\d+(?:\.\d{0,4})?/)[0]}</span>
 														<br/>
 														<span className="labelCoin">PAID</span>
-														<span className="amountCoin">{item.balanceToken?.match(/^-?\d+(?:\.\d{0,4})?/)[0]}</span>
+														<span className="amountCoin">{item.balanceToken?.match(/^-?\d+(?:\.\d{0,4})?/)[0]}&nbsp;&nbsp;&nbsp;</span>
+														<br/>
+														<span className="labelCoin">DAI</span>
+														<span className="amountCoin">{item.balanceDaiToken?.match(/^-?\d+(?:\.\d{0,4})?/)[0]}</span>
 													</div>
 												}
 											</div>
@@ -135,7 +137,10 @@ const Wallets: React.FC = () => {
 														<span className="amountCoin">{item.balance?.match(/^-?\d+(?:\.\d{0,4})?/)[0]}</span>
 														<br/>
 														<span className="labelCoin">PAID</span>
-														<span className="amountCoin">{item.balanceToken}</span>
+														<span className="amountCoin">{item.balanceToken.match(/^-?\d+(?:\.\d{0,4})?/)[0]}&nbsp;&nbsp;&nbsp;</span>
+														<br/>
+														<span className="labelCoin">DAI</span>
+														<span className="amountCoin">{item.balanceDaiToken.match(/^-?\d+(?:\.\d{0,4})?/)[0]}</span>
 													</div>
 												}
 											</div>

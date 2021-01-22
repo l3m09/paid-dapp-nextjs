@@ -3,6 +3,7 @@ import { Plugins } from '@capacitor/core';
 import { BlockchainFactory } from '../../utils/blockchainFactory';
 import { ContractFactory } from '../../utils/contractFactory';
 import { Sessions } from '../../utils/sessions';
+import { wallet } from 'ionicons/icons';
 const { Storage } = Plugins;
 
 // CREATORS
@@ -53,9 +54,17 @@ const getCurrentWallet = (payload: any) => {
 	};
 };
 
+
 const setSelectedWallet = (payload: any) => {
 	return {
 		type: WalletActionTypes.SET_SELECTED_WALLET_SUCCESS,
+		payload
+	};
+};
+
+const setCurrentToken = (payload: any) => {
+	return {
+		type: WalletActionTypes.SET_SELECTED_WALLET_TOKEN_SUCCESS,
 		payload
 	};
 };
@@ -107,6 +116,26 @@ const getPaidBalance = async (addrtoken:string, walletId:string, password:string
 	return Promise.resolve(balanceverify).then((x:string) => {return x})
 }
 
+const getDaiBalance = async (addrtoken:string, walletId:string, password:string) => {
+	const address = addrtoken
+	const _walletModel = await BlockchainFactory.getWeb3Instance(addrtoken, walletId, password)!;
+	const walletModel = _walletModel!;
+	const web3 = walletModel.web3Instance;
+	const network = await BlockchainFactory.getNetwork(walletModel.network);
+
+	const AgreementContract = ContractFactory.getAgreementContract(web3, network);
+	const DaiTokenContract = ContractFactory.getDaiTokenContract(web3, network);
+	const token = DaiTokenContract.options.address;
+	console.log('address token', token);
+	const methodFn = AgreementContract.methods.getBalanceToken(token, addrtoken);
+	const balanceverify = await methodFn.call({ from: address })
+	.then(async function (receipt: any) {
+		const resultado =  web3.utils.fromWei(receipt,'ether');
+		return resultado;
+	});
+	return Promise.resolve(balanceverify).then((x:string) => {return x})
+}
+
 //Utils
 const getBalanceWallet = async (walletId: string, password: string) => {
 	try{
@@ -146,7 +175,8 @@ export const doUnlockWallet = (payload: {
 			BlockchainFactory.setKeystore(ks);
 			const balance = await getBalanceWallet(wallet._id, password);
 			const paidBalance = await getPaidBalance(wallet.address, wallet._id, password);
-			const walletWithBalance = {...wallet, balance: balance ?? '0', balanceToken: paidBalance, password};
+			const daiBalance = await getDaiBalance(wallet.address, wallet._id, password);
+			const walletWithBalance = {...wallet, balance: balance ?? '0', balanceToken: paidBalance ?? '0', balanceDaiToken: daiBalance ?? '0', password};
 			const value = JSON.stringify(walletWithBalance);
 			const stored: any = await Storage.get({ key: 'WALLETS' });
 			console.log('CURRENT_WALLET_ACTIONS', value);
@@ -156,7 +186,7 @@ export const doUnlockWallet = (payload: {
 				const currentWallets = JSON.parse(stored.value);
 				const currentWalletsWithBalance = currentWallets.map((currentWallet: any) => {
 					if (currentWallet.address === walletWithBalance.address) {
-						return {...currentWallet, balance: balance ?? '0',balanceToken: paidBalance ?? '0'}
+						return {...currentWallet, balance: balance ?? '0',balanceToken: paidBalance ?? '0', balanceDaiToken: daiBalance ?? '0'}
 					} else {
 						return currentWallet;
 					}
@@ -253,6 +283,21 @@ export const doSetCurrentWallet = (wallet: any) => async (dispatch: any) => {
 	}
 };
 
+export const doSetCurrentToken = (token: string) => async (dispatch: any) => {
+	dispatch({ type: WalletActionTypes.SET_SELECTED_WALLET_TOKEN_LOADING });
+	try {
+		const value = token;
+		await Storage.set({ key: 'CURRENT_TOKEN', value });
+		console.log('CURRENT_TOKEN', token);
+		dispatch(setCurrentToken(token));
+	} catch (err) {
+		dispatch({
+			type: WalletActionTypes.SET_SELECTED_WALLET_TOKEN_FAILURE,
+			payload: err.message
+		});
+	}
+};
+
 export const doCreateWallet = (payload: {
 	name: string;
 	mnemonic: string;
@@ -272,10 +317,11 @@ export const doCreateWallet = (payload: {
 			name,
 			balance: '0',
 			balanceToken: '0',
+			balanceDaiToken: '0',
 			created: created.toString(),
 			password
 		};
-		
+
 		const encoded = JSON.stringify(referenceWallet);
 		await Storage.set({ key: 'CURRENT_WALLET', value: encoded });
 		const stored = await Storage.get({ key: 'WALLETS' });
@@ -308,13 +354,15 @@ export const doImportWallet = (payload: {
 		const address = await walletManager.getWalletAddress(_id);
 		const balance = await getBalanceWallet(_id, password);
 		const paidBalance = await getPaidBalance(address, wallet._id, password);
+		const daiBalance = await getDaiBalance(address, wallet._id, password);
 
 		const referenceWallet = {
 			_id,
 			address,
 			name,
 			balance: balance ?? '0',
-			balanceToken: paidBalance ?? '0', 
+			balanceToken: paidBalance ?? '0',
+			balanceDaiToken: daiBalance ?? '0',
 			created: created.toString(),
 			password
 		};
