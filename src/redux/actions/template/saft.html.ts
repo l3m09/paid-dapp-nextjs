@@ -6,7 +6,7 @@ export const Saft = `<div class="contract" style="width: 800px; background-color
 </p>
 <p class="western" align="center"><strong>(Simple Agreement for Future Tokens)</strong></p>
 <p class="western">&nbsp;</p>
-<p class="western" align="justify">THIS CERTIFIES THAT in exchange for the payment by the undersigned purchaser (the &ldquo;<em><strong>Purchaser</strong></em>&rdquo;) of [__________] U.S. Dollars (the &ldquo;<em><strong>Purchase Amount</strong></em>&rdquo;) on or about <span id="date">{{date}}</span>, {{counterPartyName}}, a <span id="typeOfCompany">{{typeOfCompany}}</span> formed pursuant to the laws of [NON-U.S. JURISDICTION] (the &ldquo;<em><strong>Company</strong></em>&rdquo;), hereby issues to the Purchaser the right (the &ldquo;<em><strong>Right</strong></em>&rdquo;) to certain units of [_______] tokens (the &ldquo;<em><strong>Token</strong></em>&rdquo;), subject to the terms set forth below.</p>
+<p class="western" align="justify">THIS CERTIFIES THAT in exchange for the payment by the undersigned purchaser (the &ldquo;<em><strong>Purchaser</strong></em>&rdquo;) of <div style="display: inline-block; background-color:#f79632">{{purchaseAmount}}</div> U.S. Dollars (the &ldquo;<em><strong>Purchase Amount</strong></em>&rdquo;) on or about <span id="date"><div style="display: inline-block; background-color:#f79632">{{date}}</div></span>, <div style="display: inline-block; background-color:#f79632">{{counterPartyName}}</div>, a <span id="typeOfCompany"><div style="display: inline-block; background-color:#f79632">{{typeOfCompany}}</div></span> formed pursuant to the laws of <div style="display: inline-block; background-color:#f79632">{{jurisdiction}}</div> (the &ldquo;<em><strong>Company</strong></em>&rdquo;), hereby issues to the Purchaser the right (the &ldquo;<em><strong>Right</strong></em>&rdquo;) to certain units of <div style="display: inline-block; background-color:#f79632">{{tokenAmount}}</div> tokens (the &ldquo;<em><strong>Token</strong></em>&rdquo;), subject to the terms set forth below.</p>
 <p class="western" align="justify"><strong>1. </strong><em><strong>Events</strong></em></p>
 <p class="western" align="justify">&nbsp;</p>
 <p class="western" align="justify">(a) <u><strong>Network Launch</strong></u>. If there is a Network Launch before the expiration or termination of this instrument, the Company will automatically issue to the Purchaser a number of units of the Token equal to the Purchase Amount divided by the Discount Price.</p>
@@ -30,7 +30,7 @@ export const Saft = `<div class="contract" style="width: 800px; background-color
 <p class="western" align="justify">&nbsp;</p>
 <p class="western" align="justify">&ldquo;<em><strong>Token Price</strong></em>&rdquo; means the highest price per Token sold by the Company to the public during the Network Launch.</p>
 <p class="western" align="justify">3. <em><strong>Company Representations</strong></em></p>
-<p class="western" align="justify">(a) The Company is a [TYPE OF COMPANY] duly organized, validly existing and in good standing under the laws of [NON-US JURISDICTION], and has the power and authority to own, lease and operate its properties and carry on its business as now conducted.</p>
+<p class="western" align="justify">(a) The Company is a <div style="display: inline-block; background-color:#f79632">{{typeOfCompany}}</div duly organized, validly existing and in good standing under the laws of <div style="display: inline-block; background-color:#f79632">{{jurisdiction}}</div>, and has the power and authority to own, lease and operate its properties and carry on its business as now conducted.</p>
 <p class="western" align="justify">(b) The execution, delivery and performance by the Company of this instrument is within the power of the Company and, other than with respect to the actions to be taken when Tokens are to be issued to the Purchaser, has been duly authorized by all necessary actions on the part of the Company. This instrument constitutes a legal, valid and binding obligation of the Company, enforceable against the Company in accordance with its terms, except as limited by bankruptcy, insolvency or other laws of general application relating to or affecting the enforcement of creditors&rsquo; rights generally and general principles of equity. To the knowledge of the Company, it is not in violation of (i) its current operating agreement, or (ii) any material indenture or contract to which the Company is a party or by which it is bound, where, in each case, such violation or default, individually, or together with all such violations or defaults, could reasonably be expected to have a material adverse effect on the Company.</p>
 <p class="western" align="justify">(c) To the knowledge of the Company, the performance and consummation of the transactions contemplated by this instrument do not and will not: (i) violate any material judgment, statute, rule or regulation applicable to the Company; (ii) result in the acceleration of any material indenture or contract to which the Company is a party or by which it is bound; or (iii) result in the creation or imposition of any lien upon any property, asset or revenue of the Company or the suspension, forfeiture, or nonrenewal of any material permit, license or authorization applicable to the Company, its business or operations.</p>
 <p class="western" align="justify">(d) No consents or approvals are required in connection with the performance of this instrument, other than: (i) the Company&rsquo;s corporate approvals; and (ii) any qualifications or filings under applicable securities laws.</p>
@@ -84,17 +84,17 @@ export const Saft = `<div class="contract" style="width: 800px; background-color
 <p class="western" align="center">&nbsp;</p>
 <p class="western"><strong>For payments by U.S. Dollars, please remit payment using the following wire information: </strong></p>
 <p class="western">&nbsp;</p>
-<p class="western">Bank Name: [_______________]</p>
-<p class="western">Address: [_______________]</p>
-<p class="western">ABA#: [_______________]</p>
-<p class="western">Payee Account #: [_______________]</p>
-<p class="western">Payee Account Name:[_______________]</p>
+<p class="western"><div style="display: inline-block; background-color:#f79632">{{bankName}}</div></p>
+<p class="western"><div style="display: inline-block; background-color:#f79632">{{address}}</div></p>
+<p class="western"><div style="display: inline-block; background-color:#f79632">{{aba}}</div>]</p>
+<p class="western"><div style="display: inline-block; background-color:#f79632">{{payeeAccount}}</div>]</p>
+<p class="western"><div style="display: inline-block; background-color:#f79632">{{payeeAccountName}}</div>]</p>
 <p class="western">&nbsp;</p>
 <p class="western">&nbsp;</p>
 <p class="western"><strong>For payments by Ethereum, please remit payment using the following address:</strong></p>
-<p class="western"><span style="color: #000000;"><span style="font-family: Times, serif;">[INSERT ETH ADDRESS]</span></span></p>
+<p class="western"><span style="color: #000000;"><span style="font-family: Times, serif;"><div style="display: inline-block; background-color:#f79632">{{ethereumAddress}}</div>]</span></span></p>
 <p class="western">&nbsp;</p>
 <p class="western">&nbsp;</p>
 <p class="western"><strong>For payments by Bitcoin, please remit payment using the following address: </strong></p>
-<p class="western"><span style="color: #000000;"><span style="font-family: Times, serif;">[INSERT BTC ADDRESS]</span></span></p>
+<p class="western"><span style="color: #000000;"><span style="font-family: Times, serif;"><div style="display: inline-block; background-color:#f79632">{{bitcoinAddress}}</div>]</span></span></p>
 <p class="western">&nbsp;</p></div>`;
