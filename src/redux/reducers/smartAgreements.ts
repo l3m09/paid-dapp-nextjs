@@ -1,11 +1,13 @@
 import ActionModel from "../../models/ActionModel";
 import AdvisorAgreementData from "../../models/AdvisorAgreementData";
 import ReferralAgreementData from "../../models/ReferralAgreementData";
+import SaftAgreementData from "../../models/SaftAgreementData";
 import { SmartAgreementsTypes } from "../actionTypes/smartAgreements";
 
 interface SmartAgreementsState {
     advisorAgreementData: AdvisorAgreementData;
     referralAgreementData: ReferralAgreementData;
+    saftAgreementData: SaftAgreementData;
 };
 
 const initialState: SmartAgreementsState = {
@@ -27,8 +29,8 @@ const initialState: SmartAgreementsState = {
         numberOfShares: '[NUMBER OF SHARES]',
         stockPlanNameValue: '[STOCK PLAN NAME VALUE]',
         termsConditions: '[TERMS CONDITIONS]',
-        anniversaryMonth: "[ANNIVERSARY MONTH]",
-        vestingCommencement: "[VESTING COMMENCEMENT]",
+        anniversaryMonth: '[ANNIVERSARY MONTH]',
+        vestingCommencement: '[VESTING COMMENCEMENT]',
         typeOfTriggerAcceleration: '[TYPE OF TRIGGER ACCELERATION]',
         typeOfPrice: '[TYPE OF PRICE]',
         acceptionOption: '[ACCEPTING OPTION]',
@@ -51,6 +53,31 @@ const initialState: SmartAgreementsState = {
         county:'[COUNTY]',
         commision:'[COMMISION]',
         commisionDate:'[COMMISION DATE]'
+    },
+    saftAgreementData: {
+        partyName: '[________]',
+        partyEmail: '________',
+        partyAddress: '________',
+        partyWallet: '________',
+        date: '________',
+        counterPartyName: '________',
+        counterPartyEmail: '________',
+        counterPartyAddress: '________',
+        counterPartyWallet: '________',
+        purchaseAmount: '[PURCHASE AMOUNT]',
+        jurisdiction: '[JURISDICTION (NON US)]',
+        tokenAmount: '[TOKEN AMOUNT]',
+        typeOfCompany: '[TYPE OF COMPANY]',
+        discountRate: '[DISCOUNT RATE]',
+        website: '[WEBSITE]',
+        paymentOption: 'dollar',
+        bankName: '',
+        address: '',
+        aba: '',
+        payeeAccount: '',
+        payeeAccountName: '',
+        ethereum: '',
+        bitcoin: ''
     }
 }
 

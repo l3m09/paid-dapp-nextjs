@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import AdvisorAgreementForm from './AdvisorAgreementForm';
 import ReferralAgreementForm from './ReferralAgreementForm';
+import SaftAgreementForm from './SaftAgreementForm';
 
 interface SmartAgreementsFormProps {
     type: string,
@@ -10,7 +11,8 @@ interface SmartAgreementsFormProps {
 const SmartAgreementsForm: FC<SmartAgreementsFormProps> = ({ type, onClose }) => {
     const mapTypeToComponent = new Map([
         ['advisoragreement', <AdvisorAgreementForm onClose={onClose} />],
-        ['referalagreement', <ReferralAgreementForm onClose={onClose} />]
+        ['referalagreement', <ReferralAgreementForm onClose={onClose} />],
+        ['saftagreement', <SaftAgreementForm onClose={onClose} />]
     ]);
     return (<>
      {

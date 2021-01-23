@@ -1,32 +1,25 @@
 export default interface SaftAgreementData {
-  companyName: string;
-  
-  date: Date;
-  
-  purchaseAmount: number;
-  
+  partyName: string;
+  partyEmail: string;
+  partyAddress: string;
+  partyWallet: string;
+  date: string;
+  counterPartyName: string;
+  counterPartyEmail: string;
+  counterPartyAddress: string;
+  counterPartyWallet: string;
+  purchaseAmount: string;
   jurisdiction: string;
-
   typeOfCompany: string;
-
-  tokenAmount: number;
-    
+  tokenAmount: string;
+  discountRate: string;
   website: string;
-
   paymentOption: string;
-
   bankName: string;
-
   address: string;
-
-  aba: number;
-
-  payeeAccount: number;
-
+  aba: string;
+  payeeAccount: string;
   payeeAccountName: string;
-
   ethereum: string;
-
   bitcoin: string;
-
 }

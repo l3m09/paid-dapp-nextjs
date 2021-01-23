@@ -67,6 +67,7 @@ export const getContractTemplate = (contractName:String) :contractTemplate => {
             case contractsTemplates.TemplateSaft:
                 title = 'SIMPLE AGREEMENT FOR FUTURE TOKENS';
                 contractTemplate = Saft;
+                dataName = 'saftAgreementData';
                 break;
         
             default:
