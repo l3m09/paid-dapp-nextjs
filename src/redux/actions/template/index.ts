@@ -16,8 +16,9 @@ enum contractsTemplates {
 
 interface contractTemplate {
     title: string;
-    interpolationFields: Object,
-    template: string
+    interpolationFields: Object;
+    template: string;
+    dataName: string;
 }
 
 const findElementsInterpolation = (html:String) : Object => {
@@ -33,6 +34,7 @@ const findElementsInterpolation = (html:String) : Object => {
 export const getContractTemplate = (contractName:String) :contractTemplate => {
     let contractTemplate;
     let title;
+    let dataName = '';
     try {
         switch (contractName) {
             case contractsTemplates.TemplateNda:
@@ -43,6 +45,7 @@ export const getContractTemplate = (contractName:String) :contractTemplate => {
             case contractsTemplates.TemplateAdvisorAgreem:
                 title = 'ADVISOR AGREEMENT';
                 contractTemplate = AdvisorAgreem;
+                dataName = 'advisorAgreementData';
                 break;
         
             case contractsTemplates.TemplateCiia:
@@ -71,7 +74,8 @@ export const getContractTemplate = (contractName:String) :contractTemplate => {
         return {
             title,
             interpolationFields: findElementsInterpolation(contractTemplate),
-            template: contractTemplate
+            template: contractTemplate,
+            dataName
         };
     } catch (error) {
         throw error;

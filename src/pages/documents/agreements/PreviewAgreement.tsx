@@ -2,7 +2,7 @@ import React, { FC, useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { renderToString } from 'react-dom/server';
 import TemplateComponent from 'react-mustache-template-component';
-import { IonButton, IonItem } from '@ionic/react';
+import { IonButton, IonButtons, IonItem, IonPopover, IonTitle, IonToolbar } from '@ionic/react';
 import {
     doSetAgreementFormInfo,
 	doCreateAgreement,
@@ -11,6 +11,7 @@ import { useHistory, useParams } from 'react-router';
 import { getContractTemplate } from '../../../redux/actions/template/index';
 import { BlockchainFactory } from '../../../utils/blockchainFactory';
 import { ContractFactory } from '../../../utils/contractFactory';
+import SmartAgreementsForm from './smartAgreementsForms/SmartAgreementsForm';
 
 interface PreviewAgreementProps {
     current: any;
@@ -23,11 +24,15 @@ const PreviewAgreement: FC<PreviewAgreementProps> = ({ current }) => {
     const wallet = useSelector(
 		(state: { wallet: { currentWallet: any } }) => state.wallet
     );
+    const smartAgreementsState = useSelector(
+        (state: { smartAgreements }) => state.smartAgreements
+    );
+    const [showEditPopover, setShowEditPopover] = useState(false);
     const [agreementDocument, setAgreementDocument] = useState('');
     const [agreementData, setAgreementData] = useState({});
     
     const { agreementFormInfo, loading } = documentState;
-	const { currentWallet } = wallet;
+    const { currentWallet } = wallet;
 
     const { type } = useParams<{ type: string }>();
 
@@ -122,26 +127,46 @@ const PreviewAgreement: FC<PreviewAgreementProps> = ({ current }) => {
 	}, [type, currentWallet, agreementFormInfo, agreementTemplate, dispatch, slideNext, slideBack]);
 
     useEffect(() => {
-        let data: Object = {};
         const templateData = getContractTemplate(type);
-        for (const key in templateData.interpolationFields) {
-            data[key] = getDataInfo(key);
+        const data: any = {
+            ...smartAgreementsState[templateData.dataName]
+        };
+        for (const key in data) {
+            data[key] = getDataInfo(key) ?? data[key];
         }
 
         setAgreementDocument(templateData.template);
         setAgreementData(data);
-    }, [type, getDataInfo]);
+    }, [type, smartAgreementsState, getDataInfo]);
     
     return (
         <div className="agreement-content">
-            <h5 className="agreement-form-title">
-                Preview Document
-            </h5>
+            <IonToolbar className="agreement-preview-toolbar">
+                <IonTitle className="agreement-form-title">Preview Document</IonTitle>
+                <IonButtons slot="end">
+                    <IonButton onClick={() => {
+                        setShowEditPopover(true)
+                    }}>
+                        edit
+                    </IonButton>
+                </IonButtons>
+            </IonToolbar>
             <IonItem class="form-options preview-document">
                 {
                     agreementTemplate()
                 }
             </IonItem>
+            <IonPopover
+                mode="md"
+                translucent={false}
+                isOpen={showEditPopover}
+                cssClass="agreements-popover"
+                onDidDismiss={() => setShowEditPopover(false)}
+            >
+                <IonItem class="form-options">
+                    <SmartAgreementsForm type={type} onClose={() => setShowEditPopover(false)} />
+                </IonItem>
+            </IonPopover>
             <IonItem class="form-options preview-document-buttons">
                 <IonButton
                     color="danger"

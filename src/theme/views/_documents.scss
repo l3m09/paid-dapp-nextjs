@@ -254,12 +254,7 @@
         }
     }
 }
-// .agreements-popover {
-//     // .popover-wrapper {}
-//     // .popover-content {
-//     //     //background-color: white;
-//     // }
-// }
+
 .agreements-page {
     ion-slides {
         //background-color: white;
@@ -324,6 +319,14 @@
                 font-size: 1.2em;
             }
         }
+
+        .agreement-preview-toolbar {
+            --border-width: 0;
+            --border-style: none;
+            --border-color: transparent;
+            --border: none;
+        }
+
         .agreement-content-title {
             font-weight: 500;
             width: 100%;
@@ -573,5 +576,70 @@
                 //ion-button {}
             }
         }
+    }
+}
+
+.agreements-popover {
+    --width: 50vh;
+    .smart-agreements-form {
+        width: 100%;
+        ion-slide {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            ion-item {
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+
+                ion-list-header {
+                    padding-left: 0;
+                }
+
+                ion-radio {
+                    margin-left: 0;
+                }
+
+                &.item-checkbox {
+                    margin: 25px 0;
+                }
+        
+                input {
+                    border: 1px solid $grey-border !important;
+                    border-radius: 5px !important;
+                    padding: 0 10px !important;
+                    height: 48px !important;
+                }
+                .item-inner {
+                    border: none !important;
+                }
+                span {
+                    width: 100% !important;
+                    text-align: center !important;
+                    font-weight: bold !important;
+                    font-size: 0.9em !important;
+                }
+            }
+    
+            ion-label {
+                font-weight: bold !important;
+                margin: 25px 0 15px !important;
+        
+                &.checkbox-label {
+                    margin: 0;
+                }
+            }
+        }
+
+        .form-options {
+            height: fit-content;
+            display: flex;
+            flex-direction: column;
+            margin-top: 50px;
+        }
+    }
+
+    .form-options {
+        padding-bottom: 15px;
     }
 }
