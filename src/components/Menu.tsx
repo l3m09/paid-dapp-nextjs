@@ -18,7 +18,9 @@ import {
 	documentSharp,
 	listCircleOutline
 } from 'ionicons/icons';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch } from 'react-redux';
+import { openSuccessDialog } from '../redux/actions/documents';
+import { BlockchainFactory } from '../utils/blockchainFactory';
 
 interface AppPage {
 	url: string;
@@ -30,18 +32,21 @@ interface AppPage {
 
 const Menu: React.FC = () => {
 	const location = useLocation();
-	const wallet = useSelector((state: any) => state.wallet);
+	const dispatch = useDispatch();
+	// const wallet = useSelector((state: any) => state.wallet);
 
-	const { unlockedWallet } = wallet;
-
+	// const { unlockedWallet } = wallet;
 	const [disableMenu, setDisableMenu] = useState(true);
 
+	// useEffect( () => {
+	// 	console.log('Menu', window.ethereum, window.ethereum.isMetamask, connected);
+	// 	if (connected == true) {
+	// 		setDisableMenu(false);
+	// 	} else {
+	// 		setDisableMenu(true);
+	// 	}
 
-	useEffect(() => {
-		if (unlockedWallet !== null) {
-			setDisableMenu(false)
-		}
-	}, [unlockedWallet]);
+	// }, []);
 
 	const appPages: AppPage[] = [
 		{

@@ -18,6 +18,7 @@ import {
 import { useDispatch, useSelector} from 'react-redux';
 import { BlockchainFactory } from '../utils/blockchainFactory';
 import { doSetCurrentToken} from '../redux/actions/wallet';
+import { isUnlock } from '../utils/metamask';
 import { Sessions } from '../utils/sessions';
 import { useHistory } from 'react-router';
 
@@ -39,27 +40,33 @@ const MenuAlternate:  React.FC = () =>{
 	const history = useHistory();
 	const location = useLocation();
 	const dispatch = useDispatch();
-	const wallet = useSelector((state: any) => state.wallet);
-	const { unlockedWallet, selectedToken } = wallet;
+	// const wallet = useSelector((state: any) => state.wallet);
+	// const { unlockedWallet, selectedToken } = wallet;
 
-	const [disableMenu, setDisableMenu] = useState(true);
+	const [disableMenu, setDisableMenu] = useState(false);
 	const [networkText, setNetWorkText] = useState('...');
-	const [selectToken, setSelectToken] = useState(selectedToken);
+	const [selectToken, setSelectToken] = useState('paid');
 
 	const doSetSelectedToken = (token:string) => {
 		setSelectToken(token);
 		dispatch(doSetCurrentToken(token));
 	}
 
+	let unlocked:boolean = false;
+	Promise.resolve(isUnlock()).then((resp:boolean) => {
+		unlocked = resp;
+	})
+
 	useEffect(() => {
-		if (unlockedWallet !== null) {
-			setDisableMenu(false)
-			const web3 = BlockchainFactory.getWeb3Instance(unlockedWallet.address, unlockedWallet._id, unlockedWallet.password);
+		if (unlocked == true) {
+			setDisableMenu(false);
+			const web3 = BlockchainFactory.getWeb3Mask(window.ethereum);
+			// const web3 = BlockchainFactory.getWeb3Instance(unlockedWallet.address, unlockedWallet._id, unlockedWallet.password);
 			if(!Sessions.getTimeoutBool()){
 				Sessions.setTimeoutCall();
 			}
 			else{
-				history.push('/wallets');
+				history.push('/');
 			}
 			web3.then((result) => {
 				const { network } = result!;
@@ -68,8 +75,10 @@ const MenuAlternate:  React.FC = () =>{
 					setNetWorkText(networkText.toUpperCase());
 				});
 			});
+		} else {
+			history.push('/');
 		}
-	}, [unlockedWallet]);
+	}, [unlocked]);
 
 	const appPages: AppPage[] = [
 		{
@@ -143,10 +152,10 @@ const MenuAlternate:  React.FC = () =>{
 					onIonChange={ (e) => doSetSelectedToken(e.detail.value) }
 				>
 					<IonSelectOption value="paid">
-						PAID Tokens  {unlockedWallet?.balanceToken}
+						PAID Tokens  {}
 					</IonSelectOption>
 					<IonSelectOption value="dai">
-						DAI Tokens {unlockedWallet?.balanceDaiToken}
+						DAI Tokens {}
 					</IonSelectOption>
 				</IonSelect>
 			</IonItem>

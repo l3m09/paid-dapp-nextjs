@@ -1,8 +1,7 @@
-import detectEthereumProvider from '@metamask/detect-provider';
+// import detectEthereumProvider from '@metamask/detect-provider';
 
-const Metamask = async () => {
-    const provider = await detectEthereumProvider();
-    if (provider) {
+export const isMetamask = async () => {
+    if (window.ethereum != undefined) {
         console.log('Metamask Installed');
         return true;
     } else {
@@ -11,6 +10,6 @@ const Metamask = async () => {
     }
 }
 
-export const isMetamask = async () => {
-    return await Metamask();
+export const isUnlock = async ():Promise<boolean> => {
+    return await window.ethereum._metamask.isUnlocked();
 }
