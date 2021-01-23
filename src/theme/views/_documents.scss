@@ -610,6 +610,18 @@
                     padding: 0 10px !important;
                     height: 48px !important;
                 }
+
+                ion-datetime {
+                    --padding-top: 0;
+                    --padding-bottom: 0;
+                    .datetime-text {
+                        border: 1px solid $grey-border !important;
+                        border-radius: 5px !important;
+                        padding: 0 10px !important;
+                        height: 48px !important;
+                    }   
+                }
+
                 .item-inner {
                     border: none !important;
                 }

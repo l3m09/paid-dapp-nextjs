@@ -1,9 +1,11 @@
 import ActionModel from "../../models/ActionModel";
 import AdvisorAgreementData from "../../models/AdvisorAgreementData";
+import ReferralAgreementData from "../../models/ReferralAgreementData";
 import { SmartAgreementsTypes } from "../actionTypes/smartAgreements";
 
 interface SmartAgreementsState {
     advisorAgreementData: AdvisorAgreementData;
+    referralAgreementData: ReferralAgreementData;
 };
 
 const initialState: SmartAgreementsState = {
@@ -31,6 +33,24 @@ const initialState: SmartAgreementsState = {
         typeOfPrice: '[TYPE OF PRICE]',
         acceptionOption: '[ACCEPTING OPTION]',
         numberOfYears: '[NUMBER OF YEARS]'
+    },
+    referralAgreementData: {
+        partyName: '[________]',
+        partyEmail: '________',
+        partyAddress: '________',
+        partyWallet: '________',
+        date: '________',
+        counterPartyName: '________',
+        counterPartyEmail: '________',
+        counterPartyAddress: '________',
+        counterPartyWallet: '________',
+        typeOfCompany:'[TYPE OF COMPANY]',
+        terminationDate: '[TERMINATION DATE]',
+        stateOfCompany:'[STATE OF COMPANY]',
+        geographicState:'[GEOGRAPHIC SATE]',
+        county:'[COUNTY]',
+        commision:'[COMMISION]',
+        commisionDate:'[COMMISION DATE]'
     }
 }
 
@@ -48,6 +68,15 @@ export const SmartAgreementsReducer = function (
                 advisorAgreementData: {
                     ...state.advisorAgreementData,
                     ...newAdvisorData
+                }
+            };
+        case SmartAgreementsTypes.SET_REFERRAL_AGEEMENT_DATA:
+            const newReferralData = payload;
+            return {
+                ...state,
+                referralAgreementData: {
+                    ...state.referralAgreementData,
+                    ...newReferralData
                 }
             };
         default:

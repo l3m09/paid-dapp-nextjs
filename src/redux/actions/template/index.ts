@@ -61,6 +61,7 @@ export const getContractTemplate = (contractName:String) :contractTemplate => {
             case contractsTemplates.TemplateReferalAgreement:
                 title = 'SALES COMMISSION AGREEMENT';
                 contractTemplate = ReferalAgreement;
+                dataName = 'referralAgreementData';
                 break;
         
             case contractsTemplates.TemplateSaft:
