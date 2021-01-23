@@ -27,9 +27,11 @@ const SlideFirst: FC<{
             <IonDatetime
                 displayFormat="MM/DD/YYYY"
                 placeholder="MM/DD/YYYY"
+                max="2999"
                 name="terminationDate"
                 value={terminationDate}
                 onIonChange={setter}
+                mode="md"
             >
             </IonDatetime>
         </IonItem>
@@ -85,9 +87,11 @@ const SlideSecond: FC<{
             <IonDatetime
                 displayFormat="MM/DD/YYYY"
                 placeholder="MM/DD/YYYY"
+                max="2999"
                 value={commisionDate}
                 name="commisionDate"
                 onIonChange={setter}
+                mode="md"
             >
             </IonDatetime>
         </IonItem>
