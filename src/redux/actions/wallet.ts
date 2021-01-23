@@ -97,7 +97,7 @@ const unlockWallet = (payload: any) => {
 
 
 export const getPaidBalance = async (ethereum: any) => {
-	const addresses = ethereum.request({ method: 'eth_requestAccounts' });
+	const addresses = await ethereum.request({ method: 'eth_requestAccounts' });
 	const address = addresses[0];
 	const _walletModel = await BlockchainFactory.getWeb3Mask(ethereum);
 	const walletModel = _walletModel!;
@@ -118,7 +118,7 @@ export const getPaidBalance = async (ethereum: any) => {
 }
 
 export const getDaiBalance = async (ethereum: any) => {
-	const addresses = ethereum.request({ method: 'eth_requestAccounts' });
+	const addresses = await ethereum.request({ method: 'eth_requestAccounts' });
 	const address = addresses[0];
 	const _walletModel = await BlockchainFactory.getWeb3Mask(ethereum);
 	const walletModel = _walletModel;

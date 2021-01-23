@@ -219,7 +219,7 @@ export const doCreateAgreement = (payload: {
 		const arrayContent = btoa(unescape(encodeURIComponent(content)));
 		// const bytesContent = ethers.utils.toUtf8Bytes(arrayContent);
 		const bytesContent = web3.utils.utf8ToHex(arrayContent);
-		const signature = web3.eth.personal.sign(bytesContent, address, 'PAIDNetwork');
+		const signature = await web3.eth.personal.sign(bytesContent, address, 'PAIDNetwork');
 		const digest = ethers.utils.sha256(bytesContent).replace('0x', '');
 		// const ec_alice = new eddsa('ed25519');
 		// const signer = ec_alice.keyFromSecret(rawWallet.keypairs.ED25519);
@@ -361,7 +361,7 @@ export const doCreateAgreement = (payload: {
 };
 
 export const uploadsIPFS = async (ipfs: any, blobContent: any, opts: any,
-	_digest: string, sigArray: any, pubKey: any, _docId: any, counterpartyAddress: string,
+	_digest: string, sigArray: any, _docId: any, counterpartyAddress: string,
 	elementsAbi: any, elementsParties:any, parent: any = null) => {
 	const createCIDHash = (fileEntry: any) => {
 		return { path: fileEntry.path, cid: fileEntry.cid.toString() }
@@ -373,7 +373,7 @@ export const uploadsIPFS = async (ipfs: any, blobContent: any, opts: any,
 	const _elementsParties = await ipfs.add(elementsParties);
 	const index = {
 		contentRef: createCIDHash(fileContent), sigRef: createCIDHash(fileSignature), digest: _digest,
-		publicKey: pubKey, parent: parent, docId: _docId, cpartyAddress: counterpartyAddress, elementsAbi: createCIDHash(_elementsAbi),
+		parent: parent, docId: _docId, cpartyAddress: counterpartyAddress, elementsAbi: createCIDHash(_elementsAbi),
 		elementsParties: createCIDHash(_elementsParties)
 	};
 
@@ -689,7 +689,7 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 			const arrayContent = btoa(unescape(encodeURIComponent(pdfContent)));
 
 			const bytesContent = web3.utils.utf8ToHex(arrayContent);
-			const signature = web3.eth.personal.sign(bytesContent, address, 'PAIDNetwork');
+			const signature = await web3.eth.personal.sign(bytesContent, address, 'PAIDNetwork');
 			// const ec_alice = new eddsa('ed25519');
 			// const signer = ec_alice.keyFromSecret(rawWallet.keypairs.ED25519);
 			// const signature = signer
@@ -834,7 +834,7 @@ export const doRejectCounterpartyDocument = (document: any, comments: string) =>
 			const arrayContent = btoa(unescape(encodeURIComponent(pdfContent)));
 
 			const bytesContent = web3.utils.utf8ToHex(arrayContent);
-			const signature = web3.eth.personal.sign(bytesContent, address, 'PAIDNetwork');
+			const signature = await web3.eth.personal.sign(bytesContent, address, 'PAIDNetwork');
 			// const ec_alice = new eddsa('ed25519');
 			// const signer = ec_alice.keyFromSecret(rawWallet.keypairs.ED25519);
 			// const signature = signer

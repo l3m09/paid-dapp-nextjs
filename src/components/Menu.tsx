@@ -37,16 +37,17 @@ const Menu: React.FC = () => {
 
 	// const { unlockedWallet } = wallet;
 	const [disableMenu, setDisableMenu] = useState(true);
+	// window.ethereum.enable();
 
-	// useEffect( () => {
-	// 	console.log('Menu', window.ethereum, window.ethereum.isMetamask, connected);
-	// 	if (connected == true) {
-	// 		setDisableMenu(false);
-	// 	} else {
-	// 		setDisableMenu(true);
-	// 	}
+	useEffect( () => {
+		console.log('Menu', window.ethereum, window.ethereum.isMetamask);
+		if (window.ethereum != undefined) {
+			setDisableMenu(false);
+		} else {
+			setDisableMenu(true);
+		}
 
-	// }, []);
+	}, []);
 
 	const appPages: AppPage[] = [
 		{

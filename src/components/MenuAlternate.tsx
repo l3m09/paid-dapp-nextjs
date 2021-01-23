@@ -60,17 +60,20 @@ const MenuAlternate:  React.FC = () =>{
 		unlocked = resp;
 	});
 
-	// Promise.resolve(getPaidBalance(window.ethereum)).then((resp:string) => {
-	// 	paidBalance  = resp;
-	// });
+	Promise.resolve(getPaidBalance(window.ethereum)).then((resp:string) => {
+		paidBalance  = resp;
+		console.log('paid', paidBalance);
+	});
 
-	// Promise.resolve(getDaiBalance(window.ethereum)).then((resp:string) => {
-	// 	daiBalance  = resp;
-	// });
+	Promise.resolve(getDaiBalance(window.ethereum)).then((resp:string) => {
+		daiBalance  = resp;
+		console.log('dai', daiBalance);
+	});
 
 	useEffect(() => {
-		if (unlocked == true) {
+		if (window.ethereum.isConnected() == true) {
 			setDisableMenu(false);
+			window.ethereum.enable();
 			const web3 = BlockchainFactory.getWeb3Mask(window.ethereum);
 			// const web3 = BlockchainFactory.getWeb3Instance(unlockedWallet.address, unlockedWallet._id, unlockedWallet.password);
 			if(!Sessions.getTimeoutBool()){
@@ -89,7 +92,7 @@ const MenuAlternate:  React.FC = () =>{
 		} else {
 			history.push('/');
 		}
-	}, [unlocked]);
+	}, [window.ethereum.isConnected()]);
 
 	const appPages: AppPage[] = [
 		{
