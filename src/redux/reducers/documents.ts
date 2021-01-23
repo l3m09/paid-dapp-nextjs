@@ -47,6 +47,7 @@ const initialState = {
 		counterpartyPhone: '',
 		createdAt: null
 	},
+	keepMyInfo: false
 };
 
 export const DocumentsReducer = function (state = initialState, action: any) {
@@ -111,6 +112,7 @@ export const DocumentsReducer = function (state = initialState, action: any) {
 				...state.agreementFormInfo,
 				...payload
 			};
+			
 			return { ...state, agreementFormInfo: info };
 		}
 
@@ -129,7 +131,22 @@ export const DocumentsReducer = function (state = initialState, action: any) {
 				loading: false,
 				creatingAgreement: false
 			};
-
+		case DocumentsActionTypes.SET_KEEP_MY_INFO:
+			return {
+				...state,
+				loading: true,
+			};
+		case DocumentsActionTypes.SET_KEEP_MY_INFO_SUCCESS:
+			return {
+				...state,
+				keepMyInfo: payload,
+				loading: false
+			}
+		case DocumentsActionTypes.SET_KEEP_MY_INFO_FAILURE:
+			return {
+				...state,
+				loading: false,
+			};
 		default:
 			return state;
 	}

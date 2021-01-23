@@ -175,7 +175,7 @@ const Documents: React.FC = () => {
 		history.push('/agreements/' + type.toLowerCase());
 	}
 
-	function runShowPopover(show: boolean){		
+	function runShowPopover(show: boolean){
 		if(!Sessions.getTimeoutBool()){
 			Sessions.setTimeoutCall();
 		}

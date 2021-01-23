@@ -1,25 +1,22 @@
-export const AdvisorAgreem = `<div class="contract" style="width: 800px; background-color:white; color: black;"><h1 id="title" style="text-align: center;">ADVISOR AGREEMENT</h1><h1 class="western" style="text-align: center;"><span style="font-size: medium;"><span lang="en-US"><strong>&nbsp;<span id="partyName">{{partyName}}</span></strong></span></span>
+export const AdvisorAgreem = `<div class="contract" style="width: 800px; background-color:white; color: black;"><h1 id="title" style="text-align: center;">ADVISOR AGREEMENT</h1><h1 class="western" style="text-align: center;"><span style="font-size: medium;"><span lang="en-US"><strong>&nbsp;<div style="display: inline-block; background-color:#f79632"><span id="partyName">{{partyName}}</span></div></strong></span></span>
 </h1>
 <p align="center"><u><strong>Advisor Agreement</strong></u></p>
-<p>This Advisor Agreement (this &ldquo;<u>Agreement</u>&rdquo;) is entered into as of <span id="createDate">{{date}}</span>, by and between {{partyName}} (the &ldquo;<u>Company</u>&rdquo;), and <span id="counterPartyName">{{counterPartyName}}</span> (&ldquo;<u>Advisor</u>&rdquo;).</p>
+<p>This Advisor Agreement (this &ldquo;<u>Agreement</u>&rdquo;) is entered into as of <div style="display: inline-block; background-color:#f79632"><span id="createDate">{{date}}</span></div>, by and between <div style="display: inline-block; background-color:#f79632">{{partyName}}</div> (the &ldquo;<u>Company</u>&rdquo;), and <div style="display: inline-block; background-color:#f79632"><span id="counterPartyName">{{counterPartyName}}</span></div> (&ldquo;<u>Advisor</u>&rdquo;).</p>
 <p align="justify">The parties agree as follows:</p>
 <ol>
     <li>
         <p><u><strong>Services</strong></u>. Advisor agrees to act as an advisor to the Company and to provide advice and assistance to the Company as is mutually agreed by the parties (collectively, the &ldquo;<u>Services</u>&rdquo;).</p>
     </li>
     <li>
-        <p><u><strong>Compensation</strong></u>. Advisor shall not be entitled to receive any cash compensation for the Services provided hereunder. However, subject to the approval of the Company&rsquo;s Board of Directors, Advisor will be granted [a nonstatutory
-            option] <strong>OR</strong> [a right] to purchase __________ shares of the Company&rsquo;s common stock. The <span id="options">{{options}}</span> <strong>OR</strong> <span id="purchaseRight">{{purchaseRight}}</span> will be subject to the terms and conditions applicable to {{options}} <strong>OR</strong>            [restricted stock purchase awards] granted under the Company&rsquo;s [STOCK PLAN NAME] (the &ldquo;<u>Plan</u>&rdquo;), as described in that plan and the applicable [stock option] <strong>OR</strong> [restricted stock purchase] agreement,
+        <p><u><strong>Compensation</strong></u>. Advisor shall not be entitled to receive any cash compensation for the Services provided hereunder. However, subject to the approval of the Company&rsquo;s Board of Directors, Advisor will be granted <div style="display: inline-block; background-color:#f79632">{{purchaseOption}}</div> to purchase <div style="display: inline-block; background-color:#f79632">{{numberOfShares}}</div> shares of the Company&rsquo;s common stock. The <div style="display: inline-block; background-color:#f79632">{{purchaseOption}}</div> will be subject to the terms and conditions applicable to <div style="display: inline-block; background-color:#f79632">{{termsConditions}}</div> granted under the Company&rsquo;s <div style="display: inline-block; background-color:#f79632">{{stockPlanName}}</div> (the &ldquo;<u>Plan</u>&rdquo;), as described in that plan and the applicable <div style="display: inline-block; background-color:#f79632">{{stockPlanNameValue}}</div> agreement,
             which Advisor will be required to sign (the &ldquo;<u>Stock Agreement</u>&rdquo;).</p>
     </li>
 </ol>
-<p>So long as Advisor&rsquo;s Continuous Service Status (as defined in the Plan) does not terminate, Advisor will vest in [25]% of the shares on the [12}}-month anniversary of Advisor&rsquo;s vesting commencement date and [1/48<sup>th</sup>] of the total
-    shares will vest in monthly installments thereafter during continuous service, as described in the Stock Agreement. [<em>Single Trigger Acceleration:</em> Upon a Change of Control (as defined in the Stock Agreement or Plan), ____% of Advisor&rsquo;s
-    then unvested shares will immediately vest (<em>i.e.,</em> single trigger acceleration).] <strong>OR</strong> [<em>Double Trigger Acceleration:</em> If Advisor&rsquo;s services are terminated by the Company in connection with or following the consummation
-    of a Change of Control (as defined in the Stock Agreement or Plan), then ____% of Advisor&rsquo;s then unvested shares will immediately vest (<em>i.e.,</em> double trigger acceleration). The [exercise] <strong>OR</strong> [purchase] price per share
-    will be equal to the fair market value per share on the date the [option] <strong>OR</strong> [restricted stock purchase award] is granted, as determined by the Company&rsquo;s Board of Directors in good faith [compliance with applicable guidance
+<p>So long as Advisor&rsquo;s Continuous Service Status (as defined in the Plan) does not terminate, Advisor will vest in <div style="display: inline-block; background-color:#f79632">{{percentageVest}}</div>% of the shares on the <div style="display: inline-block; background-color:#f79632">{{anniversaryMonth}}</div>-month anniversary of Advisor&rsquo;s vesting commencement date and [1/48<sup>th</sup>] of the total
+    shares will vest in monthly installments thereafter during continuous service, as described in the Stock Agreement. <div style="display: inline-block; background-color:#f79632">{{typeOfTriggerAcceleration}}</div> The <div style="display: inline-block; background-color:#f79632">{{typeOfPrice}}</div> price per share
+    will be equal to the fair market value per share on the date the <div style="display: inline-block; background-color:#f79632">{{termsConditions}}</div> is granted, as determined by the Company&rsquo;s Board of Directors in good faith [compliance with applicable guidance
     in order to avoid having the option be treated as deferred compensation under Section 409A of the Internal Revenue Code of 1986, as amended]. There is no guarantee that the Internal Revenue Service will agree with this value. Advisor should consult
-    with Advisor&rsquo;s own tax advisor concerning the tax risks associated with accepting [an option] <strong>OR</strong> [a right] to purchase the Company&rsquo;s common stock. Advisor shall have no right to any compensation except as set forth in
+    with Advisor&rsquo;s own tax advisor concerning the tax risks associated with accepting <div style="display: inline-block; background-color:#f79632">{{acceptionOption}}</div> to purchase the Company&rsquo;s common stock. Advisor shall have no right to any compensation except as set forth in
     this Section 2.</p>
 <ol start="3">
     <li>
@@ -27,7 +24,7 @@ export const AdvisorAgreem = `<div class="contract" style="width: 800px; backgro
             to receipt of reimbursement, Advisor shall be required to submit to the Company reasonable evidence that the amount involved was both reasonable and necessary to the Services provided under this Agreement.</p>
     </li>
     <li>
-        <p><u><strong>Term and Termination</strong></u>. The term of this Agreement shall be for a period of [#] years from the date hereof and may be renewed by mutual agreement of the parties; <u>provided</u>, <u>however</u>, that this Agreement may be
+        <p><u><strong>Term and Termination</strong></u>. The term of this Agreement shall be for a period of <div style="display: inline-block; background-color:#f79632">{{numberOfYears}}</div> years from the date hereof and may be renewed by mutual agreement of the parties; <u>provided</u>, <u>however</u>, that this Agreement may be
             terminated by either party for any reason upon five (5) business days prior written notice without further obligation or liability.</p>
     </li>
     <li>
@@ -97,7 +94,7 @@ export const AdvisorAgreem = `<div class="contract" style="width: 800px; backgro
             all oral negotiations and prior writings with respect to the subject matter hereof. Any notice required or permitted by this Agreement shall be in writing and shall be deemed sufficient upon delivery, when delivered personally or by overnight
             courier or sent by e-mail or fax (with customary confirmation of receipt), or 48 hours after being deposited in the U.S. mail as certified or registered mail (airmail if sent internationally) with postage prepaid, addressed to the party to
             be notified at such party&rsquo;s address or fax number as set forth on the signature page herein, or as subsequently modified by written notice. The validity, interpretation, construction and performance of this Agreement shall be governed
-            by the laws of the state of [STATE], without giving effect to the principles of conflict of laws. This Agreement may be executed in counterparts, each of which shall be deemed an original, but all of which together will constitute one and
+            by the laws of the state of <div style="display: inline-block; background-color:#f79632">{{state}}</div>, without giving effect to the principles of conflict of laws. This Agreement may be executed in counterparts, each of which shall be deemed an original, but all of which together will constitute one and
             the same instrument.</p>
     </li>
 </ol>
@@ -106,17 +103,17 @@ export const AdvisorAgreem = `<div class="contract" style="width: 800px; backgro
 <p><strong>THE COMPANY:</strong></p>
 <p>(Signature)</p>
 <p>________________________________________ </p>
-<p>Name: <span id="partyName">{{partyName}}</span></p>
-<p>Email: <span id="partyEmail">{{partyEmail}}</span></p>
-<p>Address: <span id="partyAddress">{{partyAddress}}</span></p>
-<p>Wallet: <span id="partyWallet">{{partyWallet}}</span></p>
+<p>Name: <span id="partyName"><div style="display: inline-block; background-color:#f79632">{{partyName}}</div></span></p>
+<p>Email: <span id="partyEmail"><div style="display: inline-block; background-color:#f79632">{{partyEmail}}</div></span></p>
+<p>Address: <div style="display: inline-block; background-color:#f79632"><span id="partyAddress">{{partyAddress}}</span></div></p>
+<p>Wallet: <div style="display: inline-block; background-color:#f79632"><span id="partyWallet">{{partyWallet}}</span></div></p>
 <br /> <br /> 
 <p><strong>ADVISOR:</strong></p>
 <p>(Signature)</p>
 <br /> ________________________________________ 
-<p>Name: <span id="counterPartyName">{{counterPartyName}}</span></p>
-<p>Email: <span id="counterPartyEmail">{{counterPartyEmail}}</span></p>
-<p>Address: <span id="counterPartyAddress">{{counterPartyAddress}}</span>
-<p>Wallet: <span id="counterPartyWallet">{{counterPartyWallet}}</span>
+<p>Name: <div style="display: inline-block; background-color:#f79632"><span id="counterPartyName">{{counterPartyName}}</span></div></p>
+<p>Email: <div style="display: inline-block; background-color:#f79632"><span id="counterPartyEmail">{{counterPartyEmail}}</span></div></p>
+<p>Address: <div style="display: inline-block; background-color:#f79632"><span id="counterPartyAddress">{{counterPartyAddress}}</span></div>
+<p>Wallet: <div style="display: inline-block; background-color:#f79632"><span id="counterPartyWallet">{{counterPartyWallet}}</span></div>
 <p align="center"><br /> </p>
 </div>`
