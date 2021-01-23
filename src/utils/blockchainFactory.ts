@@ -1,8 +1,6 @@
-import { add, options } from 'ionicons/icons';
 import {  createWalletManager, WalletManager, AlgorithmType, KeyModel} from 'universal-crypto-wallet';
 import { KeyStorageModel } from 'universal-crypto-wallet/dist/key-storage/KeyStorageModel';
 import { WalletModel } from 'universal-crypto-wallet/dist/key-storage/WalletModel';
-import { ethers, providers, Wallet } from 'ethers';
 import Web3 from 'web3';
 
 export class BlockchainFactory {
@@ -39,7 +37,7 @@ export class BlockchainFactory {
 		/*if (!BlockchainFactory._web3) {
 			BlockchainFactory._web3 = new Web3 ( new Web3.providers.WebsocketProvider(BlockchainFactory.wssUrl, BlockchainFactory.options));
 		}*/
-		if(!BlockchainFactory._wallet || (BlockchainFactory._wallet && BlockchainFactory._wallet.walletInstance.address != walletAddress)){
+		if(!BlockchainFactory._wallet || (BlockchainFactory._wallet.walletInstance.address !== walletAddress)){
 			BlockchainFactory._wallet = await BlockchainFactory._walletManager?.createBlockchainWallet(BlockchainFactory.wssUrl, BlockchainFactory.options, 
 				walletId, password) as any;
 		}
@@ -50,13 +48,26 @@ export class BlockchainFactory {
 		// if (keyService) {
 		// 	const pk = keyService.getPrivateKey(AlgorithmType.ES256K, keyModel);
 		// 	console.log('privateKey Wallet',pk);
-		
+
 		/*BlockchainFactory._web3.eth.accounts.wallet.clear().add(privateKey);*/
-		
+
 		// 	console.log('web3 eth accounts wallet', BlockchainFactory._web3.eth.accounts.wallet)
 		// }
 		return BlockchainFactory._wallet;
 	};
+
+	public static getWeb3Mask = async (ethereum: any) => {
+		if(!BlockchainFactory._wallet) {
+				const _web3 = new Web3 (ethereum)
+				const wallet:WalletModel = {
+					web3Instance: _web3,
+					walletInstance: _web3.eth.accounts.wallet,
+					network: await _web3.eth.getChainId()
+				}
+				BlockchainFactory._wallet = wallet;
+		}
+		return BlockchainFactory._wallet;
+	}
 
 	public static getWalletManager = () => {
 		if (!BlockchainFactory._walletManager) {

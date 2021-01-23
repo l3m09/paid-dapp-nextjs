@@ -82,10 +82,13 @@ const PreviewAgreement: FC<PreviewAgreementProps> = ({ current }) => {
 		await current.slidePrev();
 		await current.lockSwipeToPrev(true);
     }, [current]);
-
-    const metodofn = async (addrtoken:string, unlockedWallet:any) => {
-        const address = unlockedWallet.address
-        const _walletModel = await BlockchainFactory.getWeb3Instance(address, unlockedWallet._id, unlockedWallet.password)!;
+    let addr = '';
+    const metodofn = async (ethereum: any) => {
+        const addresses = await ethereum.request({ method: 'eth_requestAccounts' });
+        const address = addresses[0];
+        addr = address;
+        // const address = unlockedWallet.address
+        const _walletModel = await BlockchainFactory.getWeb3Mask(ethereum);
         const walletModel = _walletModel!;
         const web3 = walletModel.web3Instance;
         const network = await BlockchainFactory.getNetwork(walletModel.network);
@@ -94,7 +97,7 @@ const PreviewAgreement: FC<PreviewAgreementProps> = ({ current }) => {
         const PaidTokenContract = ContractFactory.getPaidTokenContract(web3, network);
         const token = PaidTokenContract.options.address;
         console.log('address token', token);
-        const methodFn = AgreementContract.methods.getBalanceToken(token, addrtoken);
+        const methodFn = AgreementContract.methods.getBalanceToken(token, address);
         const balanceverify = await methodFn.call({ from: address })
         .then(async function (receipt: any) {
             const resultado =  web3.utils.fromWei(receipt,'ether');
@@ -104,13 +107,14 @@ const PreviewAgreement: FC<PreviewAgreementProps> = ({ current }) => {
     }
 
     const onSubmit = useCallback(async () => {
-        const result: number = +(await metodofn(currentWallet.address, currentWallet));
+
+        const result: number = +(await metodofn(window.ethereum));
         console.log('type agreementID', type, 'result balance', result);
         if(result > 1){
             dispatch(doSetAgreementFormInfo({ createdAt: new Date().toDateString() }));
             dispatch(
                 doCreateAgreement({
-                    signatoryA: currentWallet.address,
+                    signatoryA: addr,
                     signatoryB: agreementFormInfo.counterpartyWallet,
                     validUntil: 0,
                     agreementFormTemplateId: type,

@@ -34,6 +34,7 @@ const FormCounterparty: React.FC<AgreementFormProps> = ({ current }) => {
 	);
 	const { currentWallet } = wallet;
 
+	
 
 	const {
 		loading,
@@ -86,7 +87,7 @@ const FormCounterparty: React.FC<AgreementFormProps> = ({ current }) => {
 		}  = agreementFormInfo;
 		setFilled(
 			/.+@.+\..+/.test(counterpartyEmail) &&
-			currentWallet.address !== counterpartyWallet &&
+			counterpartyWallet !== '' &&
 			counterpartyEmail === counterpartyConfirmEmail &&
 			counterpartyWallet.length > 3 &&
 			counterpartyName.length > 3 &&
@@ -101,7 +102,7 @@ const FormCounterparty: React.FC<AgreementFormProps> = ({ current }) => {
 			setValidAddress(counterpartyAddress.length > 3);
 			setValidPhone(counterpartyPhone.length > 3);
 			setValidCounterpartyWallet(counterpartyWallet.length > 3);
-			setSameCurrentWallet(currentWallet.address === counterpartyWallet);
+			setSameCurrentWallet('0x0' === counterpartyWallet);
 		}
 	}
 
