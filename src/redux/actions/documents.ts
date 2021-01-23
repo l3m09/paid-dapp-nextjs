@@ -70,7 +70,7 @@ const getSelectedRejectDocument = (document: any) => {
 	};
 };
 
-const openSuccessDialog = (message: string) => {
+export const openSuccessDialog = (message: string) => {
 	return {
 		type: DialogsActionTypes.OPEN_SUCCESS_DIALOG,
 		payload: message
@@ -121,9 +121,9 @@ const getContractInfoByIpfs = async (agreementStoredReference: any) => {
 	return { documentName, partyAName, partyBName};
 }
 
-declare global {
-	interface Window { web3: any; ethereum: any; }
-}
+// declare global {
+// 	interface Window { web3: any; ethereum: any; }
+// }
 
 export const doCreateAgreement = (payload: {
 	signatoryA: string;

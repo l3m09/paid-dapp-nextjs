@@ -57,7 +57,7 @@
     "solido-provider-web3": "^2.0.1",
     "typescript": "3.8.3",
     "uint8arrays": "^1.1.0",
-    "universal-crypto-wallet": "1.2.2",
+    "universal-crypto-wallet": "github:PAIDNetwork/universal-wallet#ae7e269ac04d01c818be3354292551ae1f424a2d",
     "web3": "^1.3.0",
     "web3-eth-contract": "^1.3.0",
     "web3-providers-http": "^1.3.0",
@@ -88,6 +88,7 @@
   },
   "devDependencies": {
     "@capacitor/cli": "2.4.1",
+    "@metamask/detect-provider": "^1.2.0",
     "@types/pouchdb": "^6.4.0",
     "@types/react-native-pdf-lib": "^0.2.0",
     "@types/react-pdf": "^5.0.0",
