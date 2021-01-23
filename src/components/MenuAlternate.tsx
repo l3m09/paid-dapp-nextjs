@@ -20,6 +20,7 @@ import { BlockchainFactory } from '../utils/blockchainFactory';
 import { doSetCurrentToken} from '../redux/actions/wallet';
 import { isUnlock } from '../utils/metamask';
 import { Sessions } from '../utils/sessions';
+import { getPaidBalance, getDaiBalance} from '../redux/actions/wallet'
 import { useHistory } from 'react-router';
 
 interface AppPage {
@@ -51,11 +52,21 @@ const MenuAlternate:  React.FC = () =>{
 		setSelectToken(token);
 		dispatch(doSetCurrentToken(token));
 	}
+	let paidBalance = '';
+	let daiBalance = '';
 
 	let unlocked:boolean = false;
 	Promise.resolve(isUnlock()).then((resp:boolean) => {
 		unlocked = resp;
-	})
+	});
+
+	// Promise.resolve(getPaidBalance(window.ethereum)).then((resp:string) => {
+	// 	paidBalance  = resp;
+	// });
+
+	// Promise.resolve(getDaiBalance(window.ethereum)).then((resp:string) => {
+	// 	daiBalance  = resp;
+	// });
 
 	useEffect(() => {
 		if (unlocked == true) {
@@ -152,10 +163,10 @@ const MenuAlternate:  React.FC = () =>{
 					onIonChange={ (e) => doSetSelectedToken(e.detail.value) }
 				>
 					<IonSelectOption value="paid">
-						PAID Tokens  {}
+						PAID Tokens  {paidBalance}
 					</IonSelectOption>
 					<IonSelectOption value="dai">
-						DAI Tokens {}
+						DAI Tokens {daiBalance}
 					</IonSelectOption>
 				</IonSelect>
 			</IonItem>

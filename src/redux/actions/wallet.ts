@@ -96,9 +96,10 @@ const unlockWallet = (payload: any) => {
 };
 
 
-const getPaidBalance = async (addrtoken:string, walletId:string, password:string) => {
-	const address = addrtoken
-	const _walletModel = await BlockchainFactory.getWeb3Instance(addrtoken, walletId, password)!;
+export const getPaidBalance = async (ethereum: any) => {
+	const addresses = ethereum.request({ method: 'eth_requestAccounts' });
+	const address = addresses[0];
+	const _walletModel = await BlockchainFactory.getWeb3Mask(ethereum);
 	const walletModel = _walletModel!;
 	const web3 = walletModel.web3Instance;
 	const network = await BlockchainFactory.getNetwork(walletModel.network);
@@ -107,7 +108,7 @@ const getPaidBalance = async (addrtoken:string, walletId:string, password:string
 	const PaidTokenContract = ContractFactory.getPaidTokenContract(web3, network);
 	const token = PaidTokenContract.options.address;
 	console.log('address token', token);
-	const methodFn = AgreementContract.methods.getBalanceToken(token, addrtoken);
+	const methodFn = AgreementContract.methods.getBalanceToken(token, address);
 	const balanceverify = await methodFn.call({ from: address })
 	.then(async function (receipt: any) {
 		const resultado =  web3.utils.fromWei(receipt,'ether');
@@ -116,10 +117,11 @@ const getPaidBalance = async (addrtoken:string, walletId:string, password:string
 	return Promise.resolve(balanceverify).then((x:string) => {return x})
 }
 
-const getDaiBalance = async (addrtoken:string, walletId:string, password:string) => {
-	const address = addrtoken
-	const _walletModel = await BlockchainFactory.getWeb3Instance(addrtoken, walletId, password)!;
-	const walletModel = _walletModel!;
+export const getDaiBalance = async (ethereum: any) => {
+	const addresses = ethereum.request({ method: 'eth_requestAccounts' });
+	const address = addresses[0];
+	const _walletModel = await BlockchainFactory.getWeb3Mask(ethereum);
+	const walletModel = _walletModel;
 	const web3 = walletModel.web3Instance;
 	const network = await BlockchainFactory.getNetwork(walletModel.network);
 
@@ -127,7 +129,7 @@ const getDaiBalance = async (addrtoken:string, walletId:string, password:string)
 	const DaiTokenContract = ContractFactory.getDaiTokenContract(web3, network);
 	const token = DaiTokenContract.options.address;
 	console.log('address token', token);
-	const methodFn = AgreementContract.methods.getBalanceToken(token, addrtoken);
+	const methodFn = AgreementContract.methods.getBalanceToken(token, address);
 	const balanceverify = await methodFn.call({ from: address })
 	.then(async function (receipt: any) {
 		const resultado =  web3.utils.fromWei(receipt,'ether');
@@ -174,8 +176,8 @@ export const doUnlockWallet = (payload: {
 			// const { address } = wallet;
 			BlockchainFactory.setKeystore(ks);
 			const balance = await getBalanceWallet(wallet._id, password);
-			const paidBalance = await getPaidBalance(wallet.address, wallet._id, password);
-			const daiBalance = await getDaiBalance(wallet.address, wallet._id, password);
+			const paidBalance = await getPaidBalance(window.ethereum);
+			const daiBalance = await getDaiBalance(window.ethereum);
 			const walletWithBalance = {...wallet, balance: balance ?? '0', balanceToken: paidBalance ?? '0', balanceDaiToken: daiBalance ?? '0', password};
 			const value = JSON.stringify(walletWithBalance);
 			const stored: any = await Storage.get({ key: 'WALLETS' });
@@ -353,8 +355,8 @@ export const doImportWallet = (payload: {
 		const { _id, created } = wallet;
 		const address = await walletManager.getWalletAddress(_id);
 		const balance = await getBalanceWallet(_id, password);
-		const paidBalance = await getPaidBalance(address, wallet._id, password);
-		const daiBalance = await getDaiBalance(address, wallet._id, password);
+		const paidBalance = await getPaidBalance(window.ethereum);
+		const daiBalance = await getDaiBalance(window.ethereum);
 
 		const referenceWallet = {
 			_id,
