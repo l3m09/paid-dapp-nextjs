@@ -160,6 +160,7 @@ export const doCreateAgreement = (payload: {
 		const manager = BlockchainFactory.getWalletManager();
 		const storage: KeyStorage = manager.getKeyStorage();
 		const rawWallet: KeyStorageModel = await storage.find<KeyStorageModel>(unlockedWallet._id);
+		
 		const address = unlockedWallet.address
 		const _walletModel = await BlockchainFactory.getWeb3Instance(unlockedWallet.address, unlockedWallet._id, unlockedWallet.password)!;
 		const walletModel = _walletModel!;
