@@ -11,7 +11,7 @@ import { copy } from 'ionicons/icons';
 import React, { Reducer, useEffect, useReducer, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ActionModel from '../models/ActionModel';
-import { doUnlockWallet } from '../redux/actions/wallet';
+// import { doUnlockWallet } from '../redux/actions/wallet';
 import { TOAST_DURATION_WALLET_ADDRESS_COPY } from '../utils/constants';
 
 interface Props {
@@ -100,12 +100,12 @@ const UnlockWallet: React.FC<Props> = ({
 
 	const onSubmit = (e: any) => {
 		e.preventDefault();
-		dispatch(
-			doUnlockWallet({
-				wallet: selectedWallet,
-				password: state.password
-			})
-		);
+		// dispatch(
+		// 	doUnlockWallet({
+		// 		wallet: selectedWallet,
+		// 		password: state.password
+		// 	})
+		// );
 	};
 
 	const copyAddressToClipboard = () => {

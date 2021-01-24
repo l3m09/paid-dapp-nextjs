@@ -6,6 +6,7 @@ import { IonButton, IonButtons, IonItem, IonPopover, IonTitle, IonToolbar } from
 import {
     doSetAgreementFormInfo,
 	doCreateAgreement,
+    openErrorDialog,
 } from '../../../redux/actions/documents';
 import { useHistory, useParams } from 'react-router';
 import { getContractTemplate } from '../../../redux/actions/template/index';
@@ -22,7 +23,7 @@ const PreviewAgreement: FC<PreviewAgreementProps> = ({ current }) => {
     const dispatch = useDispatch();
     const documentState = useSelector((state: any) => state.documents);
     const wallet = useSelector(
-		(state: { wallet: { currentWallet: any } }) => state.wallet
+		(state: { wallet: { currentWallet: any, selectedToken: string } }) => state.wallet
     );
     const smartAgreementsState = useSelector(
         (state: { smartAgreements }) => state.smartAgreements
@@ -32,7 +33,8 @@ const PreviewAgreement: FC<PreviewAgreementProps> = ({ current }) => {
     const [agreementData, setAgreementData] = useState({});
     
     const { agreementFormInfo, loading } = documentState;
-    const { currentWallet } = wallet;
+    const { currentWallet, selectedToken } = wallet;
+    const { balance, balanceToken, balanceDaiToken, network} = currentWallet;
 
     const { type } = useParams<{ type: string }>();
 
@@ -82,51 +84,74 @@ const PreviewAgreement: FC<PreviewAgreementProps> = ({ current }) => {
 		await current.slidePrev();
 		await current.lockSwipeToPrev(true);
     }, [current]);
-    let addr = '';
-    const metodofn = async (ethereum: any) => {
-        const addresses = await ethereum.request({ method: 'eth_requestAccounts' });
-        const address = addresses[0];
-        addr = address;
-        // const address = unlockedWallet.address
-        const _walletModel = await BlockchainFactory.getWeb3Mask(ethereum);
-        const walletModel = _walletModel!;
-        const web3 = walletModel.web3Instance;
-        const network = await BlockchainFactory.getNetwork(walletModel.network);
+    // let addr = '';
+    // const metodofn = async (ethereum: any) => {
+    //     const addresses = await ethereum.request({ method: 'eth_requestAccounts' });
+    //     const address = addresses[0];
+    //     addr = address;
+    //     // const address = unlockedWallet.address
+    //     const _walletModel = await BlockchainFactory.getWeb3Mask(ethereum);
+    //     const walletModel = _walletModel!;
+    //     const web3 = walletModel.web3Instance;
+    //     const network = await BlockchainFactory.getNetwork(walletModel.network);
     
-        const AgreementContract = ContractFactory.getAgreementContract(web3, network);
-        const PaidTokenContract = ContractFactory.getPaidTokenContract(web3, network);
-        const token = PaidTokenContract.options.address;
-        console.log('address token', token);
-        const methodFn = AgreementContract.methods.getBalanceToken(token, address);
-        const balanceverify = await methodFn.call({ from: address })
-        .then(async function (receipt: any) {
-            const resultado =  web3.utils.fromWei(receipt,'ether');
-            return resultado;
-        });
-        return Promise.resolve(balanceverify).then((x:string) => {return x})
-    }
+    //     const AgreementContract = ContractFactory.getAgreementContract(web3, network);
+    //     const PaidTokenContract = ContractFactory.getPaidTokenContract(web3, network);
+    //     const token = PaidTokenContract.options.address;
+    //     console.log('address token', token);
+    //     const methodFn = AgreementContract.methods.getBalanceToken(token, address);
+    //     const balanceverify = await methodFn.call({ from: address })
+    //     .then(async function (receipt: any) {
+    //         const resultado =  web3.utils.fromWei(receipt,'ether');
+    //         return resultado;
+    //     });
+    //     return Promise.resolve(balanceverify).then((x:string) => {return x})
+    // }
 
     const onSubmit = useCallback(async () => {
-
-        const result: number = +(await metodofn(window.ethereum));
-        console.log('type agreementID', type, 'result balance', result);
-        if(result > 1){
-            dispatch(doSetAgreementFormInfo({ createdAt: new Date().toDateString() }));
-            dispatch(
-                doCreateAgreement({
-                    signatoryA: addr,
-                    signatoryB: agreementFormInfo.counterpartyWallet,
-                    validUntil: 0,
-                    agreementFormTemplateId: type,
-                    agreementForm: agreementFormInfo,
-                    template: renderToString(agreementTemplate()),
-                    slideNext: slideNext,
-                    slideBack: slideBack
-                })
-            );
-        }
-        else{
-            alert("You have not enough balance to perform this action");
+        if (selectedToken == 'paid') {
+            if(balanceToken > 1){
+                dispatch(doSetAgreementFormInfo({ createdAt: new Date().toDateString() }));
+                dispatch(
+                    doCreateAgreement({
+                        signatoryA: currentWallet?.address,
+                        signatoryB: agreementFormInfo.counterpartyWallet,
+                        validUntil: 0,
+                        agreementFormTemplateId: type,
+                        agreementForm: agreementFormInfo,
+                        template: renderToString(agreementTemplate()),
+                        slideNext: slideNext,
+                        slideBack: slideBack
+                    })
+                );
+            }
+            else{
+                dispatch(openErrorDialog('You have not enough balance to perform this action'));
+            }
+            console.log('type agreementID', type, 'result balance', balanceDaiToken);
+        } else if (selectedToken == 'dai') {
+            if(balanceDaiToken > 1){
+                dispatch(doSetAgreementFormInfo({ createdAt: new Date().toDateString() }));
+                dispatch(
+                    doCreateAgreement({
+                        signatoryA: currentWallet?.address,
+                        signatoryB: agreementFormInfo.counterpartyWallet,
+                        validUntil: 0,
+                        agreementFormTemplateId: type,
+                        agreementForm: agreementFormInfo,
+                        template: renderToString(agreementTemplate()),
+                        slideNext: slideNext,
+                        slideBack: slideBack
+                    })
+                );
+            }
+            else{
+                dispatch(openErrorDialog('You have not enough balance to perform this action'));
+            }
+            console.log('type agreementID', type, 'result balance', balanceDaiToken);
+        } else {
+            dispatch(openErrorDialog('Error in SelectedToken Value'));
+            throw new Error('Error in SelectedToken Value');
         }
 	}, [type, currentWallet, agreementFormInfo, agreementTemplate, dispatch, slideNext, slideBack]);
 

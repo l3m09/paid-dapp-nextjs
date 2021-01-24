@@ -82,7 +82,7 @@ export const openSuccessDialog = (message: string) => {
 	}
 }
 
-const openErrorDialog = (message: string) => {
+export const openErrorDialog = (message: string) => {
 	return {
 		type: DialogsActionTypes.OPEN_SUCCESS_DIALOG,
 		payload: message
@@ -166,28 +166,25 @@ export const doCreateAgreement = (payload: {
 		const unlocked = await isUnlock();
 
 		const { wallet } = getState();
-		const { unlockedWallet, selectedToken } = wallet;
+		const { unlockedWallet, selectedToken, connectedWallet, currentWallet } = wallet;
+		const { address, balance, web3, balanceToken, balanceDaiToken, network} = currentWallet;
 		// if (!unlockedWallet) {
 		// 	throw new Error('Not unlocked wallet found');
 		// }
-		if ((!unlocked) || (window.ethereum == undefined))  {
-			dispatch(openSuccessDialog('Failed to Create Smart Agreement'));
+		if ((!connectedWallet) || (window.ethereum == undefined))  {
+			dispatch(openErrorDialog('Failed to Create Smart Agreement'));
 			slideBack();
 		}
-
-		// const manager = BlockchainFactory.getWalletManager();
-		// const storage: KeyStorage = manager.getKeyStorage();
-		// const rawWallet: KeyStorageModel = await storage.find<KeyStorageModel>(unlockedWallet._id);
 		
-		const addresses = await window.ethereum.request({ method: 'eth_requestAccounts' });
-		const address = addresses[0];
-		const _walletModel = await BlockchainFactory.getWeb3Mask(window.ethereum);
-		const walletModel = _walletModel!;
-		const web3 = walletModel.web3Instance;
-		const network = await BlockchainFactory.getNetwork(walletModel.network);
+		// const addresses = await window.ethereum.request({ method: 'eth_requestAccounts' });
+		// const address = addresses[0];
+		// const _walletModel = await BlockchainFactory.getWeb3Mask(window.ethereum);
+		// const walletModel = _walletModel!;
+		// const web3 = walletModel.web3Instance;
+		// const network = await BlockchainFactory.getNetwork(walletModel.network);
 
 		if (!web3.utils.isAddress(agreementForm.counterpartyWallet)) {
-			alert('Invalid Counter Party Address');
+			dispatch(openErrorDialog('Invalid Counter Party Address'));
 			throw new Error('Invalid Counter Party Address');
 		}
 
@@ -205,6 +202,7 @@ export const doCreateAgreement = (payload: {
 			const balance = web3!.utils.fromWei(balancewei);
 			const parsedBalance = BigNumber(balance).toNumber();
 			if ((parsedBalance <= 0.0009999999999)) {
+				dispatch(openErrorDialog('The wallet should has balance to send a transaction.'));
 				throw new Error('The wallet should has balance to send a transaction.');
 			}
 		})
@@ -255,6 +253,10 @@ export const doCreateAgreement = (payload: {
 		let metodoTkn:any;
 		const paymentSA = web3.utils.toWei(pago, 'ether')
 		if (selectedToken === 'paid') {
+			if (balanceToken < 1) {
+				dispatch(openErrorDialog('You have not enough balance to perform this action'));
+				throw new Error('You have not enough balance to perform this action')
+			}
 			const PaidTokenContract = ContractFactory.getPaidTokenContract(web3, network);
 			token = PaidTokenContract.options.address;
 			PaidTokenContract.options.from = address;
@@ -264,6 +266,10 @@ export const doCreateAgreement = (payload: {
 				paymentSA.toString()
 			);
 		} else if (selectedToken === 'dai') {
+			if (balanceDaiToken < 1) {
+				dispatch(openErrorDialog('You have not enough balance to perform this action'));
+				throw new Error('You have not enough balance to perform this action')
+			}
 			const DaiTokenContract = ContractFactory.getDaiTokenContract(web3, network);
 			token = DaiTokenContract.options.address;
 			DaiTokenContract.options.from = address;
@@ -381,32 +387,18 @@ export const uploadsIPFS = async (ipfs: any, blobContent: any, opts: any,
 	return fileIndex.cid;
 }
 
-export const doGetDocuments = (currentWallet: any) => async (
+export const doGetDocuments = (sending_currentWallet: any) => async (
 	dispatch: any,
 	getState: () => { wallet: any }
 ) => {
 	dispatch({ type: DocumentsActionTypes.GET_DOCUMENTS_LOADING });
 	try {
-		// const { address } = currentWallet;
-		// const { wallet } = getState();
-		// const { unlockedWallet } = wallet;
-		// if (!unlockedWallet) {
-		// 	throw new Error('Not unlocked wallet found');
-		// }
-		const unlocked = await isUnlock();
-
-		if ((!unlocked) || (window.ethereum == undefined)) {
-			dispatch(openSuccessDialog('Failed to Get Smart Agreement'));
+		const { wallet } = getState();
+		const { currentWallet } = wallet;
+		const { address, web3, network } = currentWallet;
+		if ((!currentWallet) || (sending_currentWallet != currentWallet)){
+			throw new Error('Not unlocked wallet found of wallet inconsistences');
 		}
-
-		const addresses = await window.ethereum.request({ method: 'eth_requestAccounts' });
-		const address = addresses[0];
-
-		const _walletModel = await BlockchainFactory.getWeb3Mask(window.ethereum);
-		const walletModel = _walletModel!;
-		const web3 = walletModel.web3Instance;
-		const network = await BlockchainFactory.getNetwork(walletModel.network);
-
 		const agreementContract = ContractFactory.getAgreementContract(web3, network);
 		const eventsSource = await agreementContract.getPastEvents('AgreementEvents', {
 			filter: { partySource: address.toString() },
@@ -599,7 +591,7 @@ export const doGetDocuments = (currentWallet: any) => async (
 		}
 
 		console.log('agreementsFrom', agreementsSource, 'agreementsTo', agreementsDestination);
-
+		debugger;
 		dispatch(getDocuments(responseArray));
 	} catch (err) {
 		console.log('ln564', err);

@@ -108,8 +108,9 @@ function SelectedDocument(payload: {
 	} = payload;
 	const wallet = useSelector((state: any) => state.wallet);
 
-	const { unlockedWallet } = wallet;
-	const [networkText, setNetWorkText] = useState('...');
+	const { connectedWallet, currentWallet } = wallet;
+	const { network } = currentWallet;
+	const [networkText, setNetWorkText] = useState(network);
 	const [comments, setComments] = useState('');
 	const [validReject, setValidReject] = useState(true);
 
@@ -118,17 +119,10 @@ function SelectedDocument(payload: {
 	}, [show]);
 
 	useEffect(() => {
-		if (unlockedWallet) {
-			const web3 = BlockchainFactory.getWeb3Instance(unlockedWallet.address, unlockedWallet._id, unlockedWallet.password);
-			web3.then((result) => {
-				const { network } = result!;
-				const _network = BlockchainFactory.getNetwork(network);
-				_network.then((networkText) => {
-					setNetWorkText(networkText.toUpperCase());
-				});
-			});
+		if (connectedWallet) {
+			setNetWorkText(network);
 		}
-	}, [unlockedWallet]);
+	}, [connectedWallet]);
 
 
 	if (!selectedDocument) {
@@ -347,6 +341,10 @@ const DocumentsList: React.FC<Props> = ({
 	const [forceVerifyDocument, setForceVerifyDocument] = useState(false);
 	const wallet = useSelector((state: any) => state.wallet);
 	const { currentWallet } = wallet;
+	debugger;
+	if (currentWallet == null) {
+		throw new Error('DocumentLis.tsx no connect wallet');
+	}
 
 	function showDocument(item: any) {
 		setForceVerifyDocument(false);
@@ -429,7 +427,7 @@ const DocumentsList: React.FC<Props> = ({
 
 		setAgreementContent(pdfContent);
 	}
-
+	debugger;
 	const agreementTypesList = () => {
 		return <IonList>
 			{
@@ -451,7 +449,7 @@ const DocumentsList: React.FC<Props> = ({
 			}
 		</IonList>
 	}
-
+	debugger;
 	return (
 		<div>
 				<IonLoading
@@ -460,7 +458,6 @@ const DocumentsList: React.FC<Props> = ({
 					isOpen={loading}
 
 				/>
-				
 			<div className="documents-container">
 				{
 					(documentsFrom.length > 0) &&

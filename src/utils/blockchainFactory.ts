@@ -58,7 +58,7 @@ export class BlockchainFactory {
 
 	public static getWeb3Mask = async (ethereum: any) => {
 		if(!BlockchainFactory._wallet) {
-				const _web3 = new Web3 (ethereum)
+				const _web3 = new Web3 (ethereum);
 				const wallet:WalletModel = {
 					web3Instance: _web3,
 					walletInstance: _web3.eth.accounts.wallet,

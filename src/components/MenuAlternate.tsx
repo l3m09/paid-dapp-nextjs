@@ -20,7 +20,6 @@ import { BlockchainFactory } from '../utils/blockchainFactory';
 import { doSetCurrentToken} from '../redux/actions/wallet';
 import { isUnlock } from '../utils/metamask';
 import { Sessions } from '../utils/sessions';
-import { getPaidBalance, getDaiBalance} from '../redux/actions/wallet'
 import { useHistory } from 'react-router';
 
 interface AppPage {
@@ -41,58 +40,56 @@ const MenuAlternate:  React.FC = () =>{
 	const history = useHistory();
 	const location = useLocation();
 	const dispatch = useDispatch();
-	// const wallet = useSelector((state: any) => state.wallet);
-	// const { unlockedWallet, selectedToken } = wallet;
+	const wallet = useSelector((state: any) => state.wallet);
+	const { connectedWallet, currentWallet, selectedToken } = wallet;
+	if (currentWallet == null) {
+		throw new Error('disconnet wallet');
+	}
+	const {
+		balanceToken,
+		balanceDaiToken,
+		network
+	} = currentWallet;
 
 	const [disableMenu, setDisableMenu] = useState(false);
-	const [networkText, setNetWorkText] = useState('...');
-	const [selectToken, setSelectToken] = useState('paid');
+	const [networkText, setNetWorkText] = useState(network);
+	const [selectToken, setSelectToken] = useState(selectedToken);
 
 	const doSetSelectedToken = (token:string) => {
 		setSelectToken(token);
 		dispatch(doSetCurrentToken(token));
 	}
-	let paidBalance = '';
-	let daiBalance = '';
+	const paidBalance = balanceToken;
+	const daiBalance = balanceDaiToken;
 
-	let unlocked:boolean = false;
-	Promise.resolve(isUnlock()).then((resp:boolean) => {
-		unlocked = resp;
-	});
+	const unlocked = connectedWallet;
+	// Promise.resolve(isUnlock()).then((resp:boolean) => {
+	// 	unlocked = resp;
+	// });
 
-	Promise.resolve(getPaidBalance(window.ethereum)).then((resp:string) => {
-		paidBalance  = resp;
-		console.log('paid', paidBalance);
-	});
+	// Promise.resolve(getPaidBalance(window.ethereum)).then((resp:string) => {
+	// 	paidBalance  = resp;
+	// 	console.log('paid', paidBalance);
+	// });
 
-	Promise.resolve(getDaiBalance(window.ethereum)).then((resp:string) => {
-		daiBalance  = resp;
-		console.log('dai', daiBalance);
-	});
+	// Promise.resolve(getDaiBalance(window.ethereum)).then((resp:string) => {
+	// 	daiBalance  = resp;
+	// 	console.log('dai', daiBalance);
+	// });
 
 	useEffect(() => {
-		if (window.ethereum.isConnected() == true) {
+		if (unlocked == true) {
 			setDisableMenu(false);
-			window.ethereum.enable();
-			const web3 = BlockchainFactory.getWeb3Mask(window.ethereum);
-			// const web3 = BlockchainFactory.getWeb3Instance(unlockedWallet.address, unlockedWallet._id, unlockedWallet.password);
 			if(!Sessions.getTimeoutBool()){
 				Sessions.setTimeoutCall();
 			}
 			else{
 				history.push('/');
 			}
-			web3.then((result) => {
-				const { network } = result!;
-				const _network = BlockchainFactory.getNetwork(network);
-				_network.then((networkText: string) => {
-					setNetWorkText(networkText.toUpperCase());
-				});
-			});
 		} else {
 			history.push('/');
 		}
-	}, [window.ethereum.isConnected()]);
+	}, [connectedWallet]);
 
 	const appPages: AppPage[] = [
 		{

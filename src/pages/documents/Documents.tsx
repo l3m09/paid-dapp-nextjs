@@ -50,23 +50,17 @@ function SelectedDocument(payload: {
 	closeShowDocument: () => void;
 }) {
 	const wallet = useSelector((state: any) => state.wallet);
-	const { unlockedWallet } = wallet;
+	const { currentWallet } = wallet;
+	const { network } = currentWallet;
 
-	const [networkText, setNetWorkText] = useState('...');
+	const [networkText, setNetWorkText] = useState(network);
 	const { show, selectedDocument, closeShowDocument } = payload;
 
 	useEffect(() => {
-		if (unlockedWallet) {
-			const web3 = BlockchainFactory.getWeb3Instance(unlockedWallet. address, unlockedWallet._id, unlockedWallet.password);
-			web3.then((result) => {
-				const { network } = result!;
-				const _network = BlockchainFactory.getNetwork(network);
-				_network.then((networkText) => {
-					setNetWorkText(networkText.toUpperCase());
-				});
-			});
+		if (currentWallet) {
+			setNetWorkText(network);
 		}
-	}, [unlockedWallet]);
+	}, [currentWallet]);
 
 	if (!selectedDocument) {
 		return null;
@@ -124,7 +118,6 @@ const Documents: React.FC = () => {
 	const dispatch = useDispatch();
 	const slidesRef = useRef<HTMLIonSlidesElement | null>(null);
 	const documentsState = useSelector((state: any) => state.documents);
-	const walletsState = useSelector((state: any) => state.wallet);
 	const {
 		documentsFrom,
 		documentsTo,
@@ -133,22 +126,26 @@ const Documents: React.FC = () => {
 		agreementTypes
 	} = documentsState;
 	const wallet = useSelector((state: any) => state.wallet);
-	
-	const { currentWallet } = wallet;
+	const { connectedWallet ,currentWallet } = wallet;
+	console.log('documents.tsx',connectedWallet, currentWallet);
+	if (currentWallet == null) {
+		throw new Error('disconnet wallet');
+	}
 	const [showModal, setShowModal] = useState(false);
 	const [showPopOver, setShowPopover] = useState(false);
 	const [currentIndex, setCurrentIndex] = useState(0);
 
-	useEffect(() => {
-		if(!Sessions.getTimeoutBool()){
-			Sessions.setTimeoutCall();			
-			dispatch(doGetDocuments(currentWallet));
-		}
-		else{
-			history.push('/wallets');
-		}
-		slidesRef.current?.lockSwipes(true)
-	}, [dispatch, slidesRef, currentWallet]);
+	// useEffect(() => {
+	// 	if(!Sessions.getTimeoutBool()){
+	// 		Sessions.setTimeoutCall();
+	// 		debugger;
+	// 		dispatch(doGetDocuments(currentWallet));
+	// 	}
+	// 	else{
+	// 		// history.push('/');
+	// 	}
+	// 	slidesRef.current?.lockSwipes(true)
+	// }, [dispatch, slidesRef, currentWallet]);
 
 	function showDocument(item: any) {
 		dispatch(doGetSelectedDocument(item));
@@ -180,7 +177,7 @@ const Documents: React.FC = () => {
 			Sessions.setTimeoutCall();
 		}
 		else{
-			history.push('/wallets');
+			// history.push('/');
 		}
 		setShowPopover(show);
 	}
@@ -203,7 +200,7 @@ const Documents: React.FC = () => {
 		await slidesRef.current?.lockSwipes(true)
 
 	}
-
+	debugger;
 	return (
 		<IonPage className="documents-page content-page">
 			<IonContent fullscreen>
@@ -223,14 +220,14 @@ const Documents: React.FC = () => {
 
 				/>
 				<div>
-				<DocumentsList 
-					documentsTo={documentsTo} 
-					documentsFrom={documentsFrom} 
-					type="from" 
-					counterType="to"
-					agreementTypes={agreementTypes}
-					onClickAgreementType={chooseOption}
-				/>
+					<DocumentsList 
+						documentsTo={documentsTo} 
+						documentsFrom={documentsFrom} 
+						type="from" 
+						counterType="to"
+						agreementTypes={agreementTypes}
+						onClickAgreementType={chooseOption}
+					/>
 
 					<IonPopover mode="md" translucent={false} isOpen={showPopOver} cssClass="agreements-popover" onDidDismiss={() => {
 						setShowPopover(false)

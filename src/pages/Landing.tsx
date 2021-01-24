@@ -10,62 +10,71 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 import Terms from '../components/Terms';
-import { openSuccessDialog } from '../redux/actions/documents'
+import { openSuccessDialog, openErrorDialog } from '../redux/actions/documents';
 import { isUnlock } from '../utils/metamask'
-import { doGetWallets } from '../redux/actions/wallet';
-import CreateWallet from './wallet/create-wallet/CreateWallet';
-import ImportWallet from "./wallet/ImportWallet";
 import { BlockchainFactory } from '../utils/blockchainFactory';
+import { doConnectWallet } from '../redux/actions/wallet';
+import { withRouter } from "react-router-dom"
 
 declare global {
 	interface Window { web3: any; ethereum: any;}
 }
 
 const Landing: React.FC = () => {
-	const history = useHistory();
-	// const wallet = useSelector(
-	// 	(state: { wallet: { wallets: []; loadingWallets: boolean } }) =>
-	// 		state.wallet
-	// );
 	const dispatch = useDispatch();
-	const mask = isUnlock();
-	let metamask:boolean;
-	let loading = true;
-	Promise.resolve(mask).then(async (resp:boolean)=> {
-		metamask = resp;
-		loading = false;
-		console.log('dentro de promise',metamask, loading, window.ethereum);
-		if (metamask) {
-			const ethereumButton = document.querySelector('.enableEthereumButton');
+	const history = useHistory();
+	const wallet = useSelector(
+		(state: { wallet: { connectedWallet: boolean ; currentWallet: any } }) =>
+			state.wallet
+	);
+	const [showTermsModal, setShowTermsModal] = useState(false);
+	const { connectedWallet, currentWallet } = wallet;
+	
+	// const mask = isUnlock();
+	// let metamask:boolean;
+	// let loading = true;
+	// Promise.resolve(mask).then(async (resp:boolean)=> {
+	// 	metamask = resp;
+	// 	loading = false;
+	// 	console.log('dentro de promise',metamask, loading, window.ethereum);
+	// 	if (metamask) {
+	// 		const ethereumButton = document.querySelector('.enableEthereumButton');
 
-			const metaInstance = await BlockchainFactory.getWeb3Mask(window.ethereum);
-			window.web3 = metaInstance?.web3Instance;
+	// 		const metaInstance = await BlockchainFactory.getWeb3Mask(window.ethereum);
+	// 		window.web3 = metaInstance?.web3Instance;
 
-			const getAccount = async () =>  {
-				const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-				const account = accounts[0];
-				if (account != null) {history.push('/documents');}
-				console.log(account);
-			}
+	// 		const getAccount = async () =>  {
+	// 			const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+	// 			const account = accounts[0];
+	// 			if (account != null) {history.push('/documents');}
+	// 			console.log(account);
+	// 		}
 
-			ethereumButton?.addEventListener('click', async () => {
-				//Will Start the metamask extension
-				getAccount();
-				});
-			console.log('Metamask Installed');
-		} else {
-			dispatch(openSuccessDialog('Failed to Connect Metamask'));
-			history.push('/');
-		}
-	})
+	// 		ethereumButton?.addEventListener('click', async () => {
+	// 			//Will Start the metamask extension
+	// 			getAccount();
+	// 			});
+	// 		console.log('Metamask Installed');
+	// 	} else {
+	// 		dispatch(openSuccessDialog('Failed to Connect Metamask'));
+	// 		history.push('/');
+	// 	}
+	// })
 
+	// new logic
+	// const ethereumButton = document.querySelector('.enableEthereumButton');
+	// ethereumButton?.addEventListener('click', async () => {
+	// 	//Will Start the metamask extension
+	// 	console.log('captura evento');
+	// 	dispatch(doConnectWallet(window.ethereum));
+	// });
 
 	// const enable = () =>{
 	// 	console.log('active metamask')
 	// 	window.ethereum.enable();
 	// }
 
-	const [showTermsModal, setShowTermsModal] = useState(false);
+
 
 
 	// useEffect(async () => {
@@ -93,6 +102,10 @@ const Landing: React.FC = () => {
 					isOpen={loading}
 				/> */}
 						<IonButton
+						onClick={() => {
+							console.log('captura evento');
+							dispatch(doConnectWallet(window.ethereum, history));
+						}}
 						className="enableEthereumButton"
 						color="secondary"
 						shape="round"

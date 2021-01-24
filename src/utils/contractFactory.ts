@@ -17,6 +17,7 @@ export class ContractFactory {
 				AgreementContract.raw.abi as any,
 				AgreementContract.address[network]
 			);
+			ContractFactory._agreementContract.options.address = AgreementContract.address[network];
 		}
 		return ContractFactory._agreementContract;
 	};
@@ -27,6 +28,7 @@ export class ContractFactory {
 				PAIDTokenContract.raw.abi as any,
 				PAIDTokenContract.address[network]
 			);
+			ContractFactory._paidtokenContract.options.address = PAIDTokenContract.address[network];
 		}
 		return ContractFactory._paidtokenContract;
 	};
@@ -37,6 +39,7 @@ export class ContractFactory {
 				DAITokenContract.raw.abi as any,
 				DAITokenContract.address[network]
 			);
+			ContractFactory._daitokenContract.options.address = DAITokenContract.address[network];
 		}
 		return ContractFactory._daitokenContract;
 	};

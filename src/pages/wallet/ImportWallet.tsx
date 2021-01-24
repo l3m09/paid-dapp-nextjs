@@ -16,7 +16,7 @@ import {
 import React, { useReducer, Reducer } from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import ActionModel from '../../models/ActionModel';
-import {doImportWallet} from "../../redux/actions/wallet";
+// import {doImportWallet} from "../../redux/actions/wallet";
 
 interface Props {
     show: boolean;
@@ -118,11 +118,11 @@ const ImportWallet: React.FC<Props> = ({show, dismiss}) => {
         const {name, passphrase, mnemonic, verified} = state;
 
         if (verified) {
-            dispatch(doImportWallet({
-                name,
-                password: passphrase,
-                mnemonic
-            }));
+            // dispatch(doImportWallet({
+            //     name,
+            //     password: passphrase,
+            //     mnemonic
+            // }));
         } else if (walletInfo.passphrase !== walletInfo.confirmPassphrase) {
 			alert('Passphrase is different Confirm Passphrase');
 		} else if (walletInfo.passphrase === '') {
