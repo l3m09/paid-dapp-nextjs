@@ -30,40 +30,45 @@ import Agreements from './pages/documents/agreements/Agreements';
 import { useHistory } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { doGetWallets } from './redux/actions/wallet';
-
+import { openSuccessDialog } from '../src/redux/actions/documents'
 import UnlockWallet from './components/UnlockWallet';
 
 const Layout: React.FC = () => {
 	const history = useHistory();
 	const dispatch = useDispatch();
-	const wallet = useSelector((state: any) => state.wallet);
-	const { wallets, currentWallet, unlockedWallet } = wallet;
+	// const wallet = useSelector((state: any) => state.wallet);
+	// const { wallets, currentWallet, unlockedWallet } = wallet;
 
 	const [showUnlockWalletModal, setShowUnlockWalletModal] = useState(false);
 
-	useEffect(() => {
-		dispatch(doGetWallets());
-		// dispatch(doGetCurrentWallet());
-	}, [dispatch]);
+	// useEffect(() => {
+	// 	dispatch(doGetWallets());
+	// 	// dispatch(doGetCurrentWallet());
+	// }, [dispatch]);
 
 	const dismissModal = () => {
 		setShowUnlockWalletModal(false);
 	};
 
-	useEffect(() => {
-		if (unlockedWallet !== null) {
-			history.push('/documents');
-			dismissModal();
-		} else if (currentWallet !== null) {
-			setShowUnlockWalletModal(false);
-		} else if (wallets.length > 0) {
-			history.push('/wallets')
-			dismissModal();
-		} else {
-			dismissModal();
-			history.push('/')
-		}
-	}, [currentWallet, wallets, unlockedWallet, history]);
+	// useEffect(() => {
+	// 	if (window.ethereum != undefined) {
+	// 		const connected:boolean = window.ethereum.isConnected();
+	// 		if (connected == true) {
+	// 			history.push('/documents');
+	// 			dismissModal()
+	// 		} else {
+	// 			dispatch(openSuccessDialog('Failed to Connect Metamask'));
+	// 		}
+	// 	// } else if (currentWallet !== null) {
+	// 	// 	setShowUnlockWalletModal(false);
+	// 	// } else if (wallets.length > 0) {
+	// 	// 	history.push('/wallets')
+	// 	// 	dismissModal();
+	// 	} else {
+	// 		dismissModal();
+	// 		history.push('/')
+	// 	}
+	// }, [history]);
 
 	return (
 		<IonContent className="main-content">
@@ -72,7 +77,7 @@ const Layout: React.FC = () => {
 			<Route path="/wallets" component={Wallets} exact />
 			<Route path="/documents/:id?" component={Documents} exact />
 			<Route path="/agreements/:type" component={Agreements} exact />
-			{ currentWallet !== null ? <UnlockWallet selectedWallet={currentWallet} show={showUnlockWalletModal} dismiss={dismissModal}/> : null}
+			{/* currentWallet !== null ? <UnlockWallet selectedWallet={currentWallet} show={showUnlockWalletModal} dismiss={dismissModal}/> : null */}
 		</IonContent>
 	);
 };

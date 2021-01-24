@@ -1,6 +1,10 @@
 # install
 
+Integración de Cambios Merge Metamask-integrated / Hot-fix
+
 ## Prerequisites
+
+Integration Metamask
 
 ### Local dependencies
 - Docker

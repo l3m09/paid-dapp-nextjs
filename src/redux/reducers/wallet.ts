@@ -16,6 +16,9 @@ const initialState = {
 	selectedWallet: null,
 	settingCurrentWallet: false,
 	gettingCurrentWallet: false,
+	selectedToken: 'paid',
+	settingCurrentToken: false,
+	gettingCurrentToken: false,
 	unlockingWallet: false,
 	unlockedWallet: null,
 	timeout: null
@@ -159,6 +162,19 @@ export const WalletReducer = function (state = initialState, action: any) {
 
 		case WalletActionTypes.GET_CURRENT_WALLET_FAILURE:
 			return { ...state, error: payload, gettingCurrentWallet: false };
+
+		case WalletActionTypes.SET_SELECTED_WALLET_TOKEN_LOADING:
+			return { ...state, settingCurrentToken: true };
+
+		case WalletActionTypes.SET_SELECTED_WALLET_TOKEN_SUCCESS:
+			return {
+				...state,
+				selectedToken: payload,
+				settingCurrentToken: false
+			};
+
+		case WalletActionTypes.SET_SELECTED_WALLET_TOKEN_FAILURE:
+			return { ...state, error: payload, gettingCurrentToken: false };
 
 		case WalletActionTypes.UNLOCK_WALLET_LOADING:
 			return { ...state, unlockingWallet: true };
