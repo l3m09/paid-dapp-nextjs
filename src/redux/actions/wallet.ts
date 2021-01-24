@@ -523,3 +523,7 @@ export const doSetCurrentToken = (token: string) => async (dispatch: any) => {
 export const doSetSelectedWallet = (wallet: any) => async (dispatch: any) => {
 	dispatch(setSelectedWallet(wallet));
 };
+
+export const doShowMyCurrentWallet = (show: boolean) => (dispatch: any) => {
+	dispatch({ type: WalletActionTypes.SHOW_MY_CURRENT_WALLET, payload: show });
+};

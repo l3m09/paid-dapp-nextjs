@@ -12,7 +12,8 @@ const initialState = {
 	unlockedWallet: null,
 	connectingWallet: false,
 	connectedWallet: null,
-	timeout: null
+	timeout: null,
+	openCurrentWallet: false
 };
 
 export const WalletReducer = function (state = initialState, action: any) {
@@ -71,6 +72,11 @@ export const WalletReducer = function (state = initialState, action: any) {
 
 		case WalletActionTypes.SET_SELECTED_WALLET_SUCCESS:
 			return { ...state, selectedWallet: payload, error: null };
+		case WalletActionTypes.SHOW_MY_CURRENT_WALLET:
+			return {
+				...state,
+				openCurrentWallet: payload
+			};
 		default:
 			return state;
 	}

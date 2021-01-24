@@ -20,11 +20,14 @@ import {
 	IonPopover,
 	IonItemDivider,
 	IonFabButton,
-	IonFab
+	IonFab,
+	IonFabList
 } from '@ionic/react';
 import {
 	add,
+	caretUp,
 	documentsOutline as documentsIcon,
+	power,
 } from 'ionicons/icons';
 
 import React, {useEffect, useState, useRef} from 'react';
@@ -217,7 +220,6 @@ const Documents: React.FC = () => {
 					cssClass="loader-spinner"
 					mode="md"
 					isOpen={loading}
-
 				/>
 				<div>
 					<DocumentsList 
@@ -255,11 +257,19 @@ const Documents: React.FC = () => {
 						closeShowDocument={closeShowDocument}
 					/>
 					<IonFab vertical="bottom" horizontal="end" slot="fixed">
-						<IonFabButton color="gradient" onClick={() => {
-							runShowPopover(true);
-						}}>
-							<IonIcon icon={add}/>
+						<IonFabButton color="gradient">
+							<IonIcon style={{pointerEvents: 'none'}} icon={caretUp}></IonIcon>
 						</IonFabButton>
+						<IonFabList side="top">
+							<IonFabButton color="gradient" onClick={() => {
+								runShowPopover(true);
+							}}>
+								<IonIcon style={{pointerEvents: 'none'}} icon={add}/>
+							</IonFabButton>
+							<IonFabButton color="gradient">
+								<IonIcon style={{pointerEvents: 'none'}} icon={power} title="close network" ariaLabel="close network"></IonIcon>
+							</IonFabButton>
+						</IonFabList>
 					</IonFab>
 				</div>
 				<SuccessDialog />

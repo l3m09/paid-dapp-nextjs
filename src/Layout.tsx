@@ -32,6 +32,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { openSuccessDialog } from '../src/redux/actions/documents'
 import UnlockWallet from './components/UnlockWallet';
 import { doConnectWallet } from './redux/actions/wallet';
+import MyCurrentWallet from './components/MyCurrentWallet';
 
 const Layout: React.FC = () => {
 	const history = useHistory();
@@ -77,7 +78,8 @@ const Layout: React.FC = () => {
 			<Route path="/wallets" component={Wallets} exact />
 			<Route path="/documents/:id?" component={Documents} exact />
 			<Route path="/agreements/:type" component={Agreements} exact />
-			{/* currentWallet !== null ? dispatch(doConnectWallet(window.ethereum, history)) : null */}
+			{/* currentWallet !== null ? <UnlockWallet selectedWallet={currentWallet} show={showUnlockWalletModal} dismiss={dismissModal}/> : null */}
+			<MyCurrentWallet />
 		</IonContent>
 	);
 };

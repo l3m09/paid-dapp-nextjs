@@ -17,7 +17,7 @@ import {
 } from 'ionicons/icons';
 import { useDispatch, useSelector} from 'react-redux';
 import { BlockchainFactory } from '../utils/blockchainFactory';
-import { doSetCurrentToken} from '../redux/actions/wallet';
+import { doSetCurrentToken, doShowMyCurrentWallet} from '../redux/actions/wallet';
 import { isUnlock } from '../utils/metamask';
 import { Sessions } from '../utils/sessions';
 import { useHistory } from 'react-router';
@@ -28,6 +28,8 @@ interface AppPage {
 	mdIcon: string;
 	title: string;
 	disabled: boolean;
+	selected: boolean;
+	click: any;
 }
 
 const customAlertTokens = {
@@ -94,24 +96,30 @@ const MenuAlternate:  React.FC = () =>{
 	const appPages: AppPage[] = [
 		{
 			title: 'Network: ' + networkText,
-			url: '/wallets',
+			url: '',
 			iosIcon: globeSharp,
 			mdIcon: globeSharp,
-			disabled: false
+			disabled: false,
+			selected: true,
+			click: null
 		},
 		{
-			title: 'Wallets',
+			title: 'Wallet',
 			url: '/wallets',
 			iosIcon: walletSharp,
 			mdIcon: walletSharp,
-			disabled: false
+			disabled: false,
+			selected: false,
+			click: () => dispatch(doShowMyCurrentWallet(true))
 		},
 		{
 			title: 'Smart Agreements Log',
 			url: '/documents',
 			iosIcon: documentSharp,
 			mdIcon: documentSharp,
-			disabled: false
+			disabled: false,
+			selected: false,
+			click: null
 		},
 	];
 
@@ -123,12 +131,16 @@ const MenuAlternate:  React.FC = () =>{
 						key={index}
 						disabled={appPage.disabled || disableMenu}
 						className={
-							location.pathname === appPage.url ? 'selected' : ''
+							location.pathname === appPage.url ?
+							('selected') :
+							appPage.selected ?
+							('selected') :
+							('')
 						}
-						routerLink={appPage.url}
-						routerDirection="none"
 						lines="none"
 						detail={false}
+						button={appPage.click != null}
+						onClick={appPage.click}
 					>
 						<div className="icon-wrapper">
 							<IonIcon
@@ -146,7 +158,10 @@ const MenuAlternate:  React.FC = () =>{
 			>
 				<div className="icon-wrapper">
 					<IonImg
-						src="/assets/icon/icon.png"
+						src={selectToken === "paid" ?
+						('/assets/icon/icon.png') :
+						('/assets/icon/dailogo.svg')
+					}
 					/>
 				</div>
 				<IonLabel color="gradient">
