@@ -23,7 +23,7 @@
 .unlock-modal {
 
   .modal-wrapper {
-    min-height: 50vh !important;
+    min-height: 30vh !important;
     max-height: 500px !important;
 
     .ion-page {
@@ -31,6 +31,11 @@
 
       h5 {
         color: var(--ion-text-color);
+      }
+
+      .principal-label {
+        font-size: 18px;
+        margin-bottom: 10px;
       }
 
       >ion-item {
@@ -65,12 +70,25 @@
 
         }
       }
+
       .copy-icon {
         margin-left: 10px;
         vertical-align: bottom;
         margin-bottom: 2px;
         cursor: pointer;
       }
+
+      .balance-content {
+        &:first-child {
+          margin-top: 0;  
+        }
+        margin-top: 10px;
+        .balance-coin-icon {
+          width: 36px;
+          height: 36px;
+        }
+      }
+
     }
 
   }
