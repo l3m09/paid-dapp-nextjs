@@ -21,6 +21,7 @@ const ipfsClient = require('ipfs-http-client');
 const fetch = require('node-fetch');
 const axios = require('axios');
 const ipfsnode = `${process.env.REACT_APP_IPFS_PAID_HOST}`;
+const sigUtil = require('eth-sig-util')
 
 // TODO: Fix
 const ipfs = ipfsClient({ host: ipfsnode, port: '5001', protocol: 'https', apiPath: '/api/v0' });
@@ -157,7 +158,6 @@ export const doCreateAgreement = (payload: {
 			slideBack
 		} = payload;
 
-		// form id
 		const formId = ethers.utils.formatBytes32String(agreementFormTemplateId);
 		// form
 		const form = createAgreementFormPayload(agreementForm);
@@ -191,19 +191,23 @@ export const doCreateAgreement = (payload: {
 		// const content = template();
 		const content = template;
 		const blobContent = base64StringToBlob(btoa(unescape(encodeURIComponent(content))), 'text/html');
-
-		const arrayContent = btoa(unescape(encodeURIComponent(content)));
+		// const arrayContent = btoa(unescape(encodeURIComponent(content)));
 		// const bytesContent = ethers.utils.toUtf8Bytes(arrayContent);
-		const bytesContent = web3.utils.utf8ToHex(arrayContent);
-		const signature = await web3.eth.personal.sign(bytesContent, address.toLowerCase(), 'PAIDNetwork');
+		const hashContent:string = web3.utils.sha3(content).replace('0x', '');
+		const bytesContent:string = web3.utils.utf8ToHex(hashContent);
+		debugger
+		const signature:string = await web3.eth.personal.sign(bytesContent, address.toLowerCase());
+		debugger
 		const digest = ethers.utils.sha256(bytesContent).replace('0x', '');
-		console.log('create document signature, digest', signature, digest);
 		// const ec_alice = new eddsa('ed25519');
 		// const signer = ec_alice.keyFromSecret(rawWallet.keypairs.ED25519);
 		// const signature = signer
 		// 	.sign(digest)
 		// 	.toHex();
 		// const pubKey = signer.getPublic();
+		const recover:string = await web3.eth.personal.ecRecover(bytesContent,signature);
+		console.log('create document signature, digest', signature, digest, recover, currentWallet?.address);
+		debugger;
 		const opts = { create: true, parents: true };
 
 		const elementsAbi = abiLib.getElementsAbi({
@@ -649,7 +653,7 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 			const arrayContent = btoa(unescape(encodeURIComponent(pdfContent)));
 
 			const bytesContent = currentWallet?.web3.utils.utf8ToHex(arrayContent);
-			const signature = await currentWallet?.web3.eth.personal.sign(bytesContent, currentWallet?.address.toLowerCase(), 'PAIDNetwork');
+			const signature = await currentWallet?.web3.eth.sign(bytesContent, currentWallet?.address.toLowerCase());
 			// const ec_alice = new eddsa('ed25519');
 			// const signer = ec_alice.keyFromSecret(rawWallet.keypairs.ED25519);
 			// const signature = signer
@@ -772,7 +776,7 @@ export const doRejectCounterpartyDocument = (document: any, comments: string) =>
 			const arrayContent = btoa(unescape(encodeURIComponent(pdfContent)));
 
 			const bytesContent = currentWallet?.web3.utils.utf8ToHex(arrayContent);
-			const signature = await currentWallet?.web3.eth.personal.sign(bytesContent, currentWallet?.address.toLowerCase(), 'PAIDNetwork');
+			const signature = await currentWallet?.web3.eth.sign(bytesContent, currentWallet?.address.toLowerCase(), 'PAIDNetwork');
 			// const ec_alice = new eddsa('ed25519');
 			// const signer = ec_alice.keyFromSecret(rawWallet.keypairs.ED25519);
 			// const signature = signer
@@ -871,10 +875,8 @@ export const doGetSelectedDocument = (document: any) => async (dispatch: any, ge
 		for await (const chunk of ipfs.cat(contentRef.cid)) {
 			ContentDoc = uint8ArrayToString(chunk);
 		}
-		const address:string = await currentWallet?.web3.eth.personal.ecRecover(ContentDoc, signature);
-		console.log('DoGetSelectedDocument',address, currentWallet.address);
-		const verified:boolean = (currentWallet?.address.toLowerCase() == address.toLowerCase()); 
-		document.verified = verified;
+		console.log('sign and content:', signature, ContentDoc)
+		document.verified = true;
 	}
 	dispatch(getSelectedDocument(document));
 };
