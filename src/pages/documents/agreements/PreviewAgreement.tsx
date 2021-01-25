@@ -24,7 +24,7 @@ const PreviewAgreement: FC<PreviewAgreementProps> = ({ current }) => {
 		(state: { wallet: { currentWallet: any, selectedToken: string } }) => state.wallet
     );
     const smartAgreementsState = useSelector(
-        (state: { smartAgreements }) => state.smartAgreements
+        (state: { smartAgreements:any }) => state.smartAgreements
     );
     const [showEditPopover, setShowEditPopover] = useState(false);
     const [agreementDocument, setAgreementDocument] = useState('');
@@ -32,7 +32,6 @@ const PreviewAgreement: FC<PreviewAgreementProps> = ({ current }) => {
     
     const { agreementFormInfo, loading } = documentState;
     const { currentWallet, selectedToken } = wallet;
-    const { balance, balanceToken, balanceDaiToken, network} = currentWallet;
 
     const { type } = useParams<{ type: string }>();
 
@@ -82,33 +81,11 @@ const PreviewAgreement: FC<PreviewAgreementProps> = ({ current }) => {
 		await current.slidePrev();
 		await current.lockSwipeToPrev(true);
     }, [current]);
-    // let addr = '';
-    // const metodofn = async (ethereum: any) => {
-    //     const addresses = await ethereum.request({ method: 'eth_requestAccounts' });
-    //     const address = addresses[0];
-    //     addr = address;
-    //     // const address = unlockedWallet.address
-    //     const _walletModel = await BlockchainFactory.getWeb3Mask(ethereum);
-    //     const walletModel = _walletModel!;
-    //     const web3 = walletModel.web3Instance;
-    //     const network = await BlockchainFactory.getNetwork(walletModel.network);
-    
-    //     const AgreementContract = ContractFactory.getAgreementContract(web3, network);
-    //     const PaidTokenContract = ContractFactory.getPaidTokenContract(web3, network);
-    //     const token = PaidTokenContract.options.address;
-    //     console.log('address token', token);
-    //     const methodFn = AgreementContract.methods.getBalanceToken(token, address);
-    //     const balanceverify = await methodFn.call({ from: address })
-    //     .then(async function (receipt: any) {
-    //         const resultado =  web3.utils.fromWei(receipt,'ether');
-    //         return resultado;
-    //     });
-    //     return Promise.resolve(balanceverify).then((x:string) => {return x})
-    // }
+
 
     const onSubmit = useCallback(async () => {
         if (selectedToken == 'paid') {
-            if(balanceToken > 1){
+            if(currentWallet?.balanceToken > 1){
                 dispatch(doSetAgreementFormInfo({ createdAt: new Date().toDateString() }));
                 dispatch(
                     doCreateAgreement({
@@ -126,9 +103,9 @@ const PreviewAgreement: FC<PreviewAgreementProps> = ({ current }) => {
             else{
                 dispatch(openErrorDialog('You have not enough balance to perform this action'));
             }
-            console.log('type agreementID', type, 'result balance', balanceDaiToken);
+            console.log('type agreementID', type, 'result balance', currentWallet?.balanceDaiToken);
         } else if (selectedToken == 'dai') {
-            if(balanceDaiToken > 1){
+            if(currentWallet?.balanceDaiToken > 1){
                 dispatch(doSetAgreementFormInfo({ createdAt: new Date().toDateString() }));
                 dispatch(
                     doCreateAgreement({
@@ -146,7 +123,7 @@ const PreviewAgreement: FC<PreviewAgreementProps> = ({ current }) => {
             else{
                 dispatch(openErrorDialog('You have not enough balance to perform this action'));
             }
-            console.log('type agreementID', type, 'result balance', balanceDaiToken);
+            console.log('type agreementID', type, 'result balance', currentWallet?.balanceDaiToken);
         } else {
             dispatch(openErrorDialog('Error in SelectedToken Value'));
             throw new Error('Error in SelectedToken Value');
