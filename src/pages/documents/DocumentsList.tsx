@@ -346,7 +346,7 @@ const DocumentsList: React.FC<Props> = ({
 	function showDocument(item: any) {
 		setForceVerifyDocument(false);
 		dispatch(doGetSelectedDocument(item));
-		setShowVerifyDocumentButton(!(item.event.to === currentWallet?.address && parseInt(item.event.status?.toString()) === 0));
+		setShowVerifyDocumentButton(!(item.event.to.toLowerCase() === currentWallet?.address.toLowerCase() && parseInt(item.event.status?.toString()) === 0));
 		setShowModal(true);
 		setShowNotVerified(false);
 		setShowVerified(false);
@@ -354,7 +354,7 @@ const DocumentsList: React.FC<Props> = ({
 
 	async function verifyDocument(document: any) {
 		setVerifyButtonDisable(true);
-		if(document.event.status != 0 || document.event.from === currentWallet?.address || forceVerifyDocument){
+		if(document.event.status != 0 || document.event.from.toLowerCase() === currentWallet?.address.toLowerCase() || forceVerifyDocument){
 			let fetchedContent	 = '';
 			for await (const chunk of ipfs.cat(document.event.cid)) {
 				fetchedContent = uint8ArrayToString(chunk);
