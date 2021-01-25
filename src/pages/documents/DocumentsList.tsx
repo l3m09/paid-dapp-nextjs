@@ -361,16 +361,23 @@ const DocumentsList: React.FC<Props> = ({
 			}
 			const jsonContent = JSON.parse(fetchedContent);
 
-			const fetchedPubKey = jsonContent.publicKey;
+			// const fetchedPubKey = jsonContent.publicKey;
 
-			const ec = new eddsa('ed25519');
-			const key = ec.keyFromPublic(fetchedPubKey);
+			// const ec = new eddsa('ed25519');
+			// const key = ec.keyFromPublic(fetchedPubKey);
 			const sigRef = jsonContent.sigRef;
-			let sigDocument = '';
+			const contentRef = jsonContent.contentRef;
+			let signature = '';
 			for await (const chunk of ipfs.cat(sigRef.cid)) {
-				sigDocument = uint8ArrayToString(chunk);
+				signature = uint8ArrayToString(chunk);
 			}
-			const verified = key.verify(jsonContent.digest, sigDocument);
+			let ContentDoc = ''
+			for await (const chunk of ipfs.cat(contentRef.cid)) {
+				ContentDoc = uint8ArrayToString(chunk);
+			}
+			const address:string = await currentWallet?.web3.eth.personal.ecRecover(ContentDoc, signature);
+			console.log(address, currentWallet.address);
+			const verified:boolean = (currentWallet?.address.toLowerCase() == address.toLowerCase()); 
 			setShowVerified(verified);
 			setShowNotVerified(!verified);
 		}

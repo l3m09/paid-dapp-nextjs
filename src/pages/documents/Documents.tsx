@@ -46,7 +46,6 @@ import { KeyStorageModel } from 'universal-crypto-wallet/dist/key-storage/KeySto
 import SuccessDialog from '../../components/SuccessDialog';
 import AgreementType from '../../models/AgreementType';
 import { Sessions } from '../../utils/sessions';
-import { isUnlock } from '../../utils/metamask';
 
 function SelectedDocument(payload: {
 	show: boolean;

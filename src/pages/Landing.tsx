@@ -10,11 +10,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 import Terms from '../components/Terms';
-import { openSuccessDialog, openErrorDialog } from '../redux/actions/documents';
-import { isUnlock } from '../utils/metamask'
-import { BlockchainFactory } from '../utils/blockchainFactory';
 import { doConnectWallet } from '../redux/actions/wallet';
-import { withRouter } from "react-router-dom"
 
 declare global {
 	interface Window { web3: any; ethereum: any;}
@@ -30,7 +26,6 @@ const Landing: React.FC = () => {
 	const [showTermsModal, setShowTermsModal] = useState(false);
 	const { connectedWallet, currentWallet } = wallet;
 	
-	// const mask = isUnlock();
 	// let metamask:boolean;
 	// let loading = true;
 	// Promise.resolve(mask).then(async (resp:boolean)=> {

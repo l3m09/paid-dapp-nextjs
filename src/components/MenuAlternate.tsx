@@ -17,7 +17,6 @@ import {
 } from 'ionicons/icons';
 import { useDispatch, useSelector} from 'react-redux';
 import { doSetCurrentToken, doShowMyCurrentWallet} from '../redux/actions/wallet';
-import { isUnlock } from '../utils/metamask';
 import { Sessions } from '../utils/sessions';
 import { useHistory } from 'react-router';
 
