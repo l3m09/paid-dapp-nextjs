@@ -207,7 +207,7 @@ export const Ciia = `<div class="contract" style="width: 800px; background-color
 <p align="center"><strong><u>EXHIBIT&nbsp;</u><u>C</u></strong></p>
 <p class="western" align="center"><strong>LIST OF COMPANIES AND/OR AGREEMENTS <br /> EXCLUDED UNDER SECTION&nbsp;(b)</strong></p>
 <p class="western">&nbsp;</p>
-<p class="western"><div style="display: inline-block; background-color:#f79632">{{listCompAgreements}}</di></p>
+<div style="display: block; background-color:#f79632" class="western">{{listCompAgreements}}</di>
 <p class="western">&nbsp;</p>
 <p>Except as indicated above on this exhibit, Consultant has no agreements or companies to disclose pursuant to Section&nbsp;10(b) of this Agreement.</p>
 <p>___ Additional sheets attached</p>
