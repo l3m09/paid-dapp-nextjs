@@ -222,8 +222,15 @@ export const doConnectWallet = (ethereum:any, history:any
 				.then(async (addresses)=>{
 					const address = addresses[0];
 					const balance = await getBalanceWallet(metaInstance?.web3Instance, address);
-					const paidBalance = await getPaidBalance(metaInstance?.web3Instance, address, network);
-					const daiBalance = await getDaiBalance(metaInstance?.web3Instance, address, network);
+					let paidBalance:string, daiBalance: string;
+					if (network === "rinkeby") {
+						paidBalance = await getPaidBalance(metaInstance?.web3Instance, address, network);
+					    daiBalance = await getDaiBalance(metaInstance?.web3Instance, address, network);
+					} else {
+						dispatch(openSuccessDialog('Valid the Network and That have Enough Balance'));
+						paidBalance = '0';
+						daiBalance = '0';
+					}
 					const referenceWallet = {
 						web3: metaInstance?.web3Instance,
 						address,
@@ -251,7 +258,7 @@ export const doConnectWallet = (ethereum:any, history:any
 			} else if ((connected == true) && (metamask == false)) {
 				// build currentWallet / connectedWallet Element
 				const metaInstance = await BlockchainFactory.getWeb3Mask(ethereum);
-				const network = metaInstance.network;
+				const network = await BlockchainFactory.getNetwork(metaInstance.network);
 				window.web3 = metaInstance?.web3Instance;
 				const accounts = await ethereum.request({ method: 'eth_requestAccounts' })
 				.then(async (addresses)=>{
@@ -259,13 +266,21 @@ export const doConnectWallet = (ethereum:any, history:any
 					const address = addresses[0];
 					// Get Balance of Wallet and Token
 					const balance = await getBalanceWallet(metaInstance?.web3Instance, address);
-					const paidBalance = await getPaidBalance(metaInstance?.web3Instance, address, network);
-					const daiBalance = await getDaiBalance(metaInstance?.web3Instance, address, network);
+					let paidBalance:string, daiBalance: string;
+					if (network === "rinkeby") {
+						paidBalance = await getPaidBalance(metaInstance?.web3Instance, address, network);
+					    daiBalance = await getDaiBalance(metaInstance?.web3Instance, address, network);
+					} else {
+						dispatch(openSuccessDialog('Valid the Network and That have Enough Balance'));
+						paidBalance = '0';
+						daiBalance = '0';
+					}
 					const referenceWallet = {
 						address,
 						balance: balance,
 						balanceToken: paidBalance,
 						balanceDaiToken: daiBalance,
+						network,
 					};
 					dispatch(connectWallet(referenceWallet));
 					console.log('connect with wallet successfully');
