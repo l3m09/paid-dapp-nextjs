@@ -87,7 +87,7 @@ const FormCounterparty: React.FC<AgreementFormProps> = ({ current }) => {
 		}  = agreementFormInfo;
 		setFilled(
 			/.+@.+\..+/.test(counterpartyEmail) &&
-			currentWallet?.address !== counterpartyWallet &&
+			currentWallet?.address.toLowerCase() !== counterpartyWallet.toLowerCase() &&
 			counterpartyEmail === counterpartyConfirmEmail &&
 			counterpartyWallet.length > 3 &&
 			counterpartyName.length > 3 &&
