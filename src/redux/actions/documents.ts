@@ -223,6 +223,7 @@ export const doCreateAgreement = (payload: {
 		let token:string = '';
 		const AgreementContract = ContractFactory.getAgreementContract(web3, network);
 		const spender = AgreementContract.options.address;
+		AgreementContract.options.from = address;
 		// Increase Allowance for withdraw PAID token
 		console.log('Pago', pago);
 		let metodoTkn:any;
