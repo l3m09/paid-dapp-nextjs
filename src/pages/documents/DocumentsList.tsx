@@ -23,6 +23,7 @@ import {
 } from '../../redux/actions/documents';
 
 import { format } from 'date-fns';
+import { base64StringToBlob } from 'blob-util';
 import AgreementType from '../../models/AgreementType';
 
 const uint8ArrayToString = require('uint8arrays/to-string');
@@ -368,15 +369,23 @@ const DocumentsList: React.FC<Props> = ({
 			for await (const chunk of ipfs.cat(sigRef.cid)) {
 				signature = uint8ArrayToString(chunk);
 			}
-			let ContentDoc = ''
+			let content = ''
 			for await (const chunk of ipfs.cat(contentRef.cid)) {
-				ContentDoc = uint8ArrayToString(chunk);
+				content = uint8ArrayToString(chunk);
 			}
-			console.log('documentsList sig and content:', signature, ContentDoc);
+			console.log('documentsList sig and content:', signature, content);
+			// Verify signing
+			// const arrayContent = btoa(unescape(encodeURIComponent(content)));
+		
+			const hashContent:string = currentWallet?.web3.utils.sha3(content).replace('0x', '');
+			const bytesContent:string = currentWallet?.web3.utils.utf8ToHex(hashContent);
+			const recover:string = await currentWallet?.web3.eth.personal.ecRecover(bytesContent,signature);
+
+			console.log(recover.toLowerCase(), document.event.from.toLowerCase());
 			const verified:boolean = true;
 			setShowVerified(verified);
 			setShowNotVerified(!verified);
-		}
+			}
 		else{
 			dispatch(doSignCounterpartyDocument(document));
 			setForceVerifyDocument(true);
