@@ -102,7 +102,7 @@ const FormCounterparty: React.FC<AgreementFormProps> = ({ current }) => {
 			setValidAddress(counterpartyAddress.length > 3);
 			setValidPhone(counterpartyPhone.length > 3);
 			setValidCounterpartyWallet(counterpartyWallet.length > 3);
-			setSameCurrentWallet(currentWallet?.address === counterpartyWallet);
+			setSameCurrentWallet(currentWallet?.address.toLowerCase() === counterpartyWallet.toLowerCase());
 		}
 	}
 
