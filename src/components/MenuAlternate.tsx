@@ -16,7 +16,6 @@ import {
 	walletSharp
 } from 'ionicons/icons';
 import { useDispatch, useSelector} from 'react-redux';
-import { BlockchainFactory } from '../utils/blockchainFactory';
 import { doSetCurrentToken, doShowMyCurrentWallet} from '../redux/actions/wallet';
 import { isUnlock } from '../utils/metamask';
 import { Sessions } from '../utils/sessions';
@@ -43,45 +42,29 @@ const MenuAlternate:  React.FC = () =>{
 	const location = useLocation();
 	const dispatch = useDispatch();
 	const wallet = useSelector((state: any) => state.wallet);
-	const { connectedWallet, currentWallet, selectedToken } = wallet;
-	if (currentWallet == null) {
-		throw new Error('disconnet wallet');
-	}
-	const {
-		balanceToken,
-		balanceDaiToken,
-		network
-	} = currentWallet;
+	const { currentWallet, selectedToken } = wallet;
 
 	const [disableMenu, setDisableMenu] = useState(false);
-	const [networkText, setNetWorkText] = useState(network);
+	const [networkText, setNetWorkText] = useState(currentWallet?.network);
 	const [selectToken, setSelectToken] = useState(selectedToken);
 
 	const doSetSelectedToken = (token:string) => {
 		setSelectToken(token);
 		dispatch(doSetCurrentToken(token));
 	}
-	const paidBalance = balanceToken;
-	const daiBalance = balanceDaiToken;
-
-	const unlocked = connectedWallet;
-	// Promise.resolve(isUnlock()).then((resp:boolean) => {
-	// 	unlocked = resp;
-	// });
-
-	// Promise.resolve(getPaidBalance(window.ethereum)).then((resp:string) => {
-	// 	paidBalance  = resp;
-	// 	console.log('paid', paidBalance);
-	// });
-
-	// Promise.resolve(getDaiBalance(window.ethereum)).then((resp:string) => {
-	// 	daiBalance  = resp;
-	// 	console.log('dai', daiBalance);
-	// });
+	const paidBalance = currentWallet?.balanceToken;
+	const daiBalance = currentWallet?.balanceDaiToken;
+	let unlocked:boolean;
+	if ((currentWallet == null) && (currentWallet == undefined)) {
+		unlocked = false;
+	} else {
+		unlocked = true;
+	}
 
 	useEffect(() => {
 		if (unlocked == true) {
 			setDisableMenu(false);
+			setNetWorkText(currentWallet?.network);
 			if(!Sessions.getTimeoutBool()){
 				Sessions.setTimeoutCall();
 			}
@@ -91,7 +74,7 @@ const MenuAlternate:  React.FC = () =>{
 		} else {
 			history.push('/');
 		}
-	}, [connectedWallet]);
+	}, [unlocked]);
 
 	const appPages: AppPage[] = [
 		{

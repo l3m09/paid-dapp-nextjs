@@ -18,10 +18,10 @@ const MyCurrentWallet: FC = () => {
     const [showToastCopy, setShowToastCopy] = useState(false);
 
     const { openCurrentWallet, currentWallet } = walletState;
-    const { balance, balanceToken, balanceDaiToken } = currentWallet;
-    if (currentWallet == null) {
-        throw new Error('No connect Wallet, MyCurrrent Wallet Modal');
-    }
+    // if (currentWallet == null) {
+    //     throw new Error('No connect Wallet, MyCurrrent Wallet Modal');
+    // }
+    // const { balance, balanceToken, balanceDaiToken } = currentWallet;
 
     const dismiss = () => dispatch(doShowMyCurrentWallet(false));
 
@@ -91,7 +91,7 @@ const MyCurrentWallet: FC = () => {
                         </IonLabel>
                     </IonItem>
                     <IonItem className="balance-content">
-                        <IonLabel>{balanceToken}</IonLabel>
+                        <IonLabel>{currentWallet?.balanceToken}</IonLabel>
                         <IonImg
                             src="/assets/icon/icon.png"
                             slot="start"
@@ -99,7 +99,7 @@ const MyCurrentWallet: FC = () => {
                         />
                     </IonItem>
                     <IonItem className="balance-content">
-                        <IonLabel>{balance}</IonLabel>
+                        <IonLabel>{currentWallet?.balance}</IonLabel>
                         <IonImg
                             src="/assets/icon/ethereumlogo.svg"
                             slot="start"
@@ -107,7 +107,7 @@ const MyCurrentWallet: FC = () => {
                         />
                     </IonItem>
                     <IonItem className="balance-content">
-                        <IonLabel>{balanceDaiToken}</IonLabel>
+                        <IonLabel>{currentWallet?.balanceDaiToken}</IonLabel>
                         <IonImg
                             src="/assets/icon/dailogo.svg"
                             slot="start"

@@ -108,9 +108,9 @@ function SelectedDocument(payload: {
 	} = payload;
 	const wallet = useSelector((state: any) => state.wallet);
 
-	const { connectedWallet, currentWallet } = wallet;
-	const { network } = currentWallet;
-	const [networkText, setNetWorkText] = useState(network);
+	const { currentWallet } = wallet;
+
+	const [networkText, setNetWorkText] = useState(currentWallet?.network);
 	const [comments, setComments] = useState('');
 	const [validReject, setValidReject] = useState(true);
 
@@ -119,10 +119,10 @@ function SelectedDocument(payload: {
 	}, [show]);
 
 	useEffect(() => {
-		if (connectedWallet) {
-			setNetWorkText(network);
+		if (currentWallet) {
+			setNetWorkText(currentWallet?.network);
 		}
-	}, [connectedWallet]);
+	}, [currentWallet]);
 
 
 	if (!selectedDocument) {
@@ -341,10 +341,9 @@ const DocumentsList: React.FC<Props> = ({
 	const [forceVerifyDocument, setForceVerifyDocument] = useState(false);
 	const wallet = useSelector((state: any) => state.wallet);
 	const { currentWallet } = wallet;
-	debugger;
-	if (currentWallet == null) {
-		throw new Error('DocumentLis.tsx no connect wallet');
-	}
+	// if (currentWallet == null) {
+	// 	throw new Error('DocumentLis.tsx no connect wallet');
+	// }
 
 	function showDocument(item: any) {
 		setForceVerifyDocument(false);
@@ -427,7 +426,6 @@ const DocumentsList: React.FC<Props> = ({
 
 		setAgreementContent(pdfContent);
 	}
-	debugger;
 	const agreementTypesList = () => {
 		return <IonList>
 			{
@@ -449,7 +447,6 @@ const DocumentsList: React.FC<Props> = ({
 			}
 		</IonList>
 	}
-	debugger;
 	return (
 		<div>
 				<IonLoading

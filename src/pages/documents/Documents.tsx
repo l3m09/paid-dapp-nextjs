@@ -54,14 +54,13 @@ function SelectedDocument(payload: {
 }) {
 	const wallet = useSelector((state: any) => state.wallet);
 	const { currentWallet } = wallet;
-	const { network } = currentWallet;
 
-	const [networkText, setNetWorkText] = useState(network);
+	const [networkText, setNetWorkText] = useState(currentWallet?.network);
 	const { show, selectedDocument, closeShowDocument } = payload;
 
 	useEffect(() => {
 		if (currentWallet) {
-			setNetWorkText(network);
+			setNetWorkText(currentWallet?.network)
 		}
 	}, [currentWallet]);
 
@@ -130,25 +129,22 @@ const Documents: React.FC = () => {
 	} = documentsState;
 	const wallet = useSelector((state: any) => state.wallet);
 	const { connectedWallet ,currentWallet } = wallet;
-	console.log('documents.tsx',connectedWallet, currentWallet);
-	if (currentWallet == null) {
-		throw new Error('disconnet wallet');
-	}
+	// if (currentWallet == null) {
+	// 	throw new Error('disconnet wallet');
+	// }
 	const [showModal, setShowModal] = useState(false);
 	const [showPopOver, setShowPopover] = useState(false);
 	const [currentIndex, setCurrentIndex] = useState(0);
-
-	// useEffect(() => {
-	// 	if(!Sessions.getTimeoutBool()){
-	// 		Sessions.setTimeoutCall();
-	// 		debugger;
-	// 		dispatch(doGetDocuments(currentWallet));
-	// 	}
-	// 	else{
-	// 		// history.push('/');
-	// 	}
-	// 	slidesRef.current?.lockSwipes(true)
-	// }, [dispatch, slidesRef, currentWallet]);
+	useEffect(() => {
+		if(!Sessions.getTimeoutBool()){
+			Sessions.setTimeoutCall();
+			dispatch(doGetDocuments(currentWallet));
+		}
+		else{
+			history.push('/');
+		}
+		slidesRef.current?.lockSwipes(true)
+	}, [dispatch, slidesRef, currentWallet]);
 
 	function showDocument(item: any) {
 		dispatch(doGetSelectedDocument(item));
@@ -203,7 +199,6 @@ const Documents: React.FC = () => {
 		await slidesRef.current?.lockSwipes(true)
 
 	}
-	debugger;
 	return (
 		<IonPage className="documents-page content-page">
 			<IonContent fullscreen>
@@ -222,10 +217,10 @@ const Documents: React.FC = () => {
 					isOpen={loading}
 				/>
 				<div>
-					<DocumentsList 
-						documentsTo={documentsTo} 
-						documentsFrom={documentsFrom} 
-						type="from" 
+					<DocumentsList
+						documentsTo={documentsTo}
+						documentsFrom={documentsFrom}
+						type="from"
 						counterType="to"
 						agreementTypes={agreementTypes}
 						onClickAgreementType={chooseOption}

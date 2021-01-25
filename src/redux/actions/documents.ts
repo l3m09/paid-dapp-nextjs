@@ -591,7 +591,6 @@ export const doGetDocuments = (sending_currentWallet: any) => async (
 		}
 
 		console.log('agreementsFrom', agreementsSource, 'agreementsTo', agreementsDestination);
-		debugger;
 		dispatch(getDocuments(responseArray));
 	} catch (err) {
 		console.log('ln564', err);
