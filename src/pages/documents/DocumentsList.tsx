@@ -27,6 +27,7 @@ import { format } from 'date-fns';
 // import { BlockchainFactory } from '../../utils/blockchainFactory';
 // import { KeyStorageModel } from 'universal-crypto-wallet/dist/key-storage/KeyStorageModel';
 import AgreementType from '../../models/AgreementType';
+import { parseBytes32String } from 'ethers/lib/utils';
 
 const uint8ArrayToString = require('uint8arrays/to-string');
 const ipfsClient = require('ipfs-http-client');
@@ -470,7 +471,8 @@ const DocumentsList: React.FC<Props> = ({
 								const {data, meta, event} = document;
 								const createdAt = format(new Date(event.created_at * 1000), 'MM/dd/yyyy kk:mm:ss');
 								const updatedAt = format(new Date(event.updated_at * 1000), 'MM/dd/yyyy kk:mm:ss');
-								console.log(event.status, event.from, event.to, currentWallet?.address);
+								const from:boolean = (currentWallet?.address.toLowerCase()  == event.from.toLowerCase() );
+								const to:boolean = (currentWallet?.address.toLowerCase()  == event.to.toLowerCase() );
 
 								return (
 									<div key={index} className="table-body" onClick={async () => {showDocument({data, meta, event})}}>
@@ -481,10 +483,10 @@ const DocumentsList: React.FC<Props> = ({
 										<div className="col">{createdAt}</div>
 										<div className="col">{updatedAt}</div>
 										<div className="col">
-											{((event.status == 0) && (currentWallet?.address.toString() === event.from.toString())) ? <IonBadge color="success">PENDING</IonBadge> :
-											(((event.status == 0) && (currentWallet?.address.toString() === event.to.toString())) ? <IonBadge color="secondary">SIGN</IonBadge> : 
-											(((event.status == 1) && (currentWallet?.address.toString() === event.from.toString())) ? <IonBadge color="warning">SIGNED</IonBadge> : 
-											((event.status == 1) && (currentWallet?.address.toString() === event.to.toString()) ? <IonBadge color="primary">SIGNED</IonBadge> : null)))}
+											{(event.status == 1 && from ? <IonBadge color="warning">SIGNED</IonBadge> : 
+											(event.status == 1 && to ? <IonBadge color="primary">SIGNED</IonBadge> : 
+											(event.status == 0 && from ? <IonBadge color="success">PENDING</IonBadge> : 
+											(event.status == 0 && to ? <IonBadge color="secondary">SIGN</IonBadge> : null))))}	
 										</div>
 									</div>
 								);
