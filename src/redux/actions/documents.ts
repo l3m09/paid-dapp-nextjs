@@ -234,8 +234,8 @@ export const doCreateAgreement = (payload: {
 				throw new Error('You have not enough balance to perform this action')
 			}
 			const PaidTokenContract = ContractFactory.getPaidTokenContract(web3, network);
-			token = PaidTokenContract.options.address.toLowerCase();
-			PaidTokenContract.options.from = address.toLowerCase();
+			token = PaidTokenContract.options.address;
+			PaidTokenContract.options.from = address;
 			console.log('previo pago', paymentSA.toString(),'token address:',  token,'address wallet:', address, 'spender:', spender, 'recipient:', recipientTKN);
 			metodoTkn = PaidTokenContract.methods.increaseAllowance(
 				spender,
@@ -247,11 +247,11 @@ export const doCreateAgreement = (payload: {
 				throw new Error('You have not enough balance to perform this action')
 			}
 			const DaiTokenContract = ContractFactory.getDaiTokenContract(web3, network);
-			token = DaiTokenContract.options.address.toLowerCase();
-			DaiTokenContract.options.from = address.toLowerCase();
+			token = DaiTokenContract.options.address;
+			DaiTokenContract.options.from = address;
 			console.log('previo pago', paymentSA.toString(),'token address:',  token,'address wallet:', address, 'spender:', spender, 'recipient:', recipientTKN);
 			metodoTkn = DaiTokenContract.methods.approve(
-				spender.toLowerCase(),
+				spender,
 				paymentSA.toString()
 			);
 		} else {
@@ -261,21 +261,21 @@ export const doCreateAgreement = (payload: {
 		const gastkn = await metodoTkn.estimateGas();
 		// Resolve Promise for Send Tx to IncreaseAllowance
 		Promise.resolve(gastkn).then(async (gastkn:any) => {
-			const agreementTransaction = await metodoTkn.send({ from: address.toLowerCase(), gas:gastkn+5e4, gasPrice: 50e9 })
+			const agreementTransaction = await metodoTkn.send({ from: address, gas:gastkn+5e4, gasPrice: 50e9 })
 		   .on('receipt', async function (receipt: any) {
 				console.log('resolve increaseAllow'+selectedToken+'token',receipt);
 				// Withdraw PAID Token
 				const metodoFn = AgreementContract.methods.payPaidServices(
-					token.toLowerCase(),
-					address.toLowerCase(),
-					recipientTKN.toLowerCase(),
+					token,
+					address,
+					recipientTKN,
 					paymentSA.toString()
 				);
 				// EstimateGas for Withdraw PAIDToken
 			   	const gastx = await metodoFn.estimateGas();
 				// Resolve Promise for Withdraw PAIDToken
 			   	Promise.resolve(gastx).then(async (gastx:any) => {
-					const withdrawTransaction = await metodoFn.send({ from: address.toLowerCase(), gas:gastx+5e4, gasPrice: 50e9 })
+					const withdrawTransaction = await metodoFn.send({ from: address, gas:gastx+5e4, gasPrice: 50e9 })
 					.on('receipt', async function (receipt: any) {
 						console.log('resolve withdraw'+selectedToken+'token',receipt);
 			   			// Create Agreements in the Smart Contract
@@ -290,7 +290,7 @@ export const doCreateAgreement = (payload: {
 						const gas = await methodFn.estimateGas();
 						// Resolve Promise for Create Smart Agreements
 						Promise.resolve(gas).then(async (gas:any) => {
-							const agreementTransaction = await methodFn.send({ from: address.toLowerCase(), gas:gas+5e4, gasPrice: 50e9 })
+							const agreementTransaction = await methodFn.send({ from: address, gas:gas+5e4, gasPrice: 50e9 })
 							.on('receipt', async function (receipt: any) {
 								axios.post(apiUrl+'email/new-agreement', {
 									'counterParty': {
