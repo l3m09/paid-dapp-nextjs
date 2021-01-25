@@ -46,6 +46,7 @@ import { KeyStorageModel } from 'universal-crypto-wallet/dist/key-storage/KeySto
 import SuccessDialog from '../../components/SuccessDialog';
 import AgreementType from '../../models/AgreementType';
 import { Sessions } from '../../utils/sessions';
+import { isUnlock } from '../../utils/metamask';
 
 function SelectedDocument(payload: {
 	show: boolean;
@@ -128,16 +129,15 @@ const Documents: React.FC = () => {
 		agreementTypes
 	} = documentsState;
 	const wallet = useSelector((state: any) => state.wallet);
-	const { connectedWallet ,currentWallet } = wallet;
-	// if (currentWallet == null) {
-	// 	throw new Error('disconnet wallet');
-	// }
+	const { currentWallet } = wallet;
+
 	const [showModal, setShowModal] = useState(false);
 	const [showPopOver, setShowPopover] = useState(false);
 	const [currentIndex, setCurrentIndex] = useState(0);
 	
 	useEffect(() => {
-		if(!Sessions.getTimeoutBool()){
+		console.log('document connect',window.ethereum.isConnected())
+		if(!Sessions.getTimeoutBool()&&(window.ethereum.isConnected())){
 			Sessions.setTimeoutCall();
 			dispatch(doGetDocuments(currentWallet));
 		}
@@ -177,7 +177,7 @@ const Documents: React.FC = () => {
 			Sessions.setTimeoutCall();
 		}
 		else{
-			// history.push('/');
+			history.push('/');
 		}
 		setShowPopover(show);
 	}

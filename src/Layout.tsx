@@ -42,34 +42,9 @@ const Layout: React.FC = () => {
 
 	const [showUnlockWalletModal, setShowUnlockWalletModal] = useState(false);
 
-	// useEffect(() => {
-	// 	dispatch(doGetWallets());
-	// 	// dispatch(doGetCurrentWallet());
-	// }, [dispatch]);
-
 	const dismissModal = () => {
 		setShowUnlockWalletModal(false);
 	};
-
-	// useEffect(() => {
-	// 	if (window.ethereum != undefined) {
-	// 		const connected:boolean = window.ethereum.isConnected();
-	// 		if (connected == true) {
-	// 			history.push('/documents');
-	// 			dismissModal()
-	// 		} else {
-	// 			dispatch(openSuccessDialog('Failed to Connect Metamask'));
-	// 		}
-	// 	// } else if (currentWallet !== null) {
-	// 	// 	setShowUnlockWalletModal(false);
-	// 	// } else if (wallets.length > 0) {
-	// 	// 	history.push('/wallets')
-	// 	// 	dismissModal();
-	// 	} else {
-	// 		dismissModal();
-	// 		history.push('/')
-	// 	}
-	// }, [history]);
 
 	return (
 		<IonContent className="main-content">
