@@ -10,8 +10,6 @@ import {
 } from '../../../redux/actions/documents';
 import { useHistory, useParams } from 'react-router';
 import { getContractTemplate } from '../../../redux/actions/template/index';
-import { BlockchainFactory } from '../../../utils/blockchainFactory';
-import { ContractFactory } from '../../../utils/contractFactory';
 import SmartAgreementsForm from './smartAgreementsForms/SmartAgreementsForm';
 
 interface PreviewAgreementProps {

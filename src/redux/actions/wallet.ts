@@ -221,12 +221,12 @@ export const doConnectWallet = (ethereum:any, history:any
 				const accounts = await ethereum.request({ method: 'eth_requestAccounts' })
 				.then(async (addresses)=>{
 					const address = addresses[0];
-					const balance = await getBalanceWallet(metaInstance?.web3Instance, address);
-					const paidBalance = await getPaidBalance(metaInstance?.web3Instance, address, network);
-					const daiBalance = await getDaiBalance(metaInstance?.web3Instance, address, network);
+					const balance = await getBalanceWallet(metaInstance?.web3Instance, address.toLowerCase());
+					const paidBalance = await getPaidBalance(metaInstance?.web3Instance, address.toLowerCase(), network);
+					const daiBalance = await getDaiBalance(metaInstance?.web3Instance, address.toLowerCase(), network);
 					const referenceWallet = {
 						web3: metaInstance?.web3Instance,
-						address,
+						address: address.toLowerCase(),
 						balance: balance,
 						balanceToken: paidBalance,
 						balanceDaiToken: daiBalance,
@@ -258,11 +258,11 @@ export const doConnectWallet = (ethereum:any, history:any
 					// Get Address
 					const address = addresses[0];
 					// Get Balance of Wallet and Token
-					const balance = await getBalanceWallet(metaInstance?.web3Instance, address);
-					const paidBalance = await getPaidBalance(metaInstance?.web3Instance, address, network);
-					const daiBalance = await getDaiBalance(metaInstance?.web3Instance, address, network);
+					const balance = await getBalanceWallet(metaInstance?.web3Instance, address.toLowerCase());
+					const paidBalance = await getPaidBalance(metaInstance?.web3Instance, address.toLowerCase(), network);
+					const daiBalance = await getDaiBalance(metaInstance?.web3Instance, address.toLowerCase(), network);
 					const referenceWallet = {
-						address,
+						address: address.toLowerCase(),
 						balance: balance,
 						balanceToken: paidBalance,
 						balanceDaiToken: daiBalance,
