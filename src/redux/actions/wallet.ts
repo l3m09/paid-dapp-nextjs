@@ -1,9 +1,7 @@
 import { WalletActionTypes } from '../actionTypes/wallet';
-import { useHistory } from 'react-router';
 import { Plugins } from '@capacitor/core';
 import { BlockchainFactory } from '../../utils/blockchainFactory';
 import { ContractFactory } from '../../utils/contractFactory';
-import { Sessions } from '../../utils/sessions';
 import { openSuccessDialog, openErrorDialog } from './documents';
 import Web3 from 'web3';
 
@@ -207,58 +205,51 @@ const getBalanceWallet = async (web3: Web3, address: any) => {
 export const doConnectWallet = (ethereum:any, history:any
 ) => async (dispatch: any) => {
 	dispatch({ type: WalletActionTypes.CONNECT_WALLET_LOADING });
-	console.log(ethereum,history);
 	try {
-		console.log('doConnectWallet', ethereum, ethereum.isMetamask);
-		if (ethereum == undefined) {
+		if (ethereum === undefined) {
+			alert('Failure to detect your Wallet, pls check is Installed')
 			dispatch(openErrorDialog('Failure to detect your Wallet, pls check is Installed'))
 			history.push('/');
 		} else {
 			const connected = ethereum.isConnected();
 			const metamask = ethereum.isMetaMask;
-			if ((connected == true) && (metamask == true)) {
-				const unlocked = await ethereum._metamask.isUnlocked()
-				if (unlocked == true) {
-					console.log('ethereum._metamask.isUnlocked() = true',ethereum);
-					// build currentWallet / connectedWallet Element
-					const metaInstance = await BlockchainFactory.getWeb3Mask(ethereum);
-					const network = await BlockchainFactory.getNetwork(metaInstance.network);
-					window.web3 = metaInstance?.web3Instance;
-					const accounts = await ethereum.request({ method: 'eth_requestAccounts' })
-					.then(async (addresses)=>{
-						const address = addresses[0];
-						const balance = await getBalanceWallet(metaInstance?.web3Instance, address);
-						const paidBalance = await getPaidBalance(metaInstance?.web3Instance, address, network);
-						const daiBalance = await getDaiBalance(metaInstance?.web3Instance, address, network);
-						const referenceWallet = {
-							web3: metaInstance?.web3Instance,
-							address,
-							balance: balance,
-							balanceToken: paidBalance,
-							balanceDaiToken: daiBalance,
-							network,
-						};
-						dispatch(connectWallet(referenceWallet));
-						console.log('connect metamask successfully');
-						history.push('/documents');
-					})
-					.catch((error:any) => {
-						if ((error.code === 4001) || (error.code === 4100) || (error.code === 4200) || (error.code === 4900) || (error.code === 4901))  {
-						  	// EIP-1193 userRejectedRequest error
-						  	dispatch(openErrorDialog('Reject Unlocked Wallet in Metamask'));
-							history.push('/');
-						} else {
-							console.error('Error code out to EIP-1193',error);
-							dispatch(openErrorDialog(error));
-							throw new Error('Error code out to EIP-1193');
-						}
-					});
-				} else {
-					dispatch(openErrorDialog('Pls Unlocked Wallet in Metamask'));
-					history.push('/');
-				}
+			if ((connected === true) && (metamask === true)) {
+				// build currentWallet / connectedWallet Element
+				const metaInstance = await BlockchainFactory.getWeb3Mask(ethereum);
+				const network = await BlockchainFactory.getNetwork(metaInstance.network);
+				window.web3 = metaInstance?.web3Instance;
+				const accounts = await ethereum.request({ method: 'eth_requestAccounts' })
+				.then(async (addresses)=>{
+					const address = addresses[0];
+					const balance = await getBalanceWallet(metaInstance?.web3Instance, address);
+					const paidBalance = await getPaidBalance(metaInstance?.web3Instance, address, network);
+					const daiBalance = await getDaiBalance(metaInstance?.web3Instance, address, network);
+					const referenceWallet = {
+						web3: metaInstance?.web3Instance,
+						address,
+						balance: balance,
+						balanceToken: paidBalance,
+						balanceDaiToken: daiBalance,
+						network,
+					};
+					dispatch(connectWallet(referenceWallet));
+					console.log('connect metamask successfully');
+					debugger
+					history.push('/documents');
+				})
+				.catch((error:any) => {
+					if ((error.code === 4001) || (error.code === 4100) || (error.code === 4200) || (error.code === 4900) || (error.code === 4901))  {
+						// EIP-1193 userRejectedRequest error
+						console.log('Reject Unlocked Wallet in Metamask');
+						dispatch(openSuccessDialog('Reject Unlocked Wallet in Metamask'));
+						history.push('/');
+					} else {
+						console.error('Error code out to EIP-1193',error);
+						dispatch(openSuccessDialog(error));
+						throw new Error('Error code out to EIP-1193');
+					}
+				});
 			} else if ((connected == true) && (metamask == false)) {
-				console.log(ethereum);
 				// build currentWallet / connectedWallet Element
 				const metaInstance = await BlockchainFactory.getWeb3Mask(ethereum);
 				const network = metaInstance.network;
@@ -278,12 +269,14 @@ export const doConnectWallet = (ethereum:any, history:any
 						balanceDaiToken: daiBalance,
 					};
 					dispatch(connectWallet(referenceWallet));
+					console.log('connect with wallet successfully');
 					history.push('/documents');
 				})
 				.catch((error:any) => {
 					if ((error.code === 4001) || (error.code === 4100) || (error.code === 4200) || (error.code === 4900) || (error.code === 4901))  {
 						// EIP-1193 userRejectedRequest error
-						dispatch(openErrorDialog('Reject Unlocked Wallet in Metamask'));
+						console.log('Reject Unlocked Wallet');
+						dispatch(openErrorDialog('Reject Unlocked Wallet'));
 						history.push('/');
 					} else {
 						console.error('Error code out to EIP-1193',error);
@@ -293,7 +286,9 @@ export const doConnectWallet = (ethereum:any, history:any
 				});
 			} else {
 				let err:any
-				err.message = 'Failure to Connect Wallet';
+				err.message = 'Failure to Connect Provider Wallet';
+				alert(err.message);
+				console.log(err.message);
 				dispatch(openErrorDialog(err.message));
 				dispatch({
 					type: WalletActionTypes.CONNECT_WALLET_FAILURE,
@@ -302,6 +297,7 @@ export const doConnectWallet = (ethereum:any, history:any
 			}
 		}
 	} catch (err) {
+		alert(err.message);
 		dispatch(openErrorDialog(err.message));
 		dispatch({
 			type: WalletActionTypes.CONNECT_WALLET_FAILURE,

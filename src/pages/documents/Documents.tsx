@@ -135,6 +135,7 @@ const Documents: React.FC = () => {
 	const [showModal, setShowModal] = useState(false);
 	const [showPopOver, setShowPopover] = useState(false);
 	const [currentIndex, setCurrentIndex] = useState(0);
+	
 	useEffect(() => {
 		if(!Sessions.getTimeoutBool()){
 			Sessions.setTimeoutCall();
