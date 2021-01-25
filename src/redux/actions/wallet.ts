@@ -234,7 +234,6 @@ export const doConnectWallet = (ethereum:any, history:any
 					};
 					dispatch(connectWallet(referenceWallet));
 					console.log('connect metamask successfully');
-					debugger
 					history.push('/documents');
 				})
 				.catch((error:any) => {
