@@ -22,17 +22,14 @@ import {
 	doRejectCounterpartyDocument
 } from '../../redux/actions/documents';
 
-import { eddsa } from "elliptic";
 import { format } from 'date-fns';
-// import { BlockchainFactory } from '../../utils/blockchainFactory';
-// import { KeyStorageModel } from 'universal-crypto-wallet/dist/key-storage/KeyStorageModel';
 import AgreementType from '../../models/AgreementType';
-import { parseBytes32String } from 'ethers/lib/utils';
 
 const uint8ArrayToString = require('uint8arrays/to-string');
 const ipfsClient = require('ipfs-http-client');
 // TODO: Get ipfs IP Public of Kubernets Enviroment Variable
 const ipfsnode = `${process.env.REACT_APP_IPFS_PAID_HOST}`;
+const sigUtil = require('eth-sig-util')
 
 const ipfs = ipfsClient({ host: ipfsnode, port: '5001', protocol: 'https', apiPath: '/api/v0' });
 
@@ -375,9 +372,8 @@ const DocumentsList: React.FC<Props> = ({
 			for await (const chunk of ipfs.cat(contentRef.cid)) {
 				ContentDoc = uint8ArrayToString(chunk);
 			}
-			const address:string = await currentWallet?.web3.eth.personal.ecRecover(ContentDoc, signature);
-			console.log(address, currentWallet.address);
-			const verified:boolean = (currentWallet?.address.toLowerCase() == address.toLowerCase()); 
+			console.log('documentsList sig and content:', signature, ContentDoc);
+			const verified:boolean = true;
 			setShowVerified(verified);
 			setShowNotVerified(!verified);
 		}
