@@ -8,6 +8,7 @@ import {
 	IonCardTitle,
 	IonCardSubtitle,
 	IonCardHeader,
+	IonBadge,
 	IonCard, IonTitle, IonHeader, IonToolbar, IonButtons, IonContent, IonLoading, IonList, IonTextarea, IonNote,
 } from '@ionic/react';
 
@@ -21,15 +22,11 @@ import {
 	doRejectCounterpartyDocument
 } from '../../redux/actions/documents';
 
-import { IonBadge } from '@ionic/react';
-import { Plugins } from '@capacitor/core';
 import { eddsa } from "elliptic";
 import { format } from 'date-fns';
-import { BlockchainFactory } from '../../utils/blockchainFactory';
-import { KeyStorageModel } from 'universal-crypto-wallet/dist/key-storage/KeyStorageModel';
+// import { BlockchainFactory } from '../../utils/blockchainFactory';
+// import { KeyStorageModel } from 'universal-crypto-wallet/dist/key-storage/KeyStorageModel';
 import AgreementType from '../../models/AgreementType';
-
-const { Storage } = Plugins;
 
 const uint8ArrayToString = require('uint8arrays/to-string');
 const ipfsClient = require('ipfs-http-client');
@@ -68,7 +65,7 @@ function PdfViewerModal(payload: {
 }
 
   
-function createMarkup(html: string) { 
+function createMarkup(html: string) {
     return {__html: html};
   }
 
@@ -473,6 +470,7 @@ const DocumentsList: React.FC<Props> = ({
 								const {data, meta, event} = document;
 								const createdAt = format(new Date(event.created_at * 1000), 'MM/dd/yyyy kk:mm:ss');
 								const updatedAt = format(new Date(event.updated_at * 1000), 'MM/dd/yyyy kk:mm:ss');
+								console.log(event.status, event.from, event.to, currentWallet?.address);
 
 								return (
 									<div key={index} className="table-body" onClick={async () => {showDocument({data, meta, event})}}>
@@ -483,10 +481,10 @@ const DocumentsList: React.FC<Props> = ({
 										<div className="col">{createdAt}</div>
 										<div className="col">{updatedAt}</div>
 										<div className="col">
-											{event.status == 0 && currentWallet?.address == event.from ? <IonBadge color="success">PENDING</IonBadge> :
-											(event.status == 0 && currentWallet?.address == event.to ? <IonBadge color="secondary">SIGN</IonBadge> : 
-											(event.status == 1 && currentWallet?.address == event.from ? <IonBadge color="warning">SIGNED</IonBadge> : 
-											event.status == 1 && currentWallet?.address == event.to ? <IonBadge color="primary">SIGNED</IonBadge> : null))}
+											{((event.status == 0) && (currentWallet?.address.toString() === event.from.toString())) ? <IonBadge color="success">PENDING</IonBadge> :
+											(((event.status == 0) && (currentWallet?.address.toString() === event.to.toString())) ? <IonBadge color="secondary">SIGN</IonBadge> : 
+											(((event.status == 1) && (currentWallet?.address.toString() === event.from.toString())) ? <IonBadge color="warning">SIGNED</IonBadge> : 
+											((event.status == 1) && (currentWallet?.address.toString() === event.to.toString()) ? <IonBadge color="primary">SIGNED</IonBadge> : null)))}
 										</div>
 									</div>
 								);
