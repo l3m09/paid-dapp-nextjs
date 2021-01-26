@@ -216,7 +216,6 @@ export const doConnectWallet = (ethereum:any, history:any
 				// build currentWallet / connectedWallet Element
 				const metaInstance = await BlockchainFactory.getWeb3Mask(ethereum);
 				const network = await BlockchainFactory.getNetwork(metaInstance.network);
-				dispatch(openSuccessDialog('You are in Ethereum '+network));
 				window.web3 = metaInstance?.web3Instance;
 				const accounts = await ethereum.request({ method: 'eth_requestAccounts' })
 				.then(async (addresses)=>{
@@ -258,7 +257,6 @@ export const doConnectWallet = (ethereum:any, history:any
 				// build currentWallet / connectedWallet Element
 				const metaInstance = await BlockchainFactory.getWeb3Mask(ethereum);
 				const network = await BlockchainFactory.getNetwork(metaInstance.network);
-				dispatch(openSuccessDialog('You are in Ethereum '+network));
 				window.web3 = metaInstance?.web3Instance;
 				const accounts = await ethereum.request({ method: 'eth_requestAccounts' })
 				.then(async (addresses)=>{
@@ -271,7 +269,6 @@ export const doConnectWallet = (ethereum:any, history:any
 						paidBalance = await getPaidBalance(metaInstance?.web3Instance, address, network);
 					    daiBalance = await getDaiBalance(metaInstance?.web3Instance, address, network);
 					} else {
-						dispatch(openSuccessDialog('You are in Ethereum '+network));
 						paidBalance = '0';
 						daiBalance = '0';
 					}
