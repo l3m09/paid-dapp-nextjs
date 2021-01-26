@@ -1,12 +1,12 @@
 export const Nda = `<div class="contract" style="width: 800px; background-color:white; color: black;">
 	<div style="text-align: center;">
-		<h3><span id="createDate">{{createDate}}</span></h3>
+		<h3><span id="createDate"><div style="display: inline-block; background-color:#f79632">{{createDate}}</div></span></h3>
 	</div>
 	<div style="text-align: center;">
 		<h1 id="title">MUTUAL NONDISCLOSURE AGREEMENT</h1>	
 	</div>
 	<div>
-		<p>This Mutual Nondisclosure Agreement (this "Agreement") is made by and between <span id="partyName">{{partyName}}</span> (the "Company"), and <span id="counterPartyName">{{counterPartyName}}</span>  ("Counterparty").  Each party has disclosed and/or may further disclose its Confidential Information (as defined below) to the other in connection with the Relationship (as defined below) pursuant to the terms and conditions of this Agreement.  As used herein, the term "Discloser" shall refer to the Company whenever the context refers to the Company's Confidential Information being disclosed to Counterparty, which is referred to as "Recipient" in that context.  Conversely, the term "Discloser" shall refer to Counterparty whenever the context refers to Counterparty's Confidential Information being disclosed to the Company, which is referred to as "Recipient" in that context.</p>
+		<p>This Mutual Nondisclosure Agreement (this "Agreement") is made by and between <span id="partyName"><div style="display: inline-block; background-color:#f79632">{{partyName}}</div></span> (the "Company"), and <span id="counterPartyName"><div style="display: inline-block; background-color:#f79632">{{counterPartyName}}</div></span>  ("Counterparty").  Each party has disclosed and/or may further disclose its Confidential Information (as defined below) to the other in connection with the Relationship (as defined below) pursuant to the terms and conditions of this Agreement.  As used herein, the term "Discloser" shall refer to the Company whenever the context refers to the Company's Confidential Information being disclosed to Counterparty, which is referred to as "Recipient" in that context.  Conversely, the term "Discloser" shall refer to Counterparty whenever the context refers to Counterparty's Confidential Information being disclosed to the Company, which is referred to as "Recipient" in that context.</p>
 	</div>
 	
 	<div style="text-align: center;">
@@ -69,17 +69,17 @@ disclosure, or which information would, under the circumstances, appear to a rea
 		<p><b>THE COMPANY:</b></p>
 		<p>&nbsp;</p>
 		<p>_______________________________________</p>
-		<p>Name: {{partyName}}</p>
-		<p>Email: <span id="partyEmail">{{partyEmail}}</span></p>
-		<p>Address: <span id="partyAddress">{{partyAddress}}</span></p>
-		<p>Wallet: <span id="partyWallet">{{partyWallet}}</span></p>
+		<p>Name: <div style="display: inline-block; background-color:#f79632">{{partyName}}</div></p>
+		<p>Email: <span id="partyEmail"><div style="display: inline-block; background-color:#f79632">{{partyEmail}}</div></span></p>
+		<p>Address: <span id="partyAddress"><div style="display: inline-block; background-color:#f79632">{{partyAddress}}</div></span></p>
+		<p>Wallet: <span id="partyWallet"><div style="display: inline-block; background-color:#f79632">{{partyWallet}}</div></span></p>
 		<p>&nbsp;</p>
 		<p><b>COUNTERPARTY:</b></p>
 		<p>&nbsp;</p>
 		<p>_______________________________________</p>
-		<p>Name: {{counterPartyName}}</p>
-		<p>Email: <span id="counterPartyEmail">{{counterPartyEmail}}</span></p>
-		<p>Address: <span id="counterPartyAddress">{{counterPartyAddress}}</span></p>
-		<p>Wallet: <span id="counterPartyWallet">{{counterPartyWallet}}</span></p>
+		<p>Name: <div style="display: inline-block; background-color:#f79632">{{counterPartyName}}</div></p>
+		<p>Email: <span id="counterPartyEmail"><div style="display: inline-block; background-color:#f79632">{{counterPartyEmail}}</div></span></p>
+		<p>Address: <span id="counterPartyAddress"><div style="display: inline-block; background-color:#f79632">{{counterPartyAddress}}</div></span></p>
+		<p>Wallet: <span id="counterPartyWallet"><div style="display: inline-block; background-color:#f79632">{{counterPartyWallet}}</div></span></p>
 	</div>
 </div>`;
