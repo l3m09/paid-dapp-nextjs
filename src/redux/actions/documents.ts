@@ -195,9 +195,7 @@ export const doCreateAgreement = (payload: {
 		// const bytesContent = ethers.utils.toUtf8Bytes(arrayContent);
 		const hashContent:string = web3.utils.sha3(content).replace('0x', '');
 		const bytesContent:string = web3.utils.utf8ToHex(hashContent);
-		debugger
 		const signature:string = await web3.eth.personal.sign(bytesContent, address.toLowerCase());
-		debugger
 		const digest = ethers.utils.sha256(bytesContent).replace('0x', '');
 		// const ec_alice = new eddsa('ed25519');
 		// const signer = ec_alice.keyFromSecret(rawWallet.keypairs.ED25519);
@@ -207,7 +205,6 @@ export const doCreateAgreement = (payload: {
 		// const pubKey = signer.getPublic();
 		const recover:string = await web3.eth.personal.ecRecover(bytesContent,signature);
 		console.log('create document signature, digest', signature, digest, recover, currentWallet?.address);
-		debugger;
 		const opts = { create: true, parents: true };
 
 		const elementsAbi = abiLib.getElementsAbi({
@@ -648,7 +645,7 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 			const arrayContent = btoa(unescape(encodeURIComponent(pdfContent)));
 
 			const bytesContent = currentWallet?.web3.utils.utf8ToHex(arrayContent);
-			const signature = await currentWallet?.web3.eth.sign(bytesContent, currentWallet?.address.toLowerCase());
+			const signature = await currentWallet?.web3.eth.personal.sign(bytesContent, currentWallet?.address.toLowerCase());
 			// const ec_alice = new eddsa('ed25519');
 			// const signer = ec_alice.keyFromSecret(rawWallet.keypairs.ED25519);
 			// const signature = signer
@@ -771,7 +768,7 @@ export const doRejectCounterpartyDocument = (document: any, comments: string) =>
 			const arrayContent = btoa(unescape(encodeURIComponent(pdfContent)));
 
 			const bytesContent = currentWallet?.web3.utils.utf8ToHex(arrayContent);
-			const signature = await currentWallet?.web3.eth.sign(bytesContent, currentWallet?.address.toLowerCase(), 'PAIDNetwork');
+			const signature = await currentWallet?.web3.eth.personal.sign(bytesContent, currentWallet?.address.toLowerCase(), 'PAIDNetwork');
 			// const ec_alice = new eddsa('ed25519');
 			// const signer = ec_alice.keyFromSecret(rawWallet.keypairs.ED25519);
 			// const signature = signer
@@ -791,7 +788,7 @@ export const doRejectCounterpartyDocument = (document: any, comments: string) =>
 			const partiesContentStr : string = await partiesContent();
 
 			let ipfsHash = await uploadsIPFS(ipfs, blobContent, opts, digest, signature, formId, currentWallet?.address, JSON.stringify(elementsAbi), partiesContentStr, null);
-			console.log('Reject IpfsHash', ipfsHash.ToString())
+			console.log('Reject IpfsHash', ipfsHash.toString())
 			// Sending Notification of CounterParty Reject Smart Agreements
 			const parties = JSON.parse(partiesContentStr);
 			// Sending Notification
