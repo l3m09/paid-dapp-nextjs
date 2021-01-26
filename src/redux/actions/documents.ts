@@ -650,9 +650,9 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 			const pdfContent:string = await ipfsContent();
 			// console.log(pdfContent);
 			const blobContent = base64StringToBlob(btoa(unescape(encodeURIComponent(pdfContent))), 'text/html');
-			const arrayContent = btoa(unescape(encodeURIComponent(pdfContent)));
+			// const arrayContent = btoa(unescape(encodeURIComponent(pdfContent)));
 
-			const bytesContent = currentWallet?.web3.utils.utf8ToHex(arrayContent);
+			const bytesContent = currentWallet?.web3.utils.utf8ToHex(pdfContent);
 			const signature = await currentWallet?.web3.eth.personal.sign(bytesContent, currentWallet?.address.toLowerCase());
 			// const ec_alice = new eddsa('ed25519');
 			// const signer = ec_alice.keyFromSecret(rawWallet.keypairs.ED25519);
@@ -746,6 +746,15 @@ export const doRejectCounterpartyDocument = (document: any, comments: string) =>
 				dispatch(openSuccessDialog('Failed to CounterParty Reject Smart Agreement'));
 				throw new Error('Failed to CounterParty Reject Smart Agreement');
 			}
+			await currentWallet?.web3.eth.getBalance(currentWallet?.address).then((balancewei) =>{
+				const balance = currentWallet?.web3.utils.fromWei(balancewei);
+				const parsedBalance = BigNumber(balance).toNumber();
+				if ((parsedBalance <= 0.0009999999999)) {
+					throw new Error('The wallet should has balance to send a transaction.');
+				}
+			})
+
+			const AgreementContract = ContractFactory.getAgreementContract(currentWallet?.web3, currentWallet?.network);
 
 			const form = document.data.agreementForm;
 			const formId = document.event.agreementFormTemplateId;
@@ -773,10 +782,10 @@ export const doRejectCounterpartyDocument = (document: any, comments: string) =>
 			const pdfContent:string = await ipfsContent();
 			// console.log(pdfContent);
 			const blobContent = base64StringToBlob(btoa(unescape(encodeURIComponent(pdfContent))), 'text/html');
-			const arrayContent = btoa(unescape(encodeURIComponent(pdfContent)));
+			// const arrayContent = btoa(unescape(encodeURIComponent(pdfContent)));
 
-			const bytesContent = currentWallet?.web3.utils.utf8ToHex(arrayContent);
-			const signature = await currentWallet?.web3.eth.personal.sign(bytesContent, currentWallet?.address.toLowerCase(), 'PAIDNetwork');
+			const bytesContent = currentWallet?.web3.utils.utf8ToHex(pdfContent);
+			const signature = await currentWallet?.web3.eth.personal.sign(bytesContent, currentWallet?.address.toLowerCase());
 			// const ec_alice = new eddsa('ed25519');
 			// const signer = ec_alice.keyFromSecret(rawWallet.keypairs.ED25519);
 			// const signature = signer
@@ -796,29 +805,59 @@ export const doRejectCounterpartyDocument = (document: any, comments: string) =>
 			const partiesContentStr : string = await partiesContent();
 
 			let ipfsHash = await uploadsIPFS(ipfs, blobContent, opts, digest, signature, formId, currentWallet?.address, JSON.stringify(elementsAbi), partiesContentStr, null);
-			console.log('Reject IpfsHash', ipfsHash.ToString())
+			console.log('Reject IpfsHash', ipfsHash.toString())
 			// Sending Notification of CounterParty Reject Smart Agreements
 			const parties = JSON.parse(partiesContentStr);
-			// Sending Notification
-			axios.post(apiUrl+'email/reject-agreement', {
-				// counterparty field is the SENDER
-				'counterParty': {
-					'name': parties.counterpartyName,
-					'email': parties.counterpartyEmail,
-					'comments': comments
-				},
-				// party field is the TARGET
-				'party':{
-					'name': parties.partyName
-				}
-			})
-			.then(function (response) {
-				console.log('email response: ', response);
-			})
-			.catch(function (error) {
-				console.log('email error: ',error);
-				dispatch(openSuccessDialog('Error Sending Reject Notification'));
+
+			const methodFn = AgreementContract.methods.counterPartiesReject(
+				agreementId,
+				validUntil,
+				ipfsHash.toString(),
+				formId,
+				form,
+				'0x' + digest);
+
+			const gas = await methodFn.estimateGas();
+
+			Promise.resolve(gas).then(async (gas:any) => {
+				const agreementTransaction = await methodFn.send({ from: currentWallet?.address, gas:gas+5e4, gasPrice: 50e9 })
+				.on('receipt', async function (receipt: any) {
+					console.log(receipt);
+					const parties = JSON.parse(partiesContentStr);
+					// Sending Notification
+					axios.post(apiUrl+'email/reject-agreement', {
+						// counterparty field is the SENDER
+						'counterParty': {
+							'name': parties.counterpartyName,
+							'email': parties.counterpartyEmail,
+							'comments': comments
+						},
+						// party field is the TARGET
+						'party':{
+							'name': parties.partyName
+						}
+					})
+					.then(function (response) {
+						console.log('email response: ', response);
+					})
+					.catch(function (error) {
+						console.log('email error: ',error);
+						dispatch(openSuccessDialog('Error Sending Reject Notification'));
+					});
+					dispatch(getSelectedSignedDocument(document));
+					dispatch(openSuccessDialog('You have successfully Reject the Smart Agreement'));
+				})
+				.on('error', function (error: any, receipt: any) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.		
+					// alert('Transaction failed');
+					dispatch(openSuccessDialog('Failed Reject the Smart Agreement'));
+					dispatch({ type: DocumentsActionTypes.COUNTERPARTY_SIGNED_FAILURE });
+					//throw new Error('Transaction failed');
+				});
 			});
+
+
+
+			
 			dispatch(getSelectedRejectDocument(document));
 			dispatch(openSuccessDialog('You Reject the Smart Agreement'));
 		}
