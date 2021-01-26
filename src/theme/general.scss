@@ -292,3 +292,13 @@ ion-input, ion-textarea {
 .item-interactive.item-has-focus {
   --highlight-background: none !important;
 }
+
+.banner-mobile-soon-container {
+  --background: $brand-primary;
+  background-color: $brand-primary;
+  height: 10%;
+  width: 100%;
+  color: $text-default;
+  text-align: center;
+  z-index: 300;
+}

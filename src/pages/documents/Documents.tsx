@@ -46,6 +46,7 @@ import { IonText } from '@ionic/react';
 import AgreementType from '../../models/AgreementType';
 import { Sessions } from '../../utils/sessions';
 import Web3 from 'web3'
+import BannerMobileSoon from '../../components/BannerMobileSoon';
 
 function SelectedDocument(payload: {
 	show: boolean;
@@ -219,6 +220,7 @@ const Documents: React.FC = () => {
 	}
 	return (
 		<IonPage className="documents-page content-page">
+			<BannerMobileSoon />
 			<IonContent fullscreen>
 				<IonHeader translucent={false} mode="md">
 					<IonToolbar>
