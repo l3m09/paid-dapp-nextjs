@@ -653,7 +653,7 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 			const arrayContent = btoa(unescape(encodeURIComponent(pdfContent)));
 
 			const bytesContent = currentWallet?.web3.utils.utf8ToHex(arrayContent);
-			const signature = await currentWallet?.web3.eth.sign(bytesContent, currentWallet?.address.toLowerCase());
+			const signature = await currentWallet?.web3.eth.personal.sign(bytesContent, currentWallet?.address.toLowerCase());
 			// const ec_alice = new eddsa('ed25519');
 			// const signer = ec_alice.keyFromSecret(rawWallet.keypairs.ED25519);
 			// const signature = signer
@@ -776,7 +776,7 @@ export const doRejectCounterpartyDocument = (document: any, comments: string) =>
 			const arrayContent = btoa(unescape(encodeURIComponent(pdfContent)));
 
 			const bytesContent = currentWallet?.web3.utils.utf8ToHex(arrayContent);
-			const signature = await currentWallet?.web3.eth.sign(bytesContent, currentWallet?.address.toLowerCase(), 'PAIDNetwork');
+			const signature = await currentWallet?.web3.eth.personal.sign(bytesContent, currentWallet?.address.toLowerCase(), 'PAIDNetwork');
 			// const ec_alice = new eddsa('ed25519');
 			// const signer = ec_alice.keyFromSecret(rawWallet.keypairs.ED25519);
 			// const signature = signer
