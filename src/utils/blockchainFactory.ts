@@ -1,14 +1,12 @@
-import { add, options } from 'ionicons/icons';
 import {  createWalletManager, WalletManager, AlgorithmType, KeyModel} from 'universal-crypto-wallet';
 import { KeyStorageModel } from 'universal-crypto-wallet/dist/key-storage/KeyStorageModel';
 import { WalletModel } from 'universal-crypto-wallet/dist/key-storage/WalletModel';
-import { ethers, providers, Wallet } from 'ethers';
 import Web3 from 'web3';
 
 export class BlockchainFactory {
 	
 	// private static wssUrl = 'wss://kind-lalande:arrest-cursor-slogan-prism-carbon-neon@ws-nd-233-385-399.p2pify.com';
-	private static wssUrl = `${process.env.REACT_APP_WEB3_WSS}`;;
+	private static wssUrl = `${process.env.REACT_APP_WEB3_WSS}`;
 	// private static url : string = 'https://rinkeby.infura.io/v3/c01c014a022d43488fa1b30dc034a159';
 	private static _web3: Web3 | null = null;
 	private static _walletManager: WalletManager | null = null;
@@ -50,13 +48,26 @@ export class BlockchainFactory {
 		// if (keyService) {
 		// 	const pk = keyService.getPrivateKey(AlgorithmType.ES256K, keyModel);
 		// 	console.log('privateKey Wallet',pk);
-		
+
 		/*BlockchainFactory._web3.eth.accounts.wallet.clear().add(privateKey);*/
-		
+
 		// 	console.log('web3 eth accounts wallet', BlockchainFactory._web3.eth.accounts.wallet)
 		// }
 		return BlockchainFactory._wallet;
 	};
+
+	public static getWeb3Mask = async (ethereum: any) => {
+		if(!BlockchainFactory._wallet) {
+				const _web3 = new Web3 (ethereum);
+				const wallet:WalletModel = {
+					web3Instance: _web3,
+					walletInstance: _web3.eth.accounts.wallet,
+					network: await _web3.eth.getChainId()
+				}
+				BlockchainFactory._wallet = wallet;
+		}
+		return BlockchainFactory._wallet;
+	}
 
 	public static getWalletManager = () => {
 		if (!BlockchainFactory._walletManager) {

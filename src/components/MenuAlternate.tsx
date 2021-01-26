@@ -16,8 +16,7 @@ import {
 	walletSharp
 } from 'ionicons/icons';
 import { useDispatch, useSelector} from 'react-redux';
-import { BlockchainFactory } from '../utils/blockchainFactory';
-import { doSetCurrentToken} from '../redux/actions/wallet';
+import { doSetCurrentToken, doShowMyCurrentWallet} from '../redux/actions/wallet';
 import { Sessions } from '../utils/sessions';
 import { useHistory } from 'react-router';
 
@@ -27,6 +26,8 @@ interface AppPage {
 	mdIcon: string;
 	title: string;
 	disabled: boolean;
+	selected: boolean;
+	click: any;
 }
 
 const customAlertTokens = {
@@ -40,58 +41,67 @@ const MenuAlternate:  React.FC = () =>{
 	const location = useLocation();
 	const dispatch = useDispatch();
 	const wallet = useSelector((state: any) => state.wallet);
-	const { unlockedWallet, selectedToken } = wallet;
+	const { currentWallet, selectedToken } = wallet;
 
-	const [disableMenu, setDisableMenu] = useState(true);
-	const [networkText, setNetWorkText] = useState('...');
+	const [disableMenu, setDisableMenu] = useState(false);
+	const [networkText, setNetWorkText] = useState(currentWallet?.network);
 	const [selectToken, setSelectToken] = useState(selectedToken);
 
 	const doSetSelectedToken = (token:string) => {
 		setSelectToken(token);
 		dispatch(doSetCurrentToken(token));
 	}
+	const paidBalance = currentWallet?.balanceToken;
+	const daiBalance = currentWallet?.balanceDaiToken;
+	let unlocked:boolean;
+	if ((currentWallet == null) && (currentWallet == undefined)) {
+		unlocked = false;
+	} else {
+		unlocked = true;
+	}
 
 	useEffect(() => {
-		if (unlockedWallet !== null) {
-			setDisableMenu(false)
-			const web3 = BlockchainFactory.getWeb3Instance(unlockedWallet.address, unlockedWallet._id, unlockedWallet.password);
+		if (unlocked == true) {
+			setDisableMenu(false);
+			setNetWorkText(currentWallet?.network);
 			if(!Sessions.getTimeoutBool()){
 				Sessions.setTimeoutCall();
 			}
 			else{
-				history.push('/wallets');
+				history.push('/');
 			}
-			web3.then((result) => {
-				const { network } = result!;
-				const _network = BlockchainFactory.getNetwork(network);
-				_network.then((networkText: string) => {
-					setNetWorkText(networkText.toUpperCase());
-				});
-			});
+		} else {
+			history.push('/');
 		}
-	}, [unlockedWallet]);
+	}, [unlocked]);
 
 	const appPages: AppPage[] = [
 		{
 			title: 'Network: ' + networkText,
-			url: '/wallets',
+			url: '',
 			iosIcon: globeSharp,
 			mdIcon: globeSharp,
-			disabled: false
+			disabled: false,
+			selected: true,
+			click: null
 		},
 		{
-			title: 'Wallets',
+			title: 'Wallet',
 			url: '/wallets',
 			iosIcon: walletSharp,
 			mdIcon: walletSharp,
-			disabled: false
+			disabled: false,
+			selected: false,
+			click: () => dispatch(doShowMyCurrentWallet(true))
 		},
 		{
 			title: 'Smart Agreements Log',
 			url: '/documents',
 			iosIcon: documentSharp,
 			mdIcon: documentSharp,
-			disabled: false
+			disabled: false,
+			selected: false,
+			click: null
 		},
 	];
 
@@ -103,12 +113,16 @@ const MenuAlternate:  React.FC = () =>{
 						key={index}
 						disabled={appPage.disabled || disableMenu}
 						className={
-							location.pathname === appPage.url ? 'selected' : ''
+							location.pathname === appPage.url ?
+							('selected') :
+							appPage.selected ?
+							('selected') :
+							('')
 						}
-						routerLink={appPage.url}
-						routerDirection="none"
 						lines="none"
 						detail={false}
+						button={appPage.click != null}
+						onClick={appPage.click}
 					>
 						<div className="icon-wrapper">
 							<IonIcon
@@ -126,7 +140,10 @@ const MenuAlternate:  React.FC = () =>{
 			>
 				<div className="icon-wrapper">
 					<IonImg
-						src="/assets/icon/icon.png"
+						src={selectToken === "paid" ?
+						('/assets/icon/icon.png') :
+						('/assets/icon/dailogo.svg')
+					}
 					/>
 				</div>
 				<IonLabel color="gradient">
@@ -143,10 +160,10 @@ const MenuAlternate:  React.FC = () =>{
 					onIonChange={ (e) => doSetSelectedToken(e.detail.value) }
 				>
 					<IonSelectOption value="paid">
-						PAID Tokens  {unlockedWallet?.balanceToken}
+						PAID Tokens  {paidBalance}
 					</IonSelectOption>
 					<IonSelectOption value="dai">
-						DAI Tokens {unlockedWallet?.balanceDaiToken}
+						DAI Tokens {daiBalance}
 					</IonSelectOption>
 				</IonSelect>
 			</IonItem>

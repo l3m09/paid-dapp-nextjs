@@ -2,15 +2,18 @@ import React, { FC, useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { renderToString } from 'react-dom/server';
 import TemplateComponent from 'react-mustache-template-component';
-import { IonButton, IonItem } from '@ionic/react';
+import { IonButton, IonButtons, IonItem, IonPopover, IonTitle, IonToolbar } from '@ionic/react';
 import {
     doSetAgreementFormInfo,
 	doCreateAgreement,
+    openErrorDialog,
 } from '../../../redux/actions/documents';
 import { useHistory, useParams } from 'react-router';
 import { getContractTemplate } from '../../../redux/actions/template/index';
-import { BlockchainFactory } from '../../../utils/blockchainFactory';
-import { ContractFactory } from '../../../utils/contractFactory';
+import SmartAgreementsForm from './smartAgreementsForms/SmartAgreementsForm';
+
+
+const NDA_TYPE_CODE = "nda";
 
 interface PreviewAgreementProps {
     current: any;
@@ -21,13 +24,17 @@ const PreviewAgreement: FC<PreviewAgreementProps> = ({ current }) => {
     const dispatch = useDispatch();
     const documentState = useSelector((state: any) => state.documents);
     const wallet = useSelector(
-		(state: { wallet: { currentWallet: any } }) => state.wallet
+		(state: { wallet: { currentWallet: any, selectedToken: string } }) => state.wallet
     );
+    const smartAgreementsState = useSelector(
+        (state: { smartAgreements:any }) => state.smartAgreements
+    );
+    const [showEditPopover, setShowEditPopover] = useState(false);
     const [agreementDocument, setAgreementDocument] = useState('');
     const [agreementData, setAgreementData] = useState({});
     
     const { agreementFormInfo, loading } = documentState;
-	const { currentWallet } = wallet;
+    const { currentWallet, selectedToken } = wallet;
 
     const { type } = useParams<{ type: string }>();
 
@@ -78,70 +85,98 @@ const PreviewAgreement: FC<PreviewAgreementProps> = ({ current }) => {
 		await current.lockSwipeToPrev(true);
     }, [current]);
 
-    const metodofn = async (addrtoken:string, unlockedWallet:any) => {
-        const address = unlockedWallet.address
-        const _walletModel = await BlockchainFactory.getWeb3Instance(address, unlockedWallet._id, unlockedWallet.password)!;
-        const walletModel = _walletModel!;
-        const web3 = walletModel.web3Instance;
-        const network = await BlockchainFactory.getNetwork(walletModel.network);
-    
-        const AgreementContract = ContractFactory.getAgreementContract(web3, network);
-        const PaidTokenContract = ContractFactory.getPaidTokenContract(web3, network);
-        const token = PaidTokenContract.options.address;
-        console.log('address token', token);
-        const methodFn = AgreementContract.methods.getBalanceToken(token, addrtoken);
-        const balanceverify = await methodFn.call({ from: address })
-        .then(async function (receipt: any) {
-            const resultado =  web3.utils.fromWei(receipt,'ether');
-            return resultado;
-        });
-        return Promise.resolve(balanceverify).then((x:string) => {return x})
-    }
 
     const onSubmit = useCallback(async () => {
-        const result: number = +(await metodofn(currentWallet.address, currentWallet));
-        console.log('type agreementID', type, 'result balance', result);
-        if(result > 1){
-            dispatch(doSetAgreementFormInfo({ createdAt: new Date().toDateString() }));
-            dispatch(
-                doCreateAgreement({
-                    signatoryA: currentWallet.address,
-                    signatoryB: agreementFormInfo.counterpartyWallet,
-                    validUntil: 0,
-                    agreementFormTemplateId: type,
-                    agreementForm: agreementFormInfo,
-                    template: renderToString(agreementTemplate()),
-                    slideNext: slideNext,
-                    slideBack: slideBack
-                })
-            );
-        }
-        else{
-            alert("You have not enough balance to perform this action");
+        if (selectedToken == 'paid') {
+            if(currentWallet?.balanceToken > 1){
+                dispatch(doSetAgreementFormInfo({ createdAt: new Date().toDateString() }));
+                dispatch(
+                    doCreateAgreement({
+                        signatoryA: currentWallet?.address,
+                        signatoryB: agreementFormInfo.counterpartyWallet,
+                        validUntil: 0,
+                        agreementFormTemplateId: type,
+                        agreementForm: agreementFormInfo,
+                        template: renderToString(agreementTemplate()),
+                        slideNext: slideNext,
+                        slideBack: slideBack
+                    })
+                );
+            }
+            else{
+                dispatch(openErrorDialog('You have not enough balance to perform this action'));
+            }
+            console.log('type agreementID', type, 'result balance', currentWallet?.balanceDaiToken);
+        } else if (selectedToken == 'dai') {
+            if(currentWallet?.balanceDaiToken > 1){
+                dispatch(doSetAgreementFormInfo({ createdAt: new Date().toDateString() }));
+                dispatch(
+                    doCreateAgreement({
+                        signatoryA: currentWallet?.address,
+                        signatoryB: agreementFormInfo.counterpartyWallet,
+                        validUntil: 0,
+                        agreementFormTemplateId: type,
+                        agreementForm: agreementFormInfo,
+                        template: renderToString(agreementTemplate()),
+                        slideNext: slideNext,
+                        slideBack: slideBack
+                    })
+                );
+            }
+            else{
+                dispatch(openErrorDialog('You have not enough balance to perform this action'));
+            }
+            console.log('type agreementID', type, 'result balance', currentWallet?.balanceDaiToken);
+        } else {
+            dispatch(openErrorDialog('Error in SelectedToken Value'));
+            throw new Error('Error in SelectedToken Value');
         }
 	}, [type, currentWallet, agreementFormInfo, agreementTemplate, dispatch, slideNext, slideBack]);
 
     useEffect(() => {
-        let data: Object = {};
         const templateData = getContractTemplate(type);
-        for (const key in templateData.interpolationFields) {
-            data[key] = getDataInfo(key);
+        const data: any = {
+            ...smartAgreementsState[templateData.dataName]
+        };
+        for (const key in data) {
+            data[key] = getDataInfo(key) ?? data[key];
         }
 
         setAgreementDocument(templateData.template);
         setAgreementData(data);
-    }, [type, getDataInfo]);
+    }, [type, smartAgreementsState, getDataInfo]);
     
     return (
         <div className="agreement-content">
-            <h5 className="agreement-form-title">
-                Preview Document
-            </h5>
+            <IonToolbar className="agreement-preview-toolbar">
+                <IonTitle className="agreement-form-title">Preview Document</IonTitle>
+                {
+                    type !== NDA_TYPE_CODE &&
+                    <IonButtons slot="end">
+                        <IonButton onClick={() => {
+                            setShowEditPopover(true)
+                        }}>
+                            edit
+                        </IonButton>
+                    </IonButtons>
+                }
+            </IonToolbar>
             <IonItem class="form-options preview-document">
                 {
                     agreementTemplate()
                 }
             </IonItem>
+            <IonPopover
+                mode="md"
+                translucent={false}
+                isOpen={showEditPopover}
+                cssClass="agreements-popover"
+                onDidDismiss={() => setShowEditPopover(false)}
+            >
+                <IonItem class="form-options">
+                    <SmartAgreementsForm type={type} onClose={() => setShowEditPopover(false)} />
+                </IonItem>
+            </IonPopover>
             <IonItem class="form-options preview-document-buttons">
                 <IonButton
                     color="danger"

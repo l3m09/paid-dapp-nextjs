@@ -16,8 +16,9 @@ enum contractsTemplates {
 
 interface contractTemplate {
     title: string;
-    interpolationFields: Object,
-    template: string
+    interpolationFields: Object;
+    template: string;
+    dataName: string;
 }
 
 const findElementsInterpolation = (html:String) : Object => {
@@ -33,21 +34,25 @@ const findElementsInterpolation = (html:String) : Object => {
 export const getContractTemplate = (contractName:String) :contractTemplate => {
     let contractTemplate;
     let title;
+    let dataName = '';
     try {
         switch (contractName) {
             case contractsTemplates.TemplateNda:
                 title = 'MUTUAL NONDISCLOSURE AGREEMENT';
                 contractTemplate = Nda;
+                dataName = 'ndaAgreementData';
                 break;
         
             case contractsTemplates.TemplateAdvisorAgreem:
                 title = 'ADVISOR AGREEMENT';
                 contractTemplate = AdvisorAgreem;
+                dataName = 'advisorAgreementData';
                 break;
         
             case contractsTemplates.TemplateCiia:
                 title = 'CONFIDENTIAL INFORMATION AND INVENTION ASSIGNMENT AGREEMENT';
                 contractTemplate = Ciia;
+                dataName = 'ciiaAgreementData';
                 break;
         
             case contractsTemplates.TemplateConsultingAgreement:
@@ -58,11 +63,13 @@ export const getContractTemplate = (contractName:String) :contractTemplate => {
             case contractsTemplates.TemplateReferalAgreement:
                 title = 'SALES COMMISSION AGREEMENT';
                 contractTemplate = ReferalAgreement;
+                dataName = 'referralAgreementData';
                 break;
         
             case contractsTemplates.TemplateSaft:
                 title = 'SIMPLE AGREEMENT FOR FUTURE TOKENS';
                 contractTemplate = Saft;
+                dataName = 'saftAgreementData';
                 break;
         
             default:
@@ -71,7 +78,8 @@ export const getContractTemplate = (contractName:String) :contractTemplate => {
         return {
             title,
             interpolationFields: findElementsInterpolation(contractTemplate),
-            template: contractTemplate
+            template: contractTemplate,
+            dataName
         };
     } catch (error) {
         throw error;

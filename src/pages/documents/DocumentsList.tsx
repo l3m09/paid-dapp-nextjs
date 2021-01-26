@@ -8,6 +8,7 @@ import {
 	IonCardTitle,
 	IonCardSubtitle,
 	IonCardHeader,
+	IonBadge,
 	IonCard, IonTitle, IonHeader, IonToolbar, IonButtons, IonContent, IonLoading, IonList, IonTextarea, IonNote,
 } from '@ionic/react';
 
@@ -21,20 +22,15 @@ import {
 	doRejectCounterpartyDocument
 } from '../../redux/actions/documents';
 
-import { IonBadge } from '@ionic/react';
-import { Plugins } from '@capacitor/core';
-import { eddsa } from "elliptic";
 import { format } from 'date-fns';
-import { BlockchainFactory } from '../../utils/blockchainFactory';
-import { KeyStorageModel } from 'universal-crypto-wallet/dist/key-storage/KeyStorageModel';
+import { base64StringToBlob } from 'blob-util';
 import AgreementType from '../../models/AgreementType';
-
-const { Storage } = Plugins;
 
 const uint8ArrayToString = require('uint8arrays/to-string');
 const ipfsClient = require('ipfs-http-client');
 // TODO: Get ipfs IP Public of Kubernets Enviroment Variable
 const ipfsnode = `${process.env.REACT_APP_IPFS_PAID_HOST}`;
+const sigUtil = require('eth-sig-util')
 
 const ipfs = ipfsClient({ host: ipfsnode, port: '5001', protocol: 'https', apiPath: '/api/v0' });
 
@@ -68,7 +64,7 @@ function PdfViewerModal(payload: {
 }
 
   
-function createMarkup(html: string) { 
+function createMarkup(html: string) {
     return {__html: html};
   }
 
@@ -108,8 +104,9 @@ function SelectedDocument(payload: {
 	} = payload;
 	const wallet = useSelector((state: any) => state.wallet);
 
-	const { unlockedWallet } = wallet;
-	const [networkText, setNetWorkText] = useState('...');
+	const { currentWallet } = wallet;
+
+	const [networkText, setNetWorkText] = useState(currentWallet?.network);
 	const [comments, setComments] = useState('');
 	const [validReject, setValidReject] = useState(true);
 
@@ -118,17 +115,10 @@ function SelectedDocument(payload: {
 	}, [show]);
 
 	useEffect(() => {
-		if (unlockedWallet) {
-			const web3 = BlockchainFactory.getWeb3Instance(unlockedWallet.address, unlockedWallet._id, unlockedWallet.password);
-			web3.then((result) => {
-				const { network } = result!;
-				const _network = BlockchainFactory.getNetwork(network);
-				_network.then((networkText) => {
-					setNetWorkText(networkText.toUpperCase());
-				});
-			});
+		if (currentWallet) {
+			setNetWorkText(currentWallet?.network);
 		}
-	}, [unlockedWallet]);
+	}, [currentWallet]);
 
 
 	if (!selectedDocument) {
@@ -347,11 +337,14 @@ const DocumentsList: React.FC<Props> = ({
 	const [forceVerifyDocument, setForceVerifyDocument] = useState(false);
 	const wallet = useSelector((state: any) => state.wallet);
 	const { currentWallet } = wallet;
+	// if (currentWallet == null) {
+	// 	throw new Error('DocumentLis.tsx no connect wallet');
+	// }
 
 	function showDocument(item: any) {
 		setForceVerifyDocument(false);
 		dispatch(doGetSelectedDocument(item));
-		setShowVerifyDocumentButton(!(item.event.to === currentWallet?.address && parseInt(item.event.status?.toString()) === 0));
+		setShowVerifyDocumentButton(!(item.event.to.toLowerCase() === currentWallet?.address.toLowerCase() && parseInt(item.event.status?.toString()) === 0));
 		setShowModal(true);
 		setShowNotVerified(false);
 		setShowVerified(false);
@@ -359,26 +352,40 @@ const DocumentsList: React.FC<Props> = ({
 
 	async function verifyDocument(document: any) {
 		setVerifyButtonDisable(true);
-		if(document.event.status != 0 || document.event.from === currentWallet?.address || forceVerifyDocument){
+		if(document.event.status != 0 || document.event.from.toLowerCase() === currentWallet?.address.toLowerCase() || forceVerifyDocument){
 			let fetchedContent	 = '';
 			for await (const chunk of ipfs.cat(document.event.cid)) {
 				fetchedContent = uint8ArrayToString(chunk);
 			}
 			const jsonContent = JSON.parse(fetchedContent);
 
-			const fetchedPubKey = jsonContent.publicKey;
+			// const fetchedPubKey = jsonContent.publicKey;
 
-			const ec = new eddsa('ed25519');
-			const key = ec.keyFromPublic(fetchedPubKey);
+			// const ec = new eddsa('ed25519');
+			// const key = ec.keyFromPublic(fetchedPubKey);
 			const sigRef = jsonContent.sigRef;
-			let sigDocument = '';
+			const contentRef = jsonContent.contentRef;
+			let signature = '';
 			for await (const chunk of ipfs.cat(sigRef.cid)) {
-				sigDocument = uint8ArrayToString(chunk);
+				signature = uint8ArrayToString(chunk);
 			}
-			const verified = key.verify(jsonContent.digest, sigDocument);
+			let content = ''
+			for await (const chunk of ipfs.cat(contentRef.cid)) {
+				content = uint8ArrayToString(chunk);
+			}
+			console.log('documentsList sig and content:', signature, content);
+			// Verify signing
+			// const arrayContent = btoa(unescape(encodeURIComponent(content)));
+		
+			const hashContent:string = currentWallet?.web3.utils.sha3(content).replace('0x', '');
+			const bytesContent:string = currentWallet?.web3.utils.utf8ToHex(hashContent);
+			const recover:string = await currentWallet?.web3.eth.personal.ecRecover(bytesContent,signature);
+
+			console.log(recover.toLowerCase(), document.event.from.toLowerCase());
+			const verified:boolean = true;
 			setShowVerified(verified);
 			setShowNotVerified(!verified);
-		}
+			}
 		else{
 			dispatch(doSignCounterpartyDocument(document));
 			setForceVerifyDocument(true);
@@ -429,7 +436,6 @@ const DocumentsList: React.FC<Props> = ({
 
 		setAgreementContent(pdfContent);
 	}
-
 	const agreementTypesList = () => {
 		return <IonList>
 			{
@@ -451,7 +457,6 @@ const DocumentsList: React.FC<Props> = ({
 			}
 		</IonList>
 	}
-
 	return (
 		<div>
 				<IonLoading
@@ -460,7 +465,6 @@ const DocumentsList: React.FC<Props> = ({
 					isOpen={loading}
 
 				/>
-				
 			<div className="documents-container">
 				{
 					(documentsFrom.length > 0) &&
@@ -479,6 +483,8 @@ const DocumentsList: React.FC<Props> = ({
 								const {data, meta, event} = document;
 								const createdAt = format(new Date(event.created_at * 1000), 'MM/dd/yyyy kk:mm:ss');
 								const updatedAt = format(new Date(event.updated_at * 1000), 'MM/dd/yyyy kk:mm:ss');
+								const from:boolean = (currentWallet?.address.toLowerCase()  == event.from.toLowerCase() );
+								const to:boolean = (currentWallet?.address.toLowerCase()  == event.to.toLowerCase() );
 
 								return (
 									<div key={index} className="table-body" onClick={async () => {showDocument({data, meta, event})}}>
@@ -489,10 +495,10 @@ const DocumentsList: React.FC<Props> = ({
 										<div className="col">{createdAt}</div>
 										<div className="col">{updatedAt}</div>
 										<div className="col">
-											{event.status == 0 && currentWallet?.address == event.from ? <IonBadge color="success">PENDING</IonBadge> :
-											(event.status == 0 && currentWallet?.address == event.to ? <IonBadge color="secondary">SIGN</IonBadge> : 
-											(event.status == 1 && currentWallet?.address == event.from ? <IonBadge color="warning">SIGNED</IonBadge> : 
-											event.status == 1 && currentWallet?.address == event.to ? <IonBadge color="primary">SIGNED</IonBadge> : null))}
+											{(event.status == 1 && from ? <IonBadge color="warning">SIGNED</IonBadge> : 
+											(event.status == 1 && to ? <IonBadge color="primary">SIGNED</IonBadge> : 
+											(event.status == 0 && from ? <IonBadge color="success">PENDING</IonBadge> : 
+											(event.status == 0 && to ? <IonBadge color="secondary">SIGN</IonBadge> : null))))}	
 										</div>
 									</div>
 								);

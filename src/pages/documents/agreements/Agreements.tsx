@@ -54,13 +54,13 @@ const Agreements: React.FC<AgreementsProps> = () => {
 				<NdaDescription title={titleAgreement} current={slidesRef.current} />
 			</IonSlide> */}
 			<IonSlide>
-				<FormClient current={slidesRef.current} />
+				<FormClient current={slidesRef?.current} />
 			</IonSlide>
 			<IonSlide>
-				<FormCounterparty current={slidesRef.current} />
+				<FormCounterparty current={slidesRef?.current} />
 			</IonSlide>
 			<IonSlide>
-				<PreviewAgreement current={slidesRef.current} />
+				<PreviewAgreement current={slidesRef?.current} />
 			</IonSlide>
 		</IonSlides>
 	);
@@ -89,9 +89,9 @@ const Agreements: React.FC<AgreementsProps> = () => {
 			counterpartyPhone: '',
 			createdAt: null
 		}));
-		await slidesRef.current?.lockSwipeToPrev(false);
-		await slidesRef.current?.lockSwipeToNext(false);
-		await slidesRef.current?.slideTo(0).then(() => {
+		await slidesRef?.current?.lockSwipeToPrev(false);
+		await slidesRef?.current?.lockSwipeToNext(false);
+		await slidesRef?.current?.slideTo(0)?.then(() => {
 			history.push('/documents');
 		});
 	}
