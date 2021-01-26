@@ -40,6 +40,7 @@ export const getContractTemplate = (contractName:String) :contractTemplate => {
             case contractsTemplates.TemplateNda:
                 title = 'MUTUAL NONDISCLOSURE AGREEMENT';
                 contractTemplate = Nda;
+                dataName = 'ndaAgreementData';
                 break;
         
             case contractsTemplates.TemplateAdvisorAgreem:
@@ -51,6 +52,7 @@ export const getContractTemplate = (contractName:String) :contractTemplate => {
             case contractsTemplates.TemplateCiia:
                 title = 'CONFIDENTIAL INFORMATION AND INVENTION ASSIGNMENT AGREEMENT';
                 contractTemplate = Ciia;
+                dataName = 'ciiaAgreementData';
                 break;
         
             case contractsTemplates.TemplateConsultingAgreement:

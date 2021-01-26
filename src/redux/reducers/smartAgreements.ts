@@ -1,16 +1,31 @@
 import ActionModel from "../../models/ActionModel";
 import AdvisorAgreementData from "../../models/AdvisorAgreementData";
+import CiiaAgreementData from "../../models/CiiaAgreementData";
+import NdaAgreementData from "../../models/NdaAgreementData";
 import ReferralAgreementData from "../../models/ReferralAgreementData";
 import SaftAgreementData from "../../models/SaftAgreementData";
 import { SmartAgreementsTypes } from "../actionTypes/smartAgreements";
 
 interface SmartAgreementsState {
+    ndaAgreementData: NdaAgreementData;
     advisorAgreementData: AdvisorAgreementData;
+    ciiaAgreementData: CiiaAgreementData;
     referralAgreementData: ReferralAgreementData;
     saftAgreementData: SaftAgreementData;
 };
 
 const initialState: SmartAgreementsState = {
+    ndaAgreementData: {
+        partyName: '[________]',
+        partyEmail: '________',
+        partyAddress: '________',
+        partyWallet: '________',
+        date: '________',
+        counterPartyName: '________',
+        counterPartyEmail: '________',
+        counterPartyAddress: '________',
+        counterPartyWallet: '________'
+    },
     advisorAgreementData: {
         partyName: '[________]',
         partyEmail: '________',
@@ -35,6 +50,27 @@ const initialState: SmartAgreementsState = {
         typeOfPrice: '[TYPE OF PRICE]',
         acceptionOption: '[ACCEPTING OPTION]',
         numberOfYears: '[NUMBER OF YEARS]'
+    },
+    ciiaAgreementData: {
+        partyName: '[________]',
+        partyEmail: '________',
+        partyAddress: '________',
+        partyWallet: '________',
+        date: '________',
+        counterPartyName: '________',
+        counterPartyEmail: '________',
+        counterPartyAddress: '________',
+        counterPartyWallet: '________',
+        effectiveDate: '[EFFECTIVE DATE]',
+        companyState: '[COMPANY STATE]',
+        stateConsultant: '[STATE]',
+        typeOfCompanyConsultant: '[TYPE OF COMPANY]',
+        title: '[TITLE]',
+        datea: '[DATE]',
+        idNumberBriefDesc: '[IDENTIFYING NUMBER OR BRIEF DESCRIPTION]',
+        stateCompany: '[STATE]',
+        typeOfComapny: '[TYPE OF COMPANY]',
+        listCompAgreements: '[LIST OF COMPANIES AND/OR AGREEMENTS EXCLUDED UNDER SECTION 10(B)]'
     },
     referralAgreementData: {
         partyName: '[________]',
@@ -88,6 +124,15 @@ export const SmartAgreementsReducer = function (
     const { type, payload } = action;
 
     switch (type) {
+        case SmartAgreementsTypes.SET_NDA_AGREEMENT_DATA:
+            const newNdaData = payload;
+            return {
+                ...state,
+                ndaAgreementData: {
+                    ...state.ndaAgreementData,
+                    newNdaData
+                }
+            };
         case SmartAgreementsTypes.SET_ADVISOR_AGREEMENT_DATA:
             const newAdvisorData = payload;
             return {
@@ -95,6 +140,15 @@ export const SmartAgreementsReducer = function (
                 advisorAgreementData: {
                     ...state.advisorAgreementData,
                     ...newAdvisorData
+                }
+            };
+        case SmartAgreementsTypes.SET_CIIA_AGREEMENT_DATA:
+            const newCiiaData = payload;
+            return {
+                ...state,
+                ciiaAgreementData: {
+                    ...state.ciiaAgreementData,
+                    ...newCiiaData
                 }
             };
         case SmartAgreementsTypes.SET_REFERRAL_AGEEMENT_DATA:

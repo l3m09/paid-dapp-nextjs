@@ -12,6 +12,9 @@ import { useHistory, useParams } from 'react-router';
 import { getContractTemplate } from '../../../redux/actions/template/index';
 import SmartAgreementsForm from './smartAgreementsForms/SmartAgreementsForm';
 
+
+const NDA_TYPE_CODE = "nda";
+
 interface PreviewAgreementProps {
     current: any;
 }
@@ -147,13 +150,16 @@ const PreviewAgreement: FC<PreviewAgreementProps> = ({ current }) => {
         <div className="agreement-content">
             <IonToolbar className="agreement-preview-toolbar">
                 <IonTitle className="agreement-form-title">Preview Document</IonTitle>
-                <IonButtons slot="end">
-                    <IonButton onClick={() => {
-                        setShowEditPopover(true)
-                    }}>
-                        edit
-                    </IonButton>
-                </IonButtons>
+                {
+                    type !== NDA_TYPE_CODE &&
+                    <IonButtons slot="end">
+                        <IonButton onClick={() => {
+                            setShowEditPopover(true)
+                        }}>
+                            edit
+                        </IonButton>
+                    </IonButtons>
+                }
             </IonToolbar>
             <IonItem class="form-options preview-document">
                 {

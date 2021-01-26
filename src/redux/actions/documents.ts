@@ -348,7 +348,7 @@ export const doCreateAgreement = (payload: {
 		});
 	} catch (err) {
 		await payload.slideBack();
-		alert(err.message);
+		dispatch(openErrorDialog(err.message));
 		console.log('ln284', err);
 		dispatch({
 			type: DocumentsActionTypes.CREATE_AGREEMENT_FAILURE,
@@ -803,11 +803,11 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 				});
 			});
 		} else {
-			alert('Document Don\'t exist');
+			dispatch(openErrorDialog('Document Don\'t exist'));
 			throw new Error('Document Don\'t exist');
 		}
 	} catch (err) {
-		alert(err.message);
+		dispatch(openErrorDialog(err.message));
 		console.log('ln545', err);
 		dispatch({
 			type: DocumentsActionTypes.COUNTERPARTY_SIGNED_FAILURE,
