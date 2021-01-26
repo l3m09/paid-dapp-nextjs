@@ -238,20 +238,24 @@ export const doCreateAgreement = (payload: {
 		let metodoTkn:any;
 		const paymentSA = web3.utils.toWei(pago, 'ether')
 		if (selectedToken === 'paid') {
-			if (balanceToken < 1) {
+			if (balanceToken < 15) {
 				dispatch(openErrorDialog('You have not enough balance to perform this action'));
 				throw new Error('You have not enough balance to perform this action')
 			}
 			const PaidTokenContract = ContractFactory.getPaidTokenContract(web3, network);
 			token = PaidTokenContract.options.address;
 			PaidTokenContract.options.from = address;
+			const allowance = await PaidTokenContract.methods.allowance(address,spender).call();
+			if (allowance >= 15) {
+				
+			}
 			console.log('previo pago', paymentSA.toString(),'token address:',  token,'address wallet:', address, 'spender:', spender, 'recipient:', recipientTKN);
-			metodoTkn = PaidTokenContract.methods.increaseAllowance(
+			metodoTkn = PaidTokenContract.methods.approve(
 				spender,
 				paymentSA.toString()
 			);
 		} else if (selectedToken === 'dai') {
-			if (balanceDaiToken < 1) {
+			if (balanceDaiToken < 15) {
 				dispatch(openErrorDialog('You have not enough balance to perform this action'));
 				throw new Error('You have not enough balance to perform this action')
 			}
