@@ -9,6 +9,7 @@ import {
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
+import BannerMobileSoon from '../components/BannerMobileSoon';
 import Terms from '../components/Terms';
 import { doConnectWallet } from '../redux/actions/wallet';
 
@@ -86,6 +87,7 @@ const Landing: React.FC = () => {
 
 	return (
 		<IonPage>
+			<BannerMobileSoon />
 			<IonContent fullscreen class="landing-content">
 				<div className="landing-logo">
 					<IonImg src="/assets/images/logo-full.png" />
