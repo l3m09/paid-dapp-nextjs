@@ -207,7 +207,6 @@ export const doConnectWallet = (ethereum:any, history:any
 	dispatch({ type: WalletActionTypes.CONNECT_WALLET_LOADING });
 	try {
 		if (ethereum === undefined) {
-			alert('Failure to detect your Wallet, pls check is Installed')
 			dispatch(openErrorDialog('Failure to detect your Wallet, pls check is Installed'))
 			history.push('/');
 		} else {
@@ -251,7 +250,7 @@ export const doConnectWallet = (ethereum:any, history:any
 						history.push('/');
 					} else {
 						console.error('Error code out to EIP-1193',error);
-						dispatch(openSuccessDialog(error));
+						dispatch(openSuccessDialog(error.message));
 						throw new Error('Error code out to EIP-1193');
 					}
 				});
@@ -295,14 +294,13 @@ export const doConnectWallet = (ethereum:any, history:any
 						history.push('/');
 					} else {
 						console.error('Error code out to EIP-1193',error);
-						dispatch(openErrorDialog(error));
+						dispatch(openErrorDialog(error.message));
 						throw new Error('Error code out to EIP-1193');
 					}
 				});
 			} else {
 				let err:any
 				err.message = 'Failure to Connect Provider Wallet';
-				alert(err.message);
 				console.log(err.message);
 				dispatch(openErrorDialog(err.message));
 				dispatch({
@@ -312,7 +310,7 @@ export const doConnectWallet = (ethereum:any, history:any
 			}
 		}
 	} catch (err) {
-		alert(err.message);
+		// alert(err.message);
 		dispatch(openErrorDialog(err.message));
 		dispatch({
 			type: WalletActionTypes.CONNECT_WALLET_FAILURE,

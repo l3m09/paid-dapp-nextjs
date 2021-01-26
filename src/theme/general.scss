@@ -264,6 +264,9 @@ ion-header {
 
   .select-interface-option {
     justify-content: space-between;
+    .alert-radio-label {
+      color: $text-default !important;
+    }
   }
 }
 
