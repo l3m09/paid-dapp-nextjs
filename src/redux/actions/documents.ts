@@ -220,6 +220,11 @@ export const doCreateAgreement = (payload: {
 			JSON.stringify(elementsAbi), JSON.stringify(elementsParties), null);
 		console.log('CID Create Document', ipfsHash.toString());
 		// ----------------------------------------------------
+		// Verification Network
+		if (network != "rinkeby") {
+			dispatch(openErrorDialog('You are in a Demo MVP, only Create Smart Agreements in Rinkeby'));
+			throw new Error('You are in a Demo MVP, only Create Smart Agreements in Rinkeby')
+		}
 		// Estimate gas,  TODO encapsulate
 		let token:string = '';
 		const AgreementContract = ContractFactory.getAgreementContract(web3, network);
