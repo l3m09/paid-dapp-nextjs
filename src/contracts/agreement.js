@@ -480,8 +480,8 @@ module.exports = {
       ],
     },
     address: {
-      "rinkeby-fork": "0x6E7bbCDAf6164B61eB5247B0D32B8762a3B39030",
-      rinkeby: "0x6E7bbCDAf6164B61eB5247B0D32B8762a3B39030",
+      "rinkeby-fork": "0x1ad6a915f4456f6dEEaf942b9da96141a5451e85",
+      rinkeby: "0x1ad6a915f4456f6dEEaf942b9da96141a5451e85",
     },
   },
 };
