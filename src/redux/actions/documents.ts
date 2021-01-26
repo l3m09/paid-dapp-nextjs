@@ -838,14 +838,15 @@ export const doRejectCounterpartyDocument = (document: any, comments: string) =>
 						}
 					})
 					.then(function (response) {
+						dispatch(openSuccessDialog('Success Sending Reject Notification'));
 						console.log('email response: ', response);
 					})
 					.catch(function (error) {
 						console.log('email error: ',error);
 						dispatch(openSuccessDialog('Error Sending Reject Notification'));
 					});
-					dispatch(getSelectedSignedDocument(document));
 					dispatch(openSuccessDialog('You have successfully Reject the Smart Agreement'));
+					dispatch(getSelectedSignedDocument(document));
 				})
 				.on('error', function (error: any, receipt: any) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.		
 					// alert('Transaction failed');

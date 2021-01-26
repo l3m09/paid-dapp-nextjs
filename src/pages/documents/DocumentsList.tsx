@@ -495,10 +495,12 @@ const DocumentsList: React.FC<Props> = ({
 										<div className="col">{createdAt}</div>
 										<div className="col">{updatedAt}</div>
 										<div className="col">
-											{(event.status == 1 && from ? <IonBadge color="warning">SIGNED</IonBadge> : 
+											{(event.status == 9 && from ? <IonBadge color="warning">REJECT</IonBadge> : 
+											(event.status == 9 && to ? <IonBadge color="primary">REJECT</IonBadge> : 
+											(event.status == 1 && from ? <IonBadge color="warning">SIGNED</IonBadge> : 
 											(event.status == 1 && to ? <IonBadge color="primary">SIGNED</IonBadge> : 
 											(event.status == 0 && from ? <IonBadge color="success">PENDING</IonBadge> : 
-											(event.status == 0 && to ? <IonBadge color="secondary">SIGN</IonBadge> : null))))}	
+											(event.status == 0 && to ? <IonBadge color="secondary">SIGN</IonBadge> : null))))))}
 										</div>
 									</div>
 								);
