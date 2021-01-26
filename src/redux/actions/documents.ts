@@ -758,12 +758,9 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 				dispatch(openSuccessDialog('Please Select the Token to use'));
 			}
 			debugger
-
-
-
 			// Sending Data to Smart Contract
-
 			const methodFn = AgreementContract.methods.counterPartiesSign(
+				token,
 				agreementId,
 				validUntil,
 				ipfsHash.toString(),
@@ -824,16 +821,16 @@ export const doRejectCounterpartyDocument = (document: any, comments: string) =>
 	dispatch({ type: DocumentsActionTypes.COUNTERPARTY_REJECT_SIGNED_LOADING });
 	try {
 		let fetchedContent = '';
+		if (window.ethereum === undefined)  {
+			dispatch(openSuccessDialog('Failed to CounterParty Sign Smart Agreement'));
+			throw new Error('Failed to CounterParty Sign Smart Agreement');
+		}
 		if(document){
 			const { wallet } = getState();
 			const { currentWallet } = wallet;
 			if ((currentWallet === null) || (currentWallet === undefined)) {
 				dispatch(openSuccessDialog('Not unlocked wallet found'));
 				throw new Error('Not unlocked wallet found');
-			}
-			if (window.ethereum === undefined)  {
-				dispatch(openSuccessDialog('Failed to CounterParty Reject Smart Agreement'));
-				throw new Error('Failed to CounterParty Reject Smart Agreement');
 			}
 			await currentWallet?.web3.eth.getBalance(currentWallet?.address).then((balancewei) =>{
 				const balance = currentWallet?.web3.utils.fromWei(balancewei);
@@ -897,8 +894,15 @@ export const doRejectCounterpartyDocument = (document: any, comments: string) =>
 			console.log('Reject IpfsHash', ipfsHash.toString())
 			// Sending Notification of CounterParty Reject Smart Agreements
 			const parties = JSON.parse(partiesContentStr);
-
+			debugger
+			const PaidTokenContract = ContractFactory.getPaidTokenContract(currentWallet?.web3, currentWallet?.network);
+			const token = PaidTokenContract.options.address;
+			PaidTokenContract.options.from = currentWallet?.address;
+			// Verified Value
+			console.log('token address:',  token,'address wallet:', currentWallet?.address);
+			debugger
 			const methodFn = AgreementContract.methods.counterPartiesReject(
+				token,
 				agreementId,
 				validUntil,
 				ipfsHash.toString(),
@@ -944,10 +948,6 @@ export const doRejectCounterpartyDocument = (document: any, comments: string) =>
 					//throw new Error('Transaction failed');
 				});
 			});
-
-
-
-			
 			dispatch(getSelectedRejectDocument(document));
 			dispatch(openSuccessDialog('You Reject the Smart Agreement'));
 		}
