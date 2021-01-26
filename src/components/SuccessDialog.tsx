@@ -18,6 +18,7 @@ const SuccessDialog: FC = () => {
         <IonModal 
             isOpen={dialogState.openSuccessDialog}
             cssClass="success-dialog-modal"
+            onDidDismiss={() => close()}
         >
             <IonContent>
                 <div className="message-content">
