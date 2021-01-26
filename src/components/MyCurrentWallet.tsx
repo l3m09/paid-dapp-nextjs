@@ -1,4 +1,5 @@
 import { IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonImg, IonItem, IonLabel, IonList, IonModal, IonTitle, IonToast, IonToolbar } from '@ionic/react';
+import { current } from '@reduxjs/toolkit';
 import { copy } from 'ionicons/icons';
 import React, { FC, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,14 +10,18 @@ const MyCurrentWallet: FC = () => {
     const dispatch = useDispatch();
     const walletState = useSelector(
         (state: { wallet: {
-            openCurrentWallet: boolean;
+            openCurrentWallet: boolean; currentWallet: any
         } }) => state.wallet
     );
 
     const spanRef = useRef<HTMLSpanElement | null>(null);
     const [showToastCopy, setShowToastCopy] = useState(false);
 
-    const { openCurrentWallet } = walletState;
+    const { openCurrentWallet, currentWallet } = walletState;
+    // if (currentWallet == null) {
+    //     throw new Error('No connect Wallet, MyCurrrent Wallet Modal');
+    // }
+    // const { balance, balanceToken, balanceDaiToken } = currentWallet;
 
     const dismiss = () => dispatch(doShowMyCurrentWallet(false));
 
@@ -72,7 +77,7 @@ const MyCurrentWallet: FC = () => {
                             Address:
                         </IonLabel>
                         <div>
-                            <span ref={spanRef}>0x3442C44B4Bbf87144Ad0e4a2C60e4bE801d30FA8</span>
+                            <span ref={spanRef}>{currentWallet?.address}</span>
                             <IonIcon icon={copy} onClick={() => copyAddressToClipboard()} className="copy-icon" />
                         </div>
                     </IonItem>
@@ -86,7 +91,7 @@ const MyCurrentWallet: FC = () => {
                         </IonLabel>
                     </IonItem>
                     <IonItem className="balance-content">
-                        <IonLabel>100.0</IonLabel>
+                        <IonLabel>{currentWallet?.balanceToken}</IonLabel>
                         <IonImg
                             src="/assets/icon/icon.png"
                             slot="start"
@@ -94,7 +99,7 @@ const MyCurrentWallet: FC = () => {
                         />
                     </IonItem>
                     <IonItem className="balance-content">
-                        <IonLabel>5.0</IonLabel>
+                        <IonLabel>{currentWallet?.balance}</IonLabel>
                         <IonImg
                             src="/assets/icon/ethereumlogo.svg"
                             slot="start"
@@ -102,7 +107,7 @@ const MyCurrentWallet: FC = () => {
                         />
                     </IonItem>
                     <IonItem className="balance-content">
-                        <IonLabel>5.0</IonLabel>
+                        <IonLabel>{currentWallet?.balanceDaiToken}</IonLabel>
                         <IonImg
                             src="/assets/icon/dailogo.svg"
                             slot="start"

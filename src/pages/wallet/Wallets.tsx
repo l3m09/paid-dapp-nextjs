@@ -23,6 +23,7 @@ import UnlockWallet from '../../components/UnlockWallet';
 import ImportWallet from './ImportWallet';
 import MenuAlternate from '../../components/MenuAlternate';
 import { TOAST_DURATION_WALLET_ADDRESS_COPY } from '../../utils/constants';
+import { current } from '@reduxjs/toolkit';
 // import { bold } from '../../redux/actions/template/agreement.html';
 // import { promises } from 'fs';
 
@@ -35,7 +36,7 @@ const Wallets: React.FC = () => {
 	const [showImportWalletModal, setShowImportWalletModal] = useState(false);
 	const [showToastCopy, setShowToastCopy] = useState(false);
 
-	const { wallets, unlockedWallet, selectedWallet } = wallet;
+	const { currentWallet, selectedToken } = wallet;
 
 	const openCreateModal = () => {
 		setShowCreateModal(true);
@@ -88,19 +89,19 @@ const Wallets: React.FC = () => {
 					</IonItem>
 					<div className="wallets-list-wrapper">
 						<IonItemGroup class="wallets-container">
-							{unlockedWallet == null ?
+							{currentWallet == null ?
 								<IonTitle color="primary" className="ion-text-center no-wallet-selected">
 									No wallet Selected
 								</IonTitle>
 								: ''
 							}
-							{wallets.map( (item: any, index: any, flag:boolean) => {
-								if (unlockedWallet?.address === item.address) {
+							{/*wallets.map( (item: any, index: any, flag:boolean) => {
+								if (currentWallet?.address === item.address) {
 									return (
 										<IonItem class="wallet-wrapper selected-wallet" key={index}>
-											<div className="wallet-container">
+											<div className="wallet-container">*/
 												{/* <IonIcon icon={checkmarkCircle} className="current-tag" aria-label="Active wallet" /> */}
-												<strong className="current-tag">Active</strong>
+												/* <strong className="current-tag">Active</strong>
 												<span className="label">{item.name}</span>
 												<span className="address" ref={spanRef}>{item.address}</span>
 												<IonIcon className="icon-copy" icon={copy} onClick={() => copyAddressToClipboard()}/>
@@ -147,7 +148,7 @@ const Wallets: React.FC = () => {
 										</IonItem>
 									);
 								}
-							})}
+							})*/}
 						</IonItemGroup>
 						<IonItemDivider />
 						<IonItemGroup>
@@ -178,12 +179,12 @@ const Wallets: React.FC = () => {
 						show={showImportWalletModal}
 						dismiss={dismissImportModal}
 					/>
-					{selectedWallet !== null ? (
+					{currentWallet !== null ? (
 						<UnlockWallet
 							show={showUnlockWalletModal}
 							dismissible={true}
 							dismiss={dismissUnlockWalletModal}
-							selectedWallet={selectedWallet}
+							selectedWallet={currentWallet}
 						/>
 					) : null}
 				</div>

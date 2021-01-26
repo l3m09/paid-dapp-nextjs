@@ -35,7 +35,8 @@ import { useHistory } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import {
 	doGetDocuments,
-	doGetSelectedDocument
+	doGetSelectedDocument,
+	openSuccessDialog
 } from '../../redux/actions/documents';
 
 import MenuAlternate from '../../components/MenuAlternate';
@@ -46,6 +47,7 @@ import { KeyStorageModel } from 'universal-crypto-wallet/dist/key-storage/KeySto
 import SuccessDialog from '../../components/SuccessDialog';
 import AgreementType from '../../models/AgreementType';
 import { Sessions } from '../../utils/sessions';
+import Web3 from 'web3'
 
 function SelectedDocument(payload: {
 	show: boolean;
@@ -53,23 +55,16 @@ function SelectedDocument(payload: {
 	closeShowDocument: () => void;
 }) {
 	const wallet = useSelector((state: any) => state.wallet);
-	const { unlockedWallet } = wallet;
+	const { currentWallet } = wallet;
 
-	const [networkText, setNetWorkText] = useState('...');
+	const [networkText, setNetWorkText] = useState(currentWallet?.network);
 	const { show, selectedDocument, closeShowDocument } = payload;
 
 	useEffect(() => {
-		if (unlockedWallet) {
-			const web3 = BlockchainFactory.getWeb3Instance(unlockedWallet. address, unlockedWallet._id, unlockedWallet.password);
-			web3.then((result) => {
-				const { network } = result!;
-				const _network = BlockchainFactory.getNetwork(network);
-				_network.then((networkText) => {
-					setNetWorkText(networkText.toUpperCase());
-				});
-			});
+		if (currentWallet) {
+			setNetWorkText(currentWallet?.network)
 		}
-	}, [unlockedWallet]);
+	}, [currentWallet]);
 
 	if (!selectedDocument) {
 		return null;
@@ -127,7 +122,6 @@ const Documents: React.FC = () => {
 	const dispatch = useDispatch();
 	const slidesRef = useRef<HTMLIonSlidesElement | null>(null);
 	const documentsState = useSelector((state: any) => state.documents);
-	const walletsState = useSelector((state: any) => state.wallet);
 	const {
 		documentsFrom,
 		documentsTo,
@@ -136,19 +130,21 @@ const Documents: React.FC = () => {
 		agreementTypes
 	} = documentsState;
 	const wallet = useSelector((state: any) => state.wallet);
-	
 	const { currentWallet } = wallet;
+
 	const [showModal, setShowModal] = useState(false);
 	const [showPopOver, setShowPopover] = useState(false);
 	const [currentIndex, setCurrentIndex] = useState(0);
-
+	const wssUrl = `${process.env.REACT_APP_WEB3_WSS}`;
+	
 	useEffect(() => {
-		if(!Sessions.getTimeoutBool()){
-			Sessions.setTimeoutCall();			
+		console.log('document connect',window.ethereum.isConnected())
+		if(!Sessions.getTimeoutBool()&&(window.ethereum.isConnected())){
+			Sessions.setTimeoutCall();
 			dispatch(doGetDocuments(currentWallet));
 		}
 		else{
-			history.push('/wallets');
+			history.push('/');
 		}
 		slidesRef.current?.lockSwipes(true)
 	}, [dispatch, slidesRef, currentWallet]);
@@ -183,9 +179,26 @@ const Documents: React.FC = () => {
 			Sessions.setTimeoutCall();
 		}
 		else{
-			history.push('/wallets');
+			history.push('/');
+		}
+		if (currentWallet?.network != "rinkeby") {
+			alert('You are in a Demo MVP, only Create Smart Agreements in Rinkeby');
+			history.push('/');
 		}
 		setShowPopover(show);
+	}
+
+	function runDisconnetWallet(show: boolean){
+		if((!Sessions.getTimeoutBool()) && (!show)){
+			Sessions.setTimeoutCall();
+		}
+		else {
+			dispatch(openSuccessDialog('Pls Disconnect your Wallet'));
+			window.ethereum = null
+			window.web3 = new Web3 (new Web3.providers.WebsocketProvider(wssUrl));
+			currentWallet.web3 = new Web3 (new Web3.providers.WebsocketProvider(wssUrl));
+			history.push('/');
+		}
 	}
 
 	const slideOpts = {
@@ -206,7 +219,6 @@ const Documents: React.FC = () => {
 		await slidesRef.current?.lockSwipes(true)
 
 	}
-
 	return (
 		<IonPage className="documents-page content-page">
 			<IonContent fullscreen>
@@ -225,14 +237,14 @@ const Documents: React.FC = () => {
 					isOpen={loading}
 				/>
 				<div>
-				<DocumentsList 
-					documentsTo={documentsTo} 
-					documentsFrom={documentsFrom} 
-					type="from" 
-					counterType="to"
-					agreementTypes={agreementTypes}
-					onClickAgreementType={chooseOption}
-				/>
+					<DocumentsList
+						documentsTo={documentsTo}
+						documentsFrom={documentsFrom}
+						type="from"
+						counterType="to"
+						agreementTypes={agreementTypes}
+						onClickAgreementType={chooseOption}
+					/>
 
 					<IonPopover mode="md" translucent={false} isOpen={showPopOver} cssClass="agreements-popover" onDidDismiss={() => {
 						setShowPopover(false)
@@ -269,7 +281,9 @@ const Documents: React.FC = () => {
 							}}>
 								<IonIcon style={{pointerEvents: 'none'}} icon={add}/>
 							</IonFabButton>
-							<IonFabButton color="gradient">
+							<IonFabButton color="gradient" onClick={() => {
+								runDisconnetWallet(true);
+							}}>
 								<IonIcon style={{pointerEvents: 'none'}} icon={power} title="close network" ariaLabel="close network"></IonIcon>
 							</IonFabButton>
 						</IonFabList>

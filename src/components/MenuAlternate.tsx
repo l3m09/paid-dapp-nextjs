@@ -16,11 +16,8 @@ import {
 	walletSharp
 } from 'ionicons/icons';
 import { useDispatch, useSelector} from 'react-redux';
-import { BlockchainFactory } from '../utils/blockchainFactory';
 import { doSetCurrentToken, doShowMyCurrentWallet} from '../redux/actions/wallet';
-import { isUnlock } from '../utils/metamask';
 import { Sessions } from '../utils/sessions';
-import { getPaidBalance, getDaiBalance} from '../redux/actions/wallet'
 import { useHistory } from 'react-router';
 
 interface AppPage {
@@ -43,58 +40,40 @@ const MenuAlternate:  React.FC = () =>{
 	const history = useHistory();
 	const location = useLocation();
 	const dispatch = useDispatch();
-	// const wallet = useSelector((state: any) => state.wallet);
-	// const { unlockedWallet, selectedToken } = wallet;
+	const wallet = useSelector((state: any) => state.wallet);
+	const { currentWallet, selectedToken } = wallet;
 
 	const [disableMenu, setDisableMenu] = useState(false);
-	const [networkText, setNetWorkText] = useState('...');
-	const [selectToken, setSelectToken] = useState('paid');
+	const [networkText, setNetWorkText] = useState(currentWallet?.network);
+	const [selectToken, setSelectToken] = useState(selectedToken);
 
 	const doSetSelectedToken = (token:string) => {
 		setSelectToken(token);
 		dispatch(doSetCurrentToken(token));
 	}
-	let paidBalance = '';
-	let daiBalance = '';
-
-	let unlocked:boolean = false;
-	Promise.resolve(isUnlock()).then((resp:boolean) => {
-		unlocked = resp;
-	});
-
-	Promise.resolve(getPaidBalance(window.ethereum)).then((resp:string) => {
-		paidBalance  = resp;
-		console.log('paid', paidBalance);
-	});
-
-	Promise.resolve(getDaiBalance(window.ethereum)).then((resp:string) => {
-		daiBalance  = resp;
-		console.log('dai', daiBalance);
-	});
+	const paidBalance = currentWallet?.balanceToken;
+	const daiBalance = currentWallet?.balanceDaiToken;
+	let unlocked:boolean;
+	if ((currentWallet == null) && (currentWallet == undefined)) {
+		unlocked = false;
+	} else {
+		unlocked = true;
+	}
 
 	useEffect(() => {
-		if (window.ethereum.isConnected() == true) {
+		if (unlocked == true) {
 			setDisableMenu(false);
-			window.ethereum.enable();
-			const web3 = BlockchainFactory.getWeb3Mask(window.ethereum);
-			// const web3 = BlockchainFactory.getWeb3Instance(unlockedWallet.address, unlockedWallet._id, unlockedWallet.password);
+			setNetWorkText(currentWallet?.network);
 			if(!Sessions.getTimeoutBool()){
 				Sessions.setTimeoutCall();
 			}
 			else{
 				history.push('/');
 			}
-			web3.then((result) => {
-				const { network } = result!;
-				const _network = BlockchainFactory.getNetwork(network);
-				_network.then((networkText: string) => {
-					setNetWorkText(networkText.toUpperCase());
-				});
-			});
 		} else {
 			history.push('/');
 		}
-	}, [window.ethereum.isConnected()]);
+	}, [unlocked]);
 
 	const appPages: AppPage[] = [
 		{
