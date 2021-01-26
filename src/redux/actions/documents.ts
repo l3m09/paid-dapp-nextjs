@@ -241,7 +241,6 @@ export const doCreateAgreement = (payload: {
 		let metodoTkn:any;
 		let allow:any;
 		// const paymentSA = web3.utils.toWei(pago, 'ether');
-		debugger
 		if (selectedToken === 'paid') {
 			if (balanceToken < paymentSA) {
 				dispatch(openErrorDialog('You have not enough balance to perform this action'));
@@ -306,7 +305,7 @@ export const doCreateAgreement = (payload: {
 		} else {
 			dispatch(openSuccessDialog('Please Select the Token to use'));
 		}
-		debugger
+
 		// Uploads Value to Smart Agreements
 		const methodFn = AgreementContract.methods.partyCreate(
 			token,
@@ -689,12 +688,12 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 			AgreementContract.options.from = currentWallet?.address;
 			// Increase Approve for withdraw PAID token
 			console.log('Pago', paymentSA);
-			debugger
+
 			let token:string = '';
 			let metodoTkn:any;
 			let allow:any;
 			// const paymentSA = web3.utils.toWei(pago, 'ether');
-			debugger
+
 			if (selectedToken === 'paid') {
 				if (balanceToken < paymentSA) {
 					dispatch(openErrorDialog('You have not enough balance to perform this action'));
@@ -759,7 +758,7 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 			} else {
 				dispatch(openSuccessDialog('Please Select the Token to use'));
 			}
-			debugger
+
 			// Sending Data to Smart Contract
 			const methodFn = AgreementContract.methods.counterPartiesSign(
 				token,
@@ -900,7 +899,7 @@ export const doRejectCounterpartyDocument = (document: any, comments: string) =>
 			PaidTokenContract.options.from = currentWallet?.address;
 			// Verified Value
 			console.log('token address:',  token,'address wallet:', currentWallet?.address);
-			
+
 			const methodFn = AgreementContract.methods.counterPartiesReject(
 				token,
 				agreementId,
