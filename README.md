@@ -1,5 +1,6 @@
 # install
 
+<<<<<<< HEAD
 Integración de Cambios Merge Metamask-integrated / Hot-fix
 
 ## Prerequisites
@@ -47,3 +48,10 @@ npm start
 ```
 
 To create or sign Agreements make sure to have PAID tokens balance
+=======
+npm i --force
+
+npm start
+
+To create Agreements make sure to have PAID tokens balance
+>>>>>>> master
