@@ -21,6 +21,7 @@ import { useDispatch } from 'react-redux';
 import { doSetAgreementFormInfo } from '../../../redux/actions/documents';
 import PreviewAgreement from './PreviewAgreement';
 import { getContractTemplate } from '../../../redux/actions/template/index';
+import BannerMobileSoon from '../../../components/BannerMobileSoon';
 
 interface AgreementsProps {
 	show: boolean;
@@ -91,9 +92,8 @@ const Agreements: React.FC<AgreementsProps> = () => {
 		}));
 		await slidesRef?.current?.lockSwipeToPrev(false);
 		await slidesRef?.current?.lockSwipeToNext(false);
-		await slidesRef?.current?.slideTo(0)?.then(() => {
-			history.push('/documents');
-		});
+		await slidesRef?.current?.slideTo(0);
+		history?.push('/documents');
 	}
 
 	// const ndaTemplate: any = (
@@ -115,6 +115,7 @@ const Agreements: React.FC<AgreementsProps> = () => {
 
 	return (
 		<IonPage className="agreements-page content-page">
+			<BannerMobileSoon />
 			<IonContent fullscreen 
 				scrollEvents={true}>
 				<IonHeader translucent={false} mode="md">

@@ -264,6 +264,9 @@ ion-header {
 
   .select-interface-option {
     justify-content: space-between;
+    .alert-radio-label {
+      color: $text-default !important;
+    }
   }
 }
 
@@ -288,4 +291,14 @@ ion-input, ion-textarea {
 
 .item-interactive.item-has-focus {
   --highlight-background: none !important;
+}
+
+.banner-mobile-soon-container {
+  --background: $brand-primary;
+  background-color: $brand-primary;
+  height: 10%;
+  width: 100%;
+  color: $text-default;
+  text-align: center;
+  z-index: 300;
 }

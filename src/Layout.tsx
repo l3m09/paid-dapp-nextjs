@@ -33,6 +33,7 @@ import { openSuccessDialog } from '../src/redux/actions/documents'
 import UnlockWallet from './components/UnlockWallet';
 import { doConnectWallet } from './redux/actions/wallet';
 import MyCurrentWallet from './components/MyCurrentWallet';
+import SuccessDialog from './components/SuccessDialog';
 
 const Layout: React.FC = () => {
 	const history = useHistory();
@@ -55,6 +56,7 @@ const Layout: React.FC = () => {
 			<Route path="/agreements/:type" component={Agreements} exact />
 			{/* currentWallet !== null ? <UnlockWallet selectedWallet={currentWallet} show={showUnlockWalletModal} dismiss={dismissModal}/> : null */}
 			<MyCurrentWallet />
+			<SuccessDialog />
 		</IonContent>
 	);
 };

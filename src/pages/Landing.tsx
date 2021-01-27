@@ -9,6 +9,7 @@ import {
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
+import BannerMobileSoon from '../components/BannerMobileSoon';
 import Terms from '../components/Terms';
 import { doConnectWallet } from '../redux/actions/wallet';
 
@@ -26,66 +27,9 @@ const Landing: React.FC = () => {
 	const [showTermsModal, setShowTermsModal] = useState(false);
 	const { connectedWallet, currentWallet } = wallet;
 	
-	// let metamask:boolean;
-	// let loading = true;
-	// Promise.resolve(mask).then(async (resp:boolean)=> {
-	// 	metamask = resp;
-	// 	loading = false;
-	// 	console.log('dentro de promise',metamask, loading, window.ethereum);
-	// 	if (metamask) {
-	// 		const ethereumButton = document.querySelector('.enableEthereumButton');
-
-	// 		const metaInstance = await BlockchainFactory.getWeb3Mask(window.ethereum);
-	// 		window.web3 = metaInstance?.web3Instance;
-
-	// 		const getAccount = async () =>  {
-	// 			const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-	// 			const account = accounts[0];
-	// 			if (account != null) {history.push('/documents');}
-	// 			console.log(account);
-	// 		}
-
-	// 		ethereumButton?.addEventListener('click', async () => {
-	// 			//Will Start the metamask extension
-	// 			getAccount();
-	// 			});
-	// 		console.log('Metamask Installed');
-	// 	} else {
-	// 		dispatch(openSuccessDialog('Failed to Connect Metamask'));
-	// 		history.push('/');
-	// 	}
-	// })
-
-	// new logic
-	// const ethereumButton = document.querySelector('.enableEthereumButton');
-	// ethereumButton?.addEventListener('click', async () => {
-	// 	//Will Start the metamask extension
-	// 	console.log('captura evento');
-	// 	dispatch(doConnectWallet(window.ethereum));
-	// });
-
-	// const enable = () =>{
-	// 	console.log('active metamask')
-	// 	window.ethereum.enable();
-	// }
-
-
-
-
-	// useEffect(async () => {
-	// 	const provider = await detectEthereumProvider();
-	// }, []);
-	// const { wallets, loadingWallets } = wallet;
-	// const [showCreateModal, setShowCreateModal] = useState(false);
-	// const [showImportWalletModal, setShowImportWalletModal] = useState(false);
-
-	// const dismissModal = () => {
-	// 	setShowCreateModal(false);
-	// 	setShowImportWalletModal(false);
-	// };
-
 	return (
 		<IonPage>
+			<BannerMobileSoon />
 			<IonContent fullscreen class="landing-content">
 				<div className="landing-logo">
 					<IonImg src="/assets/images/logo-full.png" />
@@ -98,7 +42,6 @@ const Landing: React.FC = () => {
 				/> */}
 						<IonButton
 						onClick={() => {
-							console.log('captura evento');
 							dispatch(doConnectWallet(window.ethereum, history));
 						}}
 						className="enableEthereumButton"

@@ -36,18 +36,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
 	doGetDocuments,
 	doGetSelectedDocument,
+	openErrorDialog,
 	openSuccessDialog
 } from '../../redux/actions/documents';
 
 import MenuAlternate from '../../components/MenuAlternate';
 import DocumentsList from './DocumentsList';
 import { IonText } from '@ionic/react';
-import { BlockchainFactory } from './../../utils/blockchainFactory'
-import { KeyStorageModel } from 'universal-crypto-wallet/dist/key-storage/KeyStorageModel';
-import SuccessDialog from '../../components/SuccessDialog';
 import AgreementType from '../../models/AgreementType';
 import { Sessions } from '../../utils/sessions';
 import Web3 from 'web3'
+import BannerMobileSoon from '../../components/BannerMobileSoon';
 
 function SelectedDocument(payload: {
 	show: boolean;
@@ -138,7 +137,6 @@ const Documents: React.FC = () => {
 	const wssUrl = `${process.env.REACT_APP_WEB3_WSS}`;
 	
 	useEffect(() => {
-		console.log('document connect',window.ethereum.isConnected())
 		if(!Sessions.getTimeoutBool()&&(window.ethereum.isConnected())){
 			Sessions.setTimeoutCall();
 			dispatch(doGetDocuments(currentWallet));
@@ -182,7 +180,7 @@ const Documents: React.FC = () => {
 			history.push('/');
 		}
 		if (currentWallet?.network != "rinkeby") {
-			alert('You are in a Demo MVP, only Create Smart Agreements in Rinkeby');
+			dispatch(openErrorDialog('You are in a Demo MVP, only Create Smart Agreements in Rinkeby'));
 			history.push('/');
 		}
 		setShowPopover(show);
@@ -221,6 +219,7 @@ const Documents: React.FC = () => {
 	}
 	return (
 		<IonPage className="documents-page content-page">
+			<BannerMobileSoon />
 			<IonContent fullscreen>
 				<IonHeader translucent={false} mode="md">
 					<IonToolbar>
@@ -289,7 +288,6 @@ const Documents: React.FC = () => {
 						</IonFabList>
 					</IonFab>
 				</div>
-				<SuccessDialog />
 			</IonContent>
 		</IonPage>
 	);

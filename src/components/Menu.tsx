@@ -39,7 +39,6 @@ const Menu: React.FC = () => {
 	const [disableMenu, setDisableMenu] = useState(true);
 
 	useEffect( () => {
-		console.log('Menu wallet_info', connectedWallet, currentWallet, selectedToken);
 		if ((window.ethereum != undefined) && (connectedWallet)) {
 			setDisableMenu(false);
 		} else {

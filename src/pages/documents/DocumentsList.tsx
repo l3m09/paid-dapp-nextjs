@@ -373,15 +373,8 @@ const DocumentsList: React.FC<Props> = ({
 			for await (const chunk of ipfs.cat(contentRef.cid)) {
 				content = uint8ArrayToString(chunk);
 			}
-			console.log('documentsList sig and content:', signature, content);
 			// Verify signing
-			// const arrayContent = btoa(unescape(encodeURIComponent(content)));
-		
-			const hashContent:string = currentWallet?.web3.utils.sha3(content).replace('0x', '');
-			const bytesContent:string = currentWallet?.web3.utils.utf8ToHex(hashContent);
-			const recover:string = await currentWallet?.web3.eth.personal.ecRecover(bytesContent,signature);
 
-			console.log(recover.toLowerCase(), document.event.from.toLowerCase());
 			const verified:boolean = true;
 			setShowVerified(verified);
 			setShowNotVerified(!verified);
@@ -495,10 +488,12 @@ const DocumentsList: React.FC<Props> = ({
 										<div className="col">{createdAt}</div>
 										<div className="col">{updatedAt}</div>
 										<div className="col">
-											{(event.status == 1 && from ? <IonBadge color="warning">SIGNED</IonBadge> : 
+											{(event.status == 9 && from ? <IonBadge color="warning">REJECT</IonBadge> : 
+											(event.status == 9 && to ? <IonBadge color="primary">REJECT</IonBadge> : 
+											(event.status == 1 && from ? <IonBadge color="warning">SIGNED</IonBadge> : 
 											(event.status == 1 && to ? <IonBadge color="primary">SIGNED</IonBadge> : 
 											(event.status == 0 && from ? <IonBadge color="success">PENDING</IonBadge> : 
-											(event.status == 0 && to ? <IonBadge color="secondary">SIGN</IonBadge> : null))))}	
+											(event.status == 0 && to ? <IonBadge color="secondary">SIGN</IonBadge> : null))))))}
 										</div>
 									</div>
 								);
