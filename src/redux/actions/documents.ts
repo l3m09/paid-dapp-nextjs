@@ -240,7 +240,7 @@ export const doCreateAgreement = (payload: {
 			agreementForm.counterpartyWallet,
 			ipfsHash.toString(),
 			formId,
-			form,
+			null,
 			'0x' + digest);
 		// estimategas for Create Smart Agreements
 		const gas = await methodFn.estimateGas().then(async (gas:any) => {
