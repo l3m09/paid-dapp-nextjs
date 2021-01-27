@@ -16,7 +16,7 @@ import {
 import React, { useReducer, Reducer } from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import ActionModel from '../../models/ActionModel';
-import {doImportWallet} from "../../redux/actions/wallet";
+// import {doImportWallet} from "../../redux/actions/wallet";
 
 interface Props {
     show: boolean;
@@ -91,7 +91,7 @@ const importWalletReducer: Reducer<WalletInfo, ActionModel> = (state: WalletInfo
 const ImportWallet: React.FC<Props> = ({show, dismiss}) => {
     const dispatch = useDispatch();
     const wallet = useSelector((state: any) => state.wallet);
-    const { importingWallet } = wallet;
+    const { importingWallet, error } = wallet;
 
     let walletInfo: WalletInfo = { 
         name: '', 
@@ -118,11 +118,11 @@ const ImportWallet: React.FC<Props> = ({show, dismiss}) => {
         const {name, passphrase, mnemonic, verified} = state;
 
         if (verified) {
-            dispatch(doImportWallet({
-                name,
-                password: passphrase,
-                mnemonic
-            }));
+            // dispatch(doImportWallet({
+            //     name,
+            //     password: passphrase,
+            //     mnemonic
+            // }));
         } else if (walletInfo.passphrase !== walletInfo.confirmPassphrase) {
 			alert('Passphrase is different Confirm Passphrase');
 		} else if (walletInfo.passphrase === '') {
@@ -221,6 +221,11 @@ const ImportWallet: React.FC<Props> = ({show, dismiss}) => {
                             !state.validMnemonic &&
                             <IonNote color="danger" className="ion-margin-top">
                                 You must enter the Phrase.
+                            </IonNote>
+                        }{
+                            (error?.length > 0) &&
+                            <IonNote color="danger" className="ion-margin-top">
+                                { error }
                             </IonNote>
                         }
                         <IonText className="textarea-hint">

@@ -11,7 +11,8 @@ import { copy } from 'ionicons/icons';
 import React, { Reducer, useEffect, useReducer, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ActionModel from '../models/ActionModel';
-import { doUnlockWallet } from '../redux/actions/wallet';
+// import { doUnlockWallet } from '../redux/actions/wallet';
+import { TOAST_DURATION_WALLET_ADDRESS_COPY } from '../utils/constants';
 
 interface Props {
 	show: boolean;
@@ -50,8 +51,20 @@ const UnlockWallet: React.FC<Props> = ({
 	dismiss
 }) => {
 	const spanRef = useRef<HTMLSpanElement | null>(null);
+	const passphraseRef = useRef<HTMLIonInputElement | null>(null);
 	const dispatch = useDispatch();
 	const [showToastCopy, setShowToastCopy] = useState(false);
+
+	useEffect(() => {
+		const bootstrapAsync = async () => {
+			const element = await passphraseRef.current?.getInputElement();
+			element?.focus();
+		};
+
+		const timerBootstrapAsync = setTimeout(() => bootstrapAsync(), 500);
+
+		return () => { clearTimeout(timerBootstrapAsync); }
+	}, []);
 
 	useEffect(() => {
 		console.log('dismissible', dismissible);
@@ -87,12 +100,12 @@ const UnlockWallet: React.FC<Props> = ({
 
 	const onSubmit = (e: any) => {
 		e.preventDefault();
-		dispatch(
-			doUnlockWallet({
-				wallet: selectedWallet,
-				password: state.password
-			})
-		);
+		// dispatch(
+		// 	doUnlockWallet({
+		// 		wallet: selectedWallet,
+		// 		password: state.password
+		// 	})
+		// );
 	};
 
 	const copyAddressToClipboard = () => {
@@ -146,6 +159,7 @@ const UnlockWallet: React.FC<Props> = ({
 							value={state.password}
 							onInput={setter(CHANGE_PASSPHRASE)}
 							onIonBlur={setter(CHANGE_PASSPHRASE)}
+							ref={passphraseRef}
 						/>
 						{
 							!state.validPassphrase &&
@@ -176,7 +190,7 @@ const UnlockWallet: React.FC<Props> = ({
 					color="primary"
 					onDidDismiss={() => setShowToastCopy(false)}
 					message="Wallet address has been copied to clipboard"
-					duration={300}
+					duration={TOAST_DURATION_WALLET_ADDRESS_COPY}
 				/>
 			</IonContent>
 		</IonModal>

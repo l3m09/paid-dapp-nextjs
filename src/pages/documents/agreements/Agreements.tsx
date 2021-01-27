@@ -21,6 +21,7 @@ import { useDispatch } from 'react-redux';
 import { doSetAgreementFormInfo } from '../../../redux/actions/documents';
 import PreviewAgreement from './PreviewAgreement';
 import { getContractTemplate } from '../../../redux/actions/template/index';
+import BannerMobileSoon from '../../../components/BannerMobileSoon';
 
 interface AgreementsProps {
 	show: boolean;
@@ -50,17 +51,17 @@ const Agreements: React.FC<AgreementsProps> = () => {
 
 	const documentSlides: any = (
 		<IonSlides pager={false} options={slideOpts} ref={slidesRef}>
-			<IonSlide>
+			{/* <IonSlide>
 				<NdaDescription title={titleAgreement} current={slidesRef.current} />
+			</IonSlide> */}
+			<IonSlide>
+				<FormClient current={slidesRef?.current} />
 			</IonSlide>
 			<IonSlide>
-				<FormClient current={slidesRef.current} />
+				<FormCounterparty current={slidesRef?.current} />
 			</IonSlide>
 			<IonSlide>
-				<FormCounterparty current={slidesRef.current} />
-			</IonSlide>
-			<IonSlide>
-				<PreviewAgreement current={slidesRef.current} />
+				<PreviewAgreement current={slidesRef?.current} />
 			</IonSlide>
 		</IonSlides>
 	);
@@ -89,11 +90,10 @@ const Agreements: React.FC<AgreementsProps> = () => {
 			counterpartyPhone: '',
 			createdAt: null
 		}));
-		await slidesRef.current?.lockSwipeToPrev(false);
-		await slidesRef.current?.lockSwipeToNext(false);
-		await slidesRef.current?.slideTo(0).then(() => {
-			history.push('/documents');
-		});
+		await slidesRef?.current?.lockSwipeToPrev(false);
+		await slidesRef?.current?.lockSwipeToNext(false);
+		await slidesRef?.current?.slideTo(0);
+		history?.push('/documents');
 	}
 
 	// const ndaTemplate: any = (
@@ -115,6 +115,7 @@ const Agreements: React.FC<AgreementsProps> = () => {
 
 	return (
 		<IonPage className="agreements-page content-page">
+			<BannerMobileSoon />
 			<IonContent fullscreen 
 				scrollEvents={true}>
 				<IonHeader translucent={false} mode="md">

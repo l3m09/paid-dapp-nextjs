@@ -1,8 +1,57 @@
 # install
-`make up`
 
+<<<<<<< HEAD
+Integración de Cambios Merge Metamask-integrated / Hot-fix
+
+## Prerequisites
+
+Integration Metamask
+
+### Local dependencies
+- Docker
+- Make
+- Node
+### Env variables 
+
+Copy `.env.example` to `.env` and replace to the proper values
+
+## Getting Started
+### Using Docker (Recommended)
+
+Build a new docker image and start a new container afterwards.
+```bash
+make up
+```
+
+Remove a previous container 
+```bash
+make down
+```
+
+Get container logs
+```bash
+make logs
+```
+
+### Using Node
+
+Install application dependencies
+
+```bash
+npm i --force
+```
+
+Run the application
+
+```bash
+npm start
+```
+
+To create or sign Agreements make sure to have PAID tokens balance
+=======
 npm i --force
 
 npm start
 
 To create Agreements make sure to have PAID tokens balance
+>>>>>>> master

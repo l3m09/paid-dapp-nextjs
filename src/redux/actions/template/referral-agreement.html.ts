@@ -10,7 +10,7 @@ export const ReferalAgreement = `<div class="contract" style="width: 800px; back
 </span><span style="font-size: large;"><span lang="en-US"> AGREEMENT</span></span></strong></p>
 <p align="left">&nbsp;</p>
 <p class="western" align="justify">&nbsp;</p>
-<p class="western" lang="x-none" align="justify"><span lang="en-US">This Sales Commission Agreement (the &ldquo;</span><span lang="en-US"><strong>Agreement</strong></span><span lang="en-US">&rdquo;) is effective <span id="date">{{date}}</<span> (the &ldquo;</span><span lang="en-US"><strong>Effective Date</strong></span><span lang="en-US">&rdquo;), by and between <span id="partyName">{{partyName}}</span> <span lang="en-US">and </span><span lang="en-US"><span id="counterPartyName">{{counterPartyName}}</span></span> <span lang="en-US">{{state}}</span> <span lang="en-US">{{typeOfCompany}}</span> <span lang="en-US">(the &ldquo;</span><span lang="en-US"><strong>Provider</strong></span><span lang="en-US">&rdquo;).</span></p>
+<p class="western" lang="x-none" align="justify"><span lang="en-US">This Sales Commission Agreement (the &ldquo;</span><span lang="en-US"><strong>Agreement</strong></span><span lang="en-US">&rdquo;) is effective <div style="display: inline-block; background-color:#f79632"><span id="createDate">{{date}}</<span></div> (the &ldquo;</span><span lang="en-US"><strong>Effective Date</strong></span><span lang="en-US">&rdquo;), by and between <div style="display: inline-block; background-color:#f79632"><span id="partyName">{{partyName}}</span></div> <span lang="en-US">and </span><span lang="en-US"><div style="display: inline-block; background-color:#f79632"><span id="counterPartyName">{{counterPartyName}}</span></div></span> <div style="display: inline-block; background-color:#f79632"><span lang="en-US">{{stateOfCompany}}</span></div> <div style="display: inline-block; background-color:#f79632"><span lang="en-US">{{typeOfCompany}}</span></div> <span lang="en-US">(the &ldquo;</span><span lang="en-US"><strong>Provider</strong></span><span lang="en-US">&rdquo;).</span></p>
 <p class="western" align="justify">&nbsp;</p>
 <p lang="x-none" align="center"><a name="OLE_LINK4"></a> <span style="font-family: 'Courier New', serif;"><span style="font-size: small;"><span style="font-family: 'Times New Roman', serif;"><span style="font-size: medium;"><span lang="en-US"><strong>RECITALS</strong></span></span></span></span></span></p>
 <ol>
@@ -47,7 +47,7 @@ export const ReferalAgreement = `<div class="contract" style="width: 800px; back
 <p lang="x-none"><span style="font-family: 'Courier New', serif;"><span style="font-size: small;"><span style="font-family: 'Times New Roman', serif;"><span style="font-size: medium;"><span lang="en-US"><strong>TERM AND TERMINATION</strong></span></span></span></span></span></p>
 <ol type="a">
 <li>
-<p lang="x-none"><span style="font-family: 'Courier New', serif;"><span style="font-size: small;"><span style="font-family: 'Times New Roman', serif;"><span style="font-size: medium;"><span lang="en-US">This Agreement shall continue in full force and effect [until [TERMINATION DATE], unless and until terminated in accordance with this Section 3.</span></span></span></span></span></p>
+<p lang="x-none"><span style="font-family: 'Courier New', serif;"><span style="font-size: small;"><span style="font-family: 'Times New Roman', serif;"><span style="font-size: medium;"><span lang="en-US">This Agreement shall continue in full force and effect until <div style="display: inline-block; background-color:#f79632">{{terminationDate}}</div>, unless and until terminated in accordance with this Section 3.</span></span></span></span></span></p>
 </li>
 <li>
 <p lang="x-none"><span style="font-family: 'Courier New', serif;"><span style="font-size: small;"><span style="font-family: 'Times New Roman', serif;"><span style="font-size: medium;"><span lang="en-US">This Agreement may be terminated for any reason at any time by either the Company or Provider giving the other party fourteen (14) days&rsquo; written notice of termination.</span></span></span></span></span></p>
@@ -206,7 +206,7 @@ export const ReferalAgreement = `<div class="contract" style="width: 800px; back
 <p lang="x-none"><span style="font-family: 'Courier New', serif;"><span style="font-size: small;"><span style="font-family: 'Times New Roman', serif;"><span style="font-size: medium;"><span lang="en-US">Each party represents and warrants in favor of the other that it has all necessary capacity and authority to enter into this Agreement and to carry out its respective obligations hereunder and that neither party is a party to, bound or affected by or subject to any indenture, mortgage, lease, agreement, instrument, charter or by-law provision, statute, judgment, decree or laws of the United States which would be violated, contravened, breached by, or under which default would occur as a result of, the execution and delivery of this Agreement and the performance of its respective obligations hereunder.</span></span></span></span></span></p>
 </li>
 <li>
-<p lang="x-none"><span style="font-family: 'Courier New', serif;"><span style="font-size: small;"><span style="font-family: 'Times New Roman', serif;"><span style="font-size: medium;"><span lang="en-US">This Agreement shall be governed and interpreted by the laws of the State of [STATE], without regard to its conflict of laws principles. [COUNTY] County, [STATE] shall be the appropriate venue and jurisdiction for the resolution of any disputes hereunder. Both parties hereby consent to such personal and exclusive jurisdiction.</span></span></span></span></span></p>
+<p lang="x-none"><span style="font-family: 'Courier New', serif;"><span style="font-size: small;"><span style="font-family: 'Times New Roman', serif;"><span style="font-size: medium;"><span lang="en-US">This Agreement shall be governed and interpreted by the laws of the State of <div style="display: inline-block; background-color:#f79632">{{stateOfCompany}}</div>, without regard to its conflict of laws principles. <div style="display: inline-block; background-color:#f79632">{{county}}</div> County, <div style="display: inline-block; background-color:#f79632">{{stateOfCompany}}</div> shall be the appropriate venue and jurisdiction for the resolution of any disputes hereunder. Both parties hereby consent to such personal and exclusive jurisdiction.</span></span></span></span></span></p>
 </li>
 </ol>
 </ol>
@@ -221,18 +221,18 @@ export const ReferalAgreement = `<div class="contract" style="width: 800px; back
 <p class="western" lang="x-none" align="justify"><span style="color: #000000;"><span lang="en-US"><strong>THE COMPANY:</strong></span></span></p>
 <p>(Signature)</p>
 <p>_______________________________________</p>
-<p>Name: <span id="partyName">{{partyName}}</span></p>
-<p>Email: <span id="partyEmail">{{partyEmail}}</span></p>
-<p>Address: <span id="partyAddress">{{partyAddress}}</span></p>
-<p>Wallet: <span id="partyWallet">{{partyWallet}}</span></p>
+<p>Name: <div style="display: inline-block; background-color:#f79632"><span id="partyName">{{partyName}}</span></div></p>
+<p>Email: <div style="display: inline-block; background-color:#f79632"><span id="partyEmail">{{partyEmail}}</span></div></p>
+<p>Address: <div style="display: inline-block; background-color:#f79632"><span id="partyAddress">{{partyAddress}}</span></div></p>
+<p>Wallet: <div style="display: inline-block; background-color:#f79632"><span id="partyWallet">{{partyWallet}}</span></div></p>
 <p>&nbsp;</p>
 <p class="western" lang="x-none"><span lang="en-US"> IN WITNESS WHEREOF, each party to this Agreement has caused it to be executed on the Effective Date.</span></p>
 <p>(Signature)</p>
 <p>_______________________________________</p>
-<p>Name: <span id="counterPartyName">{{counterPartyName}}</span></p>
-<p>Email: <span id="counterPartyEmail">{{counterPartyEmail}}</span></p>
-<p>Address: <span id="counterPartyAddress">{{counterPartyAddress}}</span></p>
-<p>Wallet: <span id="counterPartyWallet">{{counterPartyWallet}}</span>
+<p>Name: <div style="display: inline-block; background-color:#f79632"><span id="counterPartyName">{{counterPartyName}}</span></div></p>
+<p>Email: <div style="display: inline-block; background-color:#f79632"><span id="counterPartyEmail">{{counterPartyEmail}}</span></div></p>
+<p>Address: <div style="display: inline-block; background-color:#f79632"><span id="counterPartyAddress">{{counterPartyAddress}}</span></div></p>
+<p>Wallet: <div style="display: inline-block; background-color:#f79632"><span id="counterPartyWallet">{{counterPartyWallet}}</span></div>
 <p>&nbsp;</p>
 <p lang="x-none" align="center"><span style="font-family: 'Courier New', serif;"><span style="font-size: small;"><span style="font-family: 'Times New Roman', serif;"><span style="font-size: medium;"><span lang="en-US"><u><strong>SCHEDULE A</strong></u></span></span></span></span></span></p>
 <p lang="x-none" align="center"><span style="font-family: 'Courier New', serif;"><span style="font-size: small;"><span style="font-family: 'Times New Roman', serif;"><span style="font-size: medium;"><span lang="en-US"><u><strong>SERVICES TO BE PROVIDED</strong></u></span></span></span></span></span></p>
@@ -249,7 +249,7 @@ export const ReferalAgreement = `<div class="contract" style="width: 800px; back
 <p>&nbsp;</p>
 <p lang="x-none"><span style="font-family: 'Courier New', serif;"><span style="font-size: small;"><span style="font-family: 'Times New Roman', serif;"><span style="font-size: medium;"><span lang="en-US">The Company shall compensate Provider in accordance with the terms set out below. The Company and Provider may amend this </span></span></span><span style="font-family: 'Times New Roman', serif;"><span style="font-size: medium;"><span lang="en-US"><u>Schedule B</u></span></span></span><span style="font-family: 'Times New Roman', serif;"><span style="font-size: medium;"><span lang="en-US"> in writing from time to time.</span></span></span></span></span></p>
 <p>&nbsp;</p>
-<p>The Company shall pay Provider a commission equal to [XX]% of Net Revenue actually received by the Company Users referred to the Company by Provider. All commissions payable to Provider pursuant to this provision shall automatically terminate upon [_____].</p>
+<p>The Company shall pay Provider a commission equal to <div style="display: inline-block; background-color:#f79632">{{commision}}</div>% of Net Revenue actually received by the Company Users referred to the Company by Provider. All commissions payable to Provider pursuant to this provision shall automatically terminate upon <div style="display: inline-block; background-color:#f79632">{{commisionDate}}</div>.</p>
 <p>The Company and Provider agree to rely upon reports generated by the Company as conclusive evidence of the amount of commission owed to Provider pursuant to this <u>Schedule B</u>. Company shall generate and deliver such reports monthly and will pay all amounts due within 30 days of delivery of such reports to Provider.</p>
 <p class="western" lang="x-none"><span lang="en-US">As used in this </span><span lang="en-US"><u>Schedule B</u></span><span lang="en-US">, &ldquo;Net Revenue&rdquo; means all revenue actually received by the Company, less any applicable taxes or fees payable by the Company. For the avoidance of doubt, Net Revenue shall not include amounts that are (a) billed but not collected, or (b) not yet billed. </span></p>
 <p class="western">&nbsp;</p>

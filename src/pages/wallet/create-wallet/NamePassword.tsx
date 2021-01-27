@@ -11,7 +11,7 @@ import React, { useReducer } from 'react';
 // import { doCreateWallet } from '../../../redux/actions/wallet';
 import { useDispatch } from 'react-redux';
 import ActionModel from '../../../models/ActionModel';
-import { doAddNamePassPharse } from '../../../redux/actions/wallet';
+// import { doAddNamePassPharse } from '../../../redux/actions/wallet';
 
 interface NamePasswordProps {
 	current: any;
@@ -92,9 +92,9 @@ const NamePassword: React.FC<NamePasswordProps> = ({ current }) => {
 	const onContinue = async () => {
 		if (state.verified) {
 			const {name, passphrase} = state;
-			await dispatch(
-				doAddNamePassPharse(name, passphrase)
-			);
+			// await dispatch(
+			// 	doAddNamePassPharse(name, passphrase)
+			// );
 			await current.lockSwipeToNext(false);
 			current.slideNext();
 			await current.lockSwipeToNext(true);

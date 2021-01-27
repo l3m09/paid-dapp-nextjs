@@ -1,20 +1,24 @@
 import {
 	IonButtons,
 	IonIcon,
+	IonImg,
 	IonItem,
 	IonLabel,
+	IonSelect,
+	IonSelectOption,
 } from '@ionic/react';
 
 import React, {useEffect, useState} from 'react';
 import { useLocation } from 'react-router-dom';
 import {
-	documentOutline,
 	documentSharp,
-	listCircleOutline
+	globeSharp,
+	walletSharp
 } from 'ionicons/icons';
-import {useSelector} from 'react-redux';
-import { BlockchainFactory } from '../utils/blockchainFactory';
-import { KeyStorageModel } from 'universal-crypto-wallet/dist/key-storage/KeyStorageModel';
+import { useDispatch, useSelector} from 'react-redux';
+import { doSetCurrentToken, doShowMyCurrentWallet} from '../redux/actions/wallet';
+import { Sessions } from '../utils/sessions';
+import { useHistory } from 'react-router';
 
 interface AppPage {
 	url: string;
@@ -22,52 +26,82 @@ interface AppPage {
 	mdIcon: string;
 	title: string;
 	disabled: boolean;
+	selected: boolean;
+	click: any;
+}
+
+const customAlertTokens = {
+	header: 'Select Payment Method',
+	cssClass: 'select-tokens-alert',
+	translucent: true
 }
 
 const MenuAlternate:  React.FC = () =>{
+	const history = useHistory();
 	const location = useLocation();
+	const dispatch = useDispatch();
 	const wallet = useSelector((state: any) => state.wallet);
-	const { unlockedWallet } = wallet;
+	const { currentWallet, selectedToken } = wallet;
 
-	const [disableMenu, setDisableMenu] = useState(true);
-	const [networkText, setNetWorkText] = useState('...');
+	const [disableMenu, setDisableMenu] = useState(false);
+	const [networkText, setNetWorkText] = useState(currentWallet?.network);
+	const [selectToken, setSelectToken] = useState(selectedToken);
 
+	const doSetSelectedToken = (token:string) => {
+		setSelectToken(token);
+		dispatch(doSetCurrentToken(token));
+	}
+	const paidBalance = currentWallet?.balanceToken;
+	const daiBalance = currentWallet?.balanceDaiToken;
+	let unlocked:boolean;
+	if ((currentWallet == null) && (currentWallet == undefined)) {
+		unlocked = false;
+	} else {
+		unlocked = true;
+	}
 
 	useEffect(() => {
-		if (unlockedWallet !== null) {
-			setDisableMenu(false)
-			const web3 = BlockchainFactory.getWeb3Instance(unlockedWallet._id, unlockedWallet.password);
-			web3.then((result) => {
-				const { provider } = result!;
-				const network = BlockchainFactory.getNetwork(provider.chainId);
-				network.then((networkText) => {
-					setNetWorkText(networkText.toUpperCase());
-				});
-			});
+		if (unlocked == true) {
+			setDisableMenu(false);
+			setNetWorkText(currentWallet?.network);
+			if(!Sessions.getTimeoutBool()){
+				Sessions.setTimeoutCall();
+			}
+			else{
+				history.push('/');
+			}
+		} else {
+			history.push('/');
 		}
-	}, [unlockedWallet]);
+	}, [unlocked]);
 
 	const appPages: AppPage[] = [
 		{
 			title: 'Network: ' + networkText,
-			url: '/wallets',
-			iosIcon: listCircleOutline,
-			mdIcon: listCircleOutline,
-			disabled: false
+			url: '',
+			iosIcon: globeSharp,
+			mdIcon: globeSharp,
+			disabled: false,
+			selected: true,
+			click: null
 		},
 		{
-			title: 'Wallets',
+			title: 'Wallet',
 			url: '/wallets',
-			iosIcon: listCircleOutline,
-			mdIcon: listCircleOutline,
-			disabled: false
+			iosIcon: walletSharp,
+			mdIcon: walletSharp,
+			disabled: false,
+			selected: false,
+			click: () => dispatch(doShowMyCurrentWallet(true))
 		},
 		{
 			title: 'Smart Agreements Log',
 			url: '/documents',
-			iosIcon: documentOutline,
+			iosIcon: documentSharp,
 			mdIcon: documentSharp,
-			disabled: false
+			disabled: false,
+			selected: false,
+			click: null
 		},
 	];
 
@@ -79,24 +113,60 @@ const MenuAlternate:  React.FC = () =>{
 						key={index}
 						disabled={appPage.disabled || disableMenu}
 						className={
-							location.pathname === appPage.url ? 'selected' : ''
+							location.pathname === appPage.url ?
+							('selected') :
+							appPage.selected ?
+							('selected') :
+							('')
 						}
-						routerLink={appPage.url}
-						routerDirection="none"
 						lines="none"
 						detail={false}
+						button={appPage.click != null}
+						onClick={appPage.click}
 					>
-										<span className="icon-wrapper">
-											<IonIcon
-												ios={appPage.iosIcon}
-												md={appPage.mdIcon}
-												color="gradient"
-											/>
-										</span>
+						<div className="icon-wrapper">
+							<IonIcon
+								ios={appPage.iosIcon}
+								md={appPage.mdIcon}
+								color="gradient"
+							/>
+						</div>
 						<IonLabel color="gradient">{appPage.title}</IonLabel>
 					</IonItem>
 				);
 			})}
+			<IonItem
+				disabled={disableMenu}
+			>
+				<div className="icon-wrapper">
+					<IonImg
+						src={selectToken === "paid" ?
+						('/assets/icon/icon.png') :
+						('/assets/icon/dailogo.svg')
+					}
+					/>
+				</div>
+				<IonLabel color="gradient">
+					{
+						selectToken === "paid" ?
+						('PAID Tokens') :
+						('DAI Tokens')
+					}
+				</IonLabel>
+				<IonSelect
+					interfaceOptions={customAlertTokens}
+					interface="alert"
+					value={selectToken}
+					onIonChange={ (e) => doSetSelectedToken(e.detail.value) }
+				>
+					<IonSelectOption value="paid">
+						PAID Tokens  {paidBalance}
+					</IonSelectOption>
+					<IonSelectOption value="dai">
+						DAI Tokens {daiBalance}
+					</IonSelectOption>
+				</IonSelect>
+			</IonItem>
 		</IonButtons>
 	);
 };

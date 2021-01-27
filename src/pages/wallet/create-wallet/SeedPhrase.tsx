@@ -9,7 +9,7 @@ import {
 import React, { useEffect } from 'react';
 import { lockClosedOutline } from 'ionicons/icons';
 import { useDispatch, useSelector } from 'react-redux';
-import { doGeneratePhrase, doCreateWallet } from '../../../redux/actions/wallet';
+// import { doGeneratePhrase, doCreateWallet } from '../../../redux/actions/wallet';
 
 interface SeedPhraseProps {
 	current: any;
@@ -28,29 +28,13 @@ const SeedPhrase: React.FC<SeedPhraseProps> = ({ current }) => {
 	);
 	const { seedPhrase, name, passphrase, creatingWallet } = wallet;
 
-	// async function slideNext() {
-	// 	console.log('SeedPhrase', await current.getActiveIndex());
-	// 	await current.lockSwipeToNext(false);
-	// 	current.slideNext();
-	// 	await current.lockSwipeToNext(true);
-	// }
 
 	const onSubmit = () => {
-		if (seedPhrase.length > 0) {
-			let mnemonic = seedPhrase.join(' ');
-			dispatch(
-				doCreateWallet({
-					name,
-					password: passphrase,
-					mnemonic: mnemonic
-				})
-			);
-		}
 	};
 
-	useEffect(() => {
-		dispatch(doGeneratePhrase());
-	}, [dispatch]);
+	// useEffect(() => {
+	// 	dispatch(doGeneratePhrase());
+	// }, [dispatch]);
 
 	return (
 		<IonContent fullscreen class="phrase-content seed-phrase">

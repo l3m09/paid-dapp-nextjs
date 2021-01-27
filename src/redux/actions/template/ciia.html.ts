@@ -1,7 +1,7 @@
 export const Ciia = `<div class="contract" style="width: 800px; background-color:white; color: black;"><h1 id="title" style="text-align: center;">CIIA</h1><p align="center"><strong><span id="partyName">{{partyName}}</v></strong></p>
 <p align="center"><strong><u>CONFIDENTIAL INFORMATION AND</u><br /> <u>INVENTION ASSIGNMENT AGREEMENT</u></strong></p>
-<p align="center"><em>Consultant Name:</em> {{counterPartyName}} (&ldquo;<u>Consultant</u>&rdquo;)</p>
-<p align="center"><em>Effective Date: {{createDate}}</em></p>
+<p align="center"><em>Consultant Name:</em> <div style="display: inline-block; background-color:#f79632">{{counterPartyName}}</div> (&ldquo;<u>Consultant</u>&rdquo;)</p>
+<p align="center"><em>Effective Date: <div style="display: inline-block; background-color:#f79632">{{effectiveDate}}</div></em></p>
 <p>As a condition of becoming retained (or Consultant&rsquo;s consulting relationship being continued) by {{partyName}}, or any of its current or future subsidiaries, affiliates, successors or assigns (collectively, the &ldquo;<u>Company</u>&rdquo;), and in consideration of Consultant&rsquo;s consulting relationship with the Company and receipt of the compensation now and hereafter paid by the Company, Consultant agrees to the following:</p>
 <ol>
 <li>
@@ -102,7 +102,7 @@ export const Ciia = `<div class="contract" style="width: 800px; background-color
 <p><span style="font-size: small;"><u><strong><span style="font-size: medium;">Miscellaneous</span></strong></u></span><strong>.</strong></p>
 <ol type="a">
 <li>
-<p><u><strong>Governing Law</strong></u><strong>.</strong> The validity, interpretation, construction and performance of this Agreement, and all acts and transactions pursuant hereto and the rights and obligations of the parties hereto shall be governed, construed and interpreted in accordance with the laws of the state of [STATE], without giving effect to the principles of conflict of laws.</p>
+<p><u><strong>Governing Law</strong></u><strong>.</strong> The validity, interpretation, construction and performance of this Agreement, and all acts and transactions pursuant hereto and the rights and obligations of the parties hereto shall be governed, construed and interpreted in accordance with the laws of the state of <div style="display: inline-block; background-color:#f79632">{{stateConsultant}}</div>, without giving effect to the principles of conflict of laws.</p>
 </li>
 <li>
 <p><u><strong>Entire Agreement</strong></u><strong>.</strong> Except as described in Section&nbsp;2., this Agreement sets forth the entire agreement and understanding between the Company and Consultant relating to its subject matter and merges all prior discussions between the parties to this Agreement. No amendment to this Agreement will be effective unless in writing signed by both parties to this Agreement. The Company shall not be deemed hereby to have waived any rights or remedies it may have in law or equity, nor to have given any authorizations or waived any of its rights under this Agreement, unless, and only to the extent, it does so by a specific writing signed by a duly authorized officer of the Company. Any subsequent change or changes in Consultant&rsquo;s duties, obligations, rights or compensation will not affect the validity or scope of this Agreement.</p>
@@ -166,13 +166,13 @@ export const Ciia = `<div class="contract" style="width: 800px; background-color
 </tr>
 <tr valign="top">
 <td width="194">
-<p class="western">&nbsp;</p>
+<p class="western"><div style="display: inline-block; background-color:#f79632">{{title}}</div></p>
 </td>
 <td width="194">
-<p class="western">&nbsp;</p>
+<p class="western"><div style="display: inline-block; background-color:#f79632">{{datea}}</div></p>
 </td>
 <td width="194">
-<p class="western">&nbsp;</p>
+<p class="western"><div style="display: inline-block; background-color:#f79632">{{idNumberBriefDesc}}</div></p>
 </td>
 </tr>
 </tbody>
@@ -191,39 +191,19 @@ export const Ciia = `<div class="contract" style="width: 800px; background-color
 <p>Date:<u> </u></p>
 <p align="center"><strong><u>EXHIBIT&nbsp;B</u> </strong></p>
 <p align="center"><strong>TERMINATION CERTIFICATION</strong></p>
-<p>This is to certify that Consultant does not have in Consultant&rsquo;s possession, nor has Consultant failed to return, any devices, records, data, notes, reports, proposals, lists, correspondence, specifications, drawings, blueprints, sketches, laboratory notebooks, flow charts, materials, equipment, other documents or property, or copies or reproductions of any aforementioned items belonging to [COMPANY NAME], a [STATE] [TYPE OF COMPANY], its subsidiaries, affiliates, successors or assigns (collectively, the &ldquo;<u>Company</u>&rdquo;).</p>
+<p>This is to certify that Consultant does not have in Consultant&rsquo;s possession, nor has Consultant failed to return, any devices, records, data, notes, reports, proposals, lists, correspondence, specifications, drawings, blueprints, sketches, laboratory notebooks, flow charts, materials, equipment, other documents or property, or copies or reproductions of any aforementioned items belonging to <div style="display: inline-block; background-color:#f79632">{{partyName}}</div>, a <div style="display: inline-block; background-color:#f79632">{{stateCompany}}</div> <div style="display: inline-block; background-color:#f79632">{{typeOfComapny}}</div>, its subsidiaries, affiliates, successors or assigns (collectively, the &ldquo;<u>Company</u>&rdquo;).</p>
 <p>Consultant further certifies that Consultant has complied with all the terms of the Company&rsquo;s Confidential Information and Invention Assignment Agreement signed by Consultant, including the reporting of any Inventions (as defined therein), conceived or made by Consultant or Consultant&rsquo;s personnel (solely or jointly with others) covered by that agreement, and Consultant acknowledges Consultant&rsquo;s continuing obligations under that agreement.</p>
 <p>Consultant further agrees that, in compliance with the Confidential Information and Invention Assignment Agreement, Consultant will preserve as confidential all trade secrets, confidential knowledge, data or other proprietary information relating to products, processes, know-how, designs, formulas, developmental or experimental work, computer programs, data bases, other original works of authorship, customer lists, business plans, financial information or other subject matter pertaining to any business of the Company or any of its employees, clients, consultants or licensees.</p>
 <p>Consultant further agrees that for twelve (12) months immediately following the termination of Consultant&rsquo;s Relationship with the Company, Consultant shall not either directly or indirectly solicit, induce, recruit or encourage any of the Company&rsquo;s employees or consultants to terminate their relationship with the Company, or attempt to solicit, induce, recruit, encourage or take away employees or consultants of the Company, either for Consultant or for any other person or entity.</p>
 <p>Further, Consultant agrees that Consultant shall not use any Confidential Information of the Company to negatively influence any of the Company&rsquo;s clients or customers from purchasing Company products or services or to solicit or influence or attempt to influence any client, customer or other person either directly or indirectly, to direct any purchase of products and/or services to any person, firm, corporation, institution or other entity in competition with the business of the Company.</p>
-<p>Date:<u> </u> <strong>Consultant:</strong></p>
+<p>Date: <u><div style="display: inline-block; background-color:#f79632">{{date}}</div></u> <strong>Consultant:</strong></p>
 <p>&nbsp;</p>
 <p>(Print Consultant&rsquo;s Name)</p>
 <p><u> <br /> </u>(Signature)</p>
 <p align="center"><strong><u>EXHIBIT&nbsp;</u><u>C</u></strong></p>
 <p class="western" align="center"><strong>LIST OF COMPANIES AND/OR AGREEMENTS <br /> EXCLUDED UNDER SECTION&nbsp;(b)</strong></p>
 <p class="western">&nbsp;</p>
-<p class="western">&nbsp;</p>
-<p class="western">&nbsp;</p>
-<p class="western">&nbsp;</p>
-<p class="western">&nbsp;</p>
-<p class="western">&nbsp;</p>
-<p class="western">&nbsp;</p>
-<p class="western">&nbsp;</p>
-<p class="western">&nbsp;</p>
-<p class="western">&nbsp;</p>
-<p class="western">&nbsp;</p>
-<p class="western">&nbsp;</p>
-<p class="western">&nbsp;</p>
-<p class="western">&nbsp;</p>
-<p class="western">&nbsp;</p>
-<p class="western">&nbsp;</p>
-<p class="western">&nbsp;</p>
-<p class="western">&nbsp;</p>
-<p class="western">&nbsp;</p>
-<p class="western">&nbsp;</p>
-<p class="western">&nbsp;</p>
-<p class="western">&nbsp;</p>
+<div style="display: block; background-color:#f79632" class="western">{{listCompAgreements}}</di>
 <p class="western">&nbsp;</p>
 <p>Except as indicated above on this exhibit, Consultant has no agreements or companies to disclose pursuant to Section&nbsp;10(b) of this Agreement.</p>
 <p>___ Additional sheets attached</p>

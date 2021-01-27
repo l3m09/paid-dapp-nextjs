@@ -34,6 +34,7 @@ const FormCounterparty: React.FC<AgreementFormProps> = ({ current }) => {
 	);
 	const { currentWallet } = wallet;
 
+	
 
 	const {
 		loading,
@@ -86,7 +87,7 @@ const FormCounterparty: React.FC<AgreementFormProps> = ({ current }) => {
 		}  = agreementFormInfo;
 		setFilled(
 			/.+@.+\..+/.test(counterpartyEmail) &&
-			currentWallet.address !== counterpartyWallet &&
+			currentWallet?.address.toLowerCase() !== counterpartyWallet.toLowerCase() &&
 			counterpartyEmail === counterpartyConfirmEmail &&
 			counterpartyWallet.length > 3 &&
 			counterpartyName.length > 3 &&
@@ -101,7 +102,7 @@ const FormCounterparty: React.FC<AgreementFormProps> = ({ current }) => {
 			setValidAddress(counterpartyAddress.length > 3);
 			setValidPhone(counterpartyPhone.length > 3);
 			setValidCounterpartyWallet(counterpartyWallet.length > 3);
-			setSameCurrentWallet(currentWallet.address === counterpartyWallet);
+			setSameCurrentWallet(currentWallet?.address.toLowerCase() === counterpartyWallet.toLowerCase());
 		}
 	}
 
@@ -130,7 +131,7 @@ const FormCounterparty: React.FC<AgreementFormProps> = ({ current }) => {
 					<IonInput
 						title="Label"
 						type="text"
-						placeholder="Enter your name"
+						placeholder="Enter a name"
 						onInput={
 							(e) => {
 								nameChanged(e);
@@ -194,7 +195,7 @@ const FormCounterparty: React.FC<AgreementFormProps> = ({ current }) => {
 					<IonInput
 						title="Label"
 						type="text"
-						placeholder="Enter your billing address"
+						placeholder="Enter an address"
 						onInput={
 							(e) => {
 								addressChanged(e);
@@ -218,7 +219,7 @@ const FormCounterparty: React.FC<AgreementFormProps> = ({ current }) => {
 					<IonInput
 						title="Label"
 						type="tel"
-						placeholder="Enter your phone number"
+						placeholder="Enter a phone number"
 						onInput={
 							(e) => {
 								phoneChanged(e);

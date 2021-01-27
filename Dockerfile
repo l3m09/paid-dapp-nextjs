@@ -13,10 +13,16 @@ COPY android android
 COPY ios ios
 COPY public public
 COPY src src
-COPY *.js *.json .env ./
+COPY *.js *.json ./
 
 # Use the base stage to produce a build
 FROM base as build
+# Specify variables at build-time for Vue
+ARG REACT_APP_WEB3_WSS
+ARG REACT_APP_RECIPIENT_ERC20_TOKEN
+ARG REACT_APP_PAYMENTS_PAID_TOKEN
+ARG REACT_APP_WAKU_SERVER
+ARG REACT_APP_IPFS_PAID_HOST
 # Execute npm to create a production build
 RUN npm run build
 
@@ -32,6 +38,9 @@ FROM build as unit-test
 
 # Use the current stable nginx image for production stage
 FROM nginx:1.19.5-alpine as production
+# Customize Nginx
+COPY ./.devops/nginx.conf /etc/nginx/nginx.conf
+COPY ./.devops/default.conf /etc/nginx/conf.d/default.conf
 # Copy build directory from build stage
 COPY --from=build /app/build /usr/share/nginx/html
 # Define the network port that this container will listen on at runtime.

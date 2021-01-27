@@ -29,41 +29,23 @@ import Documents from './pages/documents/Documents';
 import Agreements from './pages/documents/agreements/Agreements';
 import { useHistory } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
-import { doGetWallets } from './redux/actions/wallet';
-
+import { openSuccessDialog } from '../src/redux/actions/documents'
 import UnlockWallet from './components/UnlockWallet';
+import { doConnectWallet } from './redux/actions/wallet';
+import MyCurrentWallet from './components/MyCurrentWallet';
+import SuccessDialog from './components/SuccessDialog';
 
 const Layout: React.FC = () => {
 	const history = useHistory();
 	const dispatch = useDispatch();
 	const wallet = useSelector((state: any) => state.wallet);
-	const { wallets, currentWallet, unlockedWallet } = wallet;
+	const { connectedWallet, currentWallet } = wallet;
 
 	const [showUnlockWalletModal, setShowUnlockWalletModal] = useState(false);
-
-	useEffect(() => {
-		dispatch(doGetWallets());
-		// dispatch(doGetCurrentWallet());
-	}, [dispatch]);
 
 	const dismissModal = () => {
 		setShowUnlockWalletModal(false);
 	};
-
-	useEffect(() => {
-		if (unlockedWallet !== null) {
-			history.push('/documents');
-			dismissModal();
-		} else if (currentWallet !== null) {
-			setShowUnlockWalletModal(false);
-		} else if (wallets.length > 0) {
-			history.push('/wallets')
-			dismissModal();
-		} else {
-			dismissModal();
-			history.push('/')
-		}
-	}, [currentWallet, wallets, unlockedWallet, history]);
 
 	return (
 		<IonContent className="main-content">
@@ -72,7 +54,9 @@ const Layout: React.FC = () => {
 			<Route path="/wallets" component={Wallets} exact />
 			<Route path="/documents/:id?" component={Documents} exact />
 			<Route path="/agreements/:type" component={Agreements} exact />
-			{ currentWallet !== null ? <UnlockWallet selectedWallet={currentWallet} show={showUnlockWalletModal} dismiss={dismissModal}/> : null}
+			{/* currentWallet !== null ? <UnlockWallet selectedWallet={currentWallet} show={showUnlockWalletModal} dismiss={dismissModal}/> : null */}
+			<MyCurrentWallet />
+			<SuccessDialog />
 		</IonContent>
 	);
 };

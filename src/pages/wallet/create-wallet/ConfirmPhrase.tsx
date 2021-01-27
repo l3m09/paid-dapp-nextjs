@@ -12,7 +12,7 @@ import {
 import React from 'react';
 import { checkmarkCircle } from 'ionicons/icons';
 import { useDispatch, useSelector } from 'react-redux';
-import { doAddWord, doRemoveWord } from '../../../redux/actions/wallet';
+// import { doAddWord, doRemoveWord } from '../../../redux/actions/wallet';
 
 interface ConfirmPhraseProps {
 	current: any;
@@ -25,7 +25,6 @@ const ConfirmPhrase: React.FC<ConfirmPhraseProps> = ({ current }) => {
 	const randomSeedPhrase = randomSeedPhraseOrder(seedPhrase);
 
 	async function slideNext() {
-		console.log('ConfirmPhrase', await current.getActiveIndex());
 		await current.lockSwipeToNext(false);
 		current.slideNext();
 		await current.lockSwipeToNext(true);
@@ -71,10 +70,10 @@ const ConfirmPhrase: React.FC<ConfirmPhraseProps> = ({ current }) => {
 	}
 
 	function selectWord(word: string) {
-		dispatch(doAddWord(word));
+		// dispatch(doAddWord(word));
 	}
 	function deSelectWord(word: string, index: number) {
-		dispatch(doRemoveWord(word, index));
+		// dispatch(doRemoveWord(word, index));
 	}
 
 	let confirmedItems: any = [];

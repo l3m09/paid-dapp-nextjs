@@ -23,15 +23,8 @@ const signUp = (payload: any) => {
 // ACTIONS
 export const doLogin = (loginForm: any) => async (dispatch: any) => {
     dispatch({ type: AuthActionTypes.LOGIN_LOADING });
-    // const config = {
-    //     headers: {
-    //         'Content-type': 'application/json'
-    //     }
-    // };
     try {
-        console.log('loginForm', loginForm);
         // const res = await axios.post(`${API_ENDPOINT}/login`, loginForm, config);
-        // dispatch(login(res.data);
         setTimeout(function () {
             dispatch(login({ username: 'John Doe' }))
         }, 3000)
@@ -43,14 +36,7 @@ export const doLogin = (loginForm: any) => async (dispatch: any) => {
 };
 export const doLogout = (loginForm: any) => async (dispatch: any) => {
     dispatch({ type: AuthActionTypes.LOGOUT_LOADING });
-    // const config = {
-    //     headers: {
-    //         'Content-type': 'application/json'
-    //     }
-    // };
     try {
-        // const res = await axios.post(`${API_ENDPOINT}/logout`, loginForm, config);
-        // dispatch(login(res.data);
         dispatch(logout({ username: 'John Doe' }));
     } catch (err) {
         console.log(err);
@@ -59,15 +45,8 @@ export const doLogout = (loginForm: any) => async (dispatch: any) => {
 };
 export const doSignUp = (signUpForm: any) => async (dispatch: any) => {
     dispatch({ type: AuthActionTypes.SIGN_UP_LOADING });
-    // const config = {
-    //     headers: {
-    //         'Content-type': 'application/json'
-    //     }
-    // };
     try {
-        console.log('signUpForm', signUpForm);
-        // const res = await axios.post(`${API_ENDPOINT}/signup`, signUpForm, config);
-        // dispatch(login(res.data);
+        
         dispatch(signUp({ username: 'John Doe' }));
     } catch (err) {
         console.log(err);

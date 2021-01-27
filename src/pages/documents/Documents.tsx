@@ -20,11 +20,14 @@ import {
 	IonPopover,
 	IonItemDivider,
 	IonFabButton,
-	IonFab
+	IonFab,
+	IonFabList
 } from '@ionic/react';
 import {
 	add,
+	caretUp,
 	documentsOutline as documentsIcon,
+	power,
 } from 'ionicons/icons';
 
 import React, {useEffect, useState, useRef} from 'react';
@@ -32,16 +35,18 @@ import { useHistory } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import {
 	doGetDocuments,
-	doGetSelectedDocument
+	doGetSelectedDocument,
+	openErrorDialog,
+	openSuccessDialog
 } from '../../redux/actions/documents';
 
 import MenuAlternate from '../../components/MenuAlternate';
 import DocumentsList from './DocumentsList';
 import { IonText } from '@ionic/react';
-import { BlockchainFactory } from './../../utils/blockchainFactory'
-import { KeyStorageModel } from 'universal-crypto-wallet/dist/key-storage/KeyStorageModel';
-import SuccessDialog from '../../components/SuccessDialog';
 import AgreementType from '../../models/AgreementType';
+import { Sessions } from '../../utils/sessions';
+import Web3 from 'web3'
+import BannerMobileSoon from '../../components/BannerMobileSoon';
 
 function SelectedDocument(payload: {
 	show: boolean;
@@ -49,23 +54,16 @@ function SelectedDocument(payload: {
 	closeShowDocument: () => void;
 }) {
 	const wallet = useSelector((state: any) => state.wallet);
-	const { unlockedWallet } = wallet;
+	const { currentWallet } = wallet;
 
-	const [networkText, setNetWorkText] = useState('...');
+	const [networkText, setNetWorkText] = useState(currentWallet?.network);
 	const { show, selectedDocument, closeShowDocument } = payload;
 
 	useEffect(() => {
-		if (unlockedWallet !== null) {
-			const web3 = BlockchainFactory.getWeb3Instance(unlockedWallet._id, unlockedWallet.password);
-			web3.then((result) => {
-				const { provider } = result!;
-				const network = BlockchainFactory.getNetwork(provider.chainId);
-				network.then((networkText) => {
-					setNetWorkText(networkText.toUpperCase());
-				});
-			});
+		if (currentWallet) {
+			setNetWorkText(currentWallet?.network)
 		}
-	}, [unlockedWallet]);
+	}, [currentWallet]);
 
 	if (!selectedDocument) {
 		return null;
@@ -123,7 +121,6 @@ const Documents: React.FC = () => {
 	const dispatch = useDispatch();
 	const slidesRef = useRef<HTMLIonSlidesElement | null>(null);
 	const documentsState = useSelector((state: any) => state.documents);
-	const walletsState = useSelector((state: any) => state.wallet);
 	const {
 		documentsFrom,
 		documentsTo,
@@ -132,14 +129,21 @@ const Documents: React.FC = () => {
 		agreementTypes
 	} = documentsState;
 	const wallet = useSelector((state: any) => state.wallet);
-	
 	const { currentWallet } = wallet;
+
 	const [showModal, setShowModal] = useState(false);
 	const [showPopOver, setShowPopover] = useState(false);
 	const [currentIndex, setCurrentIndex] = useState(0);
-
+	const wssUrl = `${process.env.REACT_APP_WEB3_WSS}`;
+	
 	useEffect(() => {
-		dispatch(doGetDocuments(currentWallet));
+		if(!Sessions.getTimeoutBool()&&(window.ethereum.isConnected())){
+			Sessions.setTimeoutCall();
+			dispatch(doGetDocuments(currentWallet));
+		}
+		else{
+			history.push('/');
+		}
 		slidesRef.current?.lockSwipes(true)
 	}, [dispatch, slidesRef, currentWallet]);
 
@@ -168,6 +172,33 @@ const Documents: React.FC = () => {
 		history.push('/agreements/' + type.toLowerCase());
 	}
 
+	function runShowPopover(show: boolean){
+		if(!Sessions.getTimeoutBool()){
+			Sessions.setTimeoutCall();
+		}
+		else{
+			history.push('/');
+		}
+		if (currentWallet?.network != "rinkeby") {
+			dispatch(openErrorDialog('You are in a Demo MVP, only Create Smart Agreements in Rinkeby'));
+			history.push('/');
+		}
+		setShowPopover(show);
+	}
+
+	function runDisconnetWallet(show: boolean){
+		if((!Sessions.getTimeoutBool()) && (!show)){
+			Sessions.setTimeoutCall();
+		}
+		else {
+			dispatch(openSuccessDialog('Pls Disconnect your Wallet'));
+			window.ethereum = null
+			window.web3 = new Web3 (new Web3.providers.WebsocketProvider(wssUrl));
+			currentWallet.web3 = new Web3 (new Web3.providers.WebsocketProvider(wssUrl));
+			history.push('/');
+		}
+	}
+
 	const slideOpts = {
 		initialSlide: 0,
 		speed: 400,
@@ -186,16 +217,16 @@ const Documents: React.FC = () => {
 		await slidesRef.current?.lockSwipes(true)
 
 	}
-
 	return (
 		<IonPage className="documents-page content-page">
+			<BannerMobileSoon />
 			<IonContent fullscreen>
 				<IonHeader translucent={false} mode="md">
 					<IonToolbar>
 						<IonButtons slot="start">
 							<IonMenuButton/>
 						</IonButtons>
-						<IonTitle>Documents | <IonText color="primary"> {currentWallet?.address.slice(0,10)}...</IonText></IonTitle>
+						<IonTitle>Documents | <IonText color="primary"> {currentWallet?.address.slice(0,7)}...</IonText></IonTitle>
 						<MenuAlternate/>
 					</IonToolbar>
 				</IonHeader>
@@ -203,17 +234,16 @@ const Documents: React.FC = () => {
 					cssClass="loader-spinner"
 					mode="md"
 					isOpen={loading}
-
 				/>
 				<div>
-				<DocumentsList 
-					documentsTo={documentsTo} 
-					documentsFrom={documentsFrom} 
-					type="from" 
-					counterType="to"
-					agreementTypes={agreementTypes}
-					onClickAgreementType={chooseOption}
-				/>
+					<DocumentsList
+						documentsTo={documentsTo}
+						documentsFrom={documentsFrom}
+						type="from"
+						counterType="to"
+						agreementTypes={agreementTypes}
+						onClickAgreementType={chooseOption}
+					/>
 
 					<IonPopover mode="md" translucent={false} isOpen={showPopOver} cssClass="agreements-popover" onDidDismiss={() => {
 						setShowPopover(false)
@@ -224,10 +254,11 @@ const Documents: React.FC = () => {
 						{agreementTypes.map((type: AgreementType, index: number) => {
 							return (
 								<IonItem
+									key={index}
+									className="cursor-pointer"
 									onClick={() => {
 										chooseOption(type.code);
 									}}
-									key={index}
 								>
 									{type.name}
 								</IonItem>
@@ -240,14 +271,23 @@ const Documents: React.FC = () => {
 						closeShowDocument={closeShowDocument}
 					/>
 					<IonFab vertical="bottom" horizontal="end" slot="fixed">
-						<IonFabButton color="gradient" onClick={() => {
-							setShowPopover(true);
-						}}>
-							<IonIcon icon={add}/>
+						<IonFabButton color="gradient">
+							<IonIcon style={{pointerEvents: 'none'}} icon={caretUp}></IonIcon>
 						</IonFabButton>
+						<IonFabList side="top">
+							<IonFabButton color="gradient" onClick={() => {
+								runShowPopover(true);
+							}}>
+								<IonIcon style={{pointerEvents: 'none'}} icon={add}/>
+							</IonFabButton>
+							<IonFabButton color="gradient" onClick={() => {
+								runDisconnetWallet(true);
+							}}>
+								<IonIcon style={{pointerEvents: 'none'}} icon={power} title="close network" ariaLabel="close network"></IonIcon>
+							</IonFabButton>
+						</IonFabList>
 					</IonFab>
 				</div>
-				<SuccessDialog />
 			</IonContent>
 		</IonPage>
 	);
