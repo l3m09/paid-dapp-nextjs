@@ -776,14 +776,13 @@ export const doRejectCounterpartyDocument = (document: any, comments: string) =>
 			const partiesContentStr : string = await partiesContent();
 
 			let ipfsHash = await uploadsIPFS(ipfs, blobContent, opts, digest, signature, formId, currentWallet?.address, JSON.stringify(elementsAbi), partiesContentStr, null);
-			console.log('Reject IpfsHash', ipfsHash.toString())
+			
 			// Sending Notification of CounterParty Reject Smart Agreements
 			const parties = JSON.parse(partiesContentStr);
 			const PaidTokenContract = ContractFactory.getPaidTokenContract(currentWallet?.web3, currentWallet?.network);
 			const token = PaidTokenContract.options.address;
 			PaidTokenContract.options.from = currentWallet?.address;
 			// Verified Value
-			console.log('token address:',  token,'address wallet:', currentWallet?.address);
 
 			const methodFn = AgreementContract.methods.counterPartiesReject(
 				token,
