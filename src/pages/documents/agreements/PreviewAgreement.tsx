@@ -87,48 +87,19 @@ const PreviewAgreement: FC<PreviewAgreementProps> = ({ current }) => {
 
 
     const onSubmit = useCallback(async () => {
-        if (selectedToken == 'paid') {
-            if(currentWallet?.balanceToken > 1){
-                dispatch(doSetAgreementFormInfo({ createdAt: new Date().toDateString() }));
-                dispatch(
-                    doCreateAgreement({
-                        signatoryA: currentWallet?.address,
-                        signatoryB: agreementFormInfo.counterpartyWallet,
-                        validUntil: 0,
-                        agreementFormTemplateId: type,
-                        agreementForm: agreementFormInfo,
-                        template: renderToString(agreementTemplate()),
-                        slideNext: slideNext,
-                        slideBack: slideBack
-                    })
-                );
-            }
-            else{
-                dispatch(openErrorDialog('You have not enough balance to perform this action'));
-            }
-        } else if (selectedToken == 'dai') {
-            if(currentWallet?.balanceDaiToken > 1){
-                dispatch(doSetAgreementFormInfo({ createdAt: new Date().toDateString() }));
-                dispatch(
-                    doCreateAgreement({
-                        signatoryA: currentWallet?.address,
-                        signatoryB: agreementFormInfo.counterpartyWallet,
-                        validUntil: 0,
-                        agreementFormTemplateId: type,
-                        agreementForm: agreementFormInfo,
-                        template: renderToString(agreementTemplate()),
-                        slideNext: slideNext,
-                        slideBack: slideBack
-                    })
-                );
-            }
-            else{
-                dispatch(openErrorDialog('You have not enough balance to perform this action'));
-            }
-        } else {
-            dispatch(openErrorDialog('Error in SelectedToken Value'));
-            throw new Error('Error in SelectedToken Value');
-        }
+        dispatch(doSetAgreementFormInfo({ createdAt: new Date().toDateString() }));
+        dispatch(
+            doCreateAgreement({
+                signatoryA: currentWallet?.address,
+                signatoryB: agreementFormInfo.counterpartyWallet,
+                validUntil: 0,
+                agreementFormTemplateId: type,
+                agreementForm: agreementFormInfo,
+                template: renderToString(agreementTemplate()),
+                slideNext: slideNext,
+                slideBack: slideBack
+            })
+        );
 	}, [type, currentWallet, agreementFormInfo, agreementTemplate, dispatch, slideNext, slideBack]);
 
     useEffect(() => {

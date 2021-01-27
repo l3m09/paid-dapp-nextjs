@@ -164,7 +164,7 @@ export const doCreateAgreement = (payload: {
 
 		const formId = ethers.utils.formatBytes32String(agreementFormTemplateId);
 		// form
-		const form = createAgreementFormPayload(agreementForm);
+		
 
 		const { wallet } = getState();
 		const { selectedToken, currentWallet } = wallet;
@@ -180,7 +180,6 @@ export const doCreateAgreement = (payload: {
 			slideBack();
 			throw new Error('Invalid Counter Party Address');
 		}
-
 		await web3.eth.getBalance(address.toLowerCase()).then((balancewei) =>{
 			const balance = web3!.utils.fromWei(balancewei);
 			const parsedBalance = BigNumber(balance).toNumber();
@@ -190,6 +189,7 @@ export const doCreateAgreement = (payload: {
 				throw new Error('The wallet should has balance to send a transaction.');
 			}
 		})
+		const form = web3.utils.sha3(createAgreementFormPayload(agreementForm));
 
 		// ALICE SIDE
 		// const content = template();
@@ -207,7 +207,7 @@ export const doCreateAgreement = (payload: {
 		// 	.sign(digest)
 		// 	.toHex();
 		// const pubKey = signer.getPublic();
-		const recover:string = await web3.eth.personal.ecRecover(bytesContent,signature);
+		// const recover:string = await web3.eth.personal.ecRecover(bytesContent,signature);
 		const opts = { create: true, parents: true };
 
 		const elementsAbi = abiLib.getElementsAbi({
@@ -233,7 +233,6 @@ export const doCreateAgreement = (payload: {
 		const PaidTokenContract = ContractFactory.getPaidTokenContract(web3, network);
 		token = PaidTokenContract.options.address;
 		PaidTokenContract.options.from = address;
-
 		// Uploads Value to Smart Agreements
 		const methodFn = AgreementContract.methods.partyCreate(
 			token,
@@ -554,7 +553,7 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 				}
 			})
 			const AgreementContract = ContractFactory.getAgreementContract(web3, network);
-			const form = document.data.agreementForm;
+			const form = web3.utils.sha3(createAgreementFormPayload(document.data.agreementForm));
 			const formId = document.event.agreementFormTemplateId;
 			const validUntil = document.data.validUntil;
 			const agreementId = document.event.id;
@@ -590,12 +589,12 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 
 			const partiesContentStr : string = await partiesContent();
 
-			let ipfsHash = await uploadsIPFS(ipfs, blobContent, opts, digest, signature, formId, currentWallet?.address, JSON.stringify(elementsAbi), partiesContentStr, null);
-
 			// Validate Token Type
 			const spender = AgreementContract.options.address;
 			const payment = await AgreementContract.methods.getPayment().call();
-			const paymentSA =  currentWallet?.web3.utils.fromWei(payment, 'ether');
+			const paymentSA =  parseInt(currentWallet?.web3.utils.fromWei(payment, 'ether'), 10);
+			const balancePaid = parseInt(balanceToken, 10);
+			const balanceDai = parseInt(balanceToken, 10);
 			AgreementContract.options.from = currentWallet?.address;
 			// Increase Approve for withdraw PAID token
 
@@ -603,8 +602,9 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 			let metodoTkn:any;
 			let allow:any;
 			// const paymentSA = web3.utils.toWei(pago, 'ether');
-						if (selectedToken === 'paid') {
-				if (balanceToken < paymentSA) {
+			debugger
+			if (selectedToken === 'paid') {
+				if (balancePaid < paymentSA) {
 					dispatch(openErrorDialog('You have not enough balance to perform this action'));
 					throw new Error('You have not enough balance to perform this action')
 				}
@@ -612,8 +612,8 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 				token = PaidTokenContract.options.address;
 				PaidTokenContract.options.from = address;
 				allow = await PaidTokenContract.methods.allowance(address,spender).call();
-				const allowance = web3.utils.fromWei(allow, 'ether');
-								if (allowance < paymentSA) {
+				const allowance = parseInt(web3.utils.fromWei(allow, 'ether'),10);
+				if (allowance < paymentSA) {
 					metodoTkn = PaidTokenContract.methods.approve(
 						spender,
 						payment.toString()
@@ -629,7 +629,7 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 					});
 				};
 			} else if (selectedToken === 'dai') {
-				if (balanceDaiToken < paymentSA) {
+				if (balanceDai < paymentSA) {
 					dispatch(openErrorDialog('You have not enough balance to perform this action'));
 					throw new Error('You have not enough balance to perform this action')
 				}
@@ -637,7 +637,7 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 				token = DaiTokenContract.options.address;
 				DaiTokenContract.options.from = address;
 				allow = await DaiTokenContract.methods.allowance(address,spender).call();
-				const allowance = web3.utils.fromWei(allow, 'ether');
+				const allowance = parseInt(web3.utils.fromWei(allow, 'ether'),10);
 				if (allowance < paymentSA) {
 					metodoTkn = DaiTokenContract.methods.approve(
 						spender,
@@ -656,6 +656,8 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 			} else {
 				dispatch(openSuccessDialog('Please Select the Token to use'));
 			}
+			// Uploads a IPFS
+			let ipfsHash = await uploadsIPFS(ipfs, blobContent, opts, digest, signature, formId, currentWallet?.address, JSON.stringify(elementsAbi), partiesContentStr, null);
 
 			// Sending Data to Smart Contract
 			const methodFn = AgreementContract.methods.counterPartiesSign(
