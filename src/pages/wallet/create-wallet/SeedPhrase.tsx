@@ -28,24 +28,8 @@ const SeedPhrase: React.FC<SeedPhraseProps> = ({ current }) => {
 	);
 	const { seedPhrase, name, passphrase, creatingWallet } = wallet;
 
-	// async function slideNext() {
-	// 	console.log('SeedPhrase', await current.getActiveIndex());
-	// 	await current.lockSwipeToNext(false);
-	// 	current.slideNext();
-	// 	await current.lockSwipeToNext(true);
-	// }
 
 	const onSubmit = () => {
-		if (seedPhrase.length > 0) {
-			let mnemonic = seedPhrase.join(' ');
-			// dispatch(
-			// 	doCreateWallet({
-			// 		name,
-			// 		password: passphrase,
-			// 		mnemonic: mnemonic
-			// 	})
-			// );
-		}
 	};
 
 	// useEffect(() => {

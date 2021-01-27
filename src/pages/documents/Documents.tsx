@@ -137,7 +137,6 @@ const Documents: React.FC = () => {
 	const wssUrl = `${process.env.REACT_APP_WEB3_WSS}`;
 	
 	useEffect(() => {
-		console.log('document connect',window.ethereum.isConnected())
 		if(!Sessions.getTimeoutBool()&&(window.ethereum.isConnected())){
 			Sessions.setTimeoutCall();
 			dispatch(doGetDocuments(currentWallet));

@@ -34,25 +34,10 @@ export class BlockchainFactory {
 	};
 
 	public static getWeb3Instance = async (walletAddress: string, walletId: string, password: string) => {
-		/*if (!BlockchainFactory._web3) {
-			BlockchainFactory._web3 = new Web3 ( new Web3.providers.WebsocketProvider(BlockchainFactory.wssUrl, BlockchainFactory.options));
-		}*/
 		if(!BlockchainFactory._wallet || (BlockchainFactory._wallet.walletInstance.address !== walletAddress)){
 			BlockchainFactory._wallet = await BlockchainFactory._walletManager?.createBlockchainWallet(BlockchainFactory.wssUrl, BlockchainFactory.options, 
 				walletId, password) as any;
 		}
-		/*const mnemonicWallet = ethers.Wallet.fromMnemonic(mnemonic);
-		const { privateKey } = mnemonicWallet;
-		console.log(address,privateKey);*/
-
-		// if (keyService) {
-		// 	const pk = keyService.getPrivateKey(AlgorithmType.ES256K, keyModel);
-		// 	console.log('privateKey Wallet',pk);
-
-		/*BlockchainFactory._web3.eth.accounts.wallet.clear().add(privateKey);*/
-
-		// 	console.log('web3 eth accounts wallet', BlockchainFactory._web3.eth.accounts.wallet)
-		// }
 		return BlockchainFactory._wallet;
 	};
 

@@ -66,8 +66,6 @@ export const DocumentsReducer = function (state = initialState, action: any) {
 			return { ...state, loading: true };
 
 		case DocumentsActionTypes.UPLOAD_DOCUMENTS_SUCCESS: {
-			console.log('UPLOAD_DOCUMENTS_SUCCESS', payload);
-
 			return { ...state, loading: false };
 		}
 

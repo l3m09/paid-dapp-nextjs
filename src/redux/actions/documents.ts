@@ -208,7 +208,6 @@ export const doCreateAgreement = (payload: {
 		// 	.toHex();
 		// const pubKey = signer.getPublic();
 		const recover:string = await web3.eth.personal.ecRecover(bytesContent,signature);
-		console.log('create document signature, digest', signature, digest, recover, currentWallet?.address);
 		const opts = { create: true, parents: true };
 
 		const elementsAbi = abiLib.getElementsAbi({
@@ -222,7 +221,6 @@ export const doCreateAgreement = (payload: {
 		};
 		let ipfsHash = await uploadsIPFS(ipfs, blobContent, opts, digest, signature, formId, agreementForm.counterpartyWallet,
 			JSON.stringify(elementsAbi), JSON.stringify(elementsParties), null);
-		console.log('CID Create Document', ipfsHash.toString());
 		// ----------------------------------------------------
 		// Estimate gas,  TODO encapsulate
 		const AgreementContract = ContractFactory.getAgreementContract(web3, network);
@@ -231,75 +229,10 @@ export const doCreateAgreement = (payload: {
 		const paymentSA =  web3.utils.fromWei(payment, 'ether');
 		AgreementContract.options.from = address;
 		// Increase Approve for withdraw PAID token
-		console.log('Pago',payment, paymentSA);
 		let token:string = '';
-		// let metodoTkn:any;
-		// let allow:any;
-		// const paymentSA = web3.utils.toWei(pago, 'ether');
-		// if (selectedToken === 'paid') {
-		// 	if (balanceToken < paymentSA) {
-		// 		dispatch(openErrorDialog('You have not enough balance to perform this action'));
-		// 		throw new Error('You have not enough balance to perform this action')
-		// 	}
 		const PaidTokenContract = ContractFactory.getPaidTokenContract(web3, network);
 		token = PaidTokenContract.options.address;
 		PaidTokenContract.options.from = address;
-		console.log('previo pago', paymentSA.toString(),'token address:',  token,'address wallet:', address);
-		// 	allow = await PaidTokenContract.methods.allowance(address,spender).call();
-		// 	const allowance = web3.utils.fromWei(allow, 'ether');
-		// 	if (allowance < paymentSA) {
-		// 		metodoTkn = PaidTokenContract.methods.approve(
-		// 			spender,
-		// 			payment.toString()
-		// 		);
-		// 		// estimateGas for Send Tx to Increase Approve
-		// 		const gastkn = await metodoTkn.estimateGas().then(async (gastkn:any) => {
-		// 			console.log('send allowance');
-		// 			const agreementTransaction = await metodoTkn.send({ from: address, gas:gastkn+5e4, gasPrice: 50e9 })
-		// 			.on('receipt', async function (receipt: any) {
-		// 					console.log('resolve allow'+selectedToken+'token',receipt);
-		// 			})
-		// 			.on('error', function (error: any, receipt: any) {
-		// 				console.log(error, receipt);
-		// 				dispatch(openErrorDialog('Failed to Approve Token'));
-		// 				throw new Error('Transaction failed');
-		// 			});
-		// 		});
-		// 	};
-		// } else if (selectedToken === 'dai') {
-		// 	if (balanceDaiToken < paymentSA) {
-		// 		dispatch(openErrorDialog('You have not enough balance to perform this action'));
-		// 		throw new Error('You have not enough balance to perform this action')
-		// 	}
-		// 	const DaiTokenContract = ContractFactory.getDaiTokenContract(web3, network);
-		// 	token = DaiTokenContract.options.address;
-		// 	DaiTokenContract.options.from = address;
-		// 	allow = await DaiTokenContract.methods.allowance(address,spender).call();
-		// 	console.log('previo pago', paymentSA.toString(),'token address:',  token,'address wallet:', address, 'spender:', spender);
-		// 	const allowance = web3.utils.fromWei(allow, 'ether');
-		// 	if (allowance < paymentSA) {
-		// 		console.log('send allowance');
-		// 		metodoTkn = DaiTokenContract.methods.approve(
-		// 			spender,
-		// 			payment.toString()
-		// 		);
-		// 		// estimateGas for Send Tx to Increase Approve
-		// 		const gastkn = await metodoTkn.estimateGas().then(async (gastkn:any) => {
-		// 			console.log('send allowance');
-		// 			const agreementTransaction = await metodoTkn.send({ from: address, gas:gastkn+5e4, gasPrice: 50e9 })
-		// 			.on('receipt', async function (receipt: any) {
-		// 					console.log('resolve allow'+selectedToken+'token',receipt);
-		// 			})
-		// 			.on('error', function (error: any, receipt: any) {
-		// 				console.log(error, receipt);
-		// 				dispatch(openErrorDialog('Failed to Approve Token'));
-		// 				throw new Error('Transaction failed');
-		// 			});
-		// 		});
-		// 	};
-		// } else {
-		// 	dispatch(openSuccessDialog('Please Select the Token to use'));
-		// }
 
 		// Uploads Value to Smart Agreements
 		const methodFn = AgreementContract.methods.partyCreate(
@@ -322,9 +255,6 @@ export const doCreateAgreement = (payload: {
 					'party':{
 						'name': agreementForm.name
 					}
-				})
-				.then(function (response) {
-					console.log('email response: ', response);
 				})
 				.catch(function (error) {
 					console.log('email error: ',error);
@@ -573,7 +503,6 @@ export const doGetDocuments = (sending_currentWallet: any) => async (
 			}
 		}
 
-		console.log('agreementsFrom', agreementsSource, 'agreementsTo', agreementsDestination);
 		dispatch(getDocuments(responseArray));
 	} catch (err) {
 		console.log('ln564', err);
@@ -630,7 +559,6 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 			const validUntil = document.data.validUntil;
 			const agreementId = document.event.id;
 			const cid = document.event.cid.toString();
-			console.log('CID Sign counterparty', cid);
 	
 			for await (const chunk of ipfs.cat(cid)) {
 				fetchedContent = uint8ArrayToString(chunk);
@@ -639,29 +567,17 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 			const digest = jsonContent.digest;
 	
 			const contentRef = jsonContent.contentRef;
-			// let pdfContent = '';
-			// for await (const chunk of ipfs.cat(contentRef.cid)) {
-			// 	pdfContent = uint8ArrayToString(chunk);
-			// }
 			const urlIpfsContent = `https://ipfs.io/ipfs/${contentRef.cid}`;
 			const ipfsContent = async () => {
 				return await fetch(urlIpfsContent)
 				.then(res => res.text())
 			}
 			const pdfContent:string = await ipfsContent();
-			// console.log(pdfContent);
 			const blobContent = base64StringToBlob(btoa(unescape(encodeURIComponent(pdfContent))), 'text/html');
-			// const arrayContent = btoa(unescape(encodeURIComponent(pdfContent)));
 
 			const hashContent:string = web3.utils.sha3(pdfContent).replace('0x', '');
 			const bytesContent:string = web3.utils.utf8ToHex(hashContent);
 			const signature = await currentWallet?.web3.eth.personal.sign(bytesContent, currentWallet?.address.toLowerCase());
-			// const ec_alice = new eddsa('ed25519');
-			// const signer = ec_alice.keyFromSecret(rawWallet.keypairs.ED25519);
-			// const signature = signer
-			// 	.sign(digest)
-			// 	.toHex();
-			// const pubKey = signer.getPublic();
 			const opts = { create: true, parents: true };
 			const elementsAbi = abiLib.getElementsAbi({
 				'address':currentWallet?.address
@@ -682,7 +598,6 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 			const paymentSA =  currentWallet?.web3.utils.fromWei(payment, 'ether');
 			AgreementContract.options.from = currentWallet?.address;
 			// Increase Approve for withdraw PAID token
-			console.log('Pago', paymentSA);
 
 			let token:string = '';
 			let metodoTkn:any;
@@ -697,7 +612,6 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 				const PaidTokenContract = ContractFactory.getPaidTokenContract(web3, network);
 				token = PaidTokenContract.options.address;
 				PaidTokenContract.options.from = address;
-				console.log('previo pago', paymentSA.toString(),'token address:',  token,'address wallet:', address, 'spender:', spender);
 				allow = await PaidTokenContract.methods.allowance(address,spender).call();
 				const allowance = web3.utils.fromWei(allow, 'ether');
 				debugger
@@ -708,11 +622,7 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 					);
 					// estimateGas for Send Tx to Increase Approve
 					const gastkn = await metodoTkn.estimateGas().then(async (gastkn:any) => {
-						console.log('send allowance');
 						const agreementTransaction = await metodoTkn.send({ from: address, gas:gastkn+5e4, gasPrice: 50e9 })
-						.on('receipt', async function (receipt: any) {
-								console.log('resolve allow'+selectedToken+'token',receipt);
-						})
 						.on('error', function (error: any, receipt: any) {
 							console.log(error, receipt);
 							dispatch(openErrorDialog('Failed to Approve Token'));
@@ -729,22 +639,16 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 				token = DaiTokenContract.options.address;
 				DaiTokenContract.options.from = address;
 				allow = await DaiTokenContract.methods.allowance(address,spender).call();
-				console.log('previo pago', paymentSA.toString(),'token address:',  token,'address wallet:', address, 'spender:', spender);
 				const allowance = web3.utils.fromWei(allow, 'ether');
 				debugger
 				if (allowance < paymentSA) {
-					console.log('send allowance');
 					metodoTkn = DaiTokenContract.methods.approve(
 						spender,
 						payment.toString()
 					);
 					// estimateGas for Send Tx to Increase Approve
 					const gastkn = await metodoTkn.estimateGas().then(async (gastkn:any) => {
-						console.log('send allowance');
 						const agreementTransaction = await metodoTkn.send({ from: address, gas:gastkn+5e4, gasPrice: 50e9 })
-						.on('receipt', async function (receipt: any) {
-								console.log('resolve allow'+selectedToken+'token',receipt);
-						})
 						.on('error', function (error: any, receipt: any) {
 							console.log(error, receipt);
 							dispatch(openErrorDialog('Failed to Approve Token'));
@@ -769,7 +673,6 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 			const gas = await methodFn.estimateGas().then(async (gas:any) => {
 				const agreementTransaction = await methodFn.send({ from: currentWallet?.address, gas:gas+5e4, gasPrice: 50e9 })
 				.on('receipt', async function (receipt: any) {
-					console.log(receipt);
 					const parties = JSON.parse(partiesContentStr);
 					axios.post(apiUrl+'email/accept-agreement', {
 						// counterparty field is the SENDER
@@ -781,9 +684,6 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 						'party':{
 							'name': parties.counterpartyName
 						}
-					})
-					.then(function (response) {
-						console.log('email response: ', response);
 					})
 					.catch(function (error) {
 						console.log('email error: ',error);
@@ -843,7 +743,6 @@ export const doRejectCounterpartyDocument = (document: any, comments: string) =>
 			const validUntil = document.data.validUntil;
 			const agreementId = document.event.id;
 			const cid = document.event.cid.toString();
-			console.log('CID Reject counterparty', cid);
 
 			for await (const chunk of ipfs.cat(cid)) {
 				fetchedContent = uint8ArrayToString(chunk);
@@ -852,29 +751,19 @@ export const doRejectCounterpartyDocument = (document: any, comments: string) =>
 			const digest = jsonContent.digest;
 
 			const contentRef = jsonContent.contentRef;
-			// let pdfContent = '';
-			// for await (const chunk of ipfs.cat(contentRef.cid)) {
-			// 	pdfContent = uint8ArrayToString(chunk);
-			// }
+
 			const urlIpfsContent = `https://ipfs.io/ipfs/${contentRef.cid}`;
 			const ipfsContent = async () => {
 				return await fetch(urlIpfsContent)
 				.then(res => res.text())
 			}
 			const pdfContent:string = await ipfsContent();
-			// console.log(pdfContent);
 			const blobContent = base64StringToBlob(btoa(unescape(encodeURIComponent(pdfContent))), 'text/html');
-			// const arrayContent = btoa(unescape(encodeURIComponent(pdfContent)));
 
 			const hashContent:string = currentWallet?.web3.utils.sha3(pdfContent).replace('0x', '');
 			const bytesContent:string = currentWallet?.web3.utils.utf8ToHex(hashContent);
 			const signature = await currentWallet?.web3.eth.personal.sign(bytesContent, currentWallet?.address.toLowerCase());
-			// const ec_alice = new eddsa('ed25519');
-			// const signer = ec_alice.keyFromSecret(rawWallet.keypairs.ED25519);
-			// const signature = signer
-			// 	.sign(digest)
-			// 	.toHex();
-			// const pubKey = signer.getPublic();
+
 			const opts = { create: true, parents: true };
 			const elementsAbi = abiLib.getElementsAbi({
 				'address':currentWallet?.address
@@ -971,7 +860,6 @@ export const doGetSelectedDocument = (document: any) => async (dispatch: any, ge
 			dispatch(openSuccessDialog('Failed to CounterParty Reject Smart Agreement'));
 			throw new Error('Failed to CounterParty Reject Smart Agreement');
 		}
-		console.log('CID Get Selected Document', document.event.cid.toString())
 		for await (const chunk of ipfs.cat(document.event.cid.toString())) {
 			fetchedContent = uint8ArrayToString(chunk);
 		}
@@ -998,7 +886,6 @@ export const doGetSelectedDocument = (document: any) => async (dispatch: any, ge
 		for await (const chunk of ipfs.cat(contentRef.cid)) {
 			ContentDoc = uint8ArrayToString(chunk);
 		}
-		console.log('sign and content:', signature, ContentDoc)
 		document.verified = true;
 	}
 	dispatch(getSelectedDocument(document));

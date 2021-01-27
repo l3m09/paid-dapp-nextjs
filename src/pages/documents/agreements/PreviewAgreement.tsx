@@ -106,7 +106,6 @@ const PreviewAgreement: FC<PreviewAgreementProps> = ({ current }) => {
             else{
                 dispatch(openErrorDialog('You have not enough balance to perform this action'));
             }
-            console.log('type agreementID', type, 'result balance', currentWallet?.balanceDaiToken);
         } else if (selectedToken == 'dai') {
             if(currentWallet?.balanceDaiToken > 1){
                 dispatch(doSetAgreementFormInfo({ createdAt: new Date().toDateString() }));
@@ -126,7 +125,6 @@ const PreviewAgreement: FC<PreviewAgreementProps> = ({ current }) => {
             else{
                 dispatch(openErrorDialog('You have not enough balance to perform this action'));
             }
-            console.log('type agreementID', type, 'result balance', currentWallet?.balanceDaiToken);
         } else {
             dispatch(openErrorDialog('Error in SelectedToken Value'));
             throw new Error('Error in SelectedToken Value');

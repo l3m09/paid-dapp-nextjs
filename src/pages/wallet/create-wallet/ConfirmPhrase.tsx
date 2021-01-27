@@ -25,7 +25,6 @@ const ConfirmPhrase: React.FC<ConfirmPhraseProps> = ({ current }) => {
 	const randomSeedPhrase = randomSeedPhraseOrder(seedPhrase);
 
 	async function slideNext() {
-		console.log('ConfirmPhrase', await current.getActiveIndex());
 		await current.lockSwipeToNext(false);
 		current.slideNext();
 		await current.lockSwipeToNext(true);
