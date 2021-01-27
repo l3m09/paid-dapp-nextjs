@@ -603,7 +603,6 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 			let metodoTkn:any;
 			let allow:any;
 			// const paymentSA = web3.utils.toWei(pago, 'ether');
-			debugger
 			if (selectedToken === 'paid') {
 				if (balancePaid < paymentSA) {
 					dispatch(openErrorDialog('You have not enough balance to perform this action'));
