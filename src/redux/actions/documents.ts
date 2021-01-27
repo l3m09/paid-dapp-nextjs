@@ -207,7 +207,6 @@ export const doCreateAgreement = (payload: {
 		// 	.sign(digest)
 		// 	.toHex();
 		// const pubKey = signer.getPublic();
-		const recover:string = await web3.eth.personal.ecRecover(bytesContent,signature);
 		const opts = { create: true, parents: true };
 
 		const elementsAbi = abiLib.getElementsAbi({
@@ -774,14 +773,13 @@ export const doRejectCounterpartyDocument = (document: any, comments: string) =>
 			const partiesContentStr : string = await partiesContent();
 
 			let ipfsHash = await uploadsIPFS(ipfs, blobContent, opts, digest, signature, formId, currentWallet?.address, JSON.stringify(elementsAbi), partiesContentStr, null);
-			console.log('Reject IpfsHash', ipfsHash.toString())
+			
 			// Sending Notification of CounterParty Reject Smart Agreements
 			const parties = JSON.parse(partiesContentStr);
 			const PaidTokenContract = ContractFactory.getPaidTokenContract(currentWallet?.web3, currentWallet?.network);
 			const token = PaidTokenContract.options.address;
 			PaidTokenContract.options.from = currentWallet?.address;
 			// Verified Value
-			console.log('token address:',  token,'address wallet:', currentWallet?.address);
 
 			const methodFn = AgreementContract.methods.counterPartiesReject(
 				token,

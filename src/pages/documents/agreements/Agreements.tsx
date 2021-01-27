@@ -92,9 +92,8 @@ const Agreements: React.FC<AgreementsProps> = () => {
 		}));
 		await slidesRef?.current?.lockSwipeToPrev(false);
 		await slidesRef?.current?.lockSwipeToNext(false);
-		await slidesRef?.current?.slideTo(0)?.then(() => {
-			history.push('/documents');
-		});
+		await slidesRef?.current?.slideTo(0);
+		history?.push('/documents');
 	}
 
 	// const ndaTemplate: any = (
