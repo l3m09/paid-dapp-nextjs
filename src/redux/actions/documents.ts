@@ -603,8 +603,7 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 			let metodoTkn:any;
 			let allow:any;
 			// const paymentSA = web3.utils.toWei(pago, 'ether');
-			debugger
-			if (selectedToken === 'paid') {
+						if (selectedToken === 'paid') {
 				if (balanceToken < paymentSA) {
 					dispatch(openErrorDialog('You have not enough balance to perform this action'));
 					throw new Error('You have not enough balance to perform this action')
@@ -614,8 +613,7 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 				PaidTokenContract.options.from = address;
 				allow = await PaidTokenContract.methods.allowance(address,spender).call();
 				const allowance = web3.utils.fromWei(allow, 'ether');
-				debugger
-				if (allowance < paymentSA) {
+								if (allowance < paymentSA) {
 					metodoTkn = PaidTokenContract.methods.approve(
 						spender,
 						payment.toString()
@@ -640,7 +638,6 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 				DaiTokenContract.options.from = address;
 				allow = await DaiTokenContract.methods.allowance(address,spender).call();
 				const allowance = web3.utils.fromWei(allow, 'ether');
-				debugger
 				if (allowance < paymentSA) {
 					metodoTkn = DaiTokenContract.methods.approve(
 						spender,
