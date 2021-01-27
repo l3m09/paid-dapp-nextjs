@@ -244,10 +244,17 @@ export const doConnectWallet = (ethereum:any, history:any
 				.catch((error:any) => {
 					if ((error.code === 4001) || (error.code === 4100) || (error.code === 4200) || (error.code === 4900) || (error.code === 4901))  {
 						// EIP-1193 userRejectedRequest error
+						alert('Reject Unlocked Wallet in Metamask');
 						console.log('Reject Unlocked Wallet in Metamask');
 						dispatch(openSuccessDialog('Reject Unlocked Wallet in Metamask'));
 						history.push('/');
+					} else if (error.code === -32002) {
+						alert('Pls Unlock Wallet in Metamask');
+						console.log('Pls Unlock Wallet in Metamask');
+						dispatch(openSuccessDialog('Pls Unlock Wallet in Metamask'));
+						history.push('/');
 					} else {
+						alert('Error code out to EIP-1193');
 						console.error('Error code out to EIP-1193',error);
 						dispatch(openSuccessDialog(error.message));
 						throw new Error('Error code out to EIP-1193');
