@@ -679,7 +679,7 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 			// Validate Token Type
 			const spender = AgreementContract.options.address;
 			const payment = await AgreementContract.methods.getPayment().call();
-			const paymentSA =  currentWallet?.web3.utils.toWei(payment, 'ether');
+			const paymentSA =  currentWallet?.web3.utils.fromWei(payment, 'ether');
 			AgreementContract.options.from = currentWallet?.address;
 			// Increase Approve for withdraw PAID token
 			console.log('Pago', paymentSA);
@@ -688,7 +688,7 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 			let metodoTkn:any;
 			let allow:any;
 			// const paymentSA = web3.utils.toWei(pago, 'ether');
-
+			debugger
 			if (selectedToken === 'paid') {
 				if (balanceToken < paymentSA) {
 					dispatch(openErrorDialog('You have not enough balance to perform this action'));
@@ -700,6 +700,7 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 				console.log('previo pago', paymentSA.toString(),'token address:',  token,'address wallet:', address, 'spender:', spender);
 				allow = await PaidTokenContract.methods.allowance(address,spender).call();
 				const allowance = web3.utils.fromWei(allow, 'ether');
+				debugger
 				if (allowance < paymentSA) {
 					metodoTkn = PaidTokenContract.methods.approve(
 						spender,
@@ -730,6 +731,7 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 				allow = await DaiTokenContract.methods.allowance(address,spender).call();
 				console.log('previo pago', paymentSA.toString(),'token address:',  token,'address wallet:', address, 'spender:', spender);
 				const allowance = web3.utils.fromWei(allow, 'ether');
+				debugger
 				if (allowance < paymentSA) {
 					console.log('send allowance');
 					metodoTkn = DaiTokenContract.methods.approve(
