@@ -1,16 +1,12 @@
-// import { KeyStorage } from 'universal-crypto-wallet/dist/key-storage';
-// import { KeyStorageModel } from 'universal-crypto-wallet/dist/key-storage/KeyStorageModel';
 import { DocumentsActionTypes } from '../actionTypes/documents';
 import { BigNumber as BN, ethers } from 'ethers';
-import { BlockchainFactory } from '../../utils/blockchainFactory';
 import { ContractFactory } from '../../utils/contractFactory';
 import { base64StringToBlob } from 'blob-util';
-// import { AlgorithmType, CEASigningService, WalletManager } from 'universal-crypto-wallet';
-// import { eddsa } from "elliptic";
+
 import { Plugins } from '@capacitor/core';
 import * as abiLib  from '../actions/template/abi-utils/abi-lib';
 import { DialogsActionTypes } from '../actionTypes/dialogs';
-// import { PAIDTokenContract } from '../../contracts/paidtoken';
+
 import { STORAGE_KEY_MY_INFO_KEPT } from '../../utils/constants';
 
 const { Storage } = Plugins;
@@ -26,8 +22,6 @@ const sigUtil = require('eth-sig-util')
 // TODO: Fix
 const ipfs = ipfsClient({ host: ipfsnode, port: '5001', protocol: 'https', apiPath: '/api/v0' });
 const apiUrl = `${process.env.REACT_APP_WAKU_SERVER}`;
-const recipientTKN = `${process.env.REACT_APP_RECIPIENT_ERC20_TOKEN}`;
-const pago = `${process.env.REACT_APP_PAYMENTS_PAID_TOKEN}`;
 
 const createAgreementFormPayload = (obj: any) => {
 	const types: string[] = [];

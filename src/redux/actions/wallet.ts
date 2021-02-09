@@ -7,40 +7,6 @@ import Web3 from 'web3';
 
 const { Storage } = Plugins;
 
-// CREATORS
-// const generatePhrase = (payload: string[]) => {
-// 	return {
-// 		type: WalletActionTypes.GENERATE_PHRASE,
-// 		payload
-// 	};
-// };
-// const addWord = (payload: any) => {
-// 	return {
-// 		type: WalletActionTypes.ADD_WORD,
-// 		payload
-// 	};
-// };
-// const removeWord = (payload: any) => {
-// 	return {
-// 		type: WalletActionTypes.REMOVE_WORD,
-// 		payload
-// 	};
-// };
-
-// const addNamePassPhrase = (payload: any) => {
-// 	return {
-// 		type: WalletActionTypes.ADD_NAME_PASSPHRASE,
-// 		payload,
-// 	};
-// };
-
-// const getWallets = (payload: any[]) => {
-// 	return {
-// 		type: WalletActionTypes.GET_WALLETS_SUCCESS,
-// 		payload
-// 	};
-// };
-
 const setCurrentWallet = (payload: any) => {
 	return {
 		type: WalletActionTypes.SET_CURRENT_WALLET_SUCCESS,
@@ -69,25 +35,6 @@ const setCurrentToken = (payload: any) => {
 		payload
 	};
 };
-
-// const createWallet = (payload: any) => {
-// 	return {
-// 		type: WalletActionTypes.CREATE_WALLET_SUCCESS,
-// 		payload
-// 	};
-// };
-// const importWallet = (payload: any) => {
-// 	return {
-// 		type: WalletActionTypes.IMPORT_WALLET_SUCCESS,
-// 		payload
-// 	};
-// };
-// const exportWallet = (payload: any) => {
-// 	return {
-// 		type: WalletActionTypes.EXPORT_WALLET_SUCCESS,
-// 		payload
-// 	};
-// };
 
 const unlockWallet = (payload: any) => {
 	return {
@@ -260,49 +207,7 @@ export const doConnectWallet = (ethereum:any, history:any
 	}
 }
 
-// export const doGeneratePhrase = () => async (dispatch: any) => {
-// 	const walletManager = BlockchainFactory.getWalletManager();
-// 	const mnemonic = walletManager.generateMnemonic();
-// 	const words = mnemonic.split(' ');
-// 	dispatch(generatePhrase(words));
-// };
 
-// export const doAddWord = (word: any) => (
-// 	dispatch: any,
-// 	payload: any
-// ) => {
-// 	dispatch(addWord({ word }));
-// };
-// export const doRemoveWord = (word: any, index: any) => async (
-// 	dispatch: any,
-// 	payload: any
-// ) => {
-// 	dispatch(removeWord({ word, index }));
-// };
-
-// export const doAddNamePassPharse = (name: any, passphrase: any) => async (
-// 	dispatch: any,
-// 	payload: any
-// ) => {
-// 	dispatch(addNamePassPhrase({ name, passphrase }));
-// };
-
-// export const doGetWallets = () => async (dispatch: any) => {
-// 	dispatch({ type: WalletActionTypes.GET_WALLETS_LOADING });
-// 	try {
-// 		const stored = await Storage.get({ key: 'WALLETS' });
-// 		if (!stored || !stored.value) {
-// 			dispatch(getWallets([]));
-// 		} else {
-// 			dispatch(getWallets((JSON.parse(stored.value))));
-// 		}
-// 	} catch (err) {
-// 		dispatch({ 
-// 			type: WalletActionTypes.GET_WALLETS_FAILURE, 
-// 			payload: err.message 
-// 		});
-// 	}
-// };
 
 export const doGetCurrentWallet = () => async (dispatch: any) => {
 	dispatch({ type: WalletActionTypes.GET_CURRENT_WALLET_LOADING });
