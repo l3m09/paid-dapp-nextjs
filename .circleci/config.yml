@@ -129,7 +129,7 @@ jobs:
           perform-login: true
       - gcp-gke/rollout-image:
           cluster: $GKE_CLUSTER_DEV
-          namspace: paid-binance
+          namespace: paid-binance
           deployment: $CIRCLE_PROJECT_REPONAME
           container: dapp
           image: gcr.io/$GOOGLE_PROJECT_ID/$CIRCLE_PROJECT_REPONAME
