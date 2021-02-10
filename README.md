@@ -20,7 +20,7 @@ Build a new docker image and start a new container afterwards.
 make up
 ```
 
-Remove a previous container 
+Remove a previous container
 ```bash
 make down
 ```
