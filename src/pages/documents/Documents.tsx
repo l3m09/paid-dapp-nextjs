@@ -46,7 +46,7 @@ import { IonText } from '@ionic/react';
 import AgreementType from '../../models/AgreementType';
 import { Sessions } from '../../utils/sessions';
 import Web3 from 'web3'
-import BannerMobileSoon from '../../components/BannerMobileSoon';
+import BannerMessage from '../../components/BannerMessage';
 
 function SelectedDocument(payload: {
 	show: boolean;
@@ -215,7 +215,17 @@ const Documents: React.FC = () => {
 	}
 	return (
 		<IonPage className="documents-page content-page">
-			<BannerMobileSoon />
+			<BannerMessage isOnlyMobile message="Only Desktop experience is currently available. Mobile app will be coming soon." />
+			<BannerMessage
+				isOnlyDesktop
+				message={
+					<p>
+						Welcome to PAID Network Running On Biance Smart Chain (BSC)
+						<br />
+						<a href="https://academy.binance.com/en/articles/connecting-metamask-to-binance-smart-chain">Click here</a> to see instruction on how to setup your metamask.
+					</p>
+				}
+			/>
 			<IonContent fullscreen>
 				<IonHeader translucent={false} mode="md">
 					<IonToolbar>

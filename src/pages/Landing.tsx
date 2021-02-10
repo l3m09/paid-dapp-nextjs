@@ -9,7 +9,7 @@ import {
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
-import BannerMobileSoon from '../components/BannerMobileSoon';
+import BannerMessage from '../components/BannerMessage';
 import Terms from '../components/Terms';
 import { doConnectWallet } from '../redux/actions/wallet';
 
@@ -29,7 +29,17 @@ const Landing: React.FC = () => {
 	
 	return (
 		<IonPage>
-			<BannerMobileSoon />
+			<BannerMessage isOnlyMobile message="Only Desktop experience is currently available. Mobile app will be coming soon." />
+			<BannerMessage
+				isOnlyDesktop
+				message={
+					<p>
+						Welcome to PAID Network Running On Biance Smart Chain (BSC)
+						<br />
+						<a href="https://academy.binance.com/en/articles/connecting-metamask-to-binance-smart-chain">Click here</a> to see instruction on how to setup your metamask.
+					</p>
+				}
+			/>
 			<IonContent fullscreen class="landing-content">
 				<div className="landing-logo">
 					<IonImg src="/assets/images/logo-full.png" />
@@ -55,10 +65,6 @@ const Landing: React.FC = () => {
 					We use your data to offer you a personalized experience.
 					<IonRouterLink onClick={() => setShowTermsModal(true)}>Find out more.</IonRouterLink>
 					<Terms show={showTermsModal} dismiss={() => {setShowTermsModal(false)}} />
-				</div>
-				<div className="info">
-					This is version is working with Binance Blockchain
-					and you will need a Binance wallet
 				</div>
 			</IonContent>
 		</IonPage>

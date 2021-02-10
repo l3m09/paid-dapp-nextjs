@@ -21,7 +21,7 @@ import { useDispatch } from 'react-redux';
 import { doSetAgreementFormInfo } from '../../../redux/actions/documents';
 import PreviewAgreement from './PreviewAgreement';
 import { getContractTemplate } from '../../../redux/actions/template/index';
-import BannerMobileSoon from '../../../components/BannerMobileSoon';
+import BannerMessage from '../../../components/BannerMessage';
 
 interface AgreementsProps {
 	show: boolean;
@@ -115,7 +115,17 @@ const Agreements: React.FC<AgreementsProps> = () => {
 
 	return (
 		<IonPage className="agreements-page content-page">
-			<BannerMobileSoon />
+			<BannerMessage isOnlyMobile message="Only Desktop experience is currently available. Mobile app will be coming soon." />
+			<BannerMessage
+				isOnlyDesktop
+				message={
+					<p>
+						Welcome to PAID Network Running On Biance Smart Chain (BSC)
+						<br />
+						<a href="https://academy.binance.com/en/articles/connecting-metamask-to-binance-smart-chain">Click here</a> to see instruction on how to setup your metamask.
+					</p>
+				}
+			/>
 			<IonContent fullscreen 
 				scrollEvents={true}>
 				<IonHeader translucent={false} mode="md">
