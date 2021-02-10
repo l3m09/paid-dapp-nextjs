@@ -269,7 +269,7 @@ export const doCreateAgreement = (payload: {
 		});
 	} catch (err) {
 		await payload.slideBack();
-		dispatch(openErrorDialog('The agreement was not created successfully'));
+		dispatch(openErrorDialog('The agreement was not created successfully '+err.message));
 		console.log('The agreement was not created successfully', err.message);
 		dispatch({
 			type: DocumentsActionTypes.CREATE_AGREEMENT_FAILURE,
@@ -548,6 +548,7 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 				const balance = currentWallet?.web3.utils.fromWei(balancewei);
 				const parsedBalance = BigNumber(balance).toNumber();
 				if ((parsedBalance <= 0.0009999999999)) {
+					dispatch(openSuccessDialog('The wallet should has balance to send a transaction.'));
 					throw new Error('The wallet should has balance to send a transaction.');
 				}
 			})
@@ -700,11 +701,10 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 				});
 			});
 		} else {
-			dispatch(openErrorDialog('Document Don\'t exist'));
+			dispatch(openSuccessDialog('Document Don\'t exist'));
 			throw new Error('Document Don\'t exist');
 		}
 	} catch (err) {
-		dispatch(openErrorDialog(err.message));
 		console.log('ln545', err);
 		dispatch({
 			type: DocumentsActionTypes.COUNTERPARTY_SIGNED_FAILURE,
@@ -734,6 +734,7 @@ export const doRejectCounterpartyDocument = (document: any, comments: string) =>
 				const balance = currentWallet?.web3.utils.fromWei(balancewei);
 				const parsedBalance = BigNumber(balance).toNumber();
 				if ((parsedBalance <= 0.0009999999999)) {
+					dispatch(openSuccessDialog('The wallet should has balance to send a transaction.'));
 					throw new Error('The wallet should has balance to send a transaction.');
 				}
 			})
@@ -836,9 +837,7 @@ export const doRejectCounterpartyDocument = (document: any, comments: string) =>
 			dispatch(openSuccessDialog('You Reject the Smart Agreement'));
 		}
 	} catch (err) {
-		// alert(err.message);
 		console.log('ln545', err);
-		dispatch(openSuccessDialog('Failed Reject Notification'));
 		dispatch({
 			type: DocumentsActionTypes.COUNTERPARTY_REJECT_SIGNED_FAILURE,
 			payload: err.msg
