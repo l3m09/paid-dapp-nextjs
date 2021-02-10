@@ -153,6 +153,24 @@ jobs:
           tag: "$CIRCLE_BRANCH-$CIRCLE_SHA1"
       - slack/status
 
+  deploy-prod-bsc:
+    machine:
+      image: ubuntu-1604:202007-01
+      docker_layer_caching: true
+    steps:
+      - gcp-gke/install
+      - gcp-gke/update-kubeconfig-with-credentials:
+          cluster: $GKE_CLUSTER_PROD
+          perform-login: true
+      - gcp-gke/rollout-image:
+          cluster: $GKE_CLUSTER_PROD
+          namespace: paid-binance
+          deployment: $CIRCLE_PROJECT_REPONAME
+          container: dapp
+          image: gcr.io/$GOOGLE_PROJECT_ID/$CIRCLE_PROJECT_REPONAME
+          tag: "$CIRCLE_BRANCH-$CIRCLE_SHA1"
+      - slack/status
+
 workflows:
   version: 2
   build-test-and-approval-deploy:
@@ -169,7 +187,7 @@ workflows:
                 - /^release.*/
                 # Include hotfix branches
                 - /^hotfix.*/
-                - binanceSC-paid-dapp-develop
+                - /^binanceSC.*/
           context:
             - cea-gcp
             - docker-hub-creds
@@ -210,7 +228,7 @@ workflows:
                 - /^release.*/
                 # Include hotfix branches
                 - /^hotfix.*/
-                - binanceSC-paid-dapp-develop
+                - /^binanceSC.*/
           context:
             - cea-gcp
             - docker-hub-creds
@@ -226,7 +244,7 @@ workflows:
                 - /^release.*/
                 # Include hotfix branches
                 - /^hotfix.*/
-                - binanceSC-paid-dapp-develop
+                - /^binanceSC.*/
           requires:
             - publish
       - hold-deploy:
@@ -242,7 +260,7 @@ workflows:
                 - /^release.*/
                 # Include hotfix branches
                 - /^hotfix.*/
-                - binanceSC-paid-dapp-develop
+                - /^binanceSC.*/
           requires:
             - publish
       - deploy-dev:
@@ -275,6 +293,16 @@ workflows:
             branches:
               only:
                 - master
+          context:
+            - cea-gcp
+            - cea-gcp-prod
+      - deploy-prod-bsc:
+          requires:
+            - hold-deploy
+          filters:
+            branches:
+              only:
+                - binanceSC-paid-dapp
           context:
             - cea-gcp
             - cea-gcp-prod
