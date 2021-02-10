@@ -376,7 +376,7 @@ module.exports = {
     address: {
       "rinkeby-fork": "0x356Eed05d8CAF4544E2cfBBB91923d411228BF95",
       rinkeby: "0x356Eed05d8CAF4544E2cfBBB91923d411228BF95",
-      mainnet: "0x6B175474E89094C44Da98b954EedeAC495271d0F",
+      testnet: "ec5dcb5dbf4b114c9d0f65bccab49ec54f6a0867",
     },
   },
 };

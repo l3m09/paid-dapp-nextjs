@@ -161,13 +161,13 @@ export const doCreateAgreement = (payload: {
 		
 
 		const { wallet } = getState();
-		const { selectedToken, currentWallet } = wallet;
+		const { currentWallet } = wallet;
 		if ((currentWallet == null) || (currentWallet == undefined)) {
 			dispatch(openErrorDialog('Not unlocked wallet found'));
 			slideBack();
 			throw new Error('Not unlocked wallet found');
 		}
-		const { address, web3, balanceToken, balanceDaiToken, network} = currentWallet;
+		const { address, web3, network} = currentWallet;
 
 		if (!web3.utils.isAddress(agreementForm.counterpartyWallet)) {
 			dispatch(openErrorDialog('Invalid Counter Party Address'));
@@ -219,18 +219,17 @@ export const doCreateAgreement = (payload: {
 		// ----------------------------------------------------
 		// Estimate gas,  TODO encapsulate
 		const AgreementContract = ContractFactory.getAgreementContract(web3, network);
-		const spender = AgreementContract.options.address;
-		const payment = await AgreementContract.methods.getPayment().call();
-		const paymentSA =  web3.utils.fromWei(payment, 'ether');
+		// const spender = AgreementContract.options.address;
+		// const payment = await AgreementContract.methods.getPayment().call();
+		// const paymentSA =  web3.utils.fromWei(payment, 'ether');
 		AgreementContract.options.from = address;
 		// Increase Approve for withdraw PAID token
-		let token:string = '';
-		const PaidTokenContract = ContractFactory.getPaidTokenContract(web3, network);
-		token = PaidTokenContract.options.address;
-		PaidTokenContract.options.from = address;
+		// let token:string = '';
+		// const PaidTokenContract = ContractFactory.getPaidTokenContract(web3, network);
+		// token = PaidTokenContract.options.address;
+		// PaidTokenContract.options.from = address;
 		// Uploads Value to Smart Agreements
 		const methodFn = AgreementContract.methods.partyCreate(
-			token,
 			validUntil,
 			agreementForm.counterpartyWallet,
 			ipfsHash.toString(),
@@ -309,14 +308,15 @@ export const doGetDocuments = (sending_currentWallet: any) => async (
 		const agreementContract = ContractFactory.getAgreementContract(currentWallet?.web3, currentWallet?.network);
 		const eventsSource = await agreementContract.getPastEvents('AgreementEvents', {
 			filter: { partySource: currentWallet?.address.toString() },
-			fromBlock: 7600000,
+			fromBlock: 6150000,
 			toBlock: 'latest'
 		});
 		const eventsDestination = await agreementContract.getPastEvents('AgreementEvents', {
 			filter: { partyDestination: currentWallet?.address.toString() },
-			fromBlock: 7600000,
+			fromBlock: 6150000,
 			toBlock: 'latest'
 		});
+		console.log('agreementsDocuments',eventsSource, eventsDestination);
 		const promisesFrom = eventsSource.map(async (event) => {
 			const args = event.returnValues;
 			const {
@@ -532,13 +532,13 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 		}
 		if(document){
 			const { wallet } = getState();
-			const { selectedToken, currentWallet } = wallet;
+			const { currentWallet } = wallet;
 			if ((currentWallet === null) || (currentWallet === undefined)) {
 				dispatch(openSuccessDialog('Not unlocked wallet found'));
 				throw new Error('Not unlocked wallet found');
 			}
 
-			const { address, web3, balanceToken, balanceDaiToken, network} = currentWallet;
+			const { address, web3, network} = currentWallet;
 
 			await web3.eth.getBalance(currentWallet?.address).then((balancewei) =>{
 				const balance = currentWallet?.web3.utils.fromWei(balancewei);
@@ -585,77 +585,76 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 			const partiesContentStr : string = await partiesContent();
 
 			// Validate Token Type
-			const spender = AgreementContract.options.address;
-			const payment = await AgreementContract.methods.getPayment().call();
-			const paymentSA =  parseInt(currentWallet?.web3.utils.fromWei(payment, 'ether'), 10);
-			const balancePaid = parseInt(balanceToken, 10);
-			const balanceDai = parseInt(balanceToken, 10);
+			// const spender = AgreementContract.options.address;
+			// const payment = await AgreementContract.methods.getPayment().call();
+			// const paymentSA =  parseInt(currentWallet?.web3.utils.fromWei(payment, 'ether'), 10);
+			// const balancePaid = parseInt(balanceToken, 10);
+			// const balanceDai = parseInt(balanceToken, 10);
 			AgreementContract.options.from = currentWallet?.address;
 			// Increase Approve for withdraw PAID token
 
-			let token:string = '';
-			let metodoTkn:any;
-			let allow:any;
-			// const paymentSA = web3.utils.toWei(pago, 'ether');
-			if (selectedToken === 'paid') {
-				if (balancePaid < paymentSA) {
-					dispatch(openErrorDialog('You have not enough balance to perform this action'));
-					throw new Error('You have not enough balance to perform this action')
-				}
-				const PaidTokenContract = ContractFactory.getPaidTokenContract(web3, network);
-				token = PaidTokenContract.options.address;
-				PaidTokenContract.options.from = address;
-				allow = await PaidTokenContract.methods.allowance(address,spender).call();
-				const allowance = parseInt(web3.utils.fromWei(allow, 'ether'),10);
-				if (allowance < paymentSA) {
-					metodoTkn = PaidTokenContract.methods.approve(
-						spender,
-						payment.toString()
-					);
-					// estimateGas for Send Tx to Increase Approve
-					const gastkn = await metodoTkn.estimateGas().then(async (gastkn:any) => {
-						const agreementTransaction = await metodoTkn.send({ from: address, gas:gastkn+5e4, gasPrice: 50e9 })
-						.on('error', function (error: any, receipt: any) {
-							console.log(error, receipt);
-							dispatch(openErrorDialog('Failed to Approve Token'));
-							throw new Error('Transaction failed');
-						});
-					});
-				};
-			} else if (selectedToken === 'dai') {
-				if (balanceDai < paymentSA) {
-					dispatch(openErrorDialog('You have not enough balance to perform this action'));
-					throw new Error('You have not enough balance to perform this action')
-				}
-				const DaiTokenContract = ContractFactory.getDaiTokenContract(web3, network);
-				token = DaiTokenContract.options.address;
-				DaiTokenContract.options.from = address;
-				allow = await DaiTokenContract.methods.allowance(address,spender).call();
-				const allowance = parseInt(web3.utils.fromWei(allow, 'ether'),10);
-				if (allowance < paymentSA) {
-					metodoTkn = DaiTokenContract.methods.approve(
-						spender,
-						payment.toString()
-					);
-					// estimateGas for Send Tx to Increase Approve
-					const gastkn = await metodoTkn.estimateGas().then(async (gastkn:any) => {
-						const agreementTransaction = await metodoTkn.send({ from: address, gas:gastkn+5e4, gasPrice: 50e9 })
-						.on('error', function (error: any, receipt: any) {
-							console.log(error, receipt);
-							dispatch(openErrorDialog('Failed to Approve Token'));
-							throw new Error('Transaction failed');
-						});
-					});
-				};
-			} else {
-				dispatch(openSuccessDialog('Please Select the Token to use'));
-			}
+			// let token:string = '';
+			// let metodoTkn:any;
+			// let allow:any;
+			// // const paymentSA = web3.utils.toWei(pago, 'ether');
+			// if (selectedToken === 'paid') {
+			// 	if (balancePaid < paymentSA) {
+			// 		dispatch(openErrorDialog('You have not enough balance to perform this action'));
+			// 		throw new Error('You have not enough balance to perform this action')
+			// 	}
+			// 	const PaidTokenContract = ContractFactory.getPaidTokenContract(web3, network);
+			// 	token = PaidTokenContract.options.address;
+			// 	PaidTokenContract.options.from = address;
+			// 	allow = await PaidTokenContract.methods.allowance(address,spender).call();
+			// 	const allowance = parseInt(web3.utils.fromWei(allow, 'ether'),10);
+			// 	if (allowance < paymentSA) {
+			// 		metodoTkn = PaidTokenContract.methods.approve(
+			// 			spender,
+			// 			payment.toString()
+			// 		);
+			// 		// estimateGas for Send Tx to Increase Approve
+			// 		const gastkn = await metodoTkn.estimateGas().then(async (gastkn:any) => {
+			// 			const agreementTransaction = await metodoTkn.send({ from: address, gas:gastkn+5e4, gasPrice: 50e9 })
+			// 			.on('error', function (error: any, receipt: any) {
+			// 				console.log(error, receipt);
+			// 				dispatch(openErrorDialog('Failed to Approve Token'));
+			// 				throw new Error('Transaction failed');
+			// 			});
+			// 		});
+			// 	};
+			// } else if (selectedToken === 'dai') {
+			// 	if (balanceDai < paymentSA) {
+			// 		dispatch(openErrorDialog('You have not enough balance to perform this action'));
+			// 		throw new Error('You have not enough balance to perform this action')
+			// 	}
+			// 	const DaiTokenContract = ContractFactory.getDaiTokenContract(web3, network);
+			// 	token = DaiTokenContract.options.address;
+			// 	DaiTokenContract.options.from = address;
+			// 	allow = await DaiTokenContract.methods.allowance(address,spender).call();
+			// 	const allowance = parseInt(web3.utils.fromWei(allow, 'ether'),10);
+			// 	if (allowance < paymentSA) {
+			// 		metodoTkn = DaiTokenContract.methods.approve(
+			// 			spender,
+			// 			payment.toString()
+			// 		);
+			// 		// estimateGas for Send Tx to Increase Approve
+			// 		const gastkn = await metodoTkn.estimateGas().then(async (gastkn:any) => {
+			// 			const agreementTransaction = await metodoTkn.send({ from: address, gas:gastkn+5e4, gasPrice: 50e9 })
+			// 			.on('error', function (error: any, receipt: any) {
+			// 				console.log(error, receipt);
+			// 				dispatch(openErrorDialog('Failed to Approve Token'));
+			// 				throw new Error('Transaction failed');
+			// 			});
+			// 		});
+			// 	};
+			// } else {
+			// 	dispatch(openSuccessDialog('Please Select the Token to use'));
+			// }
 			// Uploads a IPFS
 			let ipfsHash = await uploadsIPFS(ipfs, blobContent, opts, digest, signature, formId, currentWallet?.address, JSON.stringify(elementsAbi), partiesContentStr, null);
 
 			// Sending Data to Smart Contract
 			const methodFn = AgreementContract.methods.counterPartiesSign(
-				token,
 				agreementId,
 				validUntil,
 				ipfsHash.toString(),
@@ -730,6 +729,7 @@ export const doRejectCounterpartyDocument = (document: any, comments: string) =>
 			})
 
 			const AgreementContract = ContractFactory.getAgreementContract(currentWallet?.web3, currentWallet?.network);
+			AgreementContract.options.from = currentWallet?.address;
 
 			const form = document.data.agreementForm;
 			const formId = document.event.agreementFormTemplateId;
@@ -773,13 +773,12 @@ export const doRejectCounterpartyDocument = (document: any, comments: string) =>
 			
 			// Sending Notification of CounterParty Reject Smart Agreements
 			const parties = JSON.parse(partiesContentStr);
-			const PaidTokenContract = ContractFactory.getPaidTokenContract(currentWallet?.web3, currentWallet?.network);
-			const token = PaidTokenContract.options.address;
-			PaidTokenContract.options.from = currentWallet?.address;
+			// const PaidTokenContract = ContractFactory.getPaidTokenContract(currentWallet?.web3, currentWallet?.network);
+			// const token = PaidTokenContract.options.address;
+			// PaidTokenContract.options.from = currentWallet?.address;
 			// Verified Value
 
 			const methodFn = AgreementContract.methods.counterPartiesReject(
-				token,
 				agreementId,
 				validUntil,
 				ipfsHash.toString(),
@@ -921,7 +920,7 @@ export const doLoadMyInfoKept = () => async (dispatch: any) => {
 	try {
 		const myInfoString = await Storage.get({ key: STORAGE_KEY_MY_INFO_KEPT });
 		const formInfo = (myInfoString.value != null) ?
-		(JSON.parse(myInfoString.value)) : 
+		(JSON.parse(myInfoString.value)) :
 		({
 			email: '',
 			confirmEmail: '',

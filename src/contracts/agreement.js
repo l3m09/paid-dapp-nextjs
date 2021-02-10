@@ -285,7 +285,6 @@ module.exports = {
         },
         {
           inputs: [
-            { internalType: "contract IERC20", name: "token", type: "address" },
             { internalType: "uint256", name: "validUntil", type: "uint256" },
             { internalType: "address", name: "counterparty", type: "address" },
             {
@@ -305,11 +304,10 @@ module.exports = {
           outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
           stateMutability: "nonpayable",
           type: "function",
-          signature: "0x8e1b4f59",
+          signature: "0x3514a201",
         },
         {
           inputs: [
-            { internalType: "contract IERC20", name: "token", type: "address" },
             { internalType: "uint256", name: "agreementId", type: "uint256" },
             { internalType: "uint256", name: "validUntil", type: "uint256" },
             {
@@ -329,11 +327,10 @@ module.exports = {
           outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
           stateMutability: "nonpayable",
           type: "function",
-          signature: "0xd6dfa13f",
+          signature: "0x4b0f650f",
         },
         {
           inputs: [
-            { internalType: "contract IERC20", name: "token", type: "address" },
             { internalType: "uint256", name: "agreementId", type: "uint256" },
             { internalType: "uint256", name: "validUntil", type: "uint256" },
             {
@@ -353,7 +350,7 @@ module.exports = {
           outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
           stateMutability: "nonpayable",
           type: "function",
-          signature: "0xe35ed0f7",
+          signature: "0x4e91994b",
         },
         {
           inputs: [
@@ -465,24 +462,12 @@ module.exports = {
           constant: true,
           signature: "0x9507d39a",
         },
-        {
-          inputs: [
-            { internalType: "contract IERC20", name: "token", type: "address" },
-            { internalType: "address", name: "recipient", type: "address" },
-          ],
-          name: "getBalanceToken",
-          outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-          stateMutability: "view",
-          type: "function",
-          constant: true,
-          signature: "0x81fd0b68",
-        },
       ],
     },
     address: {
-      "rinkeby-fork": "0x5b207B412C3087540Cd3B113BCD3B773a355B789",
-      rinkeby: "0x5b207B412C3087540Cd3B113BCD3B773a355B789",
-      mainnet: "0xcc5183443c60E8161E39bb7A91d188D24616A182",
+      "rinkeby-fork": "0x04AB80b8EfB66670d0024910c51B9b3306946989",
+      rinkeby: "0x04AB80b8EfB66670d0024910c51B9b3306946989",
+      testnet: "0x67e1816bEEcB2a2852f9305049483f32b5c7ef60",
     },
   },
 };

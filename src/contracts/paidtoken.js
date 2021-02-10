@@ -294,7 +294,7 @@ module.exports = {
     address: {
       "rinkeby-fork": "0xB4a04eCF1855FBccf5C770BA6DB1dde7c96b17Be",
       rinkeby: "0xB4a04eCF1855FBccf5C770BA6DB1dde7c96b17Be",
-      mainnet: "0x8c8687fc965593dfb2f0b4eaefd55e9d8df348df",
+      testnet: "0xae13d989dac2f0debff460ac112a837c89baa7cd",
     },
   },
 };

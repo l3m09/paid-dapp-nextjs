@@ -80,6 +80,12 @@ export class BlockchainFactory {
 			case 42 : {
 				return "kovan";
 			}
+			case 56 : {
+				return "mainnet";
+			}
+			case 97 : {
+				return "testnet";
+			}
 			default: {
 				return "Not Admit this Network"
 			}
