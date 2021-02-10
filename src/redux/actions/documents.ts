@@ -249,8 +249,13 @@ export const doCreateAgreement = (payload: {
 						'name': agreementForm.name
 					}
 				})
+				.then(function (response) {
+					console.log('email response: ', response);
+					dispatch(openSuccessDialog('Success Sending Create Notification'));
+				})
 				.catch(function (error) {
 					console.log('email error: ',error);
+					dispatch(openSuccessDialog('Error Sending Create Notification'));
 				});
 				dispatch(createAgreement());
 				dispatch(openSuccessDialog('You have created an agreement successfully'));
@@ -677,8 +682,13 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 							'name': parties.counterpartyName
 						}
 					})
+					.then(function (response) {
+						console.log('email response: ', response);
+						dispatch(openSuccessDialog('Success Sending Accept Notification'));
+					})
 					.catch(function (error) {
 						console.log('email error: ',error);
+						dispatch(openSuccessDialog('Error Sending Accept Notification'));
 					});
 					dispatch(getSelectedSignedDocument(document));
 					dispatch(openSuccessDialog('You have successfully sign the Smart Agreement'));
@@ -805,8 +815,8 @@ export const doRejectCounterpartyDocument = (document: any, comments: string) =>
 						}
 					})
 					.then(function (response) {
-						dispatch(openSuccessDialog('Success Sending Reject Notification'));
 						console.log('email response: ', response);
+						dispatch(openSuccessDialog('Success Sending Reject Notification'));
 					})
 					.catch(function (error) {
 						console.log('email error: ',error);
