@@ -242,8 +242,8 @@ export const doCreateAgreement = (payload: {
 			.on('receipt', async function (receipt: any) {
 				axios.post(apiUrl+'email/new-agreement', {
 					'counterParty': {
-						name: agreementForm.counterpartyName,
-						email: agreementForm.counterpartyEmail
+						'name': agreementForm.counterpartyName,
+						'email': agreementForm.counterpartyEmail
 					},
 					'party':{
 						'name': agreementForm.name
