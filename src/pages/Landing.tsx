@@ -34,9 +34,9 @@ const Landing: React.FC = () => {
 				isOnlyDesktop
 				message={
 					<p>
-						Welcome to PAID Network Running On Biance Smart Chain (BSC)
+						Welcome to PAID Network Running On Binance Smart Chain (BSC)
 						<br />
-						<a href="https://academy.binance.com/en/articles/connecting-metamask-to-binance-smart-chain">Click here</a> to see instruction on how to setup your metamask.
+						<a href="https://academy.binance.com/en/articles/connecting-metamask-to-binance-smart-chain" target="_blank">Click here</a> to see instruction on how to setup your metamask.
 					</p>
 				}
 			/>
