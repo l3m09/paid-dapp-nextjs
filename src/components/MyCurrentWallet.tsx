@@ -77,7 +77,8 @@ const MyCurrentWallet: FC = () => {
                             Address:
                         </IonLabel>
                         <div>
-                            <span ref={spanRef}>{currentWallet?.address}</span>
+                            <span ref={spanRef} hidden>{currentWallet?.address}</span>
+                            <a href={`https://${currentWallet?.network}.bscscan.com/address/${currentWallet?.address}`} target="_blank">{currentWallet?.address}</a>
                             <IonIcon icon={copy} onClick={() => copyAddressToClipboard()} className="copy-icon" />
                         </div>
                     </IonItem>
@@ -107,21 +108,21 @@ const MyCurrentWallet: FC = () => {
                         />
                     </IonItem> */}
                     <IonItem className="balance-content">
-                        <IonLabel>4999</IonLabel>
+                        <IonLabel>{currentWallet?.balance}</IonLabel>
                         <IonImg
                             src="/assets/icon/bnblogo.svg"
                             slot="start"
                             className="balance-coin-icon"
                         />
                     </IonItem>
-                    <IonItem className="balance-content">
+                    {/* <IonItem className="balance-content">
                         <IonLabel>{currentWallet?.balanceDaiToken}</IonLabel>
                         <IonImg
                             src="/assets/icon/dailogo.svg"
                             slot="start"
                             className="balance-coin-icon"
                         />
-                    </IonItem>
+                    </IonItem> */}
                 </IonList>
                 <IonToast
 					isOpen={showToastCopy}

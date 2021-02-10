@@ -45,7 +45,7 @@ const MenuAlternate:  React.FC = () =>{
 
 	const [disableMenu, setDisableMenu] = useState(false);
 	const [networkText, setNetWorkText] = useState(currentWallet?.network);
-	const [selectToken, setSelectToken] = useState(selectedToken);
+	const [selectToken, setSelectToken] = useState('bnb');
 
 	const doSetSelectedToken = (token:string) => {
 		setSelectToken(token);
@@ -141,16 +141,16 @@ const MenuAlternate:  React.FC = () =>{
 				<div className="icon-wrapper">
 					<IonImg
 						src={selectToken === "bnb" ?
-						('/assets/icon/bnblogo.svg') :
-						('/assets/icon/dailogo.svg')
+						('/assets/icon/bnblogo.svg') : ''
+						// ('/assets/icon/dailogo.svg')
 					}
 					/>
 				</div>
 				<IonLabel color="gradient">
 					{
 						selectToken === "bnb" ?
-						('BNB Tokens') :
-						('DAI Tokens')
+						('BNB Tokens') : null
+						// ('DAI Tokens')
 					}
 				</IonLabel>
 				<IonSelect
@@ -164,11 +164,11 @@ const MenuAlternate:  React.FC = () =>{
 					</IonSelectOption> */}
 					<IonSelectOption value="bnb">
 						{/* TODO: this amount must be dynamic */}
-						BNB Tokens 4500
+						BNB Tokens  {currentWallet?.balance}
 					</IonSelectOption>
-					<IonSelectOption value="dai">
+					{/* <IonSelectOption value="dai">
 						DAI Tokens {daiBalance}
-					</IonSelectOption>
+					</IonSelectOption> */}
 				</IonSelect>
 			</IonItem>
 		</IonButtons>

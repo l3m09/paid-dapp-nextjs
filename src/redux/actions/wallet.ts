@@ -103,6 +103,7 @@ export const doConnectWallet = (ethereum:any, history:any
 				// build currentWallet / connectedWallet Element
 				const metaInstance = await BlockchainFactory.getWeb3Mask(ethereum);
 				const network = await BlockchainFactory.getNetwork(metaInstance.network);
+				console.log('doConnect Wallet', network);
 				window.web3 = metaInstance?.web3Instance;
 				const accounts = await ethereum.request({ method: 'eth_requestAccounts' })
 				.then(async (addresses)=>{

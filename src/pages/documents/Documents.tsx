@@ -187,11 +187,11 @@ const Documents: React.FC = () => {
 			Sessions.setTimeoutCall();
 		}
 		else {
-			dispatch(openSuccessDialog('Pls Disconnect your Wallet'));
-			window.ethereum = null
+			window.ethereum = null;
 			window.web3 = new Web3 (new Web3.providers.WebsocketProvider(wssUrl));
 			currentWallet.web3 = new Web3 (new Web3.providers.WebsocketProvider(wssUrl));
-			history.push('/');
+			dispatch(openSuccessDialog('Pls Disconnect your Wallet'));
+			window.location.reload();
 		}
 	}
 
