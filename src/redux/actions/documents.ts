@@ -183,8 +183,8 @@ export const doCreateAgreement = (payload: {
 				throw new Error('The wallet should has balance to send a transaction.');
 			}
 		})
-		// const form = web3.utils.sha3(createAgreementFormPayload(agreementForm));
-		const form = web3.utils.sha3('form');
+		const form = web3.utils.sha3(createAgreementFormPayload(agreementForm));
+		// const form = web3.utils.sha3('form');
 
 		// ALICE SIDE
 		// const content = template();
@@ -313,15 +313,14 @@ export const doGetDocuments = (sending_currentWallet: any) => async (
 		const agreementContract = ContractFactory.getAgreementContract(currentWallet?.web3, currentWallet?.network);
 		const eventsSource = await agreementContract.getPastEvents('AgreementEvents', {
 			filter: { partySource: currentWallet?.address.toString() },
-			fromBlock: 6150000,
+			fromBlock: 4760000,
 			toBlock: 'latest'
 		});
 		const eventsDestination = await agreementContract.getPastEvents('AgreementEvents', {
 			filter: { partyDestination: currentWallet?.address.toString() },
-			fromBlock: 6150000,
+			fromBlock: 4760000,
 			toBlock: 'latest'
 		});
-		console.log('agreementsDocuments',eventsSource, eventsDestination);
 		const promisesFrom = eventsSource.map(async (event) => {
 			const args = event.returnValues;
 			const {
@@ -730,6 +729,7 @@ export const doRejectCounterpartyDocument = (document: any, comments: string) =>
 				dispatch(openSuccessDialog('Not unlocked wallet found'));
 				throw new Error('Not unlocked wallet found');
 			}
+			const { address, web3, network} = currentWallet;
 			await currentWallet?.web3.eth.getBalance(currentWallet?.address).then((balancewei) =>{
 				const balance = currentWallet?.web3.utils.fromWei(balancewei);
 				const parsedBalance = BigNumber(balance).toNumber();
@@ -741,7 +741,7 @@ export const doRejectCounterpartyDocument = (document: any, comments: string) =>
 			const AgreementContract = ContractFactory.getAgreementContract(currentWallet?.web3, currentWallet?.network);
 			AgreementContract.options.from = currentWallet?.address;
 
-			const form = document.data.agreementForm;
+			const form = web3.utils.sha3(createAgreementFormPayload(document.data.agreementForm));
 			const formId = document.event.agreementFormTemplateId;
 			const validUntil = document.data.validUntil;
 			const agreementId = document.event.id;
