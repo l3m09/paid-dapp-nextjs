@@ -179,7 +179,11 @@ const Documents: React.FC = () => {
 		else{
 			history.push('/');
 		}
-		setShowPopover(show);
+		if (currentWallet?.balance > 0) {
+			setShowPopover(show);
+		} else {
+			dispatch(openSuccessDialog("Don't have enough balance for Create Smart Agreements"));
+		}
 	}
 
 	function runDisconnetWallet(show: boolean){
