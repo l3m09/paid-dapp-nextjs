@@ -51,7 +51,7 @@ jobs:
           tag: "$CIRCLE_BRANCH-$CIRCLE_SHA1"
       - slack/status:
           fail_only: true
-        
+
   code-scan:
     docker:
       - image: "node:14.15.1"
@@ -69,7 +69,7 @@ jobs:
     steps:
       - checkout
       - run: docker login -u $DOCKERHUB_USER -p $DOCKERHUB_PASS
-      - run: 
+      - run:
           name: Replace the backslash for a hyphen if the CIRCLE_BRANCH is a feature, release or hotfix branch.
           command: |
             echo "export CIRCLE_BRANCH=$( echo ${CIRCLE_BRANCH} | sed 's_/_-_' )" >> $BASH_ENV
@@ -98,7 +98,7 @@ jobs:
       image: ubuntu-1604:202007-01
       docker_layer_caching: true
     steps:
-      - run: 
+      - run:
           name: Replace the backslash for a hyphen if the CIRCLE_BRANCH is a feature, release or hotfix branch.
           command: |
             echo "export CIRCLE_BRANCH=$( echo ${CIRCLE_BRANCH} | sed 's_/_-_' )" >> $BASH_ENV
@@ -114,7 +114,7 @@ jobs:
           tag: "$CIRCLE_BRANCH-$CIRCLE_SHA1"
       - slack/status
 
-  deploy-preprod:
+  deploy-dev-bsc:
     machine:
       image: ubuntu-1604:202007-01
       docker_layer_caching: true
@@ -163,16 +163,14 @@ workflows:
               only:
                 - master
                 - develop
-                - cicd-development
                 # Include features branches
                 - /^feature.*/
                 # Include release branches
                 - /^release.*/
                 # Include hotfix branches
                 - /^hotfix.*/
-                # TODO Remove filter
-                - /^binance.*/
-          context: 
+                - binanceSC-paid-dapp-develop
+          context:
             - cea-gcp
             - docker-hub-creds
       - test:
@@ -183,21 +181,19 @@ workflows:
               only:
                 - master
                 - develop
-          context: 
+          context:
             - cea-gcp
             - docker-hub-creds
       - code-scan:
-          requires: 
+          requires:
             - test
           filters:
             branches:
               only:
                 - master
                 - develop
-                # TODO Remove branch
-                - cicd-development
-          context: 
-            - cea-sonarcloud 
+          context:
+            - cea-sonarcloud
             - docker-hub-creds
       - publish:
           requires:
@@ -208,17 +204,14 @@ workflows:
               only:
                 - master
                 - develop
-                # TODO Remove branch
-                - cicd-development
                 # Include features branches
                 - /^feature.*/
                 # Include release branches
                 - /^release.*/
                 # Include hotfix branches
                 - /^hotfix.*/
-                # TODO Remove filter
-                - /^binance.*/
-          context: 
+                - binanceSC-paid-dapp-develop
+          context:
             - cea-gcp
             - docker-hub-creds
       - slack/approval-notification:
@@ -227,16 +220,13 @@ workflows:
               only:
                 - master
                 - develop
-                # TODO Remove branch
-                - cicd-development
                 # Include features branches
                 - /^feature.*/
                 # Include release branches
                 - /^release.*/
                 # Include hotfix branches
                 - /^hotfix.*/
-                # TODO Remove filter
-                - /^binance.*/
+                - binanceSC-paid-dapp-develop
           requires:
             - publish
       - hold-deploy:
@@ -246,16 +236,13 @@ workflows:
               only:
                 - master
                 - develop
-                # TODO Remove branch
-                - cicd-development
                 # Include features branches
                 - /^feature.*/
                 # Include release branches
                 - /^release.*/
                 # Include hotfix branches
                 - /^hotfix.*/
-                # TODO Remove filter
-                - /^binance.*/
+                - binanceSC-paid-dapp-develop
           requires:
             - publish
       - deploy-dev:
@@ -264,8 +251,6 @@ workflows:
           filters:
             branches:
               only:
-                # TODO Remove branch
-                - cicd-development
                 - develop
                 # Include features branches
                 - /^feature.*/
@@ -274,13 +259,13 @@ workflows:
                 # Include hotfix branches
                 - /^hotfix.*/
           context: cea-gcp
-      - deploy-preprod:
+      - deploy-dev-bsc:
           requires:
             - hold-deploy
           filters:
             branches:
               only:
-                - /^binance.*/
+                - binanceSC-paid-dapp-develop
           context:
             - cea-gcp
       - deploy-prod:
@@ -290,6 +275,6 @@ workflows:
             branches:
               only:
                 - master
-          context: 
+          context:
             - cea-gcp
             - cea-gcp-prod
