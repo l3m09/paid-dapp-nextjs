@@ -1,5 +1,7 @@
 # paid-dapp
 
+for Binance Smart Chain Mainnet and Testnet
+
 ## Prerequisites
 
 Integration Metamask
