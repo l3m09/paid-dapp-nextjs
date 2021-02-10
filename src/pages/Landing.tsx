@@ -55,7 +55,10 @@ const Landing: React.FC = () => {
 					We use your data to offer you a personalized experience.
 					<IonRouterLink onClick={() => setShowTermsModal(true)}>Find out more.</IonRouterLink>
 					<Terms show={showTermsModal} dismiss={() => {setShowTermsModal(false)}} />
-
+				</div>
+				<div className="info">
+					This is version is working with Binance Blockchain
+					and you will need a Binance wallet
 				</div>
 			</IonContent>
 		</IonPage>

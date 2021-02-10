@@ -90,18 +90,26 @@ const MyCurrentWallet: FC = () => {
                             Balances
                         </IonLabel>
                     </IonItem>
-                    <IonItem className="balance-content">
+                    {/* <IonItem className="balance-content">
                         <IonLabel>{currentWallet?.balanceToken}</IonLabel>
                         <IonImg
                             src="/assets/icon/icon.png"
                             slot="start"
                             className="balance-coin-icon"
                         />
-                    </IonItem>
-                    <IonItem className="balance-content">
+                    </IonItem> */}
+                    {/* <IonItem className="balance-content">
                         <IonLabel>{currentWallet?.balance}</IonLabel>
                         <IonImg
                             src="/assets/icon/ethereumlogo.svg"
+                            slot="start"
+                            className="balance-coin-icon"
+                        />
+                    </IonItem> */}
+                    <IonItem className="balance-content">
+                        <IonLabel>4999</IonLabel>
+                        <IonImg
+                            src="/assets/icon/bnblogo.svg"
                             slot="start"
                             className="balance-coin-icon"
                         />

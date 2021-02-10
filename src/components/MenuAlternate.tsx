@@ -140,16 +140,16 @@ const MenuAlternate:  React.FC = () =>{
 			>
 				<div className="icon-wrapper">
 					<IonImg
-						src={selectToken === "paid" ?
-						('/assets/icon/icon.png') :
+						src={selectToken === "bnb" ?
+						('/assets/icon/bnblogo.svg') :
 						('/assets/icon/dailogo.svg')
 					}
 					/>
 				</div>
 				<IonLabel color="gradient">
 					{
-						selectToken === "paid" ?
-						('PAID Tokens') :
+						selectToken === "bnb" ?
+						('BNB Tokens') :
 						('DAI Tokens')
 					}
 				</IonLabel>
@@ -159,8 +159,12 @@ const MenuAlternate:  React.FC = () =>{
 					value={selectToken}
 					onIonChange={ (e) => doSetSelectedToken(e.detail.value) }
 				>
-					<IonSelectOption value="paid">
+					{/* <IonSelectOption value="paid">
 						PAID Tokens  {paidBalance}
+					</IonSelectOption> */}
+					<IonSelectOption value="bnb">
+						{/* TODO: this amount must be dynamic */}
+						BNB Tokens 4500
 					</IonSelectOption>
 					<IonSelectOption value="dai">
 						DAI Tokens {daiBalance}
