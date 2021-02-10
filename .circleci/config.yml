@@ -92,7 +92,7 @@ jobs:
           target-tag: $CIRCLE_BRANCH-latest
       - slack/status:
           fail_only: true
-    
+
   deploy-dev:
     machine:
       image: ubuntu-1604:202007-01
@@ -108,6 +108,28 @@ jobs:
           perform-login: true
       - gcp-gke/rollout-image:
           cluster: $GKE_CLUSTER_DEV
+          deployment: $CIRCLE_PROJECT_REPONAME
+          container: dapp
+          image: gcr.io/$GOOGLE_PROJECT_ID/$CIRCLE_PROJECT_REPONAME
+          tag: "$CIRCLE_BRANCH-$CIRCLE_SHA1"
+      - slack/status
+
+  deploy-preprod:
+    machine:
+      image: ubuntu-1604:202007-01
+      docker_layer_caching: true
+    steps:
+      - run:
+          name: Replace the backslash for a hyphen if the CIRCLE_BRANCH is a feature, release or hotfix branch.
+          command: |
+            echo "export CIRCLE_BRANCH=$( echo ${CIRCLE_BRANCH} | sed 's_/_-_' )" >> $BASH_ENV
+      - gcp-gke/install
+      - gcp-gke/update-kubeconfig-with-credentials:
+          cluster: $GKE_CLUSTER_DEV
+          perform-login: true
+      - gcp-gke/rollout-image:
+          cluster: $GKE_CLUSTER_DEV
+          namspace: paid-binance
           deployment: $CIRCLE_PROJECT_REPONAME
           container: dapp
           image: gcr.io/$GOOGLE_PROJECT_ID/$CIRCLE_PROJECT_REPONAME
@@ -148,6 +170,8 @@ workflows:
                 - /^release.*/
                 # Include hotfix branches
                 - /^hotfix.*/
+                # TODO Remove filter
+                - /^binance.*/
           context: 
             - cea-gcp
             - docker-hub-creds
@@ -192,6 +216,8 @@ workflows:
                 - /^release.*/
                 # Include hotfix branches
                 - /^hotfix.*/
+                # TODO Remove filter
+                - /^binance.*/
           context: 
             - cea-gcp
             - docker-hub-creds
@@ -209,6 +235,8 @@ workflows:
                 - /^release.*/
                 # Include hotfix branches
                 - /^hotfix.*/
+                # TODO Remove filter
+                - /^binance.*/
           requires:
             - publish
       - hold-deploy:
@@ -226,6 +254,8 @@ workflows:
                 - /^release.*/
                 # Include hotfix branches
                 - /^hotfix.*/
+                # TODO Remove filter
+                - /^binance.*/
           requires:
             - publish
       - deploy-dev:
@@ -244,6 +274,15 @@ workflows:
                 # Include hotfix branches
                 - /^hotfix.*/
           context: cea-gcp
+      - deploy-preprod:
+          requires:
+            - hold-deploy
+          filters:
+            branches:
+              only:
+                - /^binance.*/
+          context:
+            - cea-gcp
       - deploy-prod:
           requires:
             - hold-deploy
