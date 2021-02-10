@@ -3,18 +3,19 @@ kind: Deployment
 metadata:
   name: paid-dapp
   labels:
-    app: dapp
+    app: dapp-binance
+  namespace: paid-binance
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: dapp
+      app: dapp-binance
   strategy:
     type: RollingUpdate
   template:
     metadata:
       labels:
-        app: dapp
+        app: dapp-binance
     spec:
       containers:
         - image: gcr.io/vivid-plateau-278712/paid-dapp:develop-latest
