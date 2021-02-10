@@ -78,7 +78,7 @@ const MyCurrentWallet: FC = () => {
                         </IonLabel>
                         <div>
                             <span ref={spanRef} hidden>{currentWallet?.address}</span>
-                            <a href={`https://${currentWallet?.network}.bscscan.com/address/${currentWallet?.address}`} target="_blank">{currentWallet?.address}</a>
+                            <a href={`https://${currentWallet?.network == 'testnet' ? currentWallet?.network+'.' : ''}bscscan.com/address/${currentWallet?.address}`} target="_blank">{currentWallet?.address}</a>
                             <IonIcon icon={copy} onClick={() => copyAddressToClipboard()} className="copy-icon" />
                         </div>
                     </IonItem>

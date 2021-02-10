@@ -86,15 +86,15 @@ function SelectedDocument(payload: {
 						<div className="details-wrapper">
 							<IonItem>
 								<IonLabel position="stacked">Signatory A</IonLabel>
-								<a href={`https://${networkText}.bscscan.com/address/${selectedDocument.event.from}`} target="_blank" rel="noopener noreferrer" >{selectedDocument.event.from}</a>
+								<a href={`https://${networkText == 'testnet' ? networkText+'.' : ''}bscscan.com/address/${selectedDocument.event.from}`} target="_blank" rel="noopener noreferrer" >{selectedDocument.event.from}</a>
 							</IonItem>
 							<IonItem>
 								<IonLabel position="stacked">Signatory B</IonLabel>
-								<a href={`https://${networkText}.bscscan.com/address/${selectedDocument.event.to}`} target="_blank" rel="noopener noreferrer" >{selectedDocument.event.to}</a>
+								<a href={`https://${networkText == 'testnet' ? networkText+'.' : ''}bscscan.com/address/${selectedDocument.event.to}`} target="_blank" rel="noopener noreferrer" >{selectedDocument.event.to}</a>
 							</IonItem>
 							<IonItem>
 								<IonLabel position="stacked">Transaction Hash</IonLabel>
-								<a href={`https://${networkText}.bscscan.com/tx/${selectedDocument.meta.transactionHash}`} target="_blank" rel="noopener noreferrer" >{selectedDocument.meta.transactionHash}</a>
+								<a href={`https://${networkText == 'testnet' ? networkText+'.' : ''}bscscan.com/tx/${selectedDocument.meta.transactionHash}`} target="_blank" rel="noopener noreferrer" >{selectedDocument.meta.transactionHash}</a>
 							</IonItem>
 						</div>
 					</IonCardContent>

@@ -203,11 +203,11 @@ function SelectedDocument(payload: {
 							<div className="details-wrapper">
 								<IonItem>
 									<IonLabel position="stacked">Signed By</IonLabel>
-									<a href={`https://${networkText}.bscscan.com/address/${selectedDocument.event.from}`} target="_blank">{selectedDocument.event.from}</a>
+									<a href={`https://${networkText == 'testnet' ? networkText+'.' : ''}bscscan.com/address/${selectedDocument.event.from}`} target="_blank">{selectedDocument.event.from}</a>
 								</IonItem>
 								<IonItem>
 									<IonLabel position="stacked">Transaction Hash</IonLabel>
-									<a href={`https://${networkText}.bscscan.com/tx/${selectedDocument.meta.transactionHash}`} target="_blank">{selectedDocument.meta.transactionHash}</a>
+									<a href={`https://${networkText == 'testnet' ? networkText+'.' : ''}bscscan.com/tx/${selectedDocument.meta.transactionHash}`} target="_blank">{selectedDocument.meta.transactionHash}</a>
 								</IonItem>
 								<IonItem>
 									<IonLabel position="stacked">Document Signature</IonLabel>
