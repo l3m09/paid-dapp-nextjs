@@ -110,7 +110,7 @@ export const doConnectWallet = (ethereum:any, history:any
 					const address = addresses[0];
 					const balance = await getBalanceWallet(metaInstance?.web3Instance, address);
 					let paidBalance:string, daiBalance: string;
-					if ((network === "rinkeby") || (network === "mainnet") ) {
+					if (network === "rinkeby") {
 						paidBalance = await getPaidBalance(metaInstance?.web3Instance, address, network);
 					    daiBalance = await getDaiBalance(metaInstance?.web3Instance, address, network);
 					} else {
@@ -157,7 +157,7 @@ export const doConnectWallet = (ethereum:any, history:any
 					// Get Balance of Wallet and Token
 					const balance = await getBalanceWallet(metaInstance?.web3Instance, address);
 					let paidBalance:string, daiBalance: string;
-					if ((network === "rinkeby") || (network === "mainnet") ) {
+					if (network === "rinkeby")  {
 						paidBalance = await getPaidBalance(metaInstance?.web3Instance, address, network);
 					    daiBalance = await getDaiBalance(metaInstance?.web3Instance, address, network);
 					} else {
