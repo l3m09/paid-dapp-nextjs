@@ -311,6 +311,7 @@ export const doGetDocuments = (sending_currentWallet: any) => async (
 			throw new Error('Not unlocked wallet found of wallet inconsistences');
 		}
 		const agreementContract = ContractFactory.getAgreementContract(currentWallet?.web3, currentWallet?.network);
+		agreementContract.options.from = currentWallet?.address;
 		const eventsSource = await agreementContract.getPastEvents('AgreementEvents', {
 			filter: { partySource: currentWallet?.address.toString() },
 			fromBlock: 4760000,

@@ -66,7 +66,7 @@ export class BlockchainFactory {
 	}
 
 
-	public static getNetwork = async (network:number) => {
+	public static getNetwork = async (network:number | string) => {
 		switch (network) {
 			case 1 : {
 				return "mainnet";
@@ -85,6 +85,12 @@ export class BlockchainFactory {
 			}
 			case 97 : {
 				return "testnet";
+			}
+			case 'Binance-Chain-Tigris' : {
+				return "bbc-mainnet"
+			}
+			case 'Binance-Chain-Ganges' : {
+				return "bbc-testnet"
 			}
 			default: {
 				return "Not Admit this Network"

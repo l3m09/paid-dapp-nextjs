@@ -89,30 +89,35 @@ const getBalanceWallet = async (web3: Web3, address: any) => {
 	}
 }
 
-export const doConnectWallet = (ethereum:any, history:any
+export const doConnectWallet = (binanceChain:any, history:any
 ) => async (dispatch: any) => {
 	dispatch({ type: WalletActionTypes.CONNECT_WALLET_LOADING });
 	try {
-		if (ethereum === undefined) {
+		if (binanceChain === undefined) {
 			dispatch(openErrorDialog('Failure to detect your Wallet, pls check is Installed'))
 			history.push('/');
+		} else if ((binanceChain.chainId != "0x61")&&(binanceChain.chainId != "0x38")) {
+			console.log('This MPV only work in Binance Smart Chain', binanceChain.chainId);
+			dispatch(openSuccessDialog('This MPV only work in Binance Smart Chain'));
+			history.push('/');
 		} else {
-			const connected = ethereum.isConnected();
-			const metamask = true;
-			if ((connected === true) && (metamask === true)) {
+			const connected:boolean = await binanceChain.isConnected();
+			console.log('doConnectWallet', binanceChain, connected);
+			if (connected === true) {
+				// Call Event for Changed Network
+				binanceChain.on('chainChanged', (_chainId:any) => window.location.reload());
 				// build currentWallet / connectedWallet Element
-				const metaInstance = await BlockchainFactory.getWeb3Mask(ethereum);
+				const metaInstance = await BlockchainFactory.getWeb3Mask(binanceChain);
 				const network = await BlockchainFactory.getNetwork(metaInstance.network);
-				if ((network != 'testnet') && (network != 'bsc-mainnet')) {
-					alert('This MPV only work in Binance Smart Chain');
-					history.push('/');
-					dispatch(openSuccessDialog('This MPV only work in Binance Smart Chain'));
-				}
 				console.log('doConnect Wallet', network);
 				window.web3 = metaInstance?.web3Instance;
-				const accounts = await ethereum.request({ method: 'eth_requestAccounts' })
+				const accounts = await binanceChain.request({ method: 'eth_requestAccounts' })
 				.then(async (addresses)=>{
 					const address = addresses[0];
+					// Call Event for Changed Address
+					binanceChain.on('accountsChanged', (accounts: Array<string>) => {
+						if (addresses[0] != accounts[0]) {window.location.reload()};
+					});
 					const balance = await getBalanceWallet(metaInstance?.web3Instance, address);
 					let paidBalance:string, daiBalance: string;
 					if (network === "rinkeby") {
@@ -152,10 +157,10 @@ export const doConnectWallet = (ethereum:any, history:any
 				});
 			// } else if ((connected == true) && (metamask == false)) {
 			// 	// build currentWallet / connectedWallet Element
-			// 	const metaInstance = await BlockchainFactory.getWeb3Mask(ethereum);
+			// 	const metaInstance = await BlockchainFactory.getWeb3Mask(binanceChain);
 			// 	const network = await BlockchainFactory.getNetwork(metaInstance.network);
 			// 	window.web3 = metaInstance?.web3Instance;
-			// 	const accounts = await ethereum.request({ method: 'eth_requestAccounts' })
+			// 	const accounts = await binanceChain.request({ method: 'eth_requestAccounts' })
 			// 	.then(async (addresses)=>{
 			// 		// Get Address
 			// 		const address = addresses[0];
@@ -205,7 +210,7 @@ export const doConnectWallet = (ethereum:any, history:any
 		}
 	} catch (err) {
 		// alert(err.message);
-		dispatch(openErrorDialog(err.message));
+		dispatch(openErrorDialog('doConnectWallet: '+err.message));
 		dispatch({
 			type: WalletActionTypes.CONNECT_WALLET_FAILURE,
 			payload: err.message

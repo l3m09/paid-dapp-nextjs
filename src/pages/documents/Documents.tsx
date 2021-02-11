@@ -47,6 +47,7 @@ import AgreementType from '../../models/AgreementType';
 import { Sessions } from '../../utils/sessions';
 import Web3 from 'web3'
 import BannerMessage from '../../components/BannerMessage';
+import { isConnect } from '../../utils/metamask'
 
 function SelectedDocument(payload: {
 	show: boolean;
@@ -137,7 +138,7 @@ const Documents: React.FC = () => {
 	const wssUrl = `${process.env.REACT_APP_WEB3_WSS}`;
 	
 	useEffect(() => {
-		if(!Sessions.getTimeoutBool()&&(window.BinanceChain.isConnected())){
+		if(!Sessions.getTimeoutBool()&&(window.BinanceChain !== undefined)) {
 			Sessions.setTimeoutCall();
 			dispatch(doGetDocuments(currentWallet));
 		}
