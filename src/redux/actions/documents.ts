@@ -142,7 +142,7 @@ export const doCreateAgreement = (payload: {
 	slideBack: () => Promise<void>;
 }) => async (dispatch: any, getState: () => { wallet: any }) => {
 	dispatch({ type: DocumentsActionTypes.CREATE_AGREEMENT_LOADING });
-	if (window.ethereum === undefined)  {
+	if (window.BinanceChain === undefined)  {
 		dispatch(openSuccessDialog('Failed to CounterParty Sign Smart Agreement'));
 		throw new Error('Failed to CounterParty Sign Smart Agreement');
 	}
@@ -530,7 +530,7 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 	dispatch({ type: DocumentsActionTypes.COUNTERPARTY_SIGNED_LOADING });
 	try {
 		let fetchedContent = '';
-		if (window.ethereum === undefined)  {
+		if (window.BinanceChain === undefined)  {
 			dispatch(openSuccessDialog('Failed to CounterParty Sign Smart Agreement'));
 			throw new Error('Failed to CounterParty Sign Smart Agreement');
 		}
@@ -718,7 +718,7 @@ export const doRejectCounterpartyDocument = (document: any, comments: string) =>
 	dispatch({ type: DocumentsActionTypes.COUNTERPARTY_REJECT_SIGNED_LOADING });
 	try {
 		let fetchedContent = '';
-		if (window.ethereum === undefined)  {
+		if (window.BinanceChain === undefined)  {
 			dispatch(openSuccessDialog('Failed to CounterParty Sign Smart Agreement'));
 			throw new Error('Failed to CounterParty Sign Smart Agreement');
 		}
@@ -856,7 +856,7 @@ export const doGetSelectedDocument = (document: any) => async (dispatch: any, ge
 			dispatch(openSuccessDialog('Not unlocked wallet found'));
 			throw new Error('Not unlocked wallet found');
 		}
-		if (window.ethereum === undefined)  {
+		if (window.BinanceChain === undefined)  {
 			dispatch(openSuccessDialog('Failed to CounterParty Reject Smart Agreement'));
 			throw new Error('Failed to CounterParty Reject Smart Agreement');
 		}

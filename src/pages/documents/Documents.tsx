@@ -137,7 +137,7 @@ const Documents: React.FC = () => {
 	const wssUrl = `${process.env.REACT_APP_WEB3_WSS}`;
 	
 	useEffect(() => {
-		if(!Sessions.getTimeoutBool()&&(window.ethereum.isConnected())){
+		if(!Sessions.getTimeoutBool()&&(window.BinanceChain.isConnected())){
 			Sessions.setTimeoutCall();
 			dispatch(doGetDocuments(currentWallet));
 		}
@@ -191,7 +191,7 @@ const Documents: React.FC = () => {
 			Sessions.setTimeoutCall();
 		}
 		else {
-			window.ethereum = null;
+			window.BinanceChain = null;
 			window.web3 = new Web3 (new Web3.providers.WebsocketProvider(wssUrl));
 			currentWallet.web3 = new Web3 (new Web3.providers.WebsocketProvider(wssUrl));
 			dispatch(openSuccessDialog('Pls Disconnect your Wallet'));

@@ -98,11 +98,16 @@ export const doConnectWallet = (ethereum:any, history:any
 			history.push('/');
 		} else {
 			const connected = ethereum.isConnected();
-			const metamask = ethereum.isMetaMask;
+			const metamask = true;
 			if ((connected === true) && (metamask === true)) {
 				// build currentWallet / connectedWallet Element
 				const metaInstance = await BlockchainFactory.getWeb3Mask(ethereum);
 				const network = await BlockchainFactory.getNetwork(metaInstance.network);
+				if ((network != 'testnet') && (network != 'bsc-mainnet')) {
+					alert('This MPV only work in Binance Smart Chain');
+					history.push('/');
+					dispatch(openSuccessDialog('This MPV only work in Binance Smart Chain'));
+				}
 				console.log('doConnect Wallet', network);
 				window.web3 = metaInstance?.web3Instance;
 				const accounts = await ethereum.request({ method: 'eth_requestAccounts' })
@@ -145,48 +150,48 @@ export const doConnectWallet = (ethereum:any, history:any
 						throw new Error('Error code out to EIP-1193');
 					}
 				});
-			} else if ((connected == true) && (metamask == false)) {
-				// build currentWallet / connectedWallet Element
-				const metaInstance = await BlockchainFactory.getWeb3Mask(ethereum);
-				const network = await BlockchainFactory.getNetwork(metaInstance.network);
-				window.web3 = metaInstance?.web3Instance;
-				const accounts = await ethereum.request({ method: 'eth_requestAccounts' })
-				.then(async (addresses)=>{
-					// Get Address
-					const address = addresses[0];
-					// Get Balance of Wallet and Token
-					const balance = await getBalanceWallet(metaInstance?.web3Instance, address);
-					let paidBalance:string, daiBalance: string;
-					if (network === "rinkeby")  {
-						paidBalance = await getPaidBalance(metaInstance?.web3Instance, address, network);
-					    daiBalance = await getDaiBalance(metaInstance?.web3Instance, address, network);
-					} else {
-						paidBalance = '0';
-						daiBalance = '0';
-					}
-					const referenceWallet = {
-						address,
-						balance: balance,
-						balanceToken: paidBalance,
-						balanceDaiToken: daiBalance,
-						network,
-					};
-					dispatch(connectWallet(referenceWallet));
-					console.log('connect with wallet successfully');
-					history.push('/documents');
-				})
-				.catch((error:any) => {
-					if ((error.code === 4001) || (error.code === 4100) || (error.code === 4200) || (error.code === 4900) || (error.code === 4901))  {
-						// EIP-1193 userRejectedRequest error
-						console.log('Reject Unlocked Wallet');
-						dispatch(openErrorDialog('Reject Unlocked Wallet'));
-						history.push('/');
-					} else {
-						console.error('Error code out to EIP-1193',error);
-						dispatch(openErrorDialog(error.message));
-						throw new Error('Error code out to EIP-1193');
-					}
-				});
+			// } else if ((connected == true) && (metamask == false)) {
+			// 	// build currentWallet / connectedWallet Element
+			// 	const metaInstance = await BlockchainFactory.getWeb3Mask(ethereum);
+			// 	const network = await BlockchainFactory.getNetwork(metaInstance.network);
+			// 	window.web3 = metaInstance?.web3Instance;
+			// 	const accounts = await ethereum.request({ method: 'eth_requestAccounts' })
+			// 	.then(async (addresses)=>{
+			// 		// Get Address
+			// 		const address = addresses[0];
+			// 		// Get Balance of Wallet and Token
+			// 		const balance = await getBalanceWallet(metaInstance?.web3Instance, address);
+			// 		let paidBalance:string, daiBalance: string;
+			// 		if (network === "rinkeby")  {
+			// 			paidBalance = await getPaidBalance(metaInstance?.web3Instance, address, network);
+			// 		    daiBalance = await getDaiBalance(metaInstance?.web3Instance, address, network);
+			// 		} else {
+			// 			paidBalance = '0';
+			// 			daiBalance = '0';
+			// 		}
+			// 		const referenceWallet = {
+			// 			address,
+			// 			balance: balance,
+			// 			balanceToken: paidBalance,
+			// 			balanceDaiToken: daiBalance,
+			// 			network,
+			// 		};
+			// 		dispatch(connectWallet(referenceWallet));
+			// 		console.log('connect with wallet successfully');
+			// 		history.push('/documents');
+			// 	})
+			// 	.catch((error:any) => {
+			// 		if ((error.code === 4001) || (error.code === 4100) || (error.code === 4200) || (error.code === 4900) || (error.code === 4901))  {
+			// 			// EIP-1193 userRejectedRequest error
+			// 			console.log('Reject Unlocked Wallet');
+			// 			dispatch(openErrorDialog('Reject Unlocked Wallet'));
+			// 			history.push('/');
+			// 		} else {
+			// 			console.error('Error code out to EIP-1193',error);
+			// 			dispatch(openErrorDialog(error.message));
+			// 			throw new Error('Error code out to EIP-1193');
+			// 		}
+			// 	});
 			} else {
 				let err:any
 				err.message = 'Failure to Connect Provider Wallet';

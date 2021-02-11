@@ -39,7 +39,7 @@ const Menu: React.FC = () => {
 	const [disableMenu, setDisableMenu] = useState(true);
 
 	useEffect( () => {
-		if ((window.ethereum != undefined) && (connectedWallet)) {
+		if ((window.BinanceChain != undefined) && (connectedWallet)) {
 			setDisableMenu(false);
 		} else {
 			setDisableMenu(true);
