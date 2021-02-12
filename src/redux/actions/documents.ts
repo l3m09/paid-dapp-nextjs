@@ -194,7 +194,10 @@ export const doCreateAgreement = (payload: {
 		// const bytesContent = ethers.utils.toUtf8Bytes(arrayContent);
 		const hashContent:string = web3.utils.sha3(content).replace('0x', '');
 		const bytesContent:string = web3.utils.utf8ToHex(hashContent);
-		const signature:string = await web3.eth.personal.sign(bytesContent, address.toLowerCase());
+		const params = [address,bytesContent];
+		const signature:string = await window.BinanceChain.request({ method: 'eth_sign', params });
+
+		// const signature:string = await web3.eth.personal.sign(bytesContent, address.toLowerCase());
 		const digest = ethers.utils.sha256(bytesContent).replace('0x', '');
 		// const ec_alice = new eddsa('ed25519');
 		// const signer = ec_alice.keyFromSecret(rawWallet.keypairs.ED25519);
@@ -308,7 +311,8 @@ export const doGetDocuments = (sending_currentWallet: any) => async (
 		const { wallet } = getState();
 		const { currentWallet } = wallet;
 		if ((currentWallet == null) || (sending_currentWallet != currentWallet)){
-			throw new Error('Not unlocked wallet found of wallet inconsistences');
+			window.location.reload();
+			console.error('Not unlocked wallet found of wallet inconsistences');
 		}
 		const agreementContract = ContractFactory.getAgreementContract(currentWallet?.web3, currentWallet?.network);
 		agreementContract.options.from = currentWallet?.address;
@@ -544,6 +548,7 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 			}
 
 			const { address, web3, network} = currentWallet;
+			window.web3 = web3;
 
 			await web3.eth.getBalance(currentWallet?.address).then((balancewei) =>{
 				const balance = currentWallet?.web3.utils.fromWei(balancewei);
@@ -577,7 +582,9 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 
 			const hashContent:string = web3.utils.sha3(pdfContent).replace('0x', '');
 			const bytesContent:string = web3.utils.utf8ToHex(hashContent);
-			const signature = await currentWallet?.web3.eth.personal.sign(bytesContent, currentWallet?.address.toLowerCase());
+			const params = [currentWallet?.address,bytesContent];
+			const signature:string = await window.BinanceChain.request({ method: 'eth_sign', params });
+			// const signature = await currentWallet?.web3.eth.personal.sign(bytesContent, currentWallet?.address.toLowerCase());
 			const opts = { create: true, parents: true };
 			const elementsAbi = abiLib.getElementsAbi({
 				'address':currentWallet?.address
@@ -767,7 +774,9 @@ export const doRejectCounterpartyDocument = (document: any, comments: string) =>
 
 			const hashContent:string = currentWallet?.web3.utils.sha3(pdfContent).replace('0x', '');
 			const bytesContent:string = currentWallet?.web3.utils.utf8ToHex(hashContent);
-			const signature = await currentWallet?.web3.eth.personal.sign(bytesContent, currentWallet?.address.toLowerCase());
+			const params = [currentWallet?.address,bytesContent];
+			const signature:string = await window.BinanceChain.request({ method: 'eth_sign', params });
+			// const signature = await currentWallet?.web3.eth.personal.sign(bytesContent, currentWallet?.address.toLowerCase());
 
 			const opts = { create: true, parents: true };
 			const elementsAbi = abiLib.getElementsAbi({
@@ -782,7 +791,7 @@ export const doRejectCounterpartyDocument = (document: any, comments: string) =>
 			const partiesContentStr : string = await partiesContent();
 
 			let ipfsHash = await uploadsIPFS(ipfs, blobContent, opts, digest, signature, formId, currentWallet?.address, JSON.stringify(elementsAbi), partiesContentStr, null);
-			
+
 			// Sending Notification of CounterParty Reject Smart Agreements
 			const parties = JSON.parse(partiesContentStr);
 			// const PaidTokenContract = ContractFactory.getPaidTokenContract(currentWallet?.web3, currentWallet?.network);
