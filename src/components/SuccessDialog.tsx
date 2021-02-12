@@ -7,7 +7,7 @@ const SuccessDialog: FC = () => {
     const dispatch = useDispatch();
 
     const dialogState = useSelector(
-        (state: { dialogs: { openSuccessDialog: boolean, successText: string } }) => state.dialogs
+        (state: { dialogs: { openSuccessDialog: boolean, successText: string, clickText: string, clickLink: string} }) => state.dialogs
     );
 
     const close = () => {
@@ -21,8 +21,9 @@ const SuccessDialog: FC = () => {
             onDidDismiss={() => close()}
         >
             <IonContent>
-                <div className="message-content">
+                <div className="item-text-wrap ion-text-center">
                     <p className="ion-align-self-center">{dialogState.successText}</p>
+                    {((dialogState.clickText !== '') && (dialogState.clickText !== undefined) && (dialogState.clickLink !== '') && (dialogState.clickLink !== undefined)) ? <a href={dialogState.clickLink} target="_blank">{dialogState.clickText}</a> : null}
                 </div>
             </IonContent>
             <IonItem className="ion-justify-content-center">

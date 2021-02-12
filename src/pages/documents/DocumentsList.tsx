@@ -30,7 +30,6 @@ const uint8ArrayToString = require('uint8arrays/to-string');
 const ipfsClient = require('ipfs-http-client');
 // TODO: Get ipfs IP Public of Kubernets Enviroment Variable
 const ipfsnode = `${process.env.REACT_APP_IPFS_PAID_HOST}`;
-const sigUtil = require('eth-sig-util')
 
 const ipfs = ipfsClient({ host: ipfsnode, port: '5001', protocol: 'https', apiPath: '/api/v0' });
 

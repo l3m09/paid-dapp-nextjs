@@ -17,7 +17,6 @@ const ipfsClient = require('ipfs-http-client');
 const fetch = require('node-fetch');
 const axios = require('axios');
 const ipfsnode = `${process.env.REACT_APP_IPFS_PAID_HOST}`;
-const sigUtil = require('eth-sig-util')
 
 // TODO: Fix
 const ipfs = ipfsClient({ host: ipfsnode, port: '5001', protocol: 'https', apiPath: '/api/v0' });
@@ -69,10 +68,14 @@ const getSelectedRejectDocument = (document: any) => {
 	};
 };
 
-export const openSuccessDialog = (message: string) => {
+export const openSuccessDialog = (successText: string, clickText?: string, clickLink?: string) => {
 	return {
 		type: DialogsActionTypes.OPEN_SUCCESS_DIALOG,
-		payload: message
+		payload: {
+			successText,
+			clickText,
+			clickLink
+		}
 	}
 }
 

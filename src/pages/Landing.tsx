@@ -36,7 +36,7 @@ const Landing: React.FC = () => {
 					<p>
 						Welcome to PAID Network Running On Binance Smart Chain (BSC)
 						<br />
-						<a href="https://academy.binance.com/en/articles/connecting-metamask-to-binance-smart-chain" target="_blank">Click here</a> to see instruction on how to setup your metamask.
+						<a href="https://chrome.google.com/webstore/detail/binance-chain-wallet/fhbohimaelbohpjbbldcngcnapndodjp" target="_blank">Click here</a> to see the link to install your Binance Chain Wallet.
 					</p>
 				}
 			/>
