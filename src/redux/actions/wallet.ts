@@ -94,7 +94,7 @@ export const doConnectWallet = (binanceChain:any, history:any
 	dispatch({ type: WalletActionTypes.CONNECT_WALLET_LOADING });
 	try {
 		if (binanceChain === undefined) {
-			dispatch(openErrorDialog('Failure to detect your Wallet, pls check is Installed'))
+			dispatch(openSuccessDialog('Binance Smart Chain Wallet Not Detected','Click here to install it', 'https://chrome.google.com/webstore/detail/binance-chain-wallet/fhbohimaelbohpjbbldcngcnapndodjp'))
 			history.push('/');
 		} else if ((binanceChain.chainId != "0x61")&&(binanceChain.chainId != "0x38")) {
 			console.log('This MPV only work in Binance Smart Chain', binanceChain.chainId);
