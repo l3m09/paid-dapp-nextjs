@@ -108,6 +108,9 @@ const getContractInfoByIpfs = async (agreementStoredReference: any) => {
 	const firstIpfsContent = async () => {
 		return await fetch(firstUrlIpfsContent)
 		.then(res => res.text())
+		.catch((err) => {
+			console.error('getContractInfoByIpfs',err);
+		})
 	};
 
 	const jsonContent = JSON.parse(await firstIpfsContent());
@@ -117,6 +120,9 @@ const getContractInfoByIpfs = async (agreementStoredReference: any) => {
 	const ipfsContent = async () => {
 		return await fetch(urlIpfsContent)
 		.then(res => res.text())
+		.catch((err) => {
+			console.error('getContractInfoByIpfs',err);
+		})
 	};
 
 	const doc = new DOMParser().parseFromString(await ipfsContent(), 'text/html');
@@ -163,14 +169,14 @@ export const doCreateAgreement = (payload: {
 		const { wallet } = getState();
 		const { currentWallet } = wallet;
 		if ((currentWallet == null) || (currentWallet == undefined)) {
-			dispatch(openErrorDialog('Not unlocked wallet found'));
+			dispatch(openSuccessDialog('Not unlocked wallet found'));
 			slideBack();
 			throw new Error('Not unlocked wallet found');
 		}
 		const { address, web3, network} = currentWallet;
 
 		if (!web3.utils.isAddress(agreementForm.counterpartyWallet)) {
-			dispatch(openErrorDialog('Invalid Counter Party Address'));
+			dispatch(openSuccessDialog('Invalid Counter Party Address'));
 			slideBack();
 			throw new Error('Invalid Counter Party Address');
 		}
@@ -178,7 +184,7 @@ export const doCreateAgreement = (payload: {
 			const balance = web3!.utils.fromWei(balancewei);
 			const parsedBalance = BigNumber(balance).toNumber();
 			if ((parsedBalance <= 0.0009999999999)) {
-				dispatch(openErrorDialog('The wallet should has balance to send a transaction.'));
+				dispatch(openSuccessDialog('The wallet should has balance to send a transaction.'));
 				slideBack();
 				throw new Error('The wallet should has balance to send a transaction.');
 			}
@@ -195,7 +201,11 @@ export const doCreateAgreement = (payload: {
 		const hashContent:string = web3.utils.sha3(content).replace('0x', '');
 		const bytesContent:string = web3.utils.utf8ToHex(hashContent);
 		const params = [address,bytesContent];
-		const signature:string = await window.BinanceChain.request({ method: 'eth_sign', params });
+		const signature:string = await window.BinanceChain.request({ method: 'eth_sign', params }).catch((err)=>{
+			console.error(err);
+			dispatch(openSuccessDialog('Error Sign Document'));
+			throw new Error('Error Sign Document');
+		});
 
 		// const signature:string = await web3.eth.personal.sign(bytesContent, address.toLowerCase());
 		const digest = ethers.utils.sha256(bytesContent).replace('0x', '');
@@ -253,11 +263,11 @@ export const doCreateAgreement = (payload: {
 					}
 				})
 				.then(function (response) {
-					console.log('email response: ', response);
+					//console.log('email response: ', response);
 					dispatch(openSuccessDialog('Success Sending Create Notification'));
 				})
 				.catch(function (error) {
-					console.log('email error: ',error);
+					//console.log('email error: ',error);
 					dispatch(openSuccessDialog('Error Sending Create Notification'));
 				});
 				dispatch(createAgreement());
@@ -273,7 +283,7 @@ export const doCreateAgreement = (payload: {
 	} catch (err) {
 		await payload.slideBack();
 		dispatch(openErrorDialog('The agreement was not created successfully '+err.message));
-		console.log('The agreement was not created successfully', err.message);
+		// console.log('The agreement was not created successfully', err.message);
 		dispatch({
 			type: DocumentsActionTypes.CREATE_AGREEMENT_FAILURE,
 			payload: err.msg
@@ -576,6 +586,10 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 			const ipfsContent = async () => {
 				return await fetch(urlIpfsContent)
 				.then(res => res.text())
+				.catch((err) => {
+					console.error(err);
+					dispatch(openSuccessDialog('Error Open Document in IPFS'));
+				})
 			}
 			const pdfContent:string = await ipfsContent();
 			const blobContent = base64StringToBlob(btoa(unescape(encodeURIComponent(pdfContent))), 'text/html');
@@ -583,7 +597,10 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 			const hashContent:string = web3.utils.sha3(pdfContent).replace('0x', '');
 			const bytesContent:string = web3.utils.utf8ToHex(hashContent);
 			const params = [currentWallet?.address,bytesContent];
-			const signature:string = await window.BinanceChain.request({ method: 'eth_sign', params });
+			const signature:string = await window.BinanceChain.request({ method: 'eth_sign', params }).catch((err) => {
+					console.error(err);
+					dispatch(openSuccessDialog('Error Sign Document for IPFS'));
+			});
 			// const signature = await currentWallet?.web3.eth.personal.sign(bytesContent, currentWallet?.address.toLowerCase());
 			const opts = { create: true, parents: true };
 			const elementsAbi = abiLib.getElementsAbi({
@@ -593,6 +610,10 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 			const partiesContent = async () => {
 				return await fetch(urlParties)
 				.then(res => res.text())
+				.catch((err) => {
+					console.error(err);
+					dispatch(openSuccessDialog('Error Open Elements Parties in IPFS'));
+				})
 			}
 
 			const partiesContentStr : string = await partiesContent();
@@ -691,11 +712,11 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 						}
 					})
 					.then(function (response) {
-						console.log('email response: ', response);
+						//console.log('email response: ', response);
 						dispatch(openSuccessDialog('Success Sending Accept Notification'));
 					})
 					.catch(function (error) {
-						console.log('email error: ',error);
+						//console.log('email error: ',error);
 						dispatch(openSuccessDialog('Error Sending Accept Notification'));
 					});
 					dispatch(getSelectedSignedDocument(document));
@@ -826,11 +847,11 @@ export const doRejectCounterpartyDocument = (document: any, comments: string) =>
 						}
 					})
 					.then(function (response) {
-						console.log('email response: ', response);
+						//console.log('email response: ', response);
 						dispatch(openSuccessDialog('Success Sending Reject Notification'));
 					})
 					.catch(function (error) {
-						console.log('email error: ',error);
+						//console.log('email error: ',error);
 						dispatch(openSuccessDialog('Error Sending Reject Notification'));
 					});
 					dispatch(openSuccessDialog('You have successfully Reject the Smart Agreement'));

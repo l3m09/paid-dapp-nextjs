@@ -55,10 +55,10 @@ const Landing: React.FC = () => {
 							dispatch(doConnectWallet(window.BinanceChain, history));
 						}}
 						className="enableEthereumButton"
-						color="secondary"
+						color="primary"
 						shape="round"
 						>
-							Connect to Wallet Metamask
+							Connect to Binance Chain Wallet
 						</IonButton>
 				<div className="terms">
 					By continuing you agree to our <IonRouterLink onClick={() => setShowTermsModal(true)}>T&Cs.</IonRouterLink>

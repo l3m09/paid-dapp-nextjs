@@ -109,7 +109,7 @@ export const doConnectWallet = (binanceChain:any, history:any
 				// build currentWallet / connectedWallet Element
 				const metaInstance = await BlockchainFactory.getWeb3Mask(binanceChain);
 				const network = await BlockchainFactory.getNetwork(metaInstance.network);
-				console.log('doConnect Wallet', network);
+				// console.log('doConnect Wallet', network);
 				window.web3 = metaInstance?.web3Instance;
 				const accounts = await binanceChain.request({ method: 'eth_requestAccounts' })
 				.then(async (addresses)=>{
@@ -136,7 +136,7 @@ export const doConnectWallet = (binanceChain:any, history:any
 						network,
 					};
 					dispatch(connectWallet(referenceWallet));
-					console.log('connect metamask successfully');
+					console.log('connect Binance Chain Wallet successfully');
 					history.push('/documents');
 				})
 				.catch((error:any) => {
