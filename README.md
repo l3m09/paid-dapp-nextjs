@@ -1,10 +1,9 @@
 # paid-dapp
 
-for Binance Smart Chain Mainnet and Testnet, and integrate [Binance Chain Wallet](https://chrome.google.com/webstore/detail/binance-chain-wallet/fhbohimaelbohpjbbldcngcnapndodjp)
 
 ## Prerequisites
 
-Integration Metamask
+Integration Binance Smart Chain Mainnet and Testnet, and integrate [Binance Chain Wallet](https://chrome.google.com/webstore/detail/binance-chain-wallet/fhbohimaelbohpjbbldcngcnapndodjp)
 
 ### Local dependencies
 - Docker
