@@ -30,8 +30,8 @@ import Agreements from './pages/documents/agreements/Agreements';
 import { useHistory } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { openSuccessDialog } from '../src/redux/actions/documents'
-import UnlockWallet from './components/UnlockWallet';
-import { doConnectWallet } from './redux/actions/wallet';
+// import UnlockWallet from './components/UnlockWallet';
+// import { doConnectWallet } from './redux/actions/wallet';
 import MyCurrentWallet from './components/MyCurrentWallet';
 import SuccessDialog from './components/SuccessDialog';
 

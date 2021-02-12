@@ -31,13 +31,13 @@ export class BlockchainFactory {
 		}
 	};
 
-	public static getWeb3Instance = async (walletAddress: string, walletId: string, password: string) => {
-		if(!BlockchainFactory._wallet || (BlockchainFactory._wallet.walletInstance.address !== walletAddress)){
-			BlockchainFactory._wallet = await BlockchainFactory._walletManager?.createBlockchainWallet(BlockchainFactory.wssUrl, BlockchainFactory.options, 
-				walletId, password) as any;
-		}
-		return BlockchainFactory._wallet;
-	};
+	// public static getWeb3Instance = async (walletAddress: string, walletId: string, password: string) => {
+	// 	if(!BlockchainFactory._wallet || (BlockchainFactory._wallet.walletInstance.address !== walletAddress)){
+	// 		BlockchainFactory._wallet = await BlockchainFactory._walletManager?.createBlockchainWallet(BlockchainFactory.wssUrl, BlockchainFactory.options, 
+	// 			walletId, password) as any;
+	// 	}
+	// 	return BlockchainFactory._wallet;
+	// };
 
 	public static getWeb3Mask = async (ethereum: any) => {
 		if(!BlockchainFactory._wallet) {
@@ -66,7 +66,7 @@ export class BlockchainFactory {
 	}
 
 
-	public static getNetwork = async (network:number) => {
+	public static getNetwork = async (network:number | string) => {
 		switch (network) {
 			case 1 : {
 				return "mainnet";
@@ -81,10 +81,16 @@ export class BlockchainFactory {
 				return "kovan";
 			}
 			case 56 : {
-				return "mainnet";
+				return "bsc-mainnet";
 			}
 			case 97 : {
 				return "testnet";
+			}
+			case 'Binance-Chain-Tigris' : {
+				return "bbc-mainnet"
+			}
+			case 'Binance-Chain-Ganges' : {
+				return "bbc-testnet"
 			}
 			default: {
 				return "Not Admit this Network"

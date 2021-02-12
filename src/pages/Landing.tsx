@@ -14,7 +14,7 @@ import Terms from '../components/Terms';
 import { doConnectWallet } from '../redux/actions/wallet';
 
 declare global {
-	interface Window { web3: any; ethereum: any;}
+	interface Window { web3: any; BinanceChain: any;}
 }
 
 const Landing: React.FC = () => {
@@ -52,13 +52,13 @@ const Landing: React.FC = () => {
 				/> */}
 						<IonButton
 						onClick={() => {
-							dispatch(doConnectWallet(window.ethereum, history));
+							dispatch(doConnectWallet(window.BinanceChain, history));
 						}}
 						className="enableEthereumButton"
-						color="secondary"
+						color="primary"
 						shape="round"
 						>
-							Connect to Wallet Metamask
+							Connect to Binance Chain Wallet
 						</IonButton>
 				<div className="terms">
 					By continuing you agree to our <IonRouterLink onClick={() => setShowTermsModal(true)}>T&Cs.</IonRouterLink>

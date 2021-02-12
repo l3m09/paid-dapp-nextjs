@@ -89,25 +89,35 @@ const getBalanceWallet = async (web3: Web3, address: any) => {
 	}
 }
 
-export const doConnectWallet = (ethereum:any, history:any
+export const doConnectWallet = (binanceChain:any, history:any
 ) => async (dispatch: any) => {
 	dispatch({ type: WalletActionTypes.CONNECT_WALLET_LOADING });
 	try {
-		if (ethereum === undefined) {
+		if (binanceChain === undefined) {
 			dispatch(openErrorDialog('Failure to detect your Wallet, pls check is Installed'))
 			history.push('/');
+		} else if ((binanceChain.chainId != "0x61")&&(binanceChain.chainId != "0x38")) {
+			console.log('This MPV only work in Binance Smart Chain', binanceChain.chainId);
+			dispatch(openSuccessDialog('This MPV only work in Binance Smart Chain'));
+			history.push('/');
 		} else {
-			const connected = ethereum.isConnected();
-			const metamask = ethereum.isMetaMask;
-			if ((connected === true) && (metamask === true)) {
+			const connected:boolean = await binanceChain.isConnected();
+			console.log('doConnectWallet', binanceChain, connected);
+			if (connected === true) {
+				// Call Event for Changed Network
+				binanceChain.on('chainChanged', (_chainId:any) => window.location.reload());
 				// build currentWallet / connectedWallet Element
-				const metaInstance = await BlockchainFactory.getWeb3Mask(ethereum);
+				const metaInstance = await BlockchainFactory.getWeb3Mask(binanceChain);
 				const network = await BlockchainFactory.getNetwork(metaInstance.network);
-				console.log('doConnect Wallet', network);
+				// console.log('doConnect Wallet', network);
 				window.web3 = metaInstance?.web3Instance;
-				const accounts = await ethereum.request({ method: 'eth_requestAccounts' })
+				const accounts = await binanceChain.request({ method: 'eth_requestAccounts' })
 				.then(async (addresses)=>{
 					const address = addresses[0];
+					// Call Event for Changed Address
+					binanceChain.on('accountsChanged', (accounts: Array<string>) => {
+						if (addresses[0] != accounts[0]) {window.location.reload()};
+					});
 					const balance = await getBalanceWallet(metaInstance?.web3Instance, address);
 					let paidBalance:string, daiBalance: string;
 					if (network === "rinkeby") {
@@ -126,7 +136,7 @@ export const doConnectWallet = (ethereum:any, history:any
 						network,
 					};
 					dispatch(connectWallet(referenceWallet));
-					console.log('connect metamask successfully');
+					console.log('connect Binance Chain Wallet successfully');
 					history.push('/documents');
 				})
 				.catch((error:any) => {
@@ -145,48 +155,48 @@ export const doConnectWallet = (ethereum:any, history:any
 						throw new Error('Error code out to EIP-1193');
 					}
 				});
-			} else if ((connected == true) && (metamask == false)) {
-				// build currentWallet / connectedWallet Element
-				const metaInstance = await BlockchainFactory.getWeb3Mask(ethereum);
-				const network = await BlockchainFactory.getNetwork(metaInstance.network);
-				window.web3 = metaInstance?.web3Instance;
-				const accounts = await ethereum.request({ method: 'eth_requestAccounts' })
-				.then(async (addresses)=>{
-					// Get Address
-					const address = addresses[0];
-					// Get Balance of Wallet and Token
-					const balance = await getBalanceWallet(metaInstance?.web3Instance, address);
-					let paidBalance:string, daiBalance: string;
-					if (network === "rinkeby")  {
-						paidBalance = await getPaidBalance(metaInstance?.web3Instance, address, network);
-					    daiBalance = await getDaiBalance(metaInstance?.web3Instance, address, network);
-					} else {
-						paidBalance = '0';
-						daiBalance = '0';
-					}
-					const referenceWallet = {
-						address,
-						balance: balance,
-						balanceToken: paidBalance,
-						balanceDaiToken: daiBalance,
-						network,
-					};
-					dispatch(connectWallet(referenceWallet));
-					console.log('connect with wallet successfully');
-					history.push('/documents');
-				})
-				.catch((error:any) => {
-					if ((error.code === 4001) || (error.code === 4100) || (error.code === 4200) || (error.code === 4900) || (error.code === 4901))  {
-						// EIP-1193 userRejectedRequest error
-						console.log('Reject Unlocked Wallet');
-						dispatch(openErrorDialog('Reject Unlocked Wallet'));
-						history.push('/');
-					} else {
-						console.error('Error code out to EIP-1193',error);
-						dispatch(openErrorDialog(error.message));
-						throw new Error('Error code out to EIP-1193');
-					}
-				});
+			// } else if ((connected == true) && (metamask == false)) {
+			// 	// build currentWallet / connectedWallet Element
+			// 	const metaInstance = await BlockchainFactory.getWeb3Mask(binanceChain);
+			// 	const network = await BlockchainFactory.getNetwork(metaInstance.network);
+			// 	window.web3 = metaInstance?.web3Instance;
+			// 	const accounts = await binanceChain.request({ method: 'eth_requestAccounts' })
+			// 	.then(async (addresses)=>{
+			// 		// Get Address
+			// 		const address = addresses[0];
+			// 		// Get Balance of Wallet and Token
+			// 		const balance = await getBalanceWallet(metaInstance?.web3Instance, address);
+			// 		let paidBalance:string, daiBalance: string;
+			// 		if (network === "rinkeby")  {
+			// 			paidBalance = await getPaidBalance(metaInstance?.web3Instance, address, network);
+			// 		    daiBalance = await getDaiBalance(metaInstance?.web3Instance, address, network);
+			// 		} else {
+			// 			paidBalance = '0';
+			// 			daiBalance = '0';
+			// 		}
+			// 		const referenceWallet = {
+			// 			address,
+			// 			balance: balance,
+			// 			balanceToken: paidBalance,
+			// 			balanceDaiToken: daiBalance,
+			// 			network,
+			// 		};
+			// 		dispatch(connectWallet(referenceWallet));
+			// 		console.log('connect with wallet successfully');
+			// 		history.push('/documents');
+			// 	})
+			// 	.catch((error:any) => {
+			// 		if ((error.code === 4001) || (error.code === 4100) || (error.code === 4200) || (error.code === 4900) || (error.code === 4901))  {
+			// 			// EIP-1193 userRejectedRequest error
+			// 			console.log('Reject Unlocked Wallet');
+			// 			dispatch(openErrorDialog('Reject Unlocked Wallet'));
+			// 			history.push('/');
+			// 		} else {
+			// 			console.error('Error code out to EIP-1193',error);
+			// 			dispatch(openErrorDialog(error.message));
+			// 			throw new Error('Error code out to EIP-1193');
+			// 		}
+			// 	});
 			} else {
 				let err:any
 				err.message = 'Failure to Connect Provider Wallet';
@@ -200,7 +210,7 @@ export const doConnectWallet = (ethereum:any, history:any
 		}
 	} catch (err) {
 		// alert(err.message);
-		dispatch(openErrorDialog(err.message));
+		dispatch(openErrorDialog('doConnectWallet: '+err.message));
 		dispatch({
 			type: WalletActionTypes.CONNECT_WALLET_FAILURE,
 			payload: err.message
