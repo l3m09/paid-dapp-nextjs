@@ -136,6 +136,19 @@ export const doConnectWallet = (binanceChain:any, history:any
 						network,
 					};
 					dispatch(connectWallet(referenceWallet));
+					// Listener of Create or Update Smart Agreements
+					const AgreementContract = ContractFactory.getAgreementContract(metaInstance?.web3Instance, network);
+					AgreementContract.options.from = address;
+					AgreementContract.events.AgreementEvents({
+						fromBlock: 4760000,
+						toBlock: 'latest'
+					})
+					.on('data', async(receipt: any) => {
+						console.log(receipt.returnValues);
+					})
+					.on('error', async(receipt: any, error:any) => {
+						console.log(receipt, error);
+					});
 					console.log('connect Binance Chain Wallet successfully');
 					history.push('/documents');
 				})
