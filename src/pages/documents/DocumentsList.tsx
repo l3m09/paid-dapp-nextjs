@@ -346,8 +346,8 @@ const DocumentsList: React.FC<Props> = ({
 	// Updating GetDocuments
 	useInterval(
 		() => {
-			// console.log('Paso 15 seg');
-		  	dispatch(doGetDocuments(currentWallet))
+			// console.log('15 sec');
+		  	dispatch(doGetDocuments({...currentWallet,no_loading: true}))
 		},
 		isPlaying ? delay : null);
 

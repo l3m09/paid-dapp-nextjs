@@ -8,6 +8,7 @@ import * as abiLib  from '../actions/template/abi-utils/abi-lib';
 import { DialogsActionTypes } from '../actionTypes/dialogs';
 
 import { STORAGE_KEY_MY_INFO_KEPT } from '../../utils/constants';
+import { type } from 'os';
 
 const { Storage } = Plugins;
 const uint8ArrayToString = require('uint8arrays/to-string');
@@ -21,6 +22,7 @@ const ipfsnode = `${process.env.REACT_APP_IPFS_PAID_HOST}`;
 // TODO: Fix
 const ipfs = ipfsClient({ host: ipfsnode, port: '5001', protocol: 'https', apiPath: '/api/v0' });
 const apiUrl = `${process.env.REACT_APP_WAKU_SERVER}`;
+const KEY_NO_LOADING = 'no_loading';
 
 const createAgreementFormPayload = (obj: any) => {
 	const types: string[] = [];
@@ -319,12 +321,13 @@ export const doGetDocuments = (sending_currentWallet: any) => async (
 	dispatch: any,
 	getState: () => { wallet: any }
 ) => {
-	dispatch({ type: DocumentsActionTypes.GET_DOCUMENTS_LOADING });
+	if (!Object.prototype.hasOwnProperty.call(sending_currentWallet, KEY_NO_LOADING))
+		{dispatch({ type: DocumentsActionTypes.GET_DOCUMENTS_LOADING })}
 	try {
 		const { wallet } = getState();
 		const { currentWallet } = wallet;
-		if ((currentWallet == null) || (sending_currentWallet != currentWallet)){
-			window.location.reload();
+		if ((currentWallet === null) || (sending_currentWallet?.address !== currentWallet?.address)){
+			// window.location.reload();
 			console.error('Not unlocked wallet found of wallet inconsistences');
 		}
 		const agreementContract = ContractFactory.getAgreementContract(currentWallet?.web3, currentWallet?.network);
