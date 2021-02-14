@@ -108,6 +108,7 @@ export const doConnectWallet = (binanceChain:any, history:any
 				binanceChain.on('chainChanged', (_chainId:any) => window.location.reload());
 				// build currentWallet / connectedWallet Element
 				const metaInstance = await BlockchainFactory.getWeb3Mask(binanceChain);
+				// const walletwss = await BlockchainFactory.getWeb3WSS(binanceChain);
 				const network = await BlockchainFactory.getNetwork(metaInstance.network);
 				// console.log('doConnect Wallet', network);
 				window.web3 = metaInstance?.web3Instance;
@@ -136,6 +137,28 @@ export const doConnectWallet = (binanceChain:any, history:any
 						network,
 					};
 					dispatch(connectWallet(referenceWallet));
+					// Listener of Create or Update Smart Agreements
+					// const AgreementContract = ContractFactory.getAgreementContract(walletwss?.web3Instance!, network);
+					// AgreementContract.options.from = address;
+					// AgreementContract.events.AgreementEvents({
+					// 	filter: { partySource: address.toString() },
+					// 	fromBlock: 4760000,
+					// 	toBlock: 'latest'
+					// }, function (error, event) {
+					// 	console.log('Sources: ', event, 'Error:', error);
+					// })
+					// .on('connected', async(subscriptionId: any) => {
+					// 	console.log('SubscriptionId: ', subscriptionId);
+					// })
+					// .on('data', async(receipt: any) => {
+					// 	console.log('Receipt: ', receipt);
+					// })
+					// .on('changed', async(receipt: any) => {
+					// 	console.log('Receipt: ', receipt);
+					// })
+					// .on('error', async(receipt: any, error:any) => {
+					// 	console.log('Receipt: ', receipt,'Error: ', error);
+					// });
 					console.log('connect Binance Chain Wallet successfully');
 					history.push('/documents');
 				})
@@ -151,6 +174,7 @@ export const doConnectWallet = (binanceChain:any, history:any
 						history.push('/');
 					} else {
 						alert('Error code out to EIP-1193');
+						console.log(error);
 						dispatch(openSuccessDialog(error.message));
 						throw new Error('Error code out to EIP-1193');
 					}
