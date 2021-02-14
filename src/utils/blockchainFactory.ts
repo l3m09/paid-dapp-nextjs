@@ -2,11 +2,14 @@ import {  createWalletManager, WalletManager, AlgorithmType, KeyModel} from 'uni
 import { KeyStorageModel } from 'universal-crypto-wallet/dist/key-storage/KeyStorageModel';
 import { WalletModel } from 'universal-crypto-wallet/dist/key-storage/WalletModel';
 import Web3 from 'web3';
+import { WebsocketProvider } from 'web3-providers-ws';
 
 export class BlockchainFactory {
 	
 	private static wssUrl = `${process.env.REACT_APP_WEB3_WSS}`;
+	private static WssUrl = 'wss://bsc-ws-node.nariox.org:443';
 	private static _web3: Web3 | null = null;
+	private static _web3wss: WebsocketProvider  | null = null;
 	private static _walletManager: WalletManager | null = null;
 	private static _keystore: KeyStorageModel;
 	private static _wallet: WalletModel | null = null;
@@ -42,6 +45,20 @@ export class BlockchainFactory {
 	public static getWeb3Mask = async (ethereum: any) => {
 		if(!BlockchainFactory._wallet) {
 				const _web3 = new Web3 (ethereum);
+				const wallet:WalletModel = {
+					web3Instance: _web3,
+					walletInstance: _web3.eth.accounts.wallet,
+					network: await _web3.eth.getChainId()
+				}
+				BlockchainFactory._wallet = wallet;
+		}
+		return BlockchainFactory._wallet;
+	}
+
+	public static getWeb3WSS = async (ethereum: any) => {
+		if(!BlockchainFactory._web3wss) {
+				const _web3 = new Web3 (ethereum);
+				_web3.setProvider(new Web3.providers.WebsocketProvider(BlockchainFactory.WssUrl));
 				const wallet:WalletModel = {
 					web3Instance: _web3,
 					walletInstance: _web3.eth.accounts.wallet,
