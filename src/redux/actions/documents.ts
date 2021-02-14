@@ -327,7 +327,7 @@ export const doGetDocuments = (sending_currentWallet: any) => async (
 		const { wallet } = getState();
 		const { currentWallet } = wallet;
 		if ((currentWallet === null) || (sending_currentWallet?.address !== currentWallet?.address)){
-			// window.location.reload();
+			window.location.reload();
 			console.error('Not unlocked wallet found of wallet inconsistences');
 		}
 		const agreementContract = ContractFactory.getAgreementContract(currentWallet?.web3, currentWallet?.network);
