@@ -26,6 +26,8 @@ import { format } from 'date-fns';
 import { base64StringToBlob } from 'blob-util';
 import AgreementType from '../../models/AgreementType';
 
+import useInterval from '../../hooks/useInterval';
+
 const uint8ArrayToString = require('uint8arrays/to-string');
 const ipfsClient = require('ipfs-http-client');
 // TODO: Get ipfs IP Public of Kubernets Enviroment Variable
@@ -334,11 +336,21 @@ const DocumentsList: React.FC<Props> = ({
 	const [reloadDocuments, setReloadDocument] = useState(false);
 	const [showVerifyDocumentButton, setShowVerifyDocumentButton] = useState(false);
 	const [forceVerifyDocument, setForceVerifyDocument] = useState(false);
+	// Dynamic delay
+	const [delay, setDelay] = useState<number>(15000);
+	// ON/OFF
+	const [isPlaying, setPlaying] = useState<boolean>(true);
 	const wallet = useSelector((state: any) => state.wallet);
 	const { currentWallet } = wallet;
-	// if (currentWallet == null) {
-	// 	throw new Error('DocumentLis.tsx no connect wallet');
-	// }
+
+	// Updating GetDocuments
+	useInterval(
+		() => {
+			console.log('Paso 15 seg');
+		  	dispatch(doGetDocuments(currentWallet))
+		},
+		isPlaying ? delay : null);
+
 
 	function showDocument(item: any) {
 		setForceVerifyDocument(false);

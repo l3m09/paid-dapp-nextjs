@@ -112,15 +112,6 @@ export const doConnectWallet = (binanceChain:any, history:any
 				const network = await BlockchainFactory.getNetwork(metaInstance.network);
 				// console.log('doConnect Wallet', network);
 				window.web3 = metaInstance?.web3Instance;
-				const subscription = window.web3.eth.subscribe('logs', {
-					topics: ['0xc06d8b811960d44812b7b2c6eced2659c361e93a7b5efbada49e98e14030fee6...']
-				}, function(error, result){
-					if (!error) {
-						console.log(result);
-					} else {
-						console.log(error);
-					}
-				});
 				const accounts = await binanceChain.request({ method: 'eth_requestAccounts' })
 				.then(async (addresses)=>{
 					const address = addresses[0];
