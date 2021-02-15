@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 import BannerMessage from '../components/BannerMessage';
 import Terms from '../components/Terms';
+import useTimeout from '../hooks/useTimeout';
 import { doConnectWallet } from '../redux/actions/wallet';
 
 declare global {
@@ -25,21 +26,31 @@ const Landing: React.FC = () => {
 			state.wallet
 	);
 	const [showTermsModal, setShowTermsModal] = useState(false);
+	const [showBannerWallet, setShowBannerWallet] = useState(false);
 	const { connectedWallet, currentWallet } = wallet;
+
+	useTimeout(() => {
+		if (window.BinanceChain === undefined) {
+			setShowBannerWallet(true);
+		}
+	}, 700);
 	
 	return (
 		<IonPage>
 			<BannerMessage isOnlyMobile message="Only Desktop experience is currently available. Mobile app will be coming soon." />
-			<BannerMessage
-				isOnlyDesktop
-				message={
-					<p>
-						Welcome to PAID Network Running On Binance Smart Chain (BSC)
-						<br />
-						<a href="https://chrome.google.com/webstore/detail/binance-chain-wallet/fhbohimaelbohpjbbldcngcnapndodjp" target="_blank">Click here</a> to see the link to install your Binance Chain Wallet.
-					</p>
-				}
-			/>
+			{
+				(showBannerWallet) &&
+				<BannerMessage
+					isOnlyDesktop
+					message={
+						<p>
+							Welcome to PAID Network Running On Binance Smart Chain (BSC)
+							<br />
+							<a href="https://chrome.google.com/webstore/detail/binance-chain-wallet/fhbohimaelbohpjbbldcngcnapndodjp" target="_blank">Click here</a> to see the link to install your Binance Chain Wallet.
+						</p>
+					}
+				/>
+			}
 			<IonContent fullscreen class="landing-content">
 				<div className="landing-logo">
 					<IonImg src="/assets/images/logo-full.png" />
