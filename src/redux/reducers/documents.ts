@@ -78,7 +78,8 @@ const initialState = {
 		createdAt: null
 	},
 	keepMyInfo: false,
-	notification: []
+	notification: false,
+	messages: []
 };
 
 export const DocumentsReducer = function (state = initialState, action: any) {
@@ -126,7 +127,7 @@ export const DocumentsReducer = function (state = initialState, action: any) {
 					}
 				}
 				console.log(message);
-				if (message != []) {return { ...state, documentsFrom: payload.from, documentsTo: payload.to, loading: false, notification: message }}
+				if (message != []) {return { ...state, documentsFrom: payload.from, documentsTo: payload.to, loading: false, notification: true, messages:message }}
 			} else {
 				console.log(message);
 				return { ...state, documentsFrom: payload.from, documentsTo: payload.to, loading: false };
