@@ -4,7 +4,36 @@ const initialState = {
 	loading: false,
 	error: null,
 	creatingAgreement: false,
-	documentsFrom: [],
+	documentsFrom: [{
+		meta: {
+			logIndex: 0,
+			transactionIndex: 0,
+			transactionHash: '',
+			blockHash: '',
+			blockNumber: 0,
+			address: ''
+		},
+		event:{
+			id: '',
+			from: '',
+			to: '',
+			agreementFormTemplateId: '',
+			cid: '',
+			status: '',
+			created_at: 0,
+			updated_at: 0,
+		},
+		data: {
+			documentName: '',
+			partyAName:'',
+			partyBName:'',
+			agreementForm:'',
+			escrowed:'',
+			validUntil: '',
+			toSigner: '',
+			fromSigner: ''
+		}
+	}],
 	documentsTo: [],
 	selectedDocument: null,
 	agreementTypes: [
@@ -56,9 +85,23 @@ export const DocumentsReducer = function (state = initialState, action: any) {
 		case DocumentsActionTypes.GET_DOCUMENTS_LOADING:
 			return { ...state, loading: true };
 
-		case DocumentsActionTypes.GET_DOCUMENTS_SUCCESS:
-			return { ...state, documentsFrom: payload.from, documentsTo: payload.to, loading: false };
+		case DocumentsActionTypes.GET_DOCUMENTS_SUCCESS: {
+			let message:string[];
+			if ((state.documentsFrom != []) && (state.error !== null) && (state.loading !== false)) {
+				if (state.documentsFrom.length === payload.from.length) {
+					for (const array_old_status of state.documentsFrom) {
+						for (const array_new_status of payload.from) {
+							if (array_new_status.event.status != array_old_status.event.status) {
 
+							}
+						}
+					}
+				} else {
+
+				}
+			}
+			return { ...state, documentsFrom: payload.from, documentsTo: payload.to, loading: false };
+		}
 		case DocumentsActionTypes.GET_DOCUMENTS_FAILURE:
 			return { ...state,  documentsFrom: [], documentsTo: [], error: payload, loading: false };
 
