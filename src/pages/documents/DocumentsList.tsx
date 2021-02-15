@@ -9,6 +9,7 @@ import {
 	IonCardSubtitle,
 	IonCardHeader,
 	IonBadge,
+	IonToast,
 	IonCard, IonTitle, IonHeader, IonToolbar, IonButtons, IonContent, IonLoading, IonList, IonTextarea, IonNote,
 } from '@ionic/react';
 
@@ -27,6 +28,7 @@ import { base64StringToBlob } from 'blob-util';
 import AgreementType from '../../models/AgreementType';
 
 import useInterval from '../../hooks/useInterval';
+import { TOAST_DURATION_WALLET_ADDRESS_COPY } from '../../utils/constants';
 
 const uint8ArrayToString = require('uint8arrays/to-string');
 const ipfsClient = require('ipfs-http-client');
@@ -324,6 +326,7 @@ const DocumentsList: React.FC<Props> = ({
 	const {
 		selectedDocument,
 		loading,
+		notification
 	} = documentsState;
 	const [showModal, setShowModal] = useState(false);
 	const [showVerified, setShowVerified] = useState(false);
@@ -340,9 +343,14 @@ const DocumentsList: React.FC<Props> = ({
 	const [delay, setDelay] = useState<number>(15000);
 	// ON/OFF
 	const [isPlaying, setPlaying] = useState<boolean>(true);
+	const [showToast, setShowToast] = useState(false);
 	const wallet = useSelector((state: any) => state.wallet);
 	const { currentWallet } = wallet;
-
+	// Verify a notification
+	if (notification.length > 0) {
+		console.log('detecting message');
+		setShowToast(true)
+	}
 	// Updating GetDocuments
 	useInterval(
 		() => {
@@ -350,7 +358,6 @@ const DocumentsList: React.FC<Props> = ({
 		  	dispatch(doGetDocuments({...currentWallet,no_loading: true}))
 		},
 		isPlaying ? delay : null);
-
 
 	function showDocument(item: any) {
 		setForceVerifyDocument(false);
@@ -463,13 +470,14 @@ const DocumentsList: React.FC<Props> = ({
 	}
 	return (
 		<div>
-				<IonLoading
-					cssClass="loader-spinner"
-					mode="md"
-					isOpen={loading}
+			<IonLoading
+				cssClass="loader-spinner"
+				mode="md"
+				isOpen={loading}
 
-				/>
+			/>
 			<div className="documents-container">
+				{console.log(documentsFrom)}
 				{
 					(documentsFrom.length > 0) &&
 					<>
@@ -485,29 +493,36 @@ const DocumentsList: React.FC<Props> = ({
 						{
 							documentsFrom.map((document: any, index: number) => {
 								const {data, meta, event} = document;
-								const createdAt = format(new Date(event.created_at * 1000), 'MM/dd/yyyy kk:mm:ss');
-								const updatedAt = format(new Date(event.updated_at * 1000), 'MM/dd/yyyy kk:mm:ss');
-								const from:boolean = (currentWallet?.address.toLowerCase()  == event.from.toLowerCase() );
-								const to:boolean = (currentWallet?.address.toLowerCase()  == event.to.toLowerCase() );
+								if (meta.blockNumber !== 0) {
+									const createdAt = format(new Date(event.created_at * 1000), 'MM/dd/yyyy kk:mm:ss');
+									const updatedAt = format(new Date(event.updated_at * 1000), 'MM/dd/yyyy kk:mm:ss');
+									const from:boolean = (currentWallet?.address.toLowerCase()  == event.from.toLowerCase() );
+									const to:boolean = (currentWallet?.address.toLowerCase()  == event.to.toLowerCase() );
 
-								return (
-									<div key={index} className="table-body" onClick={async () => {showDocument({data, meta, event})}}>
-										<div className="col">{(data.documentName?.length > 12) ? `${data.documentName.slice(0, 12)}...` : data.documentName}</div>
-										<div className="col">{data.partyAName}</div>
-										<div className="col">{data.partyBName}</div>
-										<div className="col">{data.validUntil}</div>
-										<div className="col">{createdAt}</div>
-										<div className="col">{updatedAt}</div>
-										<div className="col">
-											{(event.status == 9 && from ? <IonBadge color="warning">REJECT</IonBadge> : 
-											(event.status == 9 && to ? <IonBadge color="primary">REJECT</IonBadge> : 
-											(event.status == 1 && from ? <IonBadge color="warning">SIGNED</IonBadge> : 
-											(event.status == 1 && to ? <IonBadge color="primary">SIGNED</IonBadge> : 
-											(event.status == 0 && from ? <IonBadge color="success">PENDING</IonBadge> : 
-											(event.status == 0 && to ? <IonBadge color="secondary">SIGN</IonBadge> : null))))))}
+									return (
+										<div key={index} className="table-body" onClick={async () => {showDocument({data, meta, event})}}>
+											<div className="col">{(data.documentName?.length > 12) ? `${data.documentName.slice(0, 12)}...` : data.documentName}</div>
+											<div className="col">{data.partyAName}</div>
+											<div className="col">{data.partyBName}</div>
+											<div className="col">{data.validUntil}</div>
+											<div className="col">{createdAt}</div>
+											<div className="col">{updatedAt}</div>
+											<div className="col">
+												{(event.status == 9 && from ? <IonBadge color="warning">REJECT</IonBadge> : 
+												(event.status == 9 && to ? <IonBadge color="primary">REJECT</IonBadge> : 
+												(event.status == 1 && from ? <IonBadge color="warning">SIGNED</IonBadge> : 
+												(event.status == 1 && to ? <IonBadge color="primary">SIGNED</IonBadge> : 
+												(event.status == 0 && from ? <IonBadge color="success">PENDING</IonBadge> : 
+												(event.status == 0 && to ? <IonBadge color="secondary">SIGN</IonBadge> : null))))))}
+											</div>
 										</div>
-									</div>
-								);
+									);
+								} else {
+									return (
+										<div className="empty-documents-container">
+										</div>
+									)
+								}
 							})
 						}
 					</>
@@ -522,6 +537,14 @@ const DocumentsList: React.FC<Props> = ({
 					</div>
 				}
 			</div>
+
+			<IonToast
+				isOpen={showToast}
+				color="primary"
+				onDidDismiss={() => setShowToast(false)}
+				message={notification}
+				duration={TOAST_DURATION_WALLET_ADDRESS_COPY}
+			/>
 
 			<SelectedDocument
 				show={showModal}

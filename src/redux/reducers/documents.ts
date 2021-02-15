@@ -1,3 +1,4 @@
+import { Console } from 'console';
 import { DocumentsActionTypes } from '../actionTypes/documents';
 
 const initialState = {
@@ -76,7 +77,8 @@ const initialState = {
 		counterpartyPhone: '',
 		createdAt: null
 	},
-	keepMyInfo: false
+	keepMyInfo: false,
+	notification: []
 };
 
 export const DocumentsReducer = function (state = initialState, action: any) {
@@ -86,21 +88,49 @@ export const DocumentsReducer = function (state = initialState, action: any) {
 			return { ...state, loading: true };
 
 		case DocumentsActionTypes.GET_DOCUMENTS_SUCCESS: {
-			let message:string[];
-			if ((state.documentsFrom != []) && (state.error !== null) && (state.loading !== false)) {
-				if (state.documentsFrom.length === payload.from.length) {
+			let message:string[] = [];
+			const { meta } = state.documentsFrom[0];
+			console.log('meta:', meta.blockNumber, state.error, state.loading);
+			if ((meta.blockNumber != 0) && (state.error == null)) {
+				if (state.documentsFrom.length == payload.from.length) {
+					console.log('arreglos iguales');
+					// loop for found change status
 					for (const array_old_status of state.documentsFrom) {
 						for (const array_new_status of payload.from) {
-							if (array_new_status.event.status != array_old_status.event.status) {
-
+							if ((array_new_status.event.status != array_old_status.event.status) && (array_new_status.event.id == array_old_status.event.id) && (array_new_status.event.from == array_old_status.event.from) && (array_new_status.event.to == array_old_status.event.to) && (array_new_status.event.created_at == array_old_status.event.created_at)) {
+								message.push('Agreement : ', array_new_status.data.documentName,'id ', array_new_status.event.id,'status changed to status: ',array_new_status.event.status);
 							}
 						}
 					}
 				} else {
-
+					console.log('arreglos distintos');
+					// loop for found change status
+					for (const array_old_status of state.documentsFrom) {
+						for (const array_new_status of payload.from) {
+							if ((array_new_status.event.status != array_old_status.event.status) && (array_new_status.event.id == array_old_status.event.id) && (array_new_status.event.from == array_old_status.event.from) && (array_new_status.event.to == array_old_status.event.to) && (array_new_status.event.created_at == array_old_status.event.created_at)) {
+								message.push('Agreement ', array_new_status.data.documentName,'id ', array_new_status.event.id,'status changed to status: ',array_new_status.event.status);
+							}
+						}
+					}
+					// loop for found new agreements
+					for (const array_new_status of payload.from) {
+						let found:boolean = false;
+						for (const array_old_status of state.documentsFrom) {
+							if (array_new_status.event.id == array_old_status.event.id) {
+								found = true;
+							}
+						}
+						if (!found) {
+							message.push(array_new_status.data.partyBName,' create a new ', array_new_status.data.documentName,' Smart Agreements ');
+						}
+					}
 				}
-			}
-			return { ...state, documentsFrom: payload.from, documentsTo: payload.to, loading: false };
+				console.log(message);
+				if (message != []) {return { ...state, documentsFrom: payload.from, documentsTo: payload.to, loading: false, notification: message }}
+			} else {
+				console.log(message);
+				return { ...state, documentsFrom: payload.from, documentsTo: payload.to, loading: false };
+			};
 		}
 		case DocumentsActionTypes.GET_DOCUMENTS_FAILURE:
 			return { ...state,  documentsFrom: [], documentsTo: [], error: payload, loading: false };
