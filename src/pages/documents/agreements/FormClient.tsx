@@ -60,14 +60,14 @@ const FormClient: React.FC<AgreementFormProps> = ({ current }) => {
 	function verifyInfo() {
 		setFilled(
 			/.+@.+\..+/.test(email) &&
-			email === confirmEmail &&
+			email.toLowerCase() === confirmEmail.toLowerCase() &&
 			name.length > 3 && 
 			address.length > 3 && 
 			phone.length > 3
 		);
 		if (startValidation) {
 			setValidEmail(/.+@.+\..+/.test(email));
-			setValidConfirmEmail(email === confirmEmail);
+			setValidConfirmEmail(email.toLowerCase() === confirmEmail.toLowerCase());
 			setValidName(name.length > 3);
 			setValidAddress(address.length > 3);
 			setValidPhone(phone.length > 3);

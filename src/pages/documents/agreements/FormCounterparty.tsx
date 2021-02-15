@@ -88,7 +88,7 @@ const FormCounterparty: React.FC<AgreementFormProps> = ({ current }) => {
 		setFilled(
 			/.+@.+\..+/.test(counterpartyEmail) &&
 			currentWallet?.address.toLowerCase() !== counterpartyWallet.toLowerCase() &&
-			counterpartyEmail === counterpartyConfirmEmail &&
+			counterpartyEmail.toLowerCase()  === counterpartyConfirmEmail.toLowerCase()  &&
 			counterpartyWallet.length > 3 &&
 			counterpartyName.length > 3 &&
 			counterpartyAddress.length > 3 &&
@@ -97,7 +97,7 @@ const FormCounterparty: React.FC<AgreementFormProps> = ({ current }) => {
 
 		if (startValidation) {
 			setValidEmail(/.+@.+\..+/.test(counterpartyEmail));
-			setValidConfirmEmail(counterpartyEmail === counterpartyConfirmEmail);
+			setValidConfirmEmail(counterpartyEmail.toLowerCase() === counterpartyConfirmEmail.toLowerCase());
 			setValidName(counterpartyName.length > 3);
 			setValidAddress(counterpartyAddress.length > 3);
 			setValidPhone(counterpartyPhone.length > 3);
