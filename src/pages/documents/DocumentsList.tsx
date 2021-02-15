@@ -513,7 +513,7 @@ const DocumentsList: React.FC<Props> = ({
 					</>
 				}
 				{
-					(!documentsFrom.length) &&
+					(!documentsFrom.length && !loading) &&
 					<div className="empty-documents-container">
 						<IonTitle color="primary">You don't have any agreements yet. Select a template from the list below to create one.</IonTitle>
 						{
