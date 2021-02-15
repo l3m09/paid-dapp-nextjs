@@ -460,6 +460,8 @@ export const doGetDocuments = (sending_currentWallet: any) => async (
 		});
 		const agreementsSource = await Promise.all(promisesFrom);
 		const agreementsDestination = await Promise.all(promisesTo);
+		console.log('agreementsSource: ',agreementsSource);
+		console.log('agreementsDestination: ',agreementsDestination);
 		let responseArray = new Array<any>();
 		let foundIds = new Array<string>();
 
