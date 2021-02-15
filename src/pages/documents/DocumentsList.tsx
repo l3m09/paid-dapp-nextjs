@@ -28,7 +28,7 @@ import { base64StringToBlob } from 'blob-util';
 import AgreementType from '../../models/AgreementType';
 
 import useInterval from '../../hooks/useInterval';
-import { TOAST_DURATION_WALLET_ADDRESS_COPY } from '../../utils/constants';
+import { TOAST_AGREEMENTS_MESSAGE } from '../../utils/constants';
 
 const uint8ArrayToString = require('uint8arrays/to-string');
 const ipfsClient = require('ipfs-http-client');
@@ -347,10 +347,13 @@ const DocumentsList: React.FC<Props> = ({
 	const wallet = useSelector((state: any) => state.wallet);
 	const { currentWallet } = wallet;
 	// Verify a notification
-	if (notification.length > 0) {
-		console.log('detecting message');
-		setShowToast(true)
-	}
+	useEffect(() => {
+		setShowToast(false);
+		if (notification.length > 0) {
+			// console.log('detecting message');
+			setShowToast(true)
+		}
+	}, [notification])
 	// Updating GetDocuments
 	useInterval(
 		() => {
@@ -477,7 +480,6 @@ const DocumentsList: React.FC<Props> = ({
 
 			/>
 			<div className="documents-container">
-				{console.log(documentsFrom)}
 				{
 					(documentsFrom.length > 0) &&
 					<>
@@ -520,6 +522,10 @@ const DocumentsList: React.FC<Props> = ({
 								} else {
 									return (
 										<div className="empty-documents-container">
+											<IonTitle color="primary">You don't have any agreements yet. Select a template from the list below to create one.</IonTitle>
+											{
+												agreementTypesList()
+											}
 										</div>
 									)
 								}
@@ -543,7 +549,7 @@ const DocumentsList: React.FC<Props> = ({
 				color="primary"
 				onDidDismiss={() => setShowToast(false)}
 				message={notification}
-				duration={TOAST_DURATION_WALLET_ADDRESS_COPY}
+				duration={TOAST_AGREEMENTS_MESSAGE}
 			/>
 
 			<SelectedDocument
