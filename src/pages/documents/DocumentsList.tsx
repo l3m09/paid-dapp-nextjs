@@ -340,7 +340,7 @@ const DocumentsList: React.FC<Props> = ({
 	const [showVerifyDocumentButton, setShowVerifyDocumentButton] = useState(false);
 	const [forceVerifyDocument, setForceVerifyDocument] = useState(false);
 	// Dynamic delay
-	const [delay, setDelay] = useState<number>(15000);
+	const [delay, setDelay] = useState<number>(10000);
 	// ON/OFF
 	const [isPlaying, setPlaying] = useState<boolean>(true);
 	const [showToast, setShowToast] = useState(false);
