@@ -3,7 +3,6 @@
         border: 1px solid #4D417D;
         box-sizing: border-box;
         border-radius: 10px;
-
         // max-width: 767px;
         margin: 25px auto 0;
         // padding: 0 15px;
@@ -11,6 +10,8 @@
         max-height: 70vh;
         @media (min-width: 767px) {
             max-height: 80vh;
+            margin-left: 20px;
+            margin-right: 20px;
         }
         /* width */
         &::-webkit-scrollbar {
@@ -145,6 +146,10 @@
 
                     &:hover {
                         background-color: #4D417D;
+                    }
+
+                    &:active {
+                        background-color: #423672;
                     }
                     
                 }
