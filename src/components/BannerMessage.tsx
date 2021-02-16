@@ -8,15 +8,32 @@ interface BannerMessageProps {
 };
 
 const BannerMessage: FC<BannerMessageProps> = ({message, isOnlyMobile, isOnlyDesktop}) => {
+    const messageElement = () => {
+        if (typeof message === 'string') {
+            return (
+                <p>
+                    {message}
+                </p>
+            );
+        }
+
+        return (
+            <>
+                {
+                    message
+                }
+            </>
+        );
+    }
     if (isOnlyMobile) {
         return(
             <>
              {         
                 (!isPlatform('desktop') && !isPlatform('electron')) &&
                 <div className="banner-container">
-                    <p>
-                        {message}
-                    </p>
+                    {
+                        messageElement()
+                    }
                 </div>
              }
             </>
@@ -29,9 +46,9 @@ const BannerMessage: FC<BannerMessageProps> = ({message, isOnlyMobile, isOnlyDes
              {         
                 (isPlatform('desktop') || isPlatform('electron')) &&
                 <div className="banner-container">
-                    <p>
-                        {message}
-                    </p>
+                    {
+                        messageElement()
+                    }
                 </div>
              }
             </>
@@ -41,9 +58,9 @@ const BannerMessage: FC<BannerMessageProps> = ({message, isOnlyMobile, isOnlyDes
     return(
         <>
             <div className="banner-container">
-                <p>
-                    {message}
-                </p>
+                {
+                    messageElement()
+                }
             </div>
         </>
     );

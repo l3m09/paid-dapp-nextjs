@@ -221,16 +221,6 @@ const Documents: React.FC = () => {
 	return (
 		<IonPage className="documents-page content-page">
 			<BannerMessage isOnlyMobile message="Only Desktop experience is currently available. Mobile app will be coming soon." />
-			<BannerMessage
-				isOnlyDesktop
-				message={
-					<p>
-						Welcome to PAID Network Running On Binance Smart Chain (BSC)
-						<br />
-						<a href="https://chrome.google.com/webstore/detail/binance-chain-wallet/fhbohimaelbohpjbbldcngcnapndodjp" target="_blank">Click here</a> to see the link to install your Binance Chain Wallet.
-					</p>
-				}
-			/>
 			<IonContent fullscreen>
 				<IonHeader translucent={false} mode="md">
 					<IonToolbar>
