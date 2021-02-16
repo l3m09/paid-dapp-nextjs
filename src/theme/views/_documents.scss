@@ -132,7 +132,8 @@
             ion-list {
                 width: 100%;
                 padding-top: 0;
-              
+                padding-bottom: 0;
+                
                 ion-item {
                     cursor: pointer;
                     border-bottom: 1px solid #4D417D;
@@ -154,9 +155,8 @@
                     
                 }
 
-                .item:last-child {
+                ion-item:last-child {
                     padding-bottom: 0;
-                    border: none;
                 }
             }
 
