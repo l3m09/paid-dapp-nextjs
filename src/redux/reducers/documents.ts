@@ -111,7 +111,7 @@ export const DocumentsReducer = function (state = initialState, action: any) {
 					for (const array_old_status of state.documentsFrom) {
 						for (const array_new_status of payload.from) {
 							if ((array_new_status.event.status != array_old_status.event.status) && (array_new_status.event.id == array_old_status.event.id) && (array_new_status.event.from == array_old_status.event.from) && (array_new_status.event.to == array_old_status.event.to) && (array_new_status.event.created_at == array_old_status.event.created_at)) {
-								message.push(`${array_new_status.data.documentName} status changed to status: ${status_name(array_new_status.event.status)}`);
+								message.push(`${array_new_status.data.partyBName} countersigns ${array_new_status.data.documentName} and agreement status changed to: ${status_name(array_new_status.event.status)}`);
 							}
 						}
 					}
@@ -121,7 +121,7 @@ export const DocumentsReducer = function (state = initialState, action: any) {
 					for (const array_old_status of state.documentsFrom) {
 						for (const array_new_status of payload.from) {
 							if ((array_new_status.event.status != array_old_status.event.status) && (array_new_status.event.id == array_old_status.event.id) && (array_new_status.event.from == array_old_status.event.from) && (array_new_status.event.to == array_old_status.event.to) && (array_new_status.event.created_at == array_old_status.event.created_at)) {
-								message.push(`${array_new_status.data.documentName} status changed to status: ${status_name(array_new_status.event.status)}`);
+								message.push(`${array_new_status.data.partyBName} countersigns ${array_new_status.data.documentName} and agreement status changed to: ${status_name(array_new_status.event.status)}`);
 							}
 						}
 					}
@@ -135,9 +135,9 @@ export const DocumentsReducer = function (state = initialState, action: any) {
 						}
 						if (!found) {
 							if (event.from != array_new_status.event.from) {
-								message.push(`${array_new_status.data.partyAName} create a new ${array_new_status.data.documentName} Smart Agreements`)
+								message.push(`${array_new_status.data.partyAName} create a new ${array_new_status.data.documentName}`)
 							} else {
-								message.push(`You create a new ${array_new_status.data.documentName} Smart Agreements`)
+								message.push(`You create a new ${array_new_status.data.documentName}`)
 							}
 						}
 					}
