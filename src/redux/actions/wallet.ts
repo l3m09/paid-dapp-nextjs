@@ -63,18 +63,18 @@ export const getPaidBalance = async (web3: Web3, address: any, network: any) => 
 	return Promise.resolve(balanceverify).then((x:string) => {return x})
 }
 
-export const getDaiBalance = async (web3: Web3, address: any, network: any) => {
-	const AgreementContract = ContractFactory.getAgreementContract(web3, network);
-	const DaiTokenContract = ContractFactory.getDaiTokenContract(web3, network);
-	const token = DaiTokenContract.options.address;
-	const methodFn = AgreementContract.methods.getBalanceToken(token, address);
-	const balanceverify = await methodFn.call({ from: address })
-	.then(async function (receipt: any) {
-		const resultado =  web3.utils.fromWei(receipt,'ether');
-		return resultado;
-	});
-	return Promise.resolve(balanceverify).then((x:string) => {return x})
-}
+// export const getDaiBalance = async (web3: Web3, address: any, network: any) => {
+// 	const AgreementContract = ContractFactory.getAgreementContract(web3, network);
+// 	const DaiTokenContract = ContractFactory.getDaiTokenContract(web3, network);
+// 	const token = DaiTokenContract.options.address;
+// 	const methodFn = AgreementContract.methods.getBalanceToken(token, address);
+// 	const balanceverify = await methodFn.call({ from: address })
+// 	.then(async function (receipt: any) {
+// 		const resultado =  web3.utils.fromWei(receipt,'ether');
+// 		return resultado;
+// 	});
+// 	return Promise.resolve(balanceverify).then((x:string) => {return x})
+// }
 
 //Utils
 const getBalanceWallet = async (web3: Web3, address: any) => {
@@ -89,51 +89,51 @@ const getBalanceWallet = async (web3: Web3, address: any) => {
 	}
 }
 
-export const doConnectWallet = (binanceChain:any, history:any
+export const doConnectWallet = (ethereum:any, history:any
 ) => async (dispatch: any) => {
 	dispatch({ type: WalletActionTypes.CONNECT_WALLET_LOADING });
 	try {
-		if (binanceChain === undefined) {
+		if (ethereum === undefined) {
 			dispatch(openSuccessDialog('Binance Smart Chain Wallet Not Detected','Click here to install it', 'https://chrome.google.com/webstore/detail/binance-chain-wallet/fhbohimaelbohpjbbldcngcnapndodjp'))
 			history.push('/');
-		} else if ((binanceChain.chainId != "0x61")&&(binanceChain.chainId != "0x38")) {
-			console.log('This MPV only work in Binance Smart Chain', binanceChain.chainId);
+		} else if ((ethereum.chainId != "0x61")&&(ethereum.chainId != "0x38")) {
+			console.log('This MPV only work in Binance Smart Chain', ethereum.chainId);
 			dispatch(openSuccessDialog('This MPV only work in Binance Smart Chain'));
 			history.push('/');
 		} else {
-			const connected:boolean = await binanceChain.isConnected();
-			console.log('doConnectWallet', binanceChain, connected);
+			const connected:boolean = await ethereum.isConnected();
+			console.log('doConnectWallet', ethereum, connected);
 			if (connected === true) {
 				// Call Event for Changed Network
-				binanceChain.on('chainChanged', (_chainId:any) => window.location.reload());
+				ethereum.on('chainChanged', (_chainId:any) => window.location.reload());
 				// build currentWallet / connectedWallet Element
-				const metaInstance = await BlockchainFactory.getWeb3Mask(binanceChain);
-				// const walletwss = await BlockchainFactory.getWeb3WSS(binanceChain);
+				const metaInstance = await BlockchainFactory.getWeb3Mask(ethereum);
+				// const walletwss = await BlockchainFactory.getWeb3WSS(ethereum);
 				const network = await BlockchainFactory.getNetwork(metaInstance.network);
 				// console.log('doConnect Wallet', network);
 				window.web3 = metaInstance?.web3Instance;
-				const accounts = await binanceChain.request({ method: 'eth_requestAccounts' })
+				const accounts = await ethereum.request({ method: 'eth_requestAccounts' })
 				.then(async (addresses)=>{
 					const address = addresses[0];
 					// Call Event for Changed Address
-					binanceChain.on('accountsChanged', (accounts: Array<string>) => {
+					ethereum.on('accountsChanged', (accounts: Array<string>) => {
 						if (addresses[0] != accounts[0]) {window.location.reload()};
 					});
 					const balance = await getBalanceWallet(metaInstance?.web3Instance, address);
 					let paidBalance:string, daiBalance: string;
 					if (network === "rinkeby") {
 						paidBalance = await getPaidBalance(metaInstance?.web3Instance, address, network);
-					    daiBalance = await getDaiBalance(metaInstance?.web3Instance, address, network);
+					    // daiBalance = await getDaiBalance(metaInstance?.web3Instance, address, network);
 					} else {
 						paidBalance = '0';
-						daiBalance = '0';
+						//daiBalance = '0';
 					}
 					const referenceWallet = {
 						web3: metaInstance?.web3Instance,
 						address,
 						balance: balance,
 						balanceToken: paidBalance,
-						balanceDaiToken: daiBalance,
+						// balanceDaiToken: daiBalance,
 						network,
 					};
 					dispatch(connectWallet(referenceWallet));
@@ -181,10 +181,10 @@ export const doConnectWallet = (binanceChain:any, history:any
 				});
 			// } else if ((connected == true) && (metamask == false)) {
 			// 	// build currentWallet / connectedWallet Element
-			// 	const metaInstance = await BlockchainFactory.getWeb3Mask(binanceChain);
+			// 	const metaInstance = await BlockchainFactory.getWeb3Mask(ethereum);
 			// 	const network = await BlockchainFactory.getNetwork(metaInstance.network);
 			// 	window.web3 = metaInstance?.web3Instance;
-			// 	const accounts = await binanceChain.request({ method: 'eth_requestAccounts' })
+			// 	const accounts = await ethereum.request({ method: 'eth_requestAccounts' })
 			// 	.then(async (addresses)=>{
 			// 		// Get Address
 			// 		const address = addresses[0];

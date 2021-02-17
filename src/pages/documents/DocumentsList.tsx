@@ -66,7 +66,6 @@ function PdfViewerModal(payload: {
 	);
 }
 
-  
 function createMarkup(html: string) {
     return {__html: html};
   }
