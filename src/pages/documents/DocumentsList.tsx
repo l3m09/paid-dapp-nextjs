@@ -428,6 +428,13 @@ const DocumentsList: React.FC<Props> = ({
 		setPdfViewerModal(false)
 	}
 
+	const totalDocumentsFromBlocknumberZero = () => {
+		return documentsFrom.filter((document: any) => {
+			const {meta} = document;
+			return meta.blockNumber === 0;
+		}).length;
+	}
+
 	async function openPdfViewer(cid:string, transactionHash: string) {
 		let fetchedContent = '';
 
