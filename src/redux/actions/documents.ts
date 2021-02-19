@@ -321,8 +321,10 @@ export const doGetDocuments = (sending_currentWallet: any) => async (
 	dispatch: any,
 	getState: () => { wallet: any }
 ) => {
-	if (!Object.prototype.hasOwnProperty.call(sending_currentWallet, KEY_NO_LOADING))
+	if ((sending_currentWallet !== undefined) && (sending_currentWallet !== null)) {
+		if (!Object.prototype.hasOwnProperty.call(sending_currentWallet, KEY_NO_LOADING))
 		{dispatch({ type: DocumentsActionTypes.GET_DOCUMENTS_LOADING })}
+	}
 	try {
 		const { wallet } = getState();
 		const { currentWallet } = wallet;

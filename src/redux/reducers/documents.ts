@@ -102,9 +102,8 @@ export const DocumentsReducer = function (state = initialState, action: any) {
 
 		case DocumentsActionTypes.GET_DOCUMENTS_SUCCESS: {
 			let message:string[] = [];
-			const { meta, event } = state.documentsFrom[0];
 			// console.log('meta:', meta.blockNumber, state.error, state.loading);
-			if ((meta?.blockNumber != 0) && (state.error == null)) {
+			if ((state.documentsFrom[0] !== undefined) && (state.documentsFrom[0].meta?.blockNumber != 0) && (state.error == null)) {
 				if (state.documentsFrom.length == payload.from.length) {
 					// console.log('arreglos iguales');
 					// loop for found change status
@@ -134,7 +133,7 @@ export const DocumentsReducer = function (state = initialState, action: any) {
 							}
 						}
 						if (!found) {
-							if (event.from != array_new_status.event.from) {
+							if (state.documentsFrom[0].event?.from != array_new_status.event.from) {
 								message.push(`${array_new_status.data.partyAName} create a new ${array_new_status.data.documentName}`)
 							} else {
 								message.push(`You create a new ${array_new_status.data.documentName}`)
