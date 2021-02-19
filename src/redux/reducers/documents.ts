@@ -135,9 +135,9 @@ export const DocumentsReducer = function (state = initialState, action: any) {
 						}
 						if (!found) {
 							if (event.from != array_new_status.event.from) {
-								message.push(`${array_new_status.data.partyAName} create a new ${array_new_status.data.documentName} Smart Agreements`)
+								message.push(`${array_new_status.data.partyAName} create a new ${array_new_status.data.documentName}`)
 							} else {
-								message.push(`You create a new ${array_new_status.data.documentName} Smart Agreements`)
+								message.push(`You create a new ${array_new_status.data.documentName}`)
 							}
 						}
 					}
