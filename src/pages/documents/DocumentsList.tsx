@@ -481,6 +481,7 @@ const DocumentsList: React.FC<Props> = ({
 			<div className="documents-container">
 				{
 					(documentsFrom.length > 0) &&
+					(documentsFrom.length > totalDocumentsFromBlocknumberZero()) &&
 					<>
 						<div className="table-header">
 							<div className="col">Document</div>
