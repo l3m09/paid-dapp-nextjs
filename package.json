@@ -57,13 +57,11 @@
     "solido-provider-web3": "^2.0.1",
     "typescript": "3.8.3",
     "uint8arrays": "^1.1.0",
-    "universal-crypto-wallet": "1.4.4",
     "web3": "^1.3.0",
     "web3-eth-contract": "^1.3.0",
     "web3-providers-http": "^1.3.0",
     "web3-utils": "^1.3.1",
-    "write-json-file": "^4.3.0",
-    "xdvplatform-wallet": "^3.0.8"
+    "write-json-file": "^4.3.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -94,7 +92,7 @@
     "@types/react-pdf": "^5.0.0",
     "@types/react-redux": "^7.1.9",
     "@types/webpack-env": "^1.15.3",
-    "node-sass": "^4.14.1"
+    "sass": "^1.32.8"
   },
   "description": "An Ionic project"
 }

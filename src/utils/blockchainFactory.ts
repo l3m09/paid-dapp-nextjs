@@ -1,8 +1,14 @@
-import {  createWalletManager, WalletManager, AlgorithmType, KeyModel} from 'universal-crypto-wallet';
-import { KeyStorageModel } from 'universal-crypto-wallet/dist/key-storage/KeyStorageModel';
-import { WalletModel } from 'universal-crypto-wallet/dist/key-storage/WalletModel';
+// import {  createWalletManager, WalletManager, AlgorithmType, KeyModel} from 'universal-crypto-wallet';
+// import { KeyStorageModel } from 'universal-crypto-wallet/dist/key-storage/KeyStorageModel';
+// import { WalletModel } from 'universal-crypto-wallet/dist/key-storage/WalletModel';
 import Web3 from 'web3';
 import { WebsocketProvider } from 'web3-providers-ws';
+
+export interface WalletModel {
+    web3Instance: Web3;
+    walletInstance: any;
+    network: number;
+}
 
 export class BlockchainFactory {
 	
@@ -10,8 +16,8 @@ export class BlockchainFactory {
 	private static WssUrl = 'wss://bsc-ws-node.nariox.org:443';
 	private static _web3: Web3 | null = null;
 	private static _web3wss: WebsocketProvider  | null = null;
-	private static _walletManager: WalletManager | null = null;
-	private static _keystore: KeyStorageModel;
+	// private static _walletManager: WalletManager | null = null;
+	// private static _keystore: KeyStorageModel;
 	private static _wallet: WalletModel | null = null;
 
 	private static options = {
@@ -69,18 +75,18 @@ export class BlockchainFactory {
 		return BlockchainFactory._wallet;
 	}
 
-	public static getWalletManager = () => {
-		if (!BlockchainFactory._walletManager) {
-			BlockchainFactory._walletManager = createWalletManager();
-		}
+	// public static getWalletManager = () => {
+	// 	if (!BlockchainFactory._walletManager) {
+	// 		BlockchainFactory._walletManager = createWalletManager();
+	// 	}
 
-		return BlockchainFactory._walletManager;
-	};
+	// 	return BlockchainFactory._walletManager;
+	// };
 
 
-	public static setKeystore(keystore: KeyStorageModel): void {
-		BlockchainFactory._keystore = keystore;
-	}
+	// public static setKeystore(keystore: KeyStorageModel): void {
+	// 	BlockchainFactory._keystore = keystore;
+	// }
 
 
 	public static getNetwork = async (network:number | string) => {
