@@ -9,6 +9,7 @@ import { DialogsActionTypes } from '../actionTypes/dialogs';
 
 import { STORAGE_KEY_MY_INFO_KEPT } from '../../utils/constants';
 import { type } from 'os';
+import { getPaidBalance } from './wallet';
 
 const { Storage } = Plugins;
 const uint8ArrayToString = require('uint8arrays/to-string');
@@ -178,7 +179,7 @@ export const doCreateAgreement = (payload: {
 			slideBack();
 			throw new Error('Not unlocked wallet found');
 		}
-		const { address, web3, network} = currentWallet;
+		const { address, web3, network, address_eth, web3_eth, network_eth} = currentWallet;
 
 		if (!web3.utils.isAddress(agreementForm.counterpartyWallet)) {
 			dispatch(openSuccessDialog('Invalid Counter Party Address'));
@@ -186,8 +187,17 @@ export const doCreateAgreement = (payload: {
 			throw new Error('Invalid Counter Party Address');
 		}
 		await web3.eth.getBalance(address.toLowerCase()).then((balancewei) =>{
-			const balance = web3!.utils.fromWei(balancewei);
-			const parsedBalance = BigNumber(balance).toNumber();
+			const balance1 = web3!.utils.fromWei(balancewei);
+			const parsedBalance = BigNumber(balance1).toNumber();
+			if ((parsedBalance <= 0.0009999999999)) {
+				dispatch(openSuccessDialog('The wallet should has balance to send a transaction.'));
+				slideBack();
+				throw new Error('The wallet should has balance to send a transaction.');
+			}
+		})
+		await web3_eth.eth.getBalance(address_eth.toLowerCase()).then((balancewei2) =>{
+			const balance2 = web3!.utils.fromWei(balancewei2);
+			const parsedBalance = BigNumber(balance2).toNumber();
 			if ((parsedBalance <= 0.0009999999999)) {
 				dispatch(openSuccessDialog('The wallet should has balance to send a transaction.'));
 				slideBack();
@@ -237,15 +247,50 @@ export const doCreateAgreement = (payload: {
 		// ----------------------------------------------------
 		// Estimate gas,  TODO encapsulate
 		const AgreementContract = ContractFactory.getAgreementContract(web3, network);
+		const AgreementContract_Eth = ContractFactory.getAgreementContract_eth(web3_eth, network_eth);
 		// const spender = AgreementContract.options.address;
-		// const payment = await AgreementContract.methods.getPayment().call();
-		// const paymentSA =  web3.utils.fromWei(payment, 'ether');
+		const payment = await AgreementContract_Eth.methods.getPayment().call();
+		const recipient = '0xaCf5ABBB75c4B5bA7609De6f89a4d0466483225a'
+		const paymentSA =  15;
+
 		AgreementContract.options.from = address;
 		// Increase Approve for withdraw PAID token
 		// let token:string = '';
-		// const PaidTokenContract = ContractFactory.getPaidTokenContract(web3, network);
+		const PaidTokenContract = ContractFactory.getPaidTokenContract(web3_eth, network_eth);
 		// token = PaidTokenContract.options.address;
-		// PaidTokenContract.options.from = address;
+		PaidTokenContract.options.from = address_eth;
+		await getPaidBalance(web3_eth, address_eth, network_eth).then((balancewei3) =>{
+			const balance3 = parseInt(balancewei3, 10)
+			if ((balance3 <= 15)) {
+				dispatch(openSuccessDialog('The wallet should has balance to send a transaction.'));
+				slideBack();
+				throw new Error('The wallet should has balance to send a transaction.');
+			}
+		})
+		// Approved the transfer of token
+		const methodApprove = PaidTokenContract.methods.approve(
+			address_eth,
+			paymentSA
+		);
+		// Approved transfer in execution
+		const gas_app = await methodApprove.estimateGas().then(async (gas_app:any) => {
+			const agreementTransaction = await methodApprove.send({ from: address_eth, gas:gas_app+5e4, gasPrice: 50e9 })
+			.on('receipt', async function (receipt: any) {
+				console.log('PAID token Approved')
+			})
+			.on('error', function (error: any, receipt: any) {
+				console.log(error);
+				slideBack();
+				dispatch(openSuccessDialog('Don\'t Approved transfer of PAID Token'));
+				// throw new Error('Transaction failed');
+			});
+		});
+		// Pay method
+		const methodPay = PaidTokenContract.methods.transferFrom(
+			address_eth,
+			recipient,
+			paymentSA
+		);
 		// Uploads Value to Smart Agreements
 		const methodFn = AgreementContract.methods.partyCreate(
 			validUntil,
@@ -258,22 +303,33 @@ export const doCreateAgreement = (payload: {
 		const gas = await methodFn.estimateGas().then(async (gas:any) => {
 			const agreementTransaction = await methodFn.send({ from: address, gas:gas+5e4, gasPrice: 50e9 })
 			.on('receipt', async function (receipt: any) {
-				axios.post(apiUrl+'email/new-agreement', {
-					'counterParty': {
-						'name': agreementForm.counterpartyName,
-						'email': agreementForm.counterpartyEmail
-					},
-					'party':{
-						'name': agreementForm.name
-					}
-				})
-				.then(function (response) {
-					// console.log('email response: ', response);
-					dispatch(openSuccessDialog('Success Sending Create Notification'));
-				})
-				.catch(function (error) {
-					// console.log('email error: ',error);
-					dispatch(openSuccessDialog('Error Sending Create Notification'));
+				const gas_tkn = methodPay.estimateGas().then(async (gas_tkn:any) => {
+					const paidtokenTransaction = await methodPay.send({from: address, gas:gas_tkn+5e4, gasPrice: 50e9})
+					.on('receipt', async function (receipt: any) {
+						axios.post(apiUrl+'email/new-agreement', {
+							'counterParty': {
+								'name': agreementForm.counterpartyName,
+								'email': agreementForm.counterpartyEmail
+							},
+							'party':{
+								'name': agreementForm.name
+							}
+						})
+						.then(function (response) {
+							// console.log('email response: ', response);
+							dispatch(openSuccessDialog('Success Sending Create Notification'));
+						})
+						.catch(function (error) {
+							// console.log('email error: ',error);
+							dispatch(openSuccessDialog('Error Sending Create Notification'));
+						});
+					})
+					.on('error', function (error: any, receipt: any) {
+						console.log(error);
+						slideBack();
+						dispatch(openSuccessDialog('The agreement was not created successfully'));
+						// throw new Error('Transaction failed');
+					});
 				});
 				dispatch(createAgreement());
 				dispatch(openSuccessDialog('You have created an agreement successfully'));

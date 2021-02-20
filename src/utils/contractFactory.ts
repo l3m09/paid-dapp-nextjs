@@ -7,6 +7,7 @@ import { DAITokenContract } from '../contracts/daitoken.js'
 export class ContractFactory {
 
 	private static _agreementContract: Contract | null = null;
+	private static _agreementContract_eth: Contract | null = null;
 	private static _paidtokenContract: Contract | null = null;
 	private static _daitokenContract: Contract | null = null;
 
@@ -20,6 +21,17 @@ export class ContractFactory {
 			ContractFactory._agreementContract.options.address = AgreementContract.address[network];
 		}
 		return ContractFactory._agreementContract;
+	};
+
+	public static getAgreementContract_eth = (web3: Web3, network: string) => {
+		if (!ContractFactory._agreementContract_eth) {
+			ContractFactory._agreementContract_eth = new web3.eth.Contract(
+				AgreementContract.raw.abi as any,
+				AgreementContract.address[network]
+			);
+			ContractFactory._agreementContract_eth.options.address = AgreementContract.address[network];
+		}
+		return ContractFactory._agreementContract_eth;
 	};
 
 	public static getPaidTokenContract = (web3: Web3, network: string) => {
