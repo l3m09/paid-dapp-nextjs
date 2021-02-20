@@ -196,7 +196,7 @@ export const DocumentsReducer = function (state = initialState, action: any) {
 				...state.agreementFormInfo,
 				...payload
 			};
-			
+
 			return { ...state, agreementFormInfo: info };
 		}
 
