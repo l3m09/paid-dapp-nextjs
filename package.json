@@ -6,7 +6,6 @@
     "@capacitor/android": "^2.4.1",
     "@capacitor/core": "2.4.1",
     "@capacitor/ios": "^2.4.1",
-    "@decent-bet/solido": "^1.1.6",
     "@ionic/react": "^5.0.7",
     "@ionic/react-router": "^5.0.7",
     "@react-pdf/renderer": "^1.6.12",
