@@ -15,7 +15,7 @@ import useTimeout from '../hooks/useTimeout';
 import { doConnectWallet } from '../redux/actions/wallet';
 
 declare global {
-	interface Window { web3: any; BinanceChain: any;}
+	interface Window { web3: any; BinanceChain: any; ethereum: any}
 }
 
 const Landing: React.FC = () => {

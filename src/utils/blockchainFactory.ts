@@ -18,7 +18,8 @@ export class BlockchainFactory {
 	private static _web3wss: WebsocketProvider  | null = null;
 	// private static _walletManager: WalletManager | null = null;
 	// private static _keystore: KeyStorageModel;
-	private static _wallet: WalletModel | null = null;
+	private static _wallet1: WalletModel | null = null;
+	private static _wallet2: WalletModel | null = null;
 
 	private static options = {
 		timeout: 30000,
@@ -49,20 +50,33 @@ export class BlockchainFactory {
 	// };
 
 	public static getWeb3Mask = async (ethereum: any) => {
-		if(!BlockchainFactory._wallet) {
+		if(!BlockchainFactory._wallet1) {
 				const _web3 = new Web3 (ethereum);
 				const wallet:WalletModel = {
 					web3Instance: _web3,
 					walletInstance: _web3.eth.accounts.wallet,
 					network: await _web3.eth.getChainId()
 				}
-				BlockchainFactory._wallet = wallet;
+				BlockchainFactory._wallet1 = wallet;
 		}
-		return BlockchainFactory._wallet;
+		return BlockchainFactory._wallet1;
+	}
+
+	public static getWeb3Binance = async (ethereum: any) => {
+		if(!BlockchainFactory._wallet2) {
+				const _web3 = new Web3 (ethereum);
+				const wallet:WalletModel = {
+					web3Instance: _web3,
+					walletInstance: _web3.eth.accounts.wallet,
+					network: await _web3.eth.getChainId()
+				}
+				BlockchainFactory._wallet2 = wallet;
+		}
+		return BlockchainFactory._wallet2;
 	}
 
 	public static getWeb3WSS = async (ethereum: any) => {
-		if(!BlockchainFactory._web3wss) {
+		if(!BlockchainFactory._wallet1) {
 				const _web3 = new Web3 (ethereum);
 				_web3.setProvider(new Web3.providers.WebsocketProvider(BlockchainFactory.WssUrl));
 				const wallet:WalletModel = {
@@ -70,9 +84,9 @@ export class BlockchainFactory {
 					walletInstance: _web3.eth.accounts.wallet,
 					network: await _web3.eth.getChainId()
 				}
-				BlockchainFactory._wallet = wallet;
+				BlockchainFactory._wallet1 = wallet;
 		}
-		return BlockchainFactory._wallet;
+		return BlockchainFactory._wallet1;
 	}
 
 	// public static getWalletManager = () => {
