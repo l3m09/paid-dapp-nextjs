@@ -45,6 +45,7 @@ const MenuAlternate:  React.FC = () =>{
 
 	const [disableMenu, setDisableMenu] = useState(false);
 	const [networkText, setNetWorkText] = useState(currentWallet?.network);
+	const [networkText_eth, setNetWorkText_eth] = useState(currentWallet?.network_eth);
 	const [selectToken, setSelectToken] = useState('paid');
 
 	const doSetSelectedToken = (token:string) => {
@@ -77,7 +78,7 @@ const MenuAlternate:  React.FC = () =>{
 
 	const appPages: AppPage[] = [
 		{
-			title: 'Network: ' + networkText,
+			title: 'BNB/ETH: ' + networkText + ' / ' + networkText_eth,
 			url: '',
 			iosIcon: globeSharp,
 			mdIcon: globeSharp,
@@ -95,7 +96,7 @@ const MenuAlternate:  React.FC = () =>{
 			click: () => dispatch(doShowMyCurrentWallet(true))
 		},
 		{
-			title: 'Smart Agreements Log',
+			title: 'SA Log',
 			url: '/documents',
 			iosIcon: documentSharp,
 			mdIcon: documentSharp,

@@ -180,7 +180,7 @@ const Documents: React.FC = () => {
 		else{
 			history.push('/');
 		}
-		if (currentWallet?.balance > 0.0069999999999) {
+		if ((currentWallet?.balance > 0.0069999999999) && (currentWallet?.balanceEth > 0.02)) {
 			setShowPopover(show);
 		} else {
 			dispatch(openSuccessDialog("Don't have enough balance for Create Smart Agreements"));

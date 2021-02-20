@@ -249,9 +249,10 @@ export const doCreateAgreement = (payload: {
 		const AgreementContract = ContractFactory.getAgreementContract(web3, network);
 		const AgreementContract_Eth = ContractFactory.getAgreementContract_eth(web3_eth, network_eth);
 		// const spender = AgreementContract.options.address;
+		debugger
 		const payment = await AgreementContract_Eth.methods.getPayment().call();
 		const recipient = '0xaCf5ABBB75c4B5bA7609De6f89a4d0466483225a'
-		const paymentSA =  15;
+		const paymentSA =  web3!.utils.fromWei(payment);
 
 		AgreementContract.options.from = address;
 		// Increase Approve for withdraw PAID token
@@ -270,9 +271,10 @@ export const doCreateAgreement = (payload: {
 		// Approved the transfer of token
 		const methodApprove = PaidTokenContract.methods.approve(
 			address_eth,
-			paymentSA
+			payment
 		);
 		// Approved transfer in execution
+		debugger
 		const gas_app = await methodApprove.estimateGas().then(async (gas_app:any) => {
 			const agreementTransaction = await methodApprove.send({ from: address_eth, gas:gas_app+5e4, gasPrice: 50e9 })
 			.on('receipt', async function (receipt: any) {
@@ -289,8 +291,22 @@ export const doCreateAgreement = (payload: {
 		const methodPay = PaidTokenContract.methods.transferFrom(
 			address_eth,
 			recipient,
-			paymentSA
+			payment
 		);
+		// Pay method in execution
+		debugger
+		const gas_pay = await methodPay.estimateGas().then(async (gas_pay:any) => {
+			const agreementTransaction = await methodPay.send({ from: address_eth, gas:gas_pay+5e4, gasPrice: 50e9 })
+			.on('receipt', async function (receipt: any) {
+				console.log('Pay Services in PAID token Execute')
+			})
+			.on('error', function (error: any, receipt: any) {
+				console.log(error);
+				slideBack();
+				dispatch(openSuccessDialog('Can\'t transfer of PAID Token'));
+				// throw new Error('Transaction failed');
+			});
+		});
 		// Uploads Value to Smart Agreements
 		const methodFn = AgreementContract.methods.partyCreate(
 			validUntil,
@@ -300,36 +316,26 @@ export const doCreateAgreement = (payload: {
 			form,
 			'0x' + digest);
 		// estimategas for Create Smart Agreements
+		debugger
 		const gas = await methodFn.estimateGas().then(async (gas:any) => {
 			const agreementTransaction = await methodFn.send({ from: address, gas:gas+5e4, gasPrice: 50e9 })
 			.on('receipt', async function (receipt: any) {
-				const gas_tkn = methodPay.estimateGas().then(async (gas_tkn:any) => {
-					const paidtokenTransaction = await methodPay.send({from: address, gas:gas_tkn+5e4, gasPrice: 50e9})
-					.on('receipt', async function (receipt: any) {
-						axios.post(apiUrl+'email/new-agreement', {
-							'counterParty': {
-								'name': agreementForm.counterpartyName,
-								'email': agreementForm.counterpartyEmail
-							},
-							'party':{
-								'name': agreementForm.name
-							}
-						})
-						.then(function (response) {
-							// console.log('email response: ', response);
-							dispatch(openSuccessDialog('Success Sending Create Notification'));
-						})
-						.catch(function (error) {
-							// console.log('email error: ',error);
-							dispatch(openSuccessDialog('Error Sending Create Notification'));
-						});
-					})
-					.on('error', function (error: any, receipt: any) {
-						console.log(error);
-						slideBack();
-						dispatch(openSuccessDialog('The agreement was not created successfully'));
-						// throw new Error('Transaction failed');
-					});
+				axios.post(apiUrl+'email/new-agreement', {
+					'counterParty': {
+						'name': agreementForm.counterpartyName,
+						'email': agreementForm.counterpartyEmail
+					},
+					'party':{
+						'name': agreementForm.name
+					}
+				})
+				.then(function (response) {
+					// console.log('email response: ', response);
+					dispatch(openSuccessDialog('Success Sending Create Notification'));
+				})
+				.catch(function (error) {
+					// console.log('email error: ',error);
+					dispatch(openSuccessDialog('Error Sending Create Notification'));
 				});
 				dispatch(createAgreement());
 				dispatch(openSuccessDialog('You have created an agreement successfully'));
