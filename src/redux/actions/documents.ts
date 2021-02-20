@@ -350,7 +350,7 @@ export const doCreateAgreement = (payload: {
 		});
 	} catch (err) {
 		await payload.slideBack();
-		dispatch(openErrorDialog('The agreement was not created successfully '+err.message));
+		dispatch(openSuccessDialog('The agreement was not created successfully '+err.message));
 		// console.log('The agreement was not created successfully', err.message);
 		dispatch({
 			type: DocumentsActionTypes.CREATE_AGREEMENT_FAILURE,
@@ -770,7 +770,7 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 				'0x' + digest);
 
 			const gas = await methodFn.estimateGas().then(async (gas:any) => {
-				console.log('gas accept:', gas)
+				// console.log('gas accept:', gas)
 				const agreementTransaction = await methodFn.send({ from: currentWallet?.address, gas:gas+9e4, gasPrice: 30e9 })
 				.on('receipt', async function (receipt: any) {
 					const parties = JSON.parse(partiesContentStr);
@@ -906,7 +906,7 @@ export const doRejectCounterpartyDocument = (document: any, comments: string) =>
 			const gas = await methodFn.estimateGas().then(async (gas:any) => {
 				const agreementTransaction = await methodFn.send({ from: currentWallet?.address, gas:gas+5e4, gasPrice: 50e9 })
 				.on('receipt', async function (receipt: any) {
-					console.log(receipt);
+					//console.log(receipt);
 					const parties = JSON.parse(partiesContentStr);
 					// Sending Notification
 					axios.post(apiUrl+'email/reject-agreement', {
