@@ -793,8 +793,8 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 						//console.log('email error: ',error);
 						dispatch(openSuccessDialog('Error Sending Accept Notification'));
 					});
-					dispatch(getSelectedSignedDocument(document));
 					dispatch(openSuccessDialog('You have successfully sign the Smart Agreement'));
+					dispatch(getSelectedSignedDocument(document));
 				})
 				.on('error', function (error: any, receipt: any) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
 					console.log(error);
