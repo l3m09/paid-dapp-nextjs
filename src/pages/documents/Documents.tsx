@@ -180,10 +180,21 @@ const Documents: React.FC = () => {
 		else{
 			history.push('/');
 		}
-		if (currentWallet?.balance > 0.0069999999999) {
+		// const value:boolean = (((currentWallet?.network === "bsc-mainnet") && (currentWallet?.network_eth === "mainnet")) || ((currentWallet?.network === "testnet") && (currentWallet?.network_eth === "rinkeby")))
+		const value = true;
+		// console.log(currentWallet, value);
+		if ( (value) && (currentWallet?.balance > 0.0069999999999) && (currentWallet?.balanceEth > 0.02) && (currentWallet?.balanceToken >= 15)) {
 			setShowPopover(show);
 		} else {
-			dispatch(openSuccessDialog("Don't have enough balance for Create Smart Agreements"));
+			if (!(currentWallet?.balance > 0.0069999999999)) {
+				dispatch(openSuccessDialog("Don't have enough BNB balance for Create Smart Agreements"));
+			} else if (!(currentWallet?.balanceEth > 0.02)) {
+				dispatch(openSuccessDialog("Don't have enough ETH balance for Create Smart Agreements"));
+			} else if (!(currentWallet?.balanceToken >= 15)) {
+				dispatch(openSuccessDialog("Don't have enough PAID Token balance for Create Smart Agreements"));
+			} else {
+				dispatch(openSuccessDialog("Both Wallet must be in Mainnet or Testnet"));
+			}
 		}
 	}
 

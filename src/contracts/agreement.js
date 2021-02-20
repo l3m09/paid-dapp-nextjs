@@ -467,6 +467,7 @@ module.exports = {
     address: {
       "rinkeby-fork": "0x04AB80b8EfB66670d0024910c51B9b3306946989",
       rinkeby: "0x04AB80b8EfB66670d0024910c51B9b3306946989",
+      mainnet: "0xcc5183443c60E8161E39bb7A91d188D24616A182",
       testnet: "0x67e1816bEEcB2a2852f9305049483f32b5c7ef60",
       "bsc-mainnet": "0x85989B58b6898649377f3e85Bec441C3Df04ec0e"
     },

@@ -45,7 +45,8 @@ const MenuAlternate:  React.FC = () =>{
 
 	const [disableMenu, setDisableMenu] = useState(false);
 	const [networkText, setNetWorkText] = useState(currentWallet?.network);
-	const [selectToken, setSelectToken] = useState('bnb');
+	const [networkText_eth, setNetWorkText_eth] = useState(currentWallet?.network_eth);
+	const [selectToken, setSelectToken] = useState('paid');
 
 	const doSetSelectedToken = (token:string) => {
 		setSelectToken(token);
@@ -77,7 +78,7 @@ const MenuAlternate:  React.FC = () =>{
 
 	const appPages: AppPage[] = [
 		{
-			title: 'Network: ' + networkText,
+			title: 'BNB/ETH: ' + networkText + ' / ' + networkText_eth,
 			url: '',
 			iosIcon: globeSharp,
 			mdIcon: globeSharp,
@@ -95,7 +96,7 @@ const MenuAlternate:  React.FC = () =>{
 			click: () => dispatch(doShowMyCurrentWallet(true))
 		},
 		{
-			title: 'Smart Agreements Log',
+			title: 'SA Log',
 			url: '/documents',
 			iosIcon: documentSharp,
 			mdIcon: documentSharp,
@@ -140,17 +141,17 @@ const MenuAlternate:  React.FC = () =>{
 			>
 				<div className="icon-wrapper">
 					<IonImg
-						src={selectToken === "bnb" ?
-						('/assets/icon/bnblogo.svg') : ''
-						// ('/assets/icon/dailogo.svg')
+						src={selectToken === "paid" ?
+						('/assets/icon/icon.png') :
+						('/assets/icon/bnblogo.svg')
 					}
 					/>
 				</div>
 				<IonLabel color="gradient">
 					{
-						selectToken === "bnb" ?
-						('BNB Tokens') : null
-						// ('DAI Tokens')
+						selectToken === "paid" ?
+						('PAID Tokens') :
+						('BNB Tokens')
 					}
 				</IonLabel>
 				<IonSelect
@@ -159,9 +160,9 @@ const MenuAlternate:  React.FC = () =>{
 					value={selectToken}
 					onIonChange={ (e) => doSetSelectedToken(e.detail.value) }
 				>
-					{/* <IonSelectOption value="paid">
+					<IonSelectOption value="paid">
 						PAID Tokens  {paidBalance}
-					</IonSelectOption> */}
+					</IonSelectOption>
 					<IonSelectOption value="bnb">
 						{/* TODO: this amount must be dynamic */}
 						BNB Tokens  {currentWallet?.balance}

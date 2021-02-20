@@ -66,7 +66,6 @@ function PdfViewerModal(payload: {
 	);
 }
 
-  
 function createMarkup(html: string) {
     return {__html: html};
   }
@@ -429,6 +428,13 @@ const DocumentsList: React.FC<Props> = ({
 		setPdfViewerModal(false)
 	}
 
+	const totalDocumentsFromBlocknumberZero = () => {
+		return documentsFrom.filter((document: any) => {
+			const {meta} = document;
+			return meta.blockNumber === 0;
+		}).length;
+	}
+
 	async function openPdfViewer(cid:string, transactionHash: string) {
 		let fetchedContent = '';
 
@@ -482,6 +488,7 @@ const DocumentsList: React.FC<Props> = ({
 			<div className="documents-container">
 				{
 					(documentsFrom.length > 0) &&
+					(documentsFrom.length > totalDocumentsFromBlocknumberZero()) &&
 					<>
 						<div className="table-header">
 							<div className="col">Document</div>

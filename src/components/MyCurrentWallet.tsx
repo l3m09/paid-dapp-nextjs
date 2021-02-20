@@ -74,7 +74,7 @@ const MyCurrentWallet: FC = () => {
                             position="stacked"
                             className="principal-label"
                         >
-                            Address:
+                            Address BNB:
                         </IonLabel>
                         <div>
                             <span ref={spanRef} hidden>{currentWallet?.address}</span>
@@ -88,25 +88,39 @@ const MyCurrentWallet: FC = () => {
                             position="stacked"
                             className="principal-label"
                         >
+                            Address PAID Token:
+                        </IonLabel>
+                        <div>
+                            <span ref={spanRef} hidden>{currentWallet?.address_eth}</span>
+                            <a href={`https://${currentWallet?.network_eth == 'rinkeby' ? currentWallet?.network_eth+'.' : ''}etherscan.io/address/${currentWallet?.address_eth}`} target="_blank">{currentWallet?.address_eth}</a>
+                            <IonIcon icon={copy} onClick={() => copyAddressToClipboard()} className="copy-icon" />
+                        </div>
+                    </IonItem>
+                    <IonItem>
+                        <IonLabel
+                            color="primary"
+                            position="stacked"
+                            className="principal-label"
+                        >
                             Balances
                         </IonLabel>
                     </IonItem>
-                    {/* <IonItem className="balance-content">
+                    <IonItem className="balance-content">
                         <IonLabel>{currentWallet?.balanceToken}</IonLabel>
                         <IonImg
                             src="/assets/icon/icon.png"
                             slot="start"
                             className="balance-coin-icon"
                         />
-                    </IonItem> */}
-                    {/* <IonItem className="balance-content">
-                        <IonLabel>{currentWallet?.balance}</IonLabel>
+                    </IonItem>
+                    <IonItem className="balance-content">
+                        <IonLabel>{currentWallet?.balanceEth}</IonLabel>
                         <IonImg
                             src="/assets/icon/ethereumlogo.svg"
                             slot="start"
                             className="balance-coin-icon"
                         />
-                    </IonItem> */}
+                    </IonItem>
                     <IonItem className="balance-content">
                         <IonLabel>{currentWallet?.balance}</IonLabel>
                         <IonImg

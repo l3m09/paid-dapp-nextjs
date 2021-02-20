@@ -51,10 +51,8 @@ const connectWallet = (payload: any) => {
 };
 
 export const getPaidBalance = async (web3: Web3, address: any, network: any) => {
-	const AgreementContract = ContractFactory.getAgreementContract(web3, network);
 	const PaidTokenContract = ContractFactory.getPaidTokenContract(web3, network);
-	const token = PaidTokenContract.options.address;
-	const methodFn = AgreementContract.methods.getBalanceToken(token, address);
+	const methodFn = PaidTokenContract.methods.balanceOf(address);
 	const balanceverify = await methodFn.call({ from: address })
 	.then(async function (receipt: any) {
 		const resultado =  web3.utils.fromWei(receipt,'ether');
@@ -63,18 +61,18 @@ export const getPaidBalance = async (web3: Web3, address: any, network: any) => 
 	return Promise.resolve(balanceverify).then((x:string) => {return x})
 }
 
-export const getDaiBalance = async (web3: Web3, address: any, network: any) => {
-	const AgreementContract = ContractFactory.getAgreementContract(web3, network);
-	const DaiTokenContract = ContractFactory.getDaiTokenContract(web3, network);
-	const token = DaiTokenContract.options.address;
-	const methodFn = AgreementContract.methods.getBalanceToken(token, address);
-	const balanceverify = await methodFn.call({ from: address })
-	.then(async function (receipt: any) {
-		const resultado =  web3.utils.fromWei(receipt,'ether');
-		return resultado;
-	});
-	return Promise.resolve(balanceverify).then((x:string) => {return x})
-}
+// export const getDaiBalance = async (web3: Web3, address: any, network: any) => {
+// 	const AgreementContract = ContractFactory.getAgreementContract(web3, network);
+// 	const DaiTokenContract = ContractFactory.getDaiTokenContract(web3, network);
+// 	const token = DaiTokenContract.options.address;
+// 	const methodFn = AgreementContract.methods.getBalanceToken(token, address);
+// 	const balanceverify = await methodFn.call({ from: address })
+// 	.then(async function (receipt: any) {
+// 		const resultado =  web3.utils.fromWei(receipt,'ether');
+// 		return resultado;
+// 	});
+// 	return Promise.resolve(balanceverify).then((x:string) => {return x})
+// }
 
 //Utils
 const getBalanceWallet = async (web3: Web3, address: any) => {
@@ -86,81 +84,50 @@ const getBalanceWallet = async (web3: Web3, address: any) => {
 	}
 	catch(ex){
 		console.log(ex);
+		return '0';
 	}
 }
 
-export const doConnectWallet = (binanceChain:any, history:any
+export const doConnectWallet = (wallet_provider:any, history:any
 ) => async (dispatch: any) => {
 	dispatch({ type: WalletActionTypes.CONNECT_WALLET_LOADING });
 	try {
-		if (binanceChain === undefined) {
+		if (wallet_provider === undefined) {
 			dispatch(openSuccessDialog('Binance Smart Chain Wallet Not Detected','Click here to install it', 'https://chrome.google.com/webstore/detail/binance-chain-wallet/fhbohimaelbohpjbbldcngcnapndodjp'))
 			history.push('/');
-		} else if ((binanceChain.chainId != "0x61")&&(binanceChain.chainId != "0x38")) {
-			console.log('This MPV only work in Binance Smart Chain', binanceChain.chainId);
+		} else if ((window.ethereum === undefined) || (window.ethereum === null)) {
+			dispatch(openSuccessDialog('Metamask Wallet Not Detected','Click here to install it', 'https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn'))
+			history.push('/');
+		} else if ((wallet_provider.chainId != "0x61")&&(wallet_provider.chainId != "0x38")) {
+			console.log('This MPV only work in Binance Smart Chain', wallet_provider.chainId);
 			dispatch(openSuccessDialog('This MPV only work in Binance Smart Chain'));
 			history.push('/');
 		} else {
-			const connected:boolean = await binanceChain.isConnected();
-			console.log('doConnectWallet', binanceChain, connected);
+			const connected:boolean = await wallet_provider.isConnected();
+			console.log('doConnectWallet', wallet_provider, connected);
 			if (connected === true) {
 				// Call Event for Changed Network
-				binanceChain.on('chainChanged', (_chainId:any) => window.location.reload());
-				// build currentWallet / connectedWallet Element
-				const metaInstance = await BlockchainFactory.getWeb3Mask(binanceChain);
-				// const walletwss = await BlockchainFactory.getWeb3WSS(binanceChain);
-				const network = await BlockchainFactory.getNetwork(metaInstance.network);
-				// console.log('doConnect Wallet', network);
-				window.web3 = metaInstance?.web3Instance;
-				const accounts = await binanceChain.request({ method: 'eth_requestAccounts' })
+				window.ethereum.on('chainChanged', (_chainId:any) => window.location.reload());
+				// MetaInstance of Ethereum
+				const metaInstance_tkn = await BlockchainFactory.getWeb3Mask(window.ethereum);
+				const network_tkn = await BlockchainFactory.getNetwork(metaInstance_tkn.network);
+				window.web3 = metaInstance_tkn?.web3Instance;
+				// Open Metamask
+				let paidBalance:string = '', ethBalance:string = '', address_tkn:string = '';
+				console.log(network_tkn, paidBalance, ethBalance);
+				const paidtoken = await window.ethereum.request({ method: 'eth_requestAccounts' })
 				.then(async (addresses)=>{
-					const address = addresses[0];
+					address_tkn = addresses[0];
 					// Call Event for Changed Address
-					binanceChain.on('accountsChanged', (accounts: Array<string>) => {
+					window.ethereum.on('accountsChanged', (accounts: Array<string>) => {
 						if (addresses[0] != accounts[0]) {window.location.reload()};
 					});
-					const balance = await getBalanceWallet(metaInstance?.web3Instance, address);
-					let paidBalance:string, daiBalance: string;
-					if (network === "rinkeby") {
-						paidBalance = await getPaidBalance(metaInstance?.web3Instance, address, network);
-					    daiBalance = await getDaiBalance(metaInstance?.web3Instance, address, network);
+					if ((network_tkn === "rinkeby") || (network_tkn === "mainnet")) {
+						paidBalance = await getPaidBalance(metaInstance_tkn?.web3Instance, address_tkn, network_tkn);
+						ethBalance = await getBalanceWallet(metaInstance_tkn?.web3Instance, address_tkn);
 					} else {
 						paidBalance = '0';
-						daiBalance = '0';
 					}
-					const referenceWallet = {
-						web3: metaInstance?.web3Instance,
-						address,
-						balance: balance,
-						balanceToken: paidBalance,
-						balanceDaiToken: daiBalance,
-						network,
-					};
-					dispatch(connectWallet(referenceWallet));
-					// Listener of Create or Update Smart Agreements
-					// const AgreementContract = ContractFactory.getAgreementContract(walletwss?.web3Instance!, network);
-					// AgreementContract.options.from = address;
-					// AgreementContract.events.AgreementEvents({
-					// 	filter: { partySource: address.toString() },
-					// 	fromBlock: 4760000,
-					// 	toBlock: 'latest'
-					// }, function (error, event) {
-					// 	console.log('Sources: ', event, 'Error:', error);
-					// })
-					// .on('connected', async(subscriptionId: any) => {
-					// 	console.log('SubscriptionId: ', subscriptionId);
-					// })
-					// .on('data', async(receipt: any) => {
-					// 	console.log('Receipt: ', receipt);
-					// })
-					// .on('changed', async(receipt: any) => {
-					// 	console.log('Receipt: ', receipt);
-					// })
-					// .on('error', async(receipt: any, error:any) => {
-					// 	console.log('Receipt: ', receipt,'Error: ', error);
-					// });
-					console.log('connect Binance Chain Wallet successfully');
-					history.push('/documents');
 				})
 				.catch((error:any) => {
 					if ((error.code === 4001) || (error.code === 4100) || (error.code === 4200) || (error.code === 4900) || (error.code === 4901))  {
@@ -179,48 +146,52 @@ export const doConnectWallet = (binanceChain:any, history:any
 						throw new Error('Error code out to EIP-1193');
 					}
 				});
-			// } else if ((connected == true) && (metamask == false)) {
-			// 	// build currentWallet / connectedWallet Element
-			// 	const metaInstance = await BlockchainFactory.getWeb3Mask(binanceChain);
-			// 	const network = await BlockchainFactory.getNetwork(metaInstance.network);
-			// 	window.web3 = metaInstance?.web3Instance;
-			// 	const accounts = await binanceChain.request({ method: 'eth_requestAccounts' })
-			// 	.then(async (addresses)=>{
-			// 		// Get Address
-			// 		const address = addresses[0];
-			// 		// Get Balance of Wallet and Token
-			// 		const balance = await getBalanceWallet(metaInstance?.web3Instance, address);
-			// 		let paidBalance:string, daiBalance: string;
-			// 		if (network === "rinkeby")  {
-			// 			paidBalance = await getPaidBalance(metaInstance?.web3Instance, address, network);
-			// 		    daiBalance = await getDaiBalance(metaInstance?.web3Instance, address, network);
-			// 		} else {
-			// 			paidBalance = '0';
-			// 			daiBalance = '0';
-			// 		}
-			// 		const referenceWallet = {
-			// 			address,
-			// 			balance: balance,
-			// 			balanceToken: paidBalance,
-			// 			balanceDaiToken: daiBalance,
-			// 			network,
-			// 		};
-			// 		dispatch(connectWallet(referenceWallet));
-			// 		console.log('connect with wallet successfully');
-			// 		history.push('/documents');
-			// 	})
-			// 	.catch((error:any) => {
-			// 		if ((error.code === 4001) || (error.code === 4100) || (error.code === 4200) || (error.code === 4900) || (error.code === 4901))  {
-			// 			// EIP-1193 userRejectedRequest error
-			// 			console.log('Reject Unlocked Wallet');
-			// 			dispatch(openErrorDialog('Reject Unlocked Wallet'));
-			// 			history.push('/');
-			// 		} else {
-			// 			console.error('Error code out to EIP-1193',error);
-			// 			dispatch(openErrorDialog(error.message));
-			// 			throw new Error('Error code out to EIP-1193');
-			// 		}
-			// 	});
+				// Call event
+				wallet_provider.on('chainChanged', (_chainId:any) => window.location.reload());
+				// build currentWallet / connectedWallet Element
+				const metaInstance = await BlockchainFactory.getWeb3Binance(wallet_provider);
+				const network = await BlockchainFactory.getNetwork(metaInstance.network);
+				window.web3 = metaInstance?.web3Instance;
+				const accounts = await wallet_provider.request({ method: 'eth_requestAccounts' })
+				.then(async (addresses)=>{
+					const address = addresses[0];
+					// Call Event for Changed Address
+					wallet_provider.on('accountsChanged', (accounts: Array<string>) => {
+						if (addresses[0] != accounts[0]) {window.location.reload()};
+					});
+					const balance = await getBalanceWallet(metaInstance?.web3Instance, address);
+					const referenceWallet = {
+						web3: metaInstance?.web3Instance,
+						web3_eth: metaInstance_tkn?.web3Instance,
+						address,
+						address_eth: address_tkn,
+						balance: balance,
+						balanceToken: paidBalance,
+						balanceEth: ethBalance,
+						network,
+						network_eth: network_tkn,
+					};
+					dispatch(connectWallet(referenceWallet));
+					console.log('connect Binance Chain Wallet successfully');
+					history.push('/documents');
+				})
+				.catch((error:any) => {
+					if ((error.code === 4001) || (error.code === 4100) || (error.code === 4200) || (error.code === 4900) || (error.code === 4901))  {
+						// EIP-1193 userRejectedRequest error
+						alert('Reject Unlocked Wallet in Binance Wallet');
+						dispatch(openSuccessDialog('Reject Unlocked Wallet in Binance Wallet'));
+						history.push('/');
+					} else if (error.code === -32002) {
+						alert('Pls Unlock Wallet in Binance Wallet');
+						dispatch(openSuccessDialog('Pls Unlock Wallet in Binance Wallet'));
+						history.push('/');
+					} else {
+						alert('Error code out to EIP-1193');
+						console.log(error);
+						dispatch(openSuccessDialog(error.message));
+						throw new Error('Error code out to EIP-1193');
+					}
+				});
 			} else {
 				let err:any
 				err.message = 'Failure to Connect Provider Wallet';
