@@ -268,11 +268,11 @@ export const doCreateAgreement = (payload: {
 					}
 				})
 				.then(function (response) {
-					//console.log('email response: ', response);
+					// console.log('email response: ', response);
 					dispatch(openSuccessDialog('Success Sending Create Notification'));
 				})
 				.catch(function (error) {
-					//console.log('email error: ',error);
+					// console.log('email error: ',error);
 					dispatch(openSuccessDialog('Error Sending Create Notification'));
 				});
 				dispatch(createAgreement());
@@ -280,6 +280,7 @@ export const doCreateAgreement = (payload: {
 				slideNext();
 			})
 			.on('error', function (error: any, receipt: any) {
+				console.log(error);
 				slideBack();
 				dispatch(openSuccessDialog('The agreement was not created successfully'));
 				// throw new Error('Transaction failed');
@@ -707,7 +708,8 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 				'0x' + digest);
 
 			const gas = await methodFn.estimateGas().then(async (gas:any) => {
-				const agreementTransaction = await methodFn.send({ from: currentWallet?.address, gas:gas+5e4, gasPrice: 50e9 })
+				console.log('gas accept:', gas)
+				const agreementTransaction = await methodFn.send({ from: currentWallet?.address, gas:gas+9e4, gasPrice: 30e9 })
 				.on('receipt', async function (receipt: any) {
 					const parties = JSON.parse(partiesContentStr);
 					axios.post(apiUrl+'email/accept-agreement', {
@@ -732,7 +734,8 @@ export const doSignCounterpartyDocument = (document: any) => async (dispatch: an
 					dispatch(getSelectedSignedDocument(document));
 					dispatch(openSuccessDialog('You have successfully sign the Smart Agreement'));
 				})
-				.on('error', function (error: any, receipt: any) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.		
+				.on('error', function (error: any, receipt: any) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
+					console.log(error);
 					// alert('Transaction failed');
 					dispatch(openSuccessDialog('Failed Sign the Smart Agreement'));
 					dispatch({ type: DocumentsActionTypes.COUNTERPARTY_SIGNED_FAILURE });
