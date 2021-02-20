@@ -113,18 +113,18 @@ export const doConnectWallet = (wallet_provider:any, history:any
 				const network_tkn = await BlockchainFactory.getNetwork(metaInstance_tkn.network);
 				window.web3 = metaInstance_tkn?.web3Instance;
 				// Open Metamask
-				let paidBalance:string = '', ethBalance:string = '';
+				let paidBalance:string = '', ethBalance:string = '', address_tkn:string = '';
 				console.log(network_tkn, paidBalance, ethBalance);
 				const paidtoken = await window.ethereum.request({ method: 'eth_requestAccounts' })
 				.then(async (addresses)=>{
-					const address = addresses[0];
+					address_tkn = addresses[0];
 					// Call Event for Changed Address
 					window.ethereum.on('accountsChanged', (accounts: Array<string>) => {
 						if (addresses[0] != accounts[0]) {window.location.reload()};
 					});
 					if ((network_tkn === "rinkeby") || (network_tkn === "mainnet")) {
-						paidBalance = await getPaidBalance(metaInstance_tkn?.web3Instance, address, network_tkn);
-						ethBalance = await getBalanceWallet(metaInstance_tkn?.web3Instance, address);
+						paidBalance = await getPaidBalance(metaInstance_tkn?.web3Instance, address_tkn, network_tkn);
+						ethBalance = await getBalanceWallet(metaInstance_tkn?.web3Instance, address_tkn);
 					} else {
 						paidBalance = '0';
 					}
@@ -162,11 +162,14 @@ export const doConnectWallet = (wallet_provider:any, history:any
 					const balance = await getBalanceWallet(metaInstance?.web3Instance, address);
 					const referenceWallet = {
 						web3: metaInstance?.web3Instance,
+						web3_eth: metaInstance_tkn?.web3Instance,
 						address,
+						address_eth: address_tkn,
 						balance: balance,
 						balanceToken: paidBalance,
 						balanceEth: ethBalance,
 						network,
+						network_eth: network_tkn,
 					};
 					dispatch(connectWallet(referenceWallet));
 					console.log('connect Binance Chain Wallet successfully');

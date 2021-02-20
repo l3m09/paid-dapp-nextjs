@@ -74,11 +74,25 @@ const MyCurrentWallet: FC = () => {
                             position="stacked"
                             className="principal-label"
                         >
-                            Address:
+                            Address BNB:
                         </IonLabel>
                         <div>
                             <span ref={spanRef} hidden>{currentWallet?.address}</span>
                             <a href={`https://${currentWallet?.network == 'testnet' ? currentWallet?.network+'.' : ''}bscscan.com/address/${currentWallet?.address}`} target="_blank">{currentWallet?.address}</a>
+                            <IonIcon icon={copy} onClick={() => copyAddressToClipboard()} className="copy-icon" />
+                        </div>
+                    </IonItem>
+                    <IonItem>
+                        <IonLabel
+                            color="primary"
+                            position="stacked"
+                            className="principal-label"
+                        >
+                            Address PAID Token:
+                        </IonLabel>
+                        <div>
+                            <span ref={spanRef} hidden>{currentWallet?.address_eth}</span>
+                            <a href={`https://${currentWallet?.network_eth == 'rinkeby' ? currentWallet?.network_eth+'.' : ''}etherscan.io/address/${currentWallet?.address_eth}`} target="_blank">{currentWallet?.address_eth}</a>
                             <IonIcon icon={copy} onClick={() => copyAddressToClipboard()} className="copy-icon" />
                         </div>
                     </IonItem>
