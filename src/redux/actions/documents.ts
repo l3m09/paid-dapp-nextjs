@@ -170,7 +170,6 @@ export const doCreateAgreement = (payload: {
 
 		const formId = ethers.utils.formatBytes32String(agreementFormTemplateId);
 		// form
-		
 
 		const { wallet } = getState();
 		const { currentWallet } = wallet;
