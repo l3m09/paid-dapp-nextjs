@@ -104,7 +104,7 @@ export const doConnectWallet = (wallet_provider:any, history:any
 			history.push('/');
 		} else {
 			const connected:boolean = await wallet_provider.isConnected();
-			console.log('doConnectWallet', wallet_provider, connected);
+			//console.log('doConnectWallet', wallet_provider, connected);
 			if (connected === true) {
 				// Call Event for Changed Network
 				window.ethereum.on('chainChanged', (_chainId:any) => window.location.reload());
@@ -114,7 +114,7 @@ export const doConnectWallet = (wallet_provider:any, history:any
 				window.web3 = metaInstance_tkn?.web3Instance;
 				// Open Metamask
 				let paidBalance:string = '', ethBalance:string = '', address_tkn:string = '';
-				console.log(network_tkn, paidBalance, ethBalance);
+				//console.log(network_tkn, paidBalance, ethBalance);
 				const paidtoken = await window.ethereum.request({ method: 'eth_requestAccounts' })
 				.then(async (addresses)=>{
 					address_tkn = addresses[0];

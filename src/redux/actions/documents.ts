@@ -248,7 +248,7 @@ export const doCreateAgreement = (payload: {
 		const AgreementContract = ContractFactory.getAgreementContract(web3, network);
 		const AgreementContract_Eth = ContractFactory.getAgreementContract_eth(web3_eth, network_eth);
 		// const spender = AgreementContract.options.address;
-		debugger
+	
 		const payment = await AgreementContract_Eth.methods.getPayment().call();
 		const recipient = '0xfadEB8DBC68692555485b355f5935B1C0769c4d6'
 		const paymentSA =  web3!.utils.fromWei(payment);
@@ -273,11 +273,11 @@ export const doCreateAgreement = (payload: {
 			payment
 		);
 		// Approved transfer in execution
-		debugger
+
 		const gas_app = await methodApprove.estimateGas().then(async (gas_app:any) => {
 			const agreementTransaction = await methodApprove.send({ from: address_eth, gas:gas_app+5e4, gasPrice: 50e9 })
 			.on('receipt', async function (receipt: any) {
-				console.log('PAID token Approved')
+				//console.log('PAID token Approved')
 			})
 			.on('error', function (error: any, receipt: any) {
 				console.log(error);
@@ -293,14 +293,14 @@ export const doCreateAgreement = (payload: {
 			payment
 		);
 		// Pay method in execution
-		debugger
+
 		const gas_pay = await methodPay.estimateGas().then(async (gas_pay:any) => {
 			const agreementTransaction = await methodPay.send({ from: address_eth, gas:gas_pay+5e4, gasPrice: 50e9 })
 			.on('receipt', async function (receipt: any) {
 				console.log('Pay Services in PAID token Execute')
 			})
 			.on('error', function (error: any, receipt: any) {
-				console.log(error);
+				//console.log(error);
 				slideBack();
 				dispatch(openSuccessDialog('Can\'t transfer of PAID Token'));
 				// throw new Error('Transaction failed');
@@ -315,7 +315,7 @@ export const doCreateAgreement = (payload: {
 			form,
 			'0x' + digest);
 		// estimategas for Create Smart Agreements
-		debugger
+
 		const gas = await methodFn.estimateGas().then(async (gas:any) => {
 			const agreementTransaction = await methodFn.send({ from: address, gas:gas+5e4, gasPrice: 50e9 })
 			.on('receipt', async function (receipt: any) {
