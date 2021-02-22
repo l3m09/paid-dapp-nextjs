@@ -19,6 +19,7 @@ const ipfsClient = require('ipfs-http-client');
 const fetch = require('node-fetch');
 const axios = require('axios');
 const ipfsnode = `${process.env.REACT_APP_IPFS_PAID_HOST}`;
+const recipient = `${process.env.REACT_APP_RECIPIENT_ERC20_TOKEN}`;
 
 // TODO: Fix
 const ipfs = ipfsClient({ host: ipfsnode, port: '5001', protocol: 'https', apiPath: '/api/v0' });
@@ -248,10 +249,8 @@ export const doCreateAgreement = (payload: {
 		const AgreementContract = ContractFactory.getAgreementContract(web3, network);
 		const AgreementContract_Eth = ContractFactory.getAgreementContract_eth(web3_eth, network_eth);
 		// const spender = AgreementContract.options.address;
-	
+
 		const payment = await AgreementContract_Eth.methods.getPayment().call();
-		const recipient = '0xfadEB8DBC68692555485b355f5935B1C0769c4d6'
-		const paymentSA =  web3!.utils.fromWei(payment);
 
 		AgreementContract.options.from = address;
 		// Increase Approve for withdraw PAID token
@@ -268,34 +267,34 @@ export const doCreateAgreement = (payload: {
 			}
 		})
 		// Approved the transfer of token
-		const methodApprove = PaidTokenContract.methods.approve(
-			address_eth,
-			payment
-		);
-		// Approved transfer in execution
+		// const methodApprove = PaidTokenContract.methods.approve(
+		// 	address_eth,
+		// 	payment
+		// );
+		// // Approved transfer in execution
 
-		const gas_app = await methodApprove.estimateGas().then(async (gas_app:any) => {
-			const agreementTransaction = await methodApprove.send({ from: address_eth, gas:gas_app+5e4, gasPrice: 50e9 })
-			.on('receipt', async function (receipt: any) {
-				//console.log('PAID token Approved')
-			})
-			.on('error', function (error: any, receipt: any) {
-				console.log(error);
-				slideBack();
-				dispatch(openSuccessDialog('Don\'t Approved transfer of PAID Token'));
-				// throw new Error('Transaction failed');
-			});
-		});
+		// const gas_app = await methodApprove.estimateGas().then(async (gas_app:any) => {
+		// 	const agreementTransaction = await methodApprove.send({ from: address_eth, gas:gas_app+5e4, gasPrice: 150e9 })
+		// 	.on('receipt', async function (receipt: any) {
+		// 		//console.log('PAID token Approved')
+		// 	})
+		// 	.on('error', function (error: any, receipt: any) {
+		// 		console.log(error);
+		// 		slideBack();
+		// 		dispatch(openSuccessDialog('Don\'t Approved transfer of PAID Token'));
+		// 		// throw new Error('Transaction failed');
+		// 	});
+		// });
+		console.log(recipient, payment);
 		// Pay method
-		const methodPay = PaidTokenContract.methods.transferFrom(
-			address_eth,
+		const methodPay = PaidTokenContract.methods.transfer(
 			recipient,
 			payment
 		);
 		// Pay method in execution
 
 		const gas_pay = await methodPay.estimateGas().then(async (gas_pay:any) => {
-			const agreementTransaction = await methodPay.send({ from: address_eth, gas:gas_pay+5e4, gasPrice: 50e9 })
+			const agreementTransaction = await methodPay.send({ from: address_eth, gas:gas_pay+5e4, gasPrice: 150e9 })
 			.on('receipt', async function (receipt: any) {
 				console.log('Pay Services in PAID token Execute')
 			})
