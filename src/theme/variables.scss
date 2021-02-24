@@ -2,11 +2,11 @@
 /* Fonts */
 @font-face {
   font-family: 'Circular' ;
-  src: url('/assets/fonts/Circular_Std.eot');
-  src: url('/assets/fonts/Circular_Std.eot?#iefix') format('embedded-opentype'),
-  url('/assets/fonts/Circular_Std.woff') format('woff'),
-  url('/assets/fonts/Circular_Std.ttf') format('truetype'),
-  url('/assets/fonts/Circular_Std.otf');
+  src: url('./assets/fonts/Circular_Std.eot');
+  src: url('./assets/fonts/Circular_Std.eot?#iefix') format('embedded-opentype'),
+  url('./assets/fonts/Circular_Std.woff') format('woff'),
+  url('./assets/fonts/Circular_Std.ttf') format('truetype'),
+  url('./assets/fonts/Circular_Std.otf');
   font-weight: normal;
 }
 
