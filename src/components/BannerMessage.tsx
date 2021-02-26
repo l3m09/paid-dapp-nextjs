@@ -12,7 +12,7 @@ const BannerMessage: FC<BannerMessageProps> = ({message, isOnlyMobile, isOnlyDes
         if (typeof message === 'string') {
             return (
                 <p>
-                    {message}
+                    {message }
                 </p>
             );
         }
