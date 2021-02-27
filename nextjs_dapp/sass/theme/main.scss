@@ -1,5 +1,7 @@
-@import "node_modules/bootstrap/scss/bootstrap";
+@import '../base/base';
+@import '_variable';
 
+@import "node_modules/bootstrap/scss/bootstrap";
 
 // Required
 @import "node_modules/bootstrap/scss/functions";
@@ -7,7 +9,3 @@
 @import "node_modules/bootstrap/scss/mixins";
 
 
-$theme-colors: (
-  "primary": green,
-  "danger": red
-);

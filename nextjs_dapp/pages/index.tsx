@@ -1,40 +1,31 @@
-import React from 'react';
-import Head from 'next/head';
+import React from "react";
+import Head from "next/head";
 
-import {
-  Card,
-  CardImg,
-  CardText,
-  CardBody,
-  CardTitle,
-  CardSubtitle,
-  Button,
-} from 'reactstrap';
+import { Container, Button } from "reactstrap";
 
 const Index: React.FC = () => (
-  <div className="container">
+  <>
     <Head>
       <title>Master Ventures</title>
       <link rel="icon" href="/assets/icon/.ico" />
     </Head>
-    <Card>
-      <CardImg
-        top
-        src="https://master.ventures/wp-content/uploads/2020/09/MasterVenturesHorizontal.png"
-        alt="Card image cap"
-      />
-      <CardBody>
-        <CardTitle tag="h5">Card title</CardTitle>
-        <CardSubtitle tag="h6" className="mb-2 text-muted">
-          Card subtitle
-        </CardSubtitle>
-        <CardText>
-          Some quick example text to build on the card title and make up the
-        </CardText>
-        <Button>Login</Button>
-      </CardBody>
-    </Card>
-  </div>
+    <div className="index m-0 p-0 container-fluid">
+      <div className="row h-100  justify-content-center align-items-center">
+        <div className="col-12 text-center">
+          <img
+            className="logo d-block mx-auto pb-4"
+            src="/assets/images/logo.png"
+            alt=""
+          />
+          <Button color="danger">Connect to Wallet</Button>
+          <p className="info mt-4">
+            By continuing you agree to our <span className="text-danger">T&#38;Cs</span>. We use your data to offer you a
+            personalized experience. <span className="text-danger">Find out more</span>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </>
 );
 
 export default Index;
