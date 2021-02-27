@@ -11,7 +11,7 @@ import {
   Button,
 } from 'reactstrap';
 
-const Login: React.FC = () => (
+const Index: React.FC = () => (
   <div className="container">
     <Head>
       <title>Master Ventures</title>
@@ -37,4 +37,4 @@ const Login: React.FC = () => (
   </div>
 );
 
-export default Login;
+export default Index;
