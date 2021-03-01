@@ -1,7 +1,7 @@
 import React from 'react';
 import Head from 'next/head';
 
-import { Container, Button } from 'reactstrap';
+import { Button } from 'reactstrap';
 
 const Index: React.FC = () => (
   <>
