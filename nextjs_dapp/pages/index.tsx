@@ -6,7 +6,7 @@ import { Button } from 'reactstrap';
 const Index: React.FC = () => (
   <>
     <Head>
-      <title>Master Ventures</title>
+      <title>Paid-Dapp</title>
       <link rel="icon" href="/assets/icon/.ico" />
     </Head>
     <div className="index m-0 p-0 container-fluid">
