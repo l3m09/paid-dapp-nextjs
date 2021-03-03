@@ -5,9 +5,34 @@
     font-size: 15px;
     line-height: 22px;
     color: $primary;
+    padding-bottom: 45px;
+    &:nth-child(1){
+      padding-left: 10px;
+    }
   }
   .arrow {
     margin-left: 5px;
     margin-bottom: 5px;
+  }
+  tr {
+    td {
+      font-size: 14px;
+      color: $primary;
+      list-style: 20px;
+    }
+  }
+  tbody {
+    tr {
+      &.row-background {
+        background-color: $background-color;
+        border-radius: 7px;
+      }
+      td {
+        line-height: 49px;
+        &:nth-child(1){
+          padding-left: 10px;
+        }
+      }
+    }
   }
 }
