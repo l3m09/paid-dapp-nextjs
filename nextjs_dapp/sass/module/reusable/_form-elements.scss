@@ -11,12 +11,13 @@
     font-weight: 500;
     color: $form-label-color;
   }
-  .stacked-input {
+  .stacked-control {
     background-color: $form-input-background-color;
     border: none;
     border-radius: $form-input-border-radius;
     font-size: 0.75rem;
     color: $form-label-color;
+    resize: none;
 
     @include placeholder {
       font-size: 0.75rem;

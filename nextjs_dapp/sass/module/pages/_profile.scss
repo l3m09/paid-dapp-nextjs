@@ -1,5 +1,10 @@
 .profile  {
   .card {
     padding: $card-spacer-x;
+    .form-wrapper {
+      .stacked-group-last {
+        margin-bottom: 1.875rem;
+      }
+    }
   }
 }
