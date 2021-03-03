@@ -1,42 +1,38 @@
 .agreements {
-  background-color: #f4f5f7;
-
-  .header {
-    position: fixed;
-    transform: translate(0, 0);
-    width: 100%;
-    padding: 10px;
-    
-    span {
-      outline: none;
-    }
-    h5 {
-      font-weight: bold;
-      font-size: 20px;
-      line-height: 24px;
-      height: 100px;
-      @media screen and (min-width: 768px) {
-        font-size: 30px;
-        line-height: 46px;
-      }
-    }
-    background-color: $blue;
-    margin: 0;
-    color: $white;
-
-    @media screen and (min-width: 1024px) {
-      background-color: unset !important;
-      color: unset;
-      margin: 30px;
-    }
+  .card {
+    padding: $card-spacer-x;
   }
-
-  img {
+  .hambunguer {
     margin-left: 5px;
     cursor: pointer;
+    display: block;
 
     @media screen and (min-width: 1024px) {
       display: none !important;
+    }
+  }
+
+  .content {
+    position: relative;
+    .new-agreement-button {
+      position: absolute;
+      top: 14px;
+      right: 28px;
+      font-style: normal;
+      font-weight: bold;
+      font-size: 10px;
+      line-height: 14px;
+    }
+    .empty-result {
+      font-style: normal;
+      font-weight: 500;
+      font-size: 18px;
+      line-height: 22px;
+      margin: 0;
+      color: $primary;
+      height: 646px;
+      background: #f4f5f7;
+      border-radius: 15px;
     }
   }
 }

@@ -28,6 +28,14 @@
       display: flex;
       cursor: pointer;
 
+      &.no-cursor {
+        cursor: unset;
+        &:hover {
+          color: $blue-500;
+          font-weight: normal;
+        }
+      }
+
       img {
         width: 24px;
       }
