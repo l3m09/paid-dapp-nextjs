@@ -7,3 +7,8 @@ $theme-colors: (
 $blue:  #110252;
 $blue-800:  #34286C;
 $blue-500:  #A09ABA;
+
+$font-size-base: 1rem !default;
+$h3-font-size: $font-size-base * 1.87 !default;
+
+$card-border-radius: 0.9375rem;
