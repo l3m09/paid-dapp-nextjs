@@ -1,0 +1,26 @@
+@mixin placeholder {
+  &::-webkit-input-placeholder {@content}
+  &:-moz-placeholder           {@content}
+  &::-moz-placeholder          {@content}
+  &:-ms-input-placeholder      {@content}
+}
+
+.stacked-group {
+  .stacked-label {
+    font-size: 0.625rem;
+    font-weight: 500;
+    color: $form-label-color;
+  }
+  .stacked-input {
+    background-color: $form-input-background-color;
+    border: none;
+    border-radius: $form-input-border-radius;
+    font-size: 0.75rem;
+    color: $form-label-color;
+
+    @include placeholder {
+      font-size: 0.75rem;
+      color: $form-label-color;
+    }
+  }
+}

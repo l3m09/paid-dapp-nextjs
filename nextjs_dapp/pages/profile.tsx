@@ -1,8 +1,11 @@
 import React, { FC, useState } from 'react'
 import { useSelector } from 'react-redux'
 import Head from 'next/head'
-import ProfileStateModel from '../models/profileStateModel'
 import { Card } from 'reactstrap'
+import { useForm,  } from 'react-hook-form'
+import { ErrorMessage } from '@hookform/error-message'
+import ProfileStateModel from '../models/profileStateModel'
+import InputStacked from '../components/reusable/InputStacked'
 
 const Profile: FC = () => {
   const profileState: ProfileStateModel = useSelector((state: any) => state.profileReducer)
@@ -16,7 +19,11 @@ const Profile: FC = () => {
   } = profile
   const emptyProfile = !(firstName && lastName && email && address && phone)
   const [edit, setEdit] = useState(emptyProfile)
+  const { register, errors, handleSubmit } = useForm()
 
+  const onSubmit = (values) => {
+    console.log('form', values)
+  }
   return (
     <>
       <Head>
@@ -30,7 +37,27 @@ const Profile: FC = () => {
           </div>
           <div className="col-12">
             <Card className="border-0">
-              <span>text</span>
+              <form onSubmit={handleSubmit(onSubmit)}>
+                <InputStacked
+                  label="Name:"
+                  name="firstName"
+                  type="text"
+                  placeholder="Jhon"
+                  innerRef={register({
+                    required: 'Name is required',
+                  })}
+                  errorComponent={
+                    (
+                      <ErrorMessage
+                        className=""
+                        name="firstName"
+                        as="div"
+                        errors={errors}
+                      />
+                    )
+                  }
+                />
+              </form>
             </Card>
           </div>
         </div>
