@@ -1,0 +1,28 @@
+.input-white {
+  background: white;
+  border-radius: 15px;
+  color: $blue-400;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  border: none;
+  height: 46px;
+  outline: white;
+}
+
+.has-search {
+  & .form-control {
+    padding-left: 2.375rem;
+  }
+  position: relative;
+}
+
+.has-search .search-icon {
+  position: absolute;
+  z-index: 2;
+  display: block;
+  pointer-events: none;
+  top: 17px;
+  left: 15px;
+  width: 18px;
+}

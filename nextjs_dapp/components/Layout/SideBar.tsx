@@ -58,9 +58,9 @@ const SideBar: React.FC = () => (
         <li className="mb-4 ">
           <img className="mr-3" src="/assets/icon/paid.svg" alt="" />
           {' '}
-          1,458 PAID
+          1,458 PAID 
         </li>
-        <li className="mb-4">
+        <li className="mb-4 no-cursor">
           <img className="mr-3" src="/assets/icon/list-log.svg" alt="" />
           Smart Agreements Log
         </li>
@@ -69,9 +69,9 @@ const SideBar: React.FC = () => (
           {' '}
           Wallets
         </li>
-        <li className="mb-4">
+        <li className="mb-4 no-cursor">
           <img className="mr-3" src="/assets/icon/profile.svg" alt="" />
-          Network: RINKEBY
+          Network: RINKEBY  
         </li>
       </ul>
     </div>
