@@ -26,7 +26,7 @@ const Agreements: React.FC = () => {
       },
       {
         Header: "Created",
-        accessor: "created",
+        accessor: "createdDate",
       },
       {
         Header: "SignedOn",
@@ -36,7 +36,118 @@ const Agreements: React.FC = () => {
     []
   );
 
-  const data = [];
+  const data = React.useMemo(
+    () => [
+      {
+        name: "Jacob Jones",
+        title: "Consulting",
+        lastModified: "12/21/2020 18:16:53",
+        createdDate: "12/21/2020 18:16:53",
+        signedon: "12/21/2020 18:16:53",
+      },
+      {
+        name: "Theresa Webb",
+        title: "Mutual NDA",
+        lastModified: "12/21/2020 18:16:53",
+        createdDate: "12/21/2020 18:16:53",
+        signedon: "12/21/2020 18:16:53",
+      },
+      {
+        name: "Kathryn Murphy",
+        title: "Consulting",
+        lastModified: "12/21/2020 18:16:53",
+        createdDate: "12/21/2020 18:16:53",
+        signedon: "12/21/2020 18:16:53",
+      },
+      {
+        name: "Jane Cooper",
+        title: "Mutual NDA",
+        lastModified: "12/21/2020 18:16:53",
+        createdDate: "12/21/2020 18:16:53",
+        signedon: "12/21/2020 18:16:53",
+      },
+      {
+        name: "Albert Flores",
+        title: "Consulting",
+        lastModified: "12/21/2020 18:16:53",
+        createdDate: "12/21/2020 18:16:53",
+        signedon: "12/21/2020 18:16:53",
+      },
+      {
+        name: "Eleanor Pena",
+        title: "Mutual NDA",
+        lastModified: "12/21/2020 18:16:53",
+        createdDate: "12/21/2020 18:16:53",
+        signedon: "12/21/2020 18:16:53",
+      },
+      {
+        name: "Courtney Henry",
+        title: "Consulting",
+        lastModified: "12/21/2020 18:16:53",
+        createdDate: "12/21/2020 18:16:53",
+        signedon: "12/21/2020 18:16:53",
+      },
+      {
+        name: "Ronald Richards",
+        title: "Mutual NDA",
+        lastModified: "12/21/2020 18:16:53",
+        createdDate: "12/21/2020 18:16:53",
+        signedon: "12/21/2020 18:16:53",
+      },
+      {
+        name: "Jerome Bell",
+        title: "Consulting",
+        lastModified: "12/21/2020 18:16:53",
+        createdDate: "12/21/2020 18:16:53",
+        signedon: "12/21/2020 18:16:53",
+      },
+
+      {
+        name: "Darlene Robertson",
+        title: "Mutual NDA",
+        lastModified: "12/21/2020 18:16:53",
+        createdDate: "12/21/2020 18:16:53",
+        signedon: "12/21/2020 18:16:53",
+      },
+
+      {
+        name: "Robert Fox",
+        title: "Consulting",
+        lastModified: "12/21/2020 18:16:53",
+        createdDate: "12/21/2020 18:16:53",
+        signedon: "12/21/2020 18:16:53",
+      },
+      {
+        name: "Jenny Wilson",
+        title: "Mutual NDA",
+        lastModified: "12/21/2020 18:16:53",
+        createdDate: "12/21/2020 18:16:53",
+        signedon: "12/21/2020 18:16:53",
+      },
+      {
+        name: "Savannah Nguyen",
+        title: "Consulting",
+        lastModified: "12/21/2020 18:16:53",
+        createdDate: "12/21/2020 18:16:53",
+        signedon: "12/21/2020 18:16:53",
+      },
+      {
+        name: "Wade Warren",
+        title: "Mutual NDA",
+        lastModified: "12/21/2020 18:16:53",
+        createdDate: "12/21/2020 18:16:53",
+        signedon: "12/21/2020 18:16:53",
+      },
+      {
+        name: "Leslie Alexander",
+        title: "Consulting",
+        lastModified: "12/21/2020 18:16:53",
+        createdDate: "12/21/2020 18:16:53",
+        signedon: "12/21/2020 18:16:53",
+      },
+    ],
+    []
+  );
 
   const isOpen = useSelector((state: any) => state.menuReducer.isOpen);
   const dispatch = useDispatch();

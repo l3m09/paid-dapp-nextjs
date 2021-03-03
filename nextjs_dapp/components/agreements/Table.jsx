@@ -61,7 +61,10 @@ function Table({ columns, data }) {
           {firstPageRows.map((row, i) => {
             prepareRow(row);
             return (
-              <tr {...row.getRowProps()}>
+              <tr
+                {...row.getRowProps()}
+                className={i % 2 === 0 ? "row-background" : ""}
+              >
                 {row.cells.map((cell) => {
                   return (
                     <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
@@ -73,16 +76,18 @@ function Table({ columns, data }) {
         </tbody>
       </table>
       <br />
-      <div className="empty-result row justify-content-center align-items-center">
-        <p className="text-center">
-          You don't have any agreements yet. Click bellow to create your first
-          smart agreement! <br />
-          <Button className="mt-3" color="primary">
-              <img className="mr-1" src="/assets/icon/plus.svg" alt=""/>
-            New agreement
-          </Button>
-        </p>
-      </div>
+      {data.length < 1 && (
+        <div className="empty-result row justify-content-center align-items-center">
+          <p className="text-center">
+            You don't have any agreements yet. Click bellow to create your first
+            smart agreement! <br />
+            <Button className="mt-3" color="primary">
+              <img className="mr-1" src="/assets/icon/plus.svg" alt="" />
+              New agreement
+            </Button>
+          </p>
+        </div>
+      )}
     </>
   );
 }
