@@ -1,31 +1,33 @@
 import React, { FC, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import Head from 'next/head'
 import { Card } from 'reactstrap'
-import { useForm } from 'react-hook-form'
-import { ErrorMessage } from '@hookform/error-message'
 import ProfileStateModel from '../models/profileStateModel'
 import FormProfile from '../components/profile/FormProfile'
-import StackedInput from '../components/reusable/StackedInput'
-import StackedTextarea from '../components/reusable/StackedTextarea'
+import ProfileModel from '../models/profileModel'
+import doSetProfile from '../redux/actions/profile'
 
 const Profile: FC = () => {
+  const dispatch = useDispatch()
   const profileState: ProfileStateModel = useSelector((state: any) => state.profileReducer)
   const { profile } = profileState
   const {
     firstName,
     lastName,
     email,
-    address,
-    phone,
   } = profile
-  const emptyProfile = !(firstName && lastName && email && address && phone)
+  const emptyProfile = !(firstName && lastName && email)
   const [edit, setEdit] = useState(emptyProfile)
-  const { register, errors, handleSubmit } = useForm()
 
-  const onSubmit = (values) => {
-    console.log('form', values)
+  const onSubmit = (values: ProfileModel) => {
+    dispatch(doSetProfile(values))
+    setEdit(false)
   }
+
+  const onCancel = () => {
+    setEdit(emptyProfile)
+  }
+
   return (
     <>
       <Head>
@@ -40,7 +42,12 @@ const Profile: FC = () => {
           <div className="col-12">
             <Card className="border-0">
               <div className="form-wrapper">
-                <FormProfile onSubmit={onSubmit} />
+                <FormProfile
+                  profile={profile}
+                  edit={edit}
+                  onSubmit={onSubmit}
+                  onCancel={onCancel}
+                />
               </div>
             </Card>
           </div>

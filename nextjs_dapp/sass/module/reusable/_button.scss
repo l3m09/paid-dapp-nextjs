@@ -8,3 +8,25 @@
     border-color: white;
     height: 46px;
 }
+
+.btn-form-save {
+    background: $danger;
+    border: none;
+    border-radius: 0.5rem;
+    color: $white;
+    font-size: $btn-font-size;
+    font-weight: 700;
+    height: 2.75rem;
+    width: 10.75rem;
+    &:focus, &:hover, &:active {
+        background: $pink;
+    }
+}
+
+.btn-link-form-cancel {
+    color: $blue;
+    font-size: $btn-font-size;
+    &:focus, &:hover {
+        text-decoration: none;
+    }
+}

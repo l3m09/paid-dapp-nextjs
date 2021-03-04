@@ -1,15 +1,29 @@
 import React, { FC } from 'react'
 import { useForm } from 'react-hook-form'
 import { ErrorMessage } from '@hookform/error-message'
+import classNames from 'classnames'
 import StackedInput from '../reusable/StackedInput'
 import StackedTextarea from '../reusable/StackedTextarea'
+import ProfileModel from '../../models/profileModel'
 
 interface FormProfileProps {
+  profile: ProfileModel;
+  edit: boolean;
   onSubmit: any;
+  onCancel: any;
 }
 
-const FormProfile: FC<FormProfileProps> = ({ onSubmit }: FormProfileProps) => {
-  const { register, errors, handleSubmit } = useForm()
+const FormProfile: FC<FormProfileProps> = ({
+  profile,
+  edit,
+  onSubmit,
+  onCancel,
+}: FormProfileProps) => {
+  const { register, errors, handleSubmit } = useForm<ProfileModel>({
+    defaultValues: {
+      ...profile,
+    },
+  })
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -18,13 +32,14 @@ const FormProfile: FC<FormProfileProps> = ({ onSubmit }: FormProfileProps) => {
         name="firstName"
         type="text"
         placeholder="Jhon"
+        inputClassNames={classNames({ 'is-invalid': errors.firstName })}
         innerRef={register({
           required: 'Name is required',
         })}
         errorComponent={
           (
             <ErrorMessage
-              className=""
+              className="error-message"
               name="firstName"
               as="div"
               errors={errors}
@@ -37,13 +52,14 @@ const FormProfile: FC<FormProfileProps> = ({ onSubmit }: FormProfileProps) => {
         name="lastName"
         type="text"
         placeholder="Doe"
+        inputClassNames={classNames({ 'is-invalid': errors.lastName })}
         innerRef={register({
           required: 'Last name is required',
         })}
         errorComponent={
           (
             <ErrorMessage
-              className=""
+              className="error-message"
               name="lastName"
               as="div"
               errors={errors}
@@ -56,6 +72,7 @@ const FormProfile: FC<FormProfileProps> = ({ onSubmit }: FormProfileProps) => {
         name="email"
         type="text"
         placeholder="jhon.doe@example.com"
+        inputClassNames={classNames({ 'is-invalid': errors.lastName })}
         innerRef={register({
           required: 'Email is required',
           pattern: {
@@ -66,7 +83,7 @@ const FormProfile: FC<FormProfileProps> = ({ onSubmit }: FormProfileProps) => {
         errorComponent={
           (
             <ErrorMessage
-              className=""
+              className="error-message"
               name="email"
               as="div"
               errors={errors}
@@ -79,6 +96,7 @@ const FormProfile: FC<FormProfileProps> = ({ onSubmit }: FormProfileProps) => {
         name="address"
         placeholder={'Suite 5A-1204\n799 E Dragram\nTucson AZ 85705\nUSA'}
         rows={4}
+        innerRef={register}
       />
       <StackedInput
         label="Phone Number:"
@@ -86,8 +104,33 @@ const FormProfile: FC<FormProfileProps> = ({ onSubmit }: FormProfileProps) => {
         type="text"
         placeholder="+1 556 985 6859"
         groupClassNames="stacked-group-last"
+        innerRef={register}
       />
-      <button className="btn btn-primary btn-block" type="submit">Submit</button>
+      <div className="d-flex justify-content-end">
+        {
+          edit ? (
+            <>
+              <button
+                className="btn btn-link btn-link-form-cancel mr-5"
+                type="button"
+                onClick={() => onCancel()}
+              >
+                Cancel
+              </button>
+              <button className="btn btn-primary btn-form-save" type="submit">Save</button>
+            </>
+          ) : (
+            <button
+              className="btn btn-primary"
+              type="button"
+            >
+              <img className="mr-1" src="/assets/icon/edit.svg" alt="" />
+              {' '}
+              Edit Profile
+            </button>
+          )
+        }
+      </div>
     </form>
   )
 }

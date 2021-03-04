@@ -26,3 +26,7 @@
   left: 15px;
   width: 18px;
 }
+
+.is-invalid {
+  border: $input-border-width solid $red !important;
+}
