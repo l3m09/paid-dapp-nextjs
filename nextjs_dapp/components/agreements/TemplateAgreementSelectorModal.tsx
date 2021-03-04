@@ -24,7 +24,7 @@ const TemplateAgreementSelectorModal: FC<TemplateAgreementSelectorModalProps> = 
     <Modal
       isOpen={open}
       toggle={() => onClose()}
-      className="custom-modal"
+      className="template-agreement-selector-modal"
     >
       <ModalHeader
         toggle={() => onClose()}

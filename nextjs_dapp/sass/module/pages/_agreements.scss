@@ -36,3 +36,27 @@
     }
   }
 }
+
+.template-agreement-selector-modal {
+  .modal-content {
+    @include modal-content;  
+    min-height: 38.6875rem;
+    width: 41.25rem;
+    top: 15vh;
+  }
+  .modal-header {
+    @include modal-header;
+  }
+}
+
+.detail-agreement-modal {
+  .modal-content {
+    @include modal-content;
+    min-height: 38.6875rem;
+    width: 41.25rem;
+    top: 15vh;
+  }
+  .modal-header {
+    @include modal-header;
+  }
+}
