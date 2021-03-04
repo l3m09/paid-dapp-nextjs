@@ -1,15 +1,24 @@
-import React, { useState } from 'react';
-import Head from 'next/head';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState } from "react";
+import Head from "next/head";
+import { useDispatch, useSelector } from "react-redux";
 
-import { Card, Button } from 'reactstrap';
+import {
+  Card,
+  Button,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+} from "reactstrap";
 
-import Table from '../components/agreements/Table';
+import Table from "../components/agreements/Table";
 
-import setOpenMenu from '../redux/actions/menu';
-import agreementsData from '../data/agreements';
-import { columnsAgreement } from '../utils/agreement';
-import TemplateAgreementSelectorModal from '../components/agreements/TemplateAgreementSelectorModal';
+import TemplateAgreementSelectorModal from "../components/agreements/TemplateAgreementSelectorModal";
+import AgreementDetailModal from "../components/agreements/AgreementDetailModal";
+
+import setOpenMenu from "../redux/actions/menu";
+import agreementsData from "../data/agreements";
+import { columnsAgreement } from "../utils/agreement";
 
 const Agreements: React.FC = () => {
   const columns = React.useMemo(() => columnsAgreement, []);
@@ -18,9 +27,23 @@ const Agreements: React.FC = () => {
   const dispatch = useDispatch();
   const [openTemplateSelector, setOpenTemplateSelector] = useState(false);
 
+  const [openDetailModal, setOpenDetailModal] = useState(false);
+
   const onCloseTemplateSelector = () => {
-    setOpenTemplateSelector(false)
-  }
+    setOpenTemplateSelector(false);
+  };
+
+  const onCloseDetailModal = () => {
+    setOpenDetailModal(false);
+  };
+
+  const onDetailClick = () => {
+    setOpenDetailModal(true);
+  };
+
+  const onNewAgreementClick = () => {
+    setOpenTemplateSelector(true);
+  };
 
   return (
     <>
@@ -72,8 +95,12 @@ const Agreements: React.FC = () => {
           </div>
           <div className="col-12">
             <Card className="border-0 content">
-              <Table columns={columns} data={data} />
-              <Button className="new-agreement-button" color="primary" onClick={() => setOpenTemplateSelector(true)}>
+              <Table columns={columns} data={data} onDetailClick={onDetailClick} onNewAgreementClick={onNewAgreementClick} />
+              <Button
+                className="new-agreement-button"
+                color="primary"
+                onClick={() => setOpenTemplateSelector(true)}
+              >
                 <img className="mr-1" src="/assets/icon/plus.svg" alt="" />
                 New agreement
               </Button>
@@ -83,6 +110,10 @@ const Agreements: React.FC = () => {
         <TemplateAgreementSelectorModal
           open={openTemplateSelector}
           onClose={onCloseTemplateSelector}
+        />
+        <AgreementDetailModal
+          open={openDetailModal}
+          onClose={onCloseDetailModal}
         />
       </div>
     </>

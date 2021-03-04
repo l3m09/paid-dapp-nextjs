@@ -1,11 +1,22 @@
-import React from "react";
+import React, { FC } from "react";
 import { useTable, useSortBy } from "react-table";
 import { Button } from "reactstrap";
 import classNames from "classnames";
 
 import { agreementStatus } from "../../utils/agreement";
 
-function Table({ columns, data }) {
+type TableProps = {
+  /** Array of columns*/
+  columns: any[];
+  /** Data to populate the table  */
+  data: any[];
+  /** The `onDetailClick` callback */
+  onDetailClick: () => void;
+   /** The `onNewAgreementClick` callback */
+   onNewAgreementClick : () => void;
+};
+
+const Table: FC<TableProps> = ({ columns, data, onDetailClick, onNewAgreementClick }) => {
   const {
     getTableProps,
     getTableBodyProps,
@@ -20,8 +31,6 @@ function Table({ columns, data }) {
     useSortBy
   );
 
-  // We don't want to render all 2000 rows for this example, so cap
-  // it at 20 for this use case
   const firstPageRows = rows.slice(0, 20);
 
   return (
@@ -89,7 +98,7 @@ function Table({ columns, data }) {
                     <Button className={statusButtonClass}>
                       {titleStatus[row.original.status]}
                     </Button>
-                    <Button className="btn-transparent" color="primary">
+                    <Button onClick={onDetailClick} className="btn-transparent" color="primary">
                       <img src="/assets/icon/3dot.svg" alt="" />
                     </Button>
                   </td>
@@ -100,12 +109,12 @@ function Table({ columns, data }) {
         </tbody>
       </table>
       <br />
-      {data.length < 1 && (
+      {data.length > 1 && (
         <div className="empty-result row justify-content-center align-items-center">
           <p className="text-center">
             You don't have any agreements yet. Click bellow to create your first
             smart agreement! <br />
-            <Button className="mt-3" color="primary">
+            <Button className="mt-3" color="primary" onClick={onNewAgreementClick}>
               <img className="mr-1" src="/assets/icon/plus.svg" alt="" />
               New agreement
             </Button>
@@ -114,6 +123,6 @@ function Table({ columns, data }) {
       )}
     </>
   );
-}
+};
 
 export default Table;
