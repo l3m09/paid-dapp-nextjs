@@ -9,6 +9,7 @@ import ProfileModel from '../../models/profileModel'
 interface FormProfileProps {
   profile: ProfileModel;
   edit: boolean;
+  onEdit: any;
   onSubmit: any;
   onCancel: any;
 }
@@ -16,14 +17,25 @@ interface FormProfileProps {
 const FormProfile: FC<FormProfileProps> = ({
   profile,
   edit,
+  onEdit,
   onSubmit,
   onCancel,
 }: FormProfileProps) => {
-  const { register, errors, handleSubmit } = useForm<ProfileModel>({
+  const {
+    register,
+    errors,
+    handleSubmit,
+    reset,
+  } = useForm<ProfileModel>({
     defaultValues: {
       ...profile,
     },
   })
+
+  const setCancel = () => {
+    reset(profile)
+    onCancel()
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -113,16 +125,22 @@ const FormProfile: FC<FormProfileProps> = ({
               <button
                 className="btn btn-link btn-link-form-cancel mr-5"
                 type="button"
-                onClick={() => onCancel()}
+                onClick={setCancel}
               >
                 Cancel
               </button>
-              <button className="btn btn-primary btn-form-save" type="submit">Save</button>
+              <button
+                className="btn btn-primary btn-form-save"
+                type="submit"
+              >
+                Save
+              </button>
             </>
           ) : (
             <button
-              className="btn btn-primary"
+              className="btn btn-primary btn-form-img-text-primary"
               type="button"
+              onClick={() => onEdit()}
             >
               <img className="mr-1" src="/assets/icon/edit.svg" alt="" />
               {' '}

@@ -45,6 +45,7 @@ const Profile: FC = () => {
                 <FormProfile
                   profile={profile}
                   edit={edit}
+                  onEdit={() => setEdit(true)}
                   onSubmit={onSubmit}
                   onCancel={onCancel}
                 />
