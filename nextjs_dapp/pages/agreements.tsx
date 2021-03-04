@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Head from 'next/head';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -9,12 +9,18 @@ import Table from '../components/agreements/Table';
 import setOpenMenu from '../redux/actions/menu';
 import agreementsData from '../data/agreements';
 import { columnsAgreement } from '../utils/agreement';
+import TemplateAgreementSelectorModal from '../components/agreements/TemplateAgreementSelectorModal';
 
 const Agreements: React.FC = () => {
   const columns = React.useMemo(() => columnsAgreement, []);
   const data = React.useMemo(() => agreementsData, []);
   const isOpen = useSelector((state: any) => state.menuReducer.isOpen);
   const dispatch = useDispatch();
+  const [openTemplateSelector, setOpenTemplateSelector] = useState(false);
+
+  const onCloseTemplateSelector = () => {
+    setOpenTemplateSelector(false)
+  }
 
   return (
     <>
@@ -67,13 +73,17 @@ const Agreements: React.FC = () => {
           <div className="col-12">
             <Card className="border-0 content">
               <Table columns={columns} data={data} />
-              <Button className="new-agreement-button" color="primary">
+              <Button className="new-agreement-button" color="primary" onClick={() => setOpenTemplateSelector(true)}>
                 <img className="mr-1" src="/assets/icon/plus.svg" alt="" />
                 New agreement
               </Button>
             </Card>
           </div>
         </div>
+        <TemplateAgreementSelectorModal
+          open={openTemplateSelector}
+          onClose={onCloseTemplateSelector}
+        />
       </div>
     </>
   );
