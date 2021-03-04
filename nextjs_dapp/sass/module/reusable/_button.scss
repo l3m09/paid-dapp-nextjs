@@ -30,3 +30,12 @@
         text-decoration: none;
     }
 }
+
+.btn-transparent {
+    background: transparent;
+    color: $blue-400;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    border-color: transparent;
+}

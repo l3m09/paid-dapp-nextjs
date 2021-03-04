@@ -1,6 +1,9 @@
 import React from "react";
 import { useTable, useSortBy } from "react-table";
 import { Button } from "reactstrap";
+import classNames from "classnames";
+
+import { agreementStatus } from "../../utils/agreement";
 
 function Table({ columns, data }) {
   const {
@@ -28,8 +31,6 @@ function Table({ columns, data }) {
           {headerGroups.map((headerGroup) => (
             <tr {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map((column) => (
-                // Add the sorting props to control sorting. For this example
-                // we can add them into the header props
                 <th {...column.getHeaderProps(column.getSortByToggleProps())}>
                   {column.render("Header")}
                   {/* Add a sort direction indicator */}
@@ -58,18 +59,41 @@ function Table({ columns, data }) {
           ))}
         </thead>
         <tbody {...getTableBodyProps()}>
-          {firstPageRows.map((row, i) => {
+          {firstPageRows.map((row, rowIndex) => {
             prepareRow(row);
+            const rowClass = classNames({
+              "row-background": rowIndex % 2 === 0,
+            });
+            const statusButtonClass = classNames("btn-status mr-3", {
+              "btn-danger": row.original.status === agreementStatus.DECLINED,
+              "btn-success": row.original.status === agreementStatus.SIGNED,
+              "btn-info": row.original.status === agreementStatus.PENDING,
+            });
+
+            const titleStatus = { 1: "Pending", 2: "Declined", 3: "Signed" };
             return (
               <tr
+                key={`${rowIndex}-row`}
                 {...row.getRowProps()}
-                className={i % 2 === 0 ? "row-background" : ""}
+                className={rowClass}
               >
-                {row.cells.map((cell) => {
-                  return (
-                    <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
-                  );
-                })}
+                <>
+                  {row.cells.map((cell, index) => {
+                    return (
+                      <td {...cell.getCellProps()} id={`${rowIndex}-${index}`}>
+                        {cell.render("Cell")}
+                      </td>
+                    );
+                  })}
+                  <td key={`btn-${rowIndex}`} className="text-right pr-5">
+                    <Button className={statusButtonClass}>
+                      {titleStatus[row.original.status]}
+                    </Button>
+                    <Button className="btn-transparent" color="primary">
+                      <img src="/assets/icon/3dot.svg" alt="" />
+                    </Button>
+                  </td>
+                </>
               </tr>
             );
           })}

@@ -1,154 +1,18 @@
-import React from "react";
-import Head from "next/head";
-import { useDispatch, useSelector } from "react-redux";
+import React from 'react';
+import Head from 'next/head';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { Card, Button } from "reactstrap";
-import { useTable } from "react-table";
+import { Card, Button } from 'reactstrap';
 
-import Table from "../components/agreements/Table";
+import Table from '../components/agreements/Table';
 
-import setOpenMenu from "../redux/actions/menu";
+import setOpenMenu from '../redux/actions/menu';
+import agreementsData from '../data/agreements';
+import { columnsAgreement } from '../utils/agreement';
 
 const Agreements: React.FC = () => {
-  const columns = React.useMemo(
-    () => [
-      {
-        Header: "Name",
-        accessor: "name",
-      },
-      {
-        Header: "Title",
-        accessor: "title",
-      },
-      {
-        Header: "Last Modified",
-        accessor: "lastModified",
-      },
-      {
-        Header: "Created",
-        accessor: "createdDate",
-      },
-      {
-        Header: "SignedOn",
-        accessor: "signedon",
-      },
-    ],
-    []
-  );
-
-  const data = React.useMemo(
-    () => [
-      {
-        name: "Jacob Jones",
-        title: "Consulting",
-        lastModified: "12/21/2020 18:16:53",
-        createdDate: "12/21/2020 18:16:53",
-        signedon: "12/21/2020 18:16:53",
-      },
-      {
-        name: "Theresa Webb",
-        title: "Mutual NDA",
-        lastModified: "12/21/2020 18:16:53",
-        createdDate: "12/21/2020 18:16:53",
-        signedon: "12/21/2020 18:16:53",
-      },
-      {
-        name: "Kathryn Murphy",
-        title: "Consulting",
-        lastModified: "12/21/2020 18:16:53",
-        createdDate: "12/21/2020 18:16:53",
-        signedon: "12/21/2020 18:16:53",
-      },
-      {
-        name: "Jane Cooper",
-        title: "Mutual NDA",
-        lastModified: "12/21/2020 18:16:53",
-        createdDate: "12/21/2020 18:16:53",
-        signedon: "12/21/2020 18:16:53",
-      },
-      {
-        name: "Albert Flores",
-        title: "Consulting",
-        lastModified: "12/21/2020 18:16:53",
-        createdDate: "12/21/2020 18:16:53",
-        signedon: "12/21/2020 18:16:53",
-      },
-      {
-        name: "Eleanor Pena",
-        title: "Mutual NDA",
-        lastModified: "12/21/2020 18:16:53",
-        createdDate: "12/21/2020 18:16:53",
-        signedon: "12/21/2020 18:16:53",
-      },
-      {
-        name: "Courtney Henry",
-        title: "Consulting",
-        lastModified: "12/21/2020 18:16:53",
-        createdDate: "12/21/2020 18:16:53",
-        signedon: "12/21/2020 18:16:53",
-      },
-      {
-        name: "Ronald Richards",
-        title: "Mutual NDA",
-        lastModified: "12/21/2020 18:16:53",
-        createdDate: "12/21/2020 18:16:53",
-        signedon: "12/21/2020 18:16:53",
-      },
-      {
-        name: "Jerome Bell",
-        title: "Consulting",
-        lastModified: "12/21/2020 18:16:53",
-        createdDate: "12/21/2020 18:16:53",
-        signedon: "12/21/2020 18:16:53",
-      },
-
-      {
-        name: "Darlene Robertson",
-        title: "Mutual NDA",
-        lastModified: "12/21/2020 18:16:53",
-        createdDate: "12/21/2020 18:16:53",
-        signedon: "12/21/2020 18:16:53",
-      },
-
-      {
-        name: "Robert Fox",
-        title: "Consulting",
-        lastModified: "12/21/2020 18:16:53",
-        createdDate: "12/21/2020 18:16:53",
-        signedon: "12/21/2020 18:16:53",
-      },
-      {
-        name: "Jenny Wilson",
-        title: "Mutual NDA",
-        lastModified: "12/21/2020 18:16:53",
-        createdDate: "12/21/2020 18:16:53",
-        signedon: "12/21/2020 18:16:53",
-      },
-      {
-        name: "Savannah Nguyen",
-        title: "Consulting",
-        lastModified: "12/21/2020 18:16:53",
-        createdDate: "12/21/2020 18:16:53",
-        signedon: "12/21/2020 18:16:53",
-      },
-      {
-        name: "Wade Warren",
-        title: "Mutual NDA",
-        lastModified: "12/21/2020 18:16:53",
-        createdDate: "12/21/2020 18:16:53",
-        signedon: "12/21/2020 18:16:53",
-      },
-      {
-        name: "Leslie Alexander",
-        title: "Consulting",
-        lastModified: "12/21/2020 18:16:53",
-        createdDate: "12/21/2020 18:16:53",
-        signedon: "12/21/2020 18:16:53",
-      },
-    ],
-    []
-  );
-
+  const columns = React.useMemo(() => columnsAgreement, []);
+  const data = React.useMemo(() => agreementsData, []);
   const isOpen = useSelector((state: any) => state.menuReducer.isOpen);
   const dispatch = useDispatch();
 
