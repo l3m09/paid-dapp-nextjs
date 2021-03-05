@@ -1,9 +1,6 @@
 import React, {
-  FC,
-  Fragment,
-  useEffect,
-  useState,
-} from 'react'
+  FC, Fragment, useEffect, useState,
+} from 'react';
 import {
   ListGroup,
   ListGroupItem,
@@ -11,9 +8,9 @@ import {
   ModalBody,
   ModalFooter,
   ModalHeader,
-} from 'reactstrap'
-import templateAgreements from '../../data/templateAgreements'
-import ButtonCloseModal from '../reusable/ButtonCloseModal'
+} from 'reactstrap';
+import templateAgreements from '../../data/templateAgreements';
+import ButtonCloseModal from '../reusable/ButtonCloseModal';
 
 interface TemplateAgreementSelectorModalProps {
   open: boolean;
@@ -24,10 +21,10 @@ const TemplateAgreementSelectorModal: FC<TemplateAgreementSelectorModalProps> = 
   open,
   onClose,
 }: TemplateAgreementSelectorModalProps) => {
-  const templates = templateAgreements
+  const templates = templateAgreements;
   const [templateSelected, setTemplateSelected] = useState('');
 
-  useEffect(() => setTemplateSelected(''), [open])
+  useEffect(() => setTemplateSelected(''), [open]);
 
   return (
     <Modal
@@ -39,25 +36,23 @@ const TemplateAgreementSelectorModal: FC<TemplateAgreementSelectorModalProps> = 
         toggle={() => onClose()}
         close={<ButtonCloseModal onClick={() => onClose()} />}
       >
-        <h5>Select Template to Create an Agreement:</h5>
+        <span className="title">Select Template to Create an Agreement:</span>
       </ModalHeader>
       <ModalBody>
         <ListGroup className="list-group-flush">
-          {
-            templates.map((template) => (
-              <Fragment key={template.code}>
-                <ListGroupItem
-                  active={templateSelected === template.code}
-                  className="list-item-grey"
-                  tag="button"
-                  action
-                  onClick={() => setTemplateSelected(template.code)}
-                >
-                  {template.name}
-                </ListGroupItem>
-              </Fragment>
-            ))
-          }
+          {templates.map((template) => (
+            <Fragment key={template.code}>
+              <ListGroupItem
+                active={templateSelected === template.code}
+                className="list-item-grey"
+                tag="button"
+                action
+                onClick={() => setTemplateSelected(template.code)}
+              >
+                {template.name}
+              </ListGroupItem>
+            </Fragment>
+          ))}
         </ListGroup>
       </ModalBody>
       <ModalFooter>
@@ -77,7 +72,7 @@ const TemplateAgreementSelectorModal: FC<TemplateAgreementSelectorModalProps> = 
         </button>
       </ModalFooter>
     </Modal>
-  )
-}
+  );
+};
 
-export default TemplateAgreementSelectorModal
+export default TemplateAgreementSelectorModal;

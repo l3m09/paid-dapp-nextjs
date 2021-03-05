@@ -37,13 +37,15 @@ const AgreementDetailModal: FC<DetailAgreementModalProps> = ({
         toggle={() => onClose()}
         close={<ButtonCloseModal onClick={() => onClose()} />}
       >
-        <h5>Consulting Agreement Details:</h5>
+        <span className="title">Consulting Agreement Details:</span>
         <p className="info">Expires in 9 days</p>
       </ModalHeader>
       <ModalBody>
         <div className="status">
           <span className="title mr-2">Status: </span>
-          <Button className={statusButtonClass}>{titleStatus[currentAgreement?.status]}</Button>
+          <Button className={statusButtonClass}>
+            {titleStatus[currentAgreement?.status]}
+          </Button>
         </div>
         <div className="row details">
           <div className="col-12 info mb-4 info mt-3 mb-2"> Details: </div>

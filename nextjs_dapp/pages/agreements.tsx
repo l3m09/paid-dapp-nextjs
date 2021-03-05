@@ -16,7 +16,6 @@ import AgreementModel from '../models/agreementModel';
 
 const Agreements: React.FC = () => {
   const columns = React.useMemo(() => columnsAgreement, []);
-
   const dispatch = useDispatch();
   const isOpen = useSelector((state: any) => state.menuReducer.isOpen);
   const agreements = useSelector(

@@ -29,7 +29,7 @@ const StackedTextarea: FC<StackedTextareaProps> = ({
     >
       {label}
     </label>
-    <textarea name={name} placeholder={placeholder} className={classNames('form-control stacked-control', inputClassNames)} ref={innerRef} rows={rows}></textarea>
+    <textarea name={name} placeholder={placeholder} className={classNames('form-control stacked-control', inputClassNames)} ref={innerRef} rows={rows} />
     {
       errorComponent
     }

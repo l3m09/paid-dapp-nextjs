@@ -1,6 +1,11 @@
+/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable no-nested-ternary */
+/* eslint-disable react/no-array-index-key */
+/* eslint-disable react/no-unescaped-entities */
 import React, { FC } from 'react';
+import PropTypes from 'prop-types';
 import { useTable, useSortBy } from 'react-table';
-import { Button } from 'reactstrap';
+import { Button, UncontrolledPopover, PopoverBody } from 'reactstrap';
 import classNames from 'classnames';
 
 import { agreementStatus } from '../../utils/agreement';
@@ -37,7 +42,6 @@ const Table: FC<TableProps> = ({
   );
 
   const firstPageRows = rows.slice(0, 20);
-
   return (
     <>
       <table {...getTableProps()} className="custom-table">
@@ -102,12 +106,29 @@ const Table: FC<TableProps> = ({
                       {titleStatus[row.original.status]}
                     </Button>
                     <Button
-                      onClick={() => onDetailClick(row.original.id)}
+                      id={`detail-button-${row.original.id}`}
                       className="btn-transparent"
                       color="primary"
                     >
                       <img src="/assets/icon/3dot.svg" alt="" />
                     </Button>
+                    <UncontrolledPopover
+                      trigger="legacy"
+                      placement="bottom"
+                      target={`detail-button-${row.original.id}`}
+                    >
+                      <PopoverBody>
+                        <Button className="btn-transparent">
+                          <img src="/assets/icon/openPdf.svg" alt="" />
+                        </Button>
+                        <Button
+                          onClick={() => onDetailClick(row.original.id)}
+                          className="btn-transparent"
+                        >
+                          <img src="/assets/icon/agreementDetails.svg" alt="" />
+                        </Button>
+                      </PopoverBody>
+                    </UncontrolledPopover>
                   </td>
                 </>
               </tr>
@@ -119,7 +140,7 @@ const Table: FC<TableProps> = ({
       {data.length < 1 && (
         <div className="empty-result row justify-content-center align-items-center">
           <p className="text-center">
-            You don't have any agreements yet. Click bellow to create your first
+            You don&apos;t have any agreements yet. Click bellow to create your first
             smart agreement!
             {' '}
             <br />
@@ -136,6 +157,13 @@ const Table: FC<TableProps> = ({
       )}
     </>
   );
+};
+
+Table.propTypes = {
+  columns: PropTypes.oneOfType([PropTypes.any]).isRequired,
+  data: PropTypes.oneOfType([PropTypes.any]).isRequired,
+  onDetailClick: PropTypes.func.isRequired,
+  onNewAgreementClick: PropTypes.func.isRequired,
 };
 
 export default Table;
