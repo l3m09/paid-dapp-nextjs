@@ -23,30 +23,28 @@ const PrivateLayout: React.FC = ({ children }) => {
     [],
   )
 
+  if (!currentWallet) {
+    return (
+      <div className="layout d-flex justify-content-center align-items-center pt-5">
+        <Spinner color="primary" />
+      </div>
+    )
+  }
+
   return (
-    <>
+    <div className="layout d-flex">
       {
-        currentWallet ? (
-          <div className="layout d-flex">
-            {
-              (isOpen || size.width > 1024)
-              && (
-                <div className="sidebar d-inline-block">
-                  <SideBar />
-                </div>
-              )
-            }
-            <div className="main-content container-fluid d-inline-block m-0 p-0">
-              {children}
-            </div>
-          </div>
-        ) : (
-          <div className="layout d-flex justify-content-center align-items-center pt-5">
-            <Spinner color="primary" />
+        (isOpen || size.width > 1024)
+        && (
+          <div className="sidebar d-inline-block">
+            <SideBar />
           </div>
         )
       }
-    </>
+      <div className="main-content container-fluid d-inline-block m-0 p-0">
+        {children}
+      </div>
+    </div>
   )
 };
 
