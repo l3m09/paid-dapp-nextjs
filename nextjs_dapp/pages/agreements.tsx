@@ -1,33 +1,36 @@
-import React, { useState } from "react";
-import Head from "next/head";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useState, useEffect } from 'react';
+import Head from 'next/head';
+import { useDispatch, useSelector } from 'react-redux';
 
-import {
-  Card,
-  Button,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-} from "reactstrap";
+import { Card, Button } from 'reactstrap';
 
-import Table from "../components/agreements/Table";
+import Table from '../components/agreements/Table';
 
-import TemplateAgreementSelectorModal from "../components/agreements/TemplateAgreementSelectorModal";
-import AgreementDetailModal from "../components/agreements/AgreementDetailModal";
+import TemplateAgreementSelectorModal from '../components/agreements/TemplateAgreementSelectorModal';
+import AgreementDetailModal from '../components/agreements/AgreementDetailModal';
 
-import setOpenMenu from "../redux/actions/menu";
-import agreementsData from "../data/agreements";
-import { columnsAgreement } from "../utils/agreement";
+import setOpenMenu from '../redux/actions/menu';
+import loadAgreements from '../redux/actions/agreement';
+import { columnsAgreement } from '../utils/agreement';
+import AgreementModel from '../models/agreementModel';
 
 const Agreements: React.FC = () => {
   const columns = React.useMemo(() => columnsAgreement, []);
-  const data = React.useMemo(() => agreementsData, []);
-  const isOpen = useSelector((state: any) => state.menuReducer.isOpen);
-  const dispatch = useDispatch();
-  const [openTemplateSelector, setOpenTemplateSelector] = useState(false);
 
+  const dispatch = useDispatch();
+  const isOpen = useSelector((state: any) => state.menuReducer.isOpen);
+  const agreements = useSelector(
+    (state: any) => state.agreementReducer.agreements,
+  );
+  const [openTemplateSelector, setOpenTemplateSelector] = useState(false);
   const [openDetailModal, setOpenDetailModal] = useState(false);
+  const [currentAgreement, setCurrentAgreement] = useState<AgreementModel>(
+    null,
+  );
+
+  useEffect(() => {
+    dispatch(loadAgreements());
+  }, []);
 
   const onCloseTemplateSelector = () => {
     setOpenTemplateSelector(false);
@@ -37,7 +40,8 @@ const Agreements: React.FC = () => {
     setOpenDetailModal(false);
   };
 
-  const onDetailClick = () => {
+  const onDetailClick = (currentId: number) => {
+    setCurrentAgreement(agreements.find(({ id }) => id === currentId));
     setOpenDetailModal(true);
   };
 
@@ -95,7 +99,12 @@ const Agreements: React.FC = () => {
           </div>
           <div className="col-12">
             <Card className="border-0 content">
-              <Table columns={columns} data={data} onDetailClick={onDetailClick} onNewAgreementClick={onNewAgreementClick} />
+              <Table
+                columns={columns}
+                data={agreements}
+                onDetailClick={onDetailClick}
+                onNewAgreementClick={onNewAgreementClick}
+              />
               <Button
                 className="new-agreement-button"
                 color="primary"
@@ -113,6 +122,7 @@ const Agreements: React.FC = () => {
         />
         <AgreementDetailModal
           open={openDetailModal}
+          currentAgreement={currentAgreement}
           onClose={onCloseDetailModal}
         />
       </div>

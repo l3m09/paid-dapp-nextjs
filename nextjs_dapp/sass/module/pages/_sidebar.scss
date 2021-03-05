@@ -18,7 +18,8 @@
     background: $blue-800;
   }
   .menu {
-    li {
+    li,
+    a {
       font-weight: normal;
       font-size: 15px;
       color: $blue-500;
@@ -27,6 +28,7 @@
       align-items: center;
       display: flex;
       cursor: pointer;
+      text-decoration: none;
 
       &.no-cursor {
         cursor: unset;
@@ -41,6 +43,11 @@
       }
 
       &:hover {
+        color: $white;
+        font-weight: bold;
+      }
+
+      &.selected {
         color: $white;
         font-weight: bold;
       }

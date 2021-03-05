@@ -16,7 +16,7 @@ function MyApp({ Component, pageProps, router }) {
       {router.pathname === "/" ? (
         <Component {...pageProps} />
       ) : (
-        <PrivateLayout>
+        <PrivateLayout routerName={router.pathname} >
           <Component {...pageProps} />
           <style global jsx>{`
             html,

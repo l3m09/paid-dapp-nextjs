@@ -1,11 +1,10 @@
-import React from 'react';
-import {
-  Navbar,
-} from 'reactstrap';
+import React from "react";
+import { Navbar } from "reactstrap";
+import Link from "next/link";
 
-import ProfileCard from '../reusable/ProfileCard';
+import ProfileCard from "../reusable/ProfileCard";
 
-const SideBar: React.FC = () => (
+const SideBar: React.FC = ({ routerName }) => (
   <Navbar className="sidebar" color="primary" light>
     <div className="logos mt-2">
       <img
@@ -21,30 +20,26 @@ const SideBar: React.FC = () => (
     <div className="menu mt-5">
       <ul className="pl-3">
         <li className="mb-4 ">
-          <img className="mr-3" src="/assets/icon/home.svg" alt="" />
-          {' '}
-          Dashboard
+          <img className="mr-3" src="/assets/icon/home.svg" alt="" /> Dashboard
         </li>
         <li className="mb-4">
-          <img className="mr-3" src="/assets/icon/referral.svg" alt="" />
-          {' '}
+          <img className="mr-3" src="/assets/icon/referral.svg" alt="" />{" "}
           Referrals
         </li>
         <li className="mb-4">
-          <img className="mr-3" src="/assets/icon/account.svg" alt="" />
-          {' '}
-          Account
+          <img className="mr-3" src="/assets/icon/account.svg" alt="" /> Account
         </li>
         <li className="mb-4">
-          <img className="mr-3" src="/assets/icon/audit.svg" alt="" />
-          {' '}
-          Audit
+          <img className="mr-3" src="/assets/icon/audit.svg" alt="" /> Audit
           &#38; Dispute
         </li>
-        <li className="mb-4">
-          <img className="mr-3" src="/assets/icon/profile.svg" alt="" />
-          {' '}
-          Profile
+        <li className='mb-4'>
+          <Link href="/profile">
+            <a  href="" className={`${routerName.includes('profile') ? 'selected': ''}`}>
+              <img className="mr-3" src="/assets/icon/profile.svg" alt="" />
+              Profile
+            </a>
+          </Link>
         </li>
         <li className="mb-4">
           <img className="mr-3" src="/assets/icon/setting.svg" alt="" />
@@ -56,22 +51,22 @@ const SideBar: React.FC = () => (
     <div className="menu mt-5 pt-5">
       <ul className="pl-3">
         <li className="mb-4 ">
-          <img className="mr-3" src="/assets/icon/paid.svg" alt="" />
-          {' '}
-          1,458 PAID 
+          <img className="mr-3" src="/assets/icon/paid.svg" alt="" /> 1,458 PAID
         </li>
-        <li className="mb-4 no-cursor">
-          <img className="mr-3" src="/assets/icon/list-log.svg" alt="" />
-          Smart Agreements Log
+        <li className='mb-4' >
+          <Link href="/agreements">
+            <a href="" className={`${routerName.includes('agreements') ? 'selected': ''}`}>
+              <img className="mr-3" src="/assets/icon/list-log.svg" alt="" />
+              Smart Agreements Log
+            </a>
+          </Link>
         </li>
         <li className="mb-4">
-          <img className="mr-3" src="/assets/icon/wallets.svg" alt="" />
-          {' '}
-          Wallets
+          <img className="mr-3" src="/assets/icon/wallets.svg" alt="" /> Wallets
         </li>
         <li className="mb-4 no-cursor">
           <img className="mr-3" src="/assets/icon/profile.svg" alt="" />
-          Network: RINKEBY  
+          Network: RINKEBY
         </li>
       </ul>
     </div>

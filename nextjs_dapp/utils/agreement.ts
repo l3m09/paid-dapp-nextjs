@@ -1,6 +1,6 @@
 export const columnsAgreement = [
   {
-    Header: 'Name',
+    Header: 'Counterparty',
     accessor: 'name',
   },
   {

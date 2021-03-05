@@ -1,6 +1,6 @@
 export default interface AgreementModel {
-    id?: number;
-    name?: string;
+    id: number;
+    name: string;
     title?: string;
     lastModified?: string;
     createdDate?: string;

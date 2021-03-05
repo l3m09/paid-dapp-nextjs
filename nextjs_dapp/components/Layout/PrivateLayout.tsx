@@ -6,7 +6,7 @@ import SideBar from './SideBar';
 
 import useWindowSize from '../../hooks/useWindowsSize';
 
-const PrivateLayout: React.FC = ({ children }) => {
+const PrivateLayout: React.FC = ({ children, routerName }) => {
   const isOpen = useSelector((state: any) => state.menuReducer.isOpen);
   const size = useWindowSize();
 
@@ -16,7 +16,7 @@ const PrivateLayout: React.FC = ({ children }) => {
         (isOpen || size.width > 1024)
         && (
         <div className="sidebar d-inline-block">
-          <SideBar />
+          <SideBar routerName={routerName} />
         </div>
         )
       }

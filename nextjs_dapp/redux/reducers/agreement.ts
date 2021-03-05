@@ -1,6 +1,6 @@
-import ActionModel from "../../models/actionModel";
-import AgreementStateModel from "../../models/agreementStateModel";
-import AgreementActionTypes from "../actionTypes/agreement";
+import ActionModel from '../../models/actionModel';
+import AgreementStateModel from '../../models/agreementStateModel';
+import AgreementActionTypes from '../actionTypes/agreement';
 
 const initialState: AgreementStateModel = {
   agreements: [],
@@ -10,14 +10,14 @@ const initialState: AgreementStateModel = {
 
 const agreementReducer = (
   state: AgreementStateModel = initialState,
-  action: ActionModel
+  action: ActionModel,
 ) => {
   const { type, payload } = action;
   switch (type) {
     case AgreementActionTypes.LOAD_AGREEMENTS: {
       return {
         ...state,
-        agreements: payload.agreement,
+        agreements: payload.agreements,
       };
     }
     default:
