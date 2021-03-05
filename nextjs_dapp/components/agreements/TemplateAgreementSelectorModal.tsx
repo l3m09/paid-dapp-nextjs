@@ -1,5 +1,18 @@
-import React, { FC } from 'react'
-import { Modal, ModalHeader } from 'reactstrap'
+import React, {
+  FC,
+  Fragment,
+  useEffect,
+  useState,
+} from 'react'
+import {
+  ListGroup,
+  ListGroupItem,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
+} from 'reactstrap'
+import templateAgreements from '../../data/templateAgreements'
 import ButtonCloseModal from '../reusable/ButtonCloseModal'
 
 interface TemplateAgreementSelectorModalProps {
@@ -10,19 +23,61 @@ interface TemplateAgreementSelectorModalProps {
 const TemplateAgreementSelectorModal: FC<TemplateAgreementSelectorModalProps> = ({
   open,
   onClose,
-}: TemplateAgreementSelectorModalProps) => (
-  <Modal
-    isOpen={open}
-    toggle={() => onClose()}
-    className="template-agreement-selector-modal"
-  >
-    <ModalHeader
+}: TemplateAgreementSelectorModalProps) => {
+  const templates = templateAgreements
+  const [templateSelected, setTemplateSelected] = useState('');
+
+  useEffect(() => setTemplateSelected(''), [open])
+
+  return (
+    <Modal
+      isOpen={open}
       toggle={() => onClose()}
-      close={<ButtonCloseModal onClick={() => onClose()} />}
+      className="template-agreement-selector-modal"
     >
-      <h5>Select Template to Create an Agreement:</h5>
-    </ModalHeader>
-  </Modal>
-)
+      <ModalHeader
+        toggle={() => onClose()}
+        close={<ButtonCloseModal onClick={() => onClose()} />}
+      >
+        <h5>Select Template to Create an Agreement:</h5>
+      </ModalHeader>
+      <ModalBody>
+        <ListGroup className="list-group-flush">
+          {
+            templates.map((template) => (
+              <Fragment key={template.code}>
+                <ListGroupItem
+                  active={templateSelected === template.code}
+                  className="list-item-grey"
+                  tag="button"
+                  action
+                  onClick={() => setTemplateSelected(template.code)}
+                >
+                  {template.name}
+                </ListGroupItem>
+              </Fragment>
+            ))
+          }
+        </ListGroup>
+      </ModalBody>
+      <ModalFooter>
+        <button
+          className="btn btn-link btn-link-form-cancel mr-5"
+          type="button"
+          onClick={() => onClose()}
+        >
+          Cancel
+        </button>
+        <button
+          className="btn btn-primary btn-green"
+          type="button"
+          disabled={templateSelected === ''}
+        >
+          Create Agreement
+        </button>
+      </ModalFooter>
+    </Modal>
+  )
+}
 
 export default TemplateAgreementSelectorModal

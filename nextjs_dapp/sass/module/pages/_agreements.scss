@@ -47,6 +47,9 @@
   .modal-header {
     @include modal-header;
   }
+  .modal-footer {
+    @include modal-footer;
+  }
 }
 
 .detail-agreement-modal {

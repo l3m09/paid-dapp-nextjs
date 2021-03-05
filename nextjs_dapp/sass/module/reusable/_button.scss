@@ -54,7 +54,7 @@
     @extend .btn-form;
     background: $danger;
     &:focus, &:hover, &:active {
-        background: $pink;
+        background-color: $pink !important;
     }
 }
 
@@ -72,5 +72,17 @@
     img {
         width: 1.5rem;
         height: 1.5rem;
+    }
+}
+
+.btn-green {
+    @extend .btn-form;
+    background: $green;
+    &:focus, &:hover, &:active {
+        background-color: $green-100 !important;
+    }
+    &:disabled {
+        background: $green;
+        opacity: 0.5;
     }
 }
