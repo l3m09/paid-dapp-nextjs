@@ -70,7 +70,7 @@ jobs:
       - slack/status:
           fail_only: true
 
-  deploy-dev:
+  deploy-dev-nextjs:
     machine:
       image: ubuntu-1604:202007-01
       docker_layer_caching: true
@@ -92,7 +92,7 @@ jobs:
           tag: "$CIRCLE_BRANCH-$CIRCLE_SHA1"
       - slack/status
 
-  deploy-prod:
+  deploy-prod-nextjs:
     machine:
       image: ubuntu-1604:202007-01
       docker_layer_caching: true
@@ -176,9 +176,11 @@ workflows:
                 - /^feature.*/
                 - /^release.*/
                 - /^hotfix.*/
+                - paid-main-nextjs-app
+                - paid-develop-nextjs-app
           requires:
             - publish
-      - deploy-dev:
+      - deploy-dev-nextjs:
           requires:
             - hold-deploy
           filters:
@@ -192,7 +194,7 @@ workflows:
           context:
             - paid-gcp
             - paid-gcp-dev
-      - deploy-prod:
+      - deploy-prod-nextjs:
           requires:
             - hold-deploy
           filters:
