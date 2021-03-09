@@ -1,10 +1,11 @@
-import React from "react";
-import Head from "next/head";
-import { NextPage } from "next";
-import router from "next/router";
+import React from 'react';
+import Head from 'next/head';
+import { NextPage } from 'next';
+import router from 'next/router';
+import PropTypes from 'prop-types';
 
-import { Card } from "reactstrap";
-import DynamicFields from "../components/new-agreement/DynamicFields";
+import { Card } from 'reactstrap';
+import DynamicFields from '../components/new-agreement/DynamicFields';
 
 type NewAgreementProps = {
   templateTypeCode?: string;
@@ -12,7 +13,7 @@ type NewAgreementProps = {
 
 const NewAgreement: NextPage<NewAgreementProps> = ({ templateTypeCode }) => {
   if (!templateTypeCode) {
-    router.push("agreements");
+    router.push('agreements');
   }
   return (
     <>
@@ -45,6 +46,10 @@ NewAgreement.getInitialProps = ({ query }): any => {
   const { templateTypeCode } = query;
 
   return { templateTypeCode };
+};
+
+NewAgreement.propTypes = {
+  templateTypeCode: PropTypes.string.isRequired,
 };
 
 export default NewAgreement;
