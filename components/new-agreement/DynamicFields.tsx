@@ -38,7 +38,6 @@ const DynamicFields: FC<DynamicFieldsProps> = ({
 
     <span className="secondary-title mb-1 px-2">
       Settings
-      {data.length}
     </span>
   </Card>
 );
