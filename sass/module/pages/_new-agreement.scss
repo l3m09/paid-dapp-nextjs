@@ -1,0 +1,20 @@
+.new-agreement {
+  .card-fields {
+    .title {
+      span {
+        font-style: normal;
+        font-weight: bold;
+        font-size: 15px;
+        line-height: 22px;
+        color: $primary;
+      }
+    }
+    .secondary-title {
+      color: $primary;
+      font-style: normal;
+      font-weight: bold;
+      font-size: 13px;
+      line-height: 22px;
+    }
+  }
+}

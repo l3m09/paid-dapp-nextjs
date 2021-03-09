@@ -1,6 +1,5 @@
-import React, {
-  FC, Fragment, useEffect, useState,
-} from 'react';
+import React, { FC, Fragment, useEffect, useState } from "react";
+import Link from "next/link";
 import {
   ListGroup,
   ListGroupItem,
@@ -8,9 +7,9 @@ import {
   ModalBody,
   ModalFooter,
   ModalHeader,
-} from 'reactstrap';
-import templateAgreements from '../../data/templateAgreements';
-import ButtonCloseModal from '../reusable/ButtonCloseModal';
+} from "reactstrap";
+import templateAgreements from "../../data/templateAgreements";
+import ButtonCloseModal from "../reusable/ButtonCloseModal";
 
 interface TemplateAgreementSelectorModalProps {
   open: boolean;
@@ -22,9 +21,9 @@ const TemplateAgreementSelectorModal: FC<TemplateAgreementSelectorModalProps> = 
   onClose,
 }: TemplateAgreementSelectorModalProps) => {
   const templates = templateAgreements;
-  const [templateSelected, setTemplateSelected] = useState('');
+  const [templateSelected, setTemplateSelected] = useState("");
 
-  useEffect(() => setTemplateSelected(''), [open]);
+  useEffect(() => setTemplateSelected(""), [open]);
 
   return (
     <Modal
@@ -63,13 +62,15 @@ const TemplateAgreementSelectorModal: FC<TemplateAgreementSelectorModalProps> = 
         >
           Cancel
         </button>
-        <button
-          className="btn btn-primary btn-green"
-          type="button"
-          disabled={templateSelected === ''}
-        >
-          Create Agreement
-        </button>
+        <Link href="/new-agreement?templateTypeCode=1">
+          <button
+            className="btn btn-primary btn-green"
+            type="button"
+            disabled={templateSelected === ""}
+          >
+            Create Agreement
+          </button>
+        </Link>
       </ModalFooter>
     </Modal>
   );
