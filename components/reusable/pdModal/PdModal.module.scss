@@ -1,16 +1,11 @@
 .pdModal {
-  & .modal-content {
-    /* Bootstrap override */
-    width: 616px;
-  }
-
   .pdModalHeader {
     border: none;
 
     .pdModalTitle {
-      font-size: 20px;
+      font-size: 1.25rem;
       font-weight: 700;
-      line-height: 25.3px;
+      line-height: 1.58rem;
     }
   }
 
