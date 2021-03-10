@@ -16,6 +16,7 @@ import {
   Button,
   Badge,
 } from "reactstrap";
+import styles from '@/pages/assets-exchange.module.scss';
 
 const AssetsExchange: React.FC = () => {
   const [open, setOpen] = useState(true);
@@ -26,7 +27,7 @@ const AssetsExchange: React.FC = () => {
         <title>Paid-Dapp Asset Exchange</title>
         <link rel="icon" href="/assets/icon/.ico" />
       </Head>
-      <div className="agreements m-0 p-0 px-4 container-fluid">
+      <div className={`m-0 p-0 px-4 container-fluid ${styles.assetsExchange}`}>
         <div className="row m-0 p-0 h-100">
           <div className="col-12 py-4 d-flex">
             <h3 className="d-flex mr-auto">Create Cross-chain Asset</h3>
@@ -41,7 +42,7 @@ const AssetsExchange: React.FC = () => {
                       <Col md={5}>
                         <span>From</span>
                         <br />
-                        <div>
+                        <div className={styles.blockButton}>
                           <Image
                             src="/assets/images/metamask.svg"
                             width={50}

@@ -21,7 +21,8 @@
     "baseUrl": ".",
     "paths": {
       "@/components/*": ["components/*"],
-      "@/pdComponents/*": ["components/reusable/*"]
+      "@/pdComponents/*": ["components/reusable/*"],
+      "@/pages/*" : ["sass/module/pages/*"]
     }
   },
   "include": [
