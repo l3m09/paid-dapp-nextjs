@@ -1,0 +1,30 @@
+.insufficientTokensModal {
+  .mB20 {
+    margin-bottom: 2.5rem;
+  }
+
+  .mL5 {
+    margin-left: 0.31rem;
+    margin-right: 0.62rem;
+  }
+
+  .modalBody {
+    text-align: center;
+    padding: 2.5rem 3.25rem;
+
+    .mainText {
+      font-size: 1.12rem;
+      line-height: 1.5rem;
+      max-width: 516px;
+      text-align: center;
+      margin: 0 auto;
+    }
+
+    .secondarySection {
+      @extend .mB20;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+}
