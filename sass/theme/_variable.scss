@@ -29,3 +29,13 @@ $btn-font-size: 0.8125rem;
 
 $btn-form-width-size: 10.75rem;
 $btn-form-height-size: 2.75rem;
+
+// bootstrap override
+$border-radius:               5px;
+$border-radius-lg:            8px;
+$border-radius-sm:            12px;
+$btn-border-radius:           $border-radius;
+$btn-border-radius-lg:        $border-radius-lg;
+$btn-border-radius-sm:        $border-radius-sm;
+
+$modal-md:                    616px;
