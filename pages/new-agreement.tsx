@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 
 import { Card } from 'reactstrap';
 import DynamicFields from '../components/new-agreement/DynamicFields';
+import PreviewDocument from '../components/new-agreement/PreviewDocument';
 
 type NewAgreementProps = {
   templateTypeCode?: string;
@@ -29,7 +30,9 @@ const NewAgreement: NextPage<NewAgreementProps> = ({ templateTypeCode }) => {
           <div className="col-12">
             <div className="row">
               <div className="col-8">
-                <Card className="border-0 content p-2"> Preview</Card>
+                <Card className="border-0 content">
+                  <PreviewDocument templateName="Mutual NDA" templateHTML="" />
+                </Card>
               </div>
               <div className="col-4">
                 <DynamicFields />
