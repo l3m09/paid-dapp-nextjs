@@ -6,11 +6,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import { Card } from 'reactstrap';
-import PreviewDocument from '@/components/new-agreement/PreviewDocument';
 import PdScrollbar from '@/pdComponents/pdScrollbar/PdScrollbar';
 import SmartAgreementFormPanel from '../components/new-agreement/SmartAgreementFormPanel';
 
-import { getContractTemplate } from '../redux/actions/template/index';
+import { getContractTemplate } from "../redux/actions/template/index";
+import PreviewDocument from "@/components/new-agreement/PreviewDocument";
 
 type NewAgreementProps = {
   templateTypeCode?: string;

@@ -57,7 +57,6 @@ const PdScrollbar: FC<PdScrollbarProps> = ({
             style={{ ...props.style, height: scrollYHeight }}
             className={
               classNames(
-                'd-block',
                 `${styles.pdTrackVertical}`,
                 noScrollY ? `${styles.hidden}` : '',
               )
