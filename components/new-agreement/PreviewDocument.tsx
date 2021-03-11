@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 // eslint-disable-next-line import/no-unresolved
-import PdRedScrollbar from '@/pdComponents/pdRedScrollbar/PdRedScrollbar'
+import PdScrollbar from '@/pdComponents/pdScrollbar/PdScrollbar'
 import styles from './PreviewDocument.module.scss'
 
 interface PreviewDocumentProps {
@@ -28,9 +28,12 @@ const PreviewDocument: FC<PreviewDocumentProps> = ({
         </button>
       </div>
       <div className={styles.previewDocumentBody}>
-        <PdRedScrollbar noScrollX scrollYHeight={665}>
+        <PdScrollbar
+          noScrollX
+          scrollYHeight={665}
+        >
           {templateHTML}
-        </PdRedScrollbar>
+        </PdScrollbar>
       </div>
     </div>
   )

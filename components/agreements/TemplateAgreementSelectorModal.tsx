@@ -64,7 +64,17 @@ const TemplateAgreementSelectorModal: FC<TemplateAgreementSelectorModalProps> = 
         >
           Cancel
         </button>
-        <Link href="/new-agreement?templateTypeCode=1">
+        {templateSelected ? (
+          <Link href={`/new-agreement?templateTypeCode=${templateSelected}`}>
+            <button
+              className="btn btn-primary btn-green"
+              type="button"
+              disabled={templateSelected === ''}
+            >
+              Create Agreement
+            </button>
+          </Link>
+        ) : (
           <button
             className="btn btn-primary btn-green"
             type="button"
@@ -72,7 +82,7 @@ const TemplateAgreementSelectorModal: FC<TemplateAgreementSelectorModalProps> = 
           >
             Create Agreement
           </button>
-        </Link>
+        )}
       </ModalFooter>
     </Modal>
   );
