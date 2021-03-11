@@ -8,6 +8,7 @@ $theme-colors: (
 
 $green: #48BC33;
 $green-100: #33bc83;
+$grey-100: #f4f5f7e3;
 $blue: #110252;
 $blue-800: #34286c;
 $blue-600: #878a9a;
@@ -29,3 +30,13 @@ $btn-font-size: 0.8125rem;
 
 $btn-form-width-size: 10.75rem;
 $btn-form-height-size: 2.75rem;
+
+// bootstrap override
+$border-radius:               5px;
+$border-radius-lg:            8px;
+$border-radius-sm:            12px;
+$btn-border-radius:           $border-radius;
+$btn-border-radius-lg:        $border-radius-lg;
+$btn-border-radius-sm:        $border-radius-sm;
+
+$modal-md:                    616px;

@@ -29,12 +29,60 @@ export const getContractTemplate = (contractName: String): contractTemplate => {
   let dataName = '';
   let jsonSchema: any = [];
   let uiSchema: Object = {};
+  const sharedProperties = {
+    couterparty: {
+      usernameOrEmail: {
+        title: 'Email or Username:',
+        type: 'string',
+      },
+      name: {
+        title: 'Name:',
+        type: 'string',
+      },
+    },
+  };
+
   try {
     switch (contractName) {
       case contractsTemplates.TemplateNda:
         title = 'MUTUAL NONDISCLOSURE AGREEMENT';
         contractTemplate = Nda;
         dataName = 'ndaAgreementData';
+        jsonSchema = {
+          type: 'object',
+          properties: {
+            partyName: {
+              title: 'Party Name',
+              type: 'string',
+            },
+            partyEmail: {
+              title: 'Party Email',
+              type: 'string',
+            },
+            partyAddress: {
+              title: 'Party Address',
+              type: 'string',
+            },
+            partyWallet: {
+              title: 'Party Wallet',
+              type: 'string',
+            },
+            date: {
+              title: 'Date',
+              type: 'string',
+              format: 'date',
+            },
+            ...sharedProperties.couterparty,
+            counterPartyAddress: {
+              title: 'CounterParty Address',
+              type: 'string',
+            },
+            counterPartyWallet: {
+              title: 'CounterParty Wallet',
+              type: 'string',
+            },
+          },
+        };
         break;
 
       case contractsTemplates.TemplateAdvisorAgreement:
@@ -44,6 +92,7 @@ export const getContractTemplate = (contractName: String): contractTemplate => {
         jsonSchema = {
           type: 'object',
           properties: {
+            ...sharedProperties.couterparty,
             purchaseOption: {
               type: 'string',
               title: 'Purchase Option',
@@ -136,6 +185,7 @@ export const getContractTemplate = (contractName: String): contractTemplate => {
         jsonSchema = {
           type: 'object',
           properties: {
+            ...sharedProperties.couterparty,
             effectiveDate: {
               title: 'Effective Date',
               type: 'string',
@@ -191,6 +241,7 @@ export const getContractTemplate = (contractName: String): contractTemplate => {
         jsonSchema = {
           type: 'object',
           properties: {
+            ...sharedProperties.couterparty,
             state: {
               title: 'State',
               type: 'string',
@@ -368,6 +419,7 @@ export const getContractTemplate = (contractName: String): contractTemplate => {
         jsonSchema = {
           type: 'object',
           properties: {
+            ...sharedProperties.couterparty,
             typeOfCompany: {
               title: 'Type of company',
               type: 'string',
@@ -414,6 +466,7 @@ export const getContractTemplate = (contractName: String): contractTemplate => {
         jsonSchema = {
           type: 'object',
           properties: {
+            ...sharedProperties.couterparty,
             purchaseAmount: {
               title: 'Purchase amount',
               type: 'number',

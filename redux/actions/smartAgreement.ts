@@ -1,9 +1,9 @@
-import AdvisorAgreementData from '../../models/advisorAgreementData';
-import CiiaAgreementData from '../../models/ciiaAgreementData';
-// import ConsultingAgreementData from "../../models/consultingAgreementData";
-import NdaAgreementData from '../../models/ndaAgreementData';
-// import ReferralAgreementData from "../../models/ReferralAgreementData";
-// import SaftAgreementData from "../../models/SaftAgreementData";
+import AdvisorAgreementData from '@/models/advisorAgreementData';
+import CiiaAgreementData from '@/models/ciiaAgreementData';
+import ConsultingAgreementData from '@/models/consultingAgreementData';
+import NdaAgreementData from '@/models/ndaAgreementData';
+import ReferralAgreementData from '@/models/ReferralAgreementData';
+import SaftAgreementData from '@/models/SaftAgreementData';
 import { SmartAgreementsTypes } from '../actionTypes/smartAgreements';
 
 export const doSetNdaAgreementData = (payload: NdaAgreementData) => (dispatch: any) => {
@@ -27,35 +27,36 @@ export const doSetCiiaAgreementData = (payload: CiiaAgreementData) => (dispatch:
   });
 }
 
-// export const doSetConsultingAgreementData = (payload: ConsultingAgreementData) => (dispatch: any) => {
-//     dispatch({
-//         type: SmartAgreementsTypes.SET_CONSULTING_AGREEMENT_DATA,
-//         payload
-//     });
-// }
+export const doSetConsultingAgreementData = (payload: ConsultingAgreementData) => (dispatch: any) => {
+  dispatch({
+    type: SmartAgreementsTypes.SET_CONSULTING_AGREEMENT_DATA,
+    payload,
+  });
+}
 
-// export const doSetReferralAgreementData = (payload: ReferralAgreementData) => (dispatch: any) => {
-//     dispatch({
-//         type: SmartAgreementsTypes.SET_REFERRAL_AGEEMENT_DATA,
-//         payload
-//     });
-// }
+export const doSetReferralAgreementData = (payload: ReferralAgreementData) => (dispatch: any) => {
+  dispatch({
+    type: SmartAgreementsTypes.SET_REFERRAL_AGEEMENT_DATA,
+    payload,
+  });
+}
 
-// export const doSetSaftAgreementData = (payload: SaftAgreementData) => (dispatch: any) => {
-//     dispatch({
-//         type: SmartAgreementsTypes.SET_SAFT_AGEEMENT_DATA,
-//         payload
-//     });
-// }
+export const doSetSaftAgreementData = (payload: SaftAgreementData) => (dispatch: any) => {
+  dispatch({
+    type: SmartAgreementsTypes.SET_SAFT_AGEEMENT_DATA,
+    payload,
+  });
+}
 
 export const doSetSmartAgreementData = (payload: any) => (dispatch: any) => {
   const { type, formData } = payload;
+  console.log(formData)
   const mapTypeToComponent = new Map([
-    ['advisoragreement', SmartAgreementsTypes.SET_ADVISOR_AGREEMENT_DATA],
+    ['advisor', SmartAgreementsTypes.SET_ADVISOR_AGREEMENT_DATA],
     ['ciia', SmartAgreementsTypes.SET_CIIA_AGREEMENT_DATA],
-    ['consultingagreement', SmartAgreementsTypes.SET_CONSULTING_AGREEMENT_DATA],
-    ['referalagreement', SmartAgreementsTypes.SET_REFERRAL_AGEEMENT_DATA],
-    ['saftagreement', SmartAgreementsTypes.SET_SAFT_AGEEMENT_DATA],
+    ['consulting', SmartAgreementsTypes.SET_CONSULTING_AGREEMENT_DATA],
+    ['referral', SmartAgreementsTypes.SET_REFERRAL_AGEEMENT_DATA],
+    ['saft', SmartAgreementsTypes.SET_SAFT_AGEEMENT_DATA],
   ]);
 
   dispatch({

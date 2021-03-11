@@ -1,12 +1,12 @@
 import React, { FC } from 'react';
-import JsonSchemaForm from '../reusable/JsonSchemaForm';
+
+import PdJsonSchemaForm from '../reusable/pdJsonSchemaForm/pdJsonSchemaForm';
 
 interface SmartAgreementsFormProps {
   jsonSchema: Object;
   uiSchema: Object;
   dataName: string;
   type: string;
-  onClose: any;
 }
 
 const SmartAgreementsForm: FC<SmartAgreementsFormProps> = ({
@@ -14,55 +14,58 @@ const SmartAgreementsForm: FC<SmartAgreementsFormProps> = ({
   dataName,
   jsonSchema,
   uiSchema,
-  onClose,
 }) => {
   const mapTypeToComponent = new Map([
     [
-      'advisor',
-      <JsonSchemaForm
+      'nda',
+      <PdJsonSchemaForm
         dataName={dataName}
         jsonSchema={jsonSchema}
         uiSchema={uiSchema}
         type={type}
-        onClose={onClose}
+      />,
+    ],
+    [
+      'advisor',
+      <PdJsonSchemaForm
+        dataName={dataName}
+        jsonSchema={jsonSchema}
+        uiSchema={uiSchema}
+        type={type}
       />,
     ],
     [
       'ciia',
-      <JsonSchemaForm
+      <PdJsonSchemaForm
         dataName={dataName}
         jsonSchema={jsonSchema}
         type={type}
-        onClose={onClose}
       />,
     ],
     [
       'consulting',
-      <JsonSchemaForm
+      <PdJsonSchemaForm
         dataName={dataName}
         jsonSchema={jsonSchema}
         uiSchema={uiSchema}
         type={type}
-        onClose={onClose}
       />,
     ],
     [
       'referral',
-      <JsonSchemaForm
+      <PdJsonSchemaForm
         dataName={dataName}
         jsonSchema={jsonSchema}
         uiSchema={uiSchema}
         type={type}
-        onClose={onClose}
       />,
     ],
     [
       'saft',
-      <JsonSchemaForm
+      <PdJsonSchemaForm
         dataName={dataName}
         jsonSchema={jsonSchema}
         type={type}
-        onClose={onClose}
       />,
     ],
   ]);

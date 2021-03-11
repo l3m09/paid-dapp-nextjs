@@ -6,6 +6,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import { Card } from 'reactstrap';
+import PreviewDocument from '@/components/new-agreement/PreviewDocument';
+import PdScrollbar from '@/pdComponents/pdScrollbar/PdScrollbar';
 import SmartAgreementFormPanel from '../components/new-agreement/SmartAgreementFormPanel';
 
 import { getContractTemplate } from '../redux/actions/template/index';
@@ -56,16 +58,19 @@ const NewAgreement: NextPage<NewAgreementProps> = ({ templateTypeCode }) => {
           <div className="col-12">
             <div className="row">
               <div className="col-8">
-                <Card className="border-0 content p-2"> Preview</Card>
+                <Card className="border-0 content">
+                  <PreviewDocument templateName="Mutual NDA" templateHTML="" />
+                </Card>
               </div>
               <div className="col-4">
-                <SmartAgreementFormPanel
-                  type={templateTypeCode}
-                  dataName={dataName}
-                  jsonSchema={jsonSchema}
-                  uiSchema={uiSchema}
-                  onClose={() => console.log('ON CLOSE')}
-                />
+                <PdScrollbar noScrollX scrollYHeight={665}>
+                  <SmartAgreementFormPanel
+                    type={templateTypeCode}
+                    dataName={dataName}
+                    jsonSchema={jsonSchema}
+                    uiSchema={uiSchema}
+                  />
+                </PdScrollbar>
               </div>
             </div>
           </div>

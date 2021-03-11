@@ -1,7 +1,5 @@
 import React, { FC } from 'react';
-import PropTypes from 'prop-types';
 import { Card, Button } from 'reactstrap';
-import StackedInput from '../reusable/StackedInput';
 import SmartAgreementForm from './SmartAgreementForm';
 
 interface SmartAgreementsFormPanelProps {
@@ -9,7 +7,6 @@ interface SmartAgreementsFormPanelProps {
   uiSchema: Object;
   dataName: string;
   type: string;
-  onClose: any;
 }
 
 const SmartAgreementsFormPanel: FC<SmartAgreementsFormPanelProps> = ({
@@ -17,7 +14,6 @@ const SmartAgreementsFormPanel: FC<SmartAgreementsFormPanelProps> = ({
   dataName,
   jsonSchema,
   uiSchema,
-  onClose,
 }: SmartAgreementsFormPanelProps) => (
   <Card className="card-fields border-0 p-3">
     <div className="title d-flex">
@@ -26,32 +22,11 @@ const SmartAgreementsFormPanel: FC<SmartAgreementsFormPanelProps> = ({
         <img src="/assets/icon/3dot.svg" alt="" />
       </Button>
     </div>
-    <span className="secondary-title mb-1 px-2">Counterparty</span>
-    <StackedInput
-      label="Email or Username:"
-      name="Type Name"
-      type="text"
-      placeholder="Type email or username"
-      errorComponent={null}
-      groupClassNames="mt-1 px-2 my-1"
-    />
-
-    <StackedInput
-      label="Name:"
-      name="name"
-      type="text"
-      placeholder="Type email or username"
-      errorComponent={null}
-      groupClassNames="px-2 py-1"
-    />
-
-    <span className="secondary-title mb-1 px-2">Settings</span>
     <SmartAgreementForm
       type={type}
       dataName={dataName}
       jsonSchema={jsonSchema}
       uiSchema={uiSchema}
-      onClose={() => console.log('TEST')}
     />
   </Card>
 );
