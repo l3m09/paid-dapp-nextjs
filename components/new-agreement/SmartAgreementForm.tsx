@@ -1,5 +1,5 @@
-import React, { FC } from "react";
-import JsonSchemaForm from "../reusable/JsonSchemaForm";
+import React, { FC } from 'react';
+import JsonSchemaForm from '../reusable/JsonSchemaForm';
 
 interface SmartAgreementsFormProps {
   jsonSchema: Object;
@@ -18,7 +18,7 @@ const SmartAgreementsForm: FC<SmartAgreementsFormProps> = ({
 }) => {
   const mapTypeToComponent = new Map([
     [
-      "advisor",
+      'advisor',
       <JsonSchemaForm
         dataName={dataName}
         jsonSchema={jsonSchema}
@@ -28,7 +28,7 @@ const SmartAgreementsForm: FC<SmartAgreementsFormProps> = ({
       />,
     ],
     [
-      "ciia",
+      'ciia',
       <JsonSchemaForm
         dataName={dataName}
         jsonSchema={jsonSchema}
@@ -37,17 +37,7 @@ const SmartAgreementsForm: FC<SmartAgreementsFormProps> = ({
       />,
     ],
     [
-      "consulting",
-      <JsonSchemaForm
-        dataName={dataName}
-        jsonSchema={jsonSchema}
-        uiSchema={uiSchema}
-        type={type}
-        onClose={onClose}
-      />,
-    ],
-    [
-      "referral",
+      'consulting',
       <JsonSchemaForm
         dataName={dataName}
         jsonSchema={jsonSchema}
@@ -57,7 +47,17 @@ const SmartAgreementsForm: FC<SmartAgreementsFormProps> = ({
       />,
     ],
     [
-      "saft",
+      'referral',
+      <JsonSchemaForm
+        dataName={dataName}
+        jsonSchema={jsonSchema}
+        uiSchema={uiSchema}
+        type={type}
+        onClose={onClose}
+      />,
+    ],
+    [
+      'saft',
       <JsonSchemaForm
         dataName={dataName}
         jsonSchema={jsonSchema}

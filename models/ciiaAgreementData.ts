@@ -1,13 +1,13 @@
 export default interface CiiaAgreementData {
-  partyName: string; //Company name
+  partyName: string; // Company name
   partyEmail: string; // company data
   partyAddress: string; // company data
   partyWallet: string; // company data
   date: string;
-  counterPartyName: string; //Consultant name
-  counterPartyEmail: string; //consultant data
-  counterPartyAddress: string; //consultant data
-  counterPartyWallet: string; //consultant data
+  counterPartyName: string; // Consultant name
+  counterPartyEmail: string; // consultant data
+  counterPartyAddress: string; // consultant data
+  counterPartyWallet: string; // consultant data
   effectiveDate: string;
   companyState: string;
   stateConsultant: string;
@@ -18,4 +18,4 @@ export default interface CiiaAgreementData {
   stateCompany: string;
   typeOfComapny: string;
   listCompAgreements: string;
-};
+}

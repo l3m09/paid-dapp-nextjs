@@ -1,8 +1,8 @@
-import React, { FC } from "react";
-import PropTypes from "prop-types";
-import { Card, Button } from "reactstrap";
-import StackedInput from "../reusable/StackedInput";
-import SmartAgreementForm from "./SmartAgreementForm";
+import React, { FC } from 'react';
+import PropTypes from 'prop-types';
+import { Card, Button } from 'reactstrap';
+import StackedInput from '../reusable/StackedInput';
+import SmartAgreementForm from './SmartAgreementForm';
 
 interface SmartAgreementsFormPanelProps {
   jsonSchema: Object;
@@ -51,7 +51,7 @@ const SmartAgreementsFormPanel: FC<SmartAgreementsFormPanelProps> = ({
       dataName={dataName}
       jsonSchema={jsonSchema}
       uiSchema={uiSchema}
-      onClose={() => console.log("TEST")}
+      onClose={() => console.log('TEST')}
     />
   </Card>
 );

@@ -8,4 +8,4 @@ export default interface NdaAgreementData {
   counterPartyEmail: string;
   counterPartyAddress: string;
   counterPartyWallet: string;
-};
+}

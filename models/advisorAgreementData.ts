@@ -22,4 +22,4 @@ export default interface AdvisorAgreementData {
   typeOfPrice: string;
   acceptionOption: string;
   numberOfYears: string;
-};
+}

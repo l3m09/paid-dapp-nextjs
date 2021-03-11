@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from "react";
-import Head from "next/head";
-import { NextPage } from "next";
-import router from "next/router";
-import { useDispatch, useSelector } from "react-redux";
-import PropTypes from "prop-types";
+import React, { useState, useEffect } from 'react';
+import Head from 'next/head';
+import { NextPage } from 'next';
+import router from 'next/router';
+import { useDispatch, useSelector } from 'react-redux';
+import PropTypes from 'prop-types';
 
-import { Card } from "reactstrap";
-import SmartAgreementFormPanel from "../components/new-agreement/SmartAgreementFormPanel";
+import { Card } from 'reactstrap';
+import SmartAgreementFormPanel from '../components/new-agreement/SmartAgreementFormPanel';
 
-import { getContractTemplate } from "../redux/actions/template/index";
+import { getContractTemplate } from '../redux/actions/template/index';
 
 type NewAgreementProps = {
   templateTypeCode?: string;
@@ -16,25 +16,25 @@ type NewAgreementProps = {
 
 const NewAgreement: NextPage<NewAgreementProps> = ({ templateTypeCode }) => {
   if (!templateTypeCode) {
-    router.push("agreements");
+    router.push('agreements');
   }
 
   const dispatch = useDispatch();
-  const [agreementDocument, setAgreementDocument] = useState("");
+  const [agreementDocument, setAgreementDocument] = useState('');
   const [agreementData, setAgreementData] = useState({});
   const smartAgreementsState = useSelector(
-    (state: { smartAgreementsReducer: any }) => state.smartAgreementsReducer
+    (state: { smartAgreementsReducer: any }) => state.smartAgreementsReducer,
   );
   const [jsonSchema, setJsonSchema] = useState({});
   const [uiSchema, setUISchema] = useState({});
-  const [dataName, setDataName] = useState("");
+  const [dataName, setDataName] = useState('');
 
   useEffect(() => {
     const templateData = getContractTemplate(templateTypeCode);
     const data: any = {
       ...smartAgreementsState[templateData.dataName],
     };
-  
+
     setAgreementDocument(templateData.template);
     setJsonSchema(templateData.jsonSchema);
     setUISchema(templateData.uiSchema);

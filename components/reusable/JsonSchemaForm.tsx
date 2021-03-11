@@ -1,10 +1,10 @@
 import React, {
-  FC
-} from "react";
-import { useDispatch, useSelector } from "react-redux";
-import Form from "@rjsf/core";
+  FC,
+} from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import Form from '@rjsf/core';
 
-import { doSetSmartAgreementData } from "../../redux/actions/smartAgreement";
+import { doSetSmartAgreementData } from '../../redux/actions/smartAgreement';
 
 interface JsonSchemaFormProps {
   type: string;
@@ -23,7 +23,7 @@ const JsonSchemaForm: FC<JsonSchemaFormProps> = ({
 }) => {
   const dispatch = useDispatch();
   const smartAgreementsState = useSelector(
-    (state: { smartAgreementsReducer: any }) => state.smartAgreementsReducer
+    (state: { smartAgreementsReducer: any }) => state.smartAgreementsReducer,
   );
 
   const onSubmit = ({ formData }) => {
@@ -58,7 +58,7 @@ const JsonSchemaForm: FC<JsonSchemaFormProps> = ({
         widgets={widgets}
         formData={smartAgreementsState[dataName]}
         onSubmit={onSubmit}
-      ></Form>
+      />
     </div>
   );
 };
