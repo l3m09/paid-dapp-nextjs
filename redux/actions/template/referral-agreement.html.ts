@@ -1,5 +1,5 @@
 /* eslint-disable no-tabs */
-const ReferalAgreement = `<div class="contract" style="width: 800px; background-color:white; color: black;">
+const ReferalAgreement = `<div class="contract" style="width: 100%; background-color:white; color: black;">
 <h1 id="title" style="text-align: center;">REFERRAL AGREEMENT</h1>
 <p lang="x-none"><img src="file:///tmp/lu3143m6nflh.tmp/lu3143m6nfm1_tmp_5818bcb1de4a4214.gif" width="8" height="9" name="_tx_id_2_" align="bottom" border="0" /></p>
 <p lang="x-none" align="center"><span id="Frame1" dir="ltr"></span><strong><span style="font-size: large;">

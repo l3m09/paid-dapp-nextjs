@@ -1,5 +1,5 @@
 /* eslint-disable no-tabs */
-const Ciia = `<div class="contract" style="width: 800px; background-color:white; color: black;"><h1 id="title" style="text-align: center;">CIIA</h1><p align="center"><strong><span id="partyName">{{partyName}}</v></strong></p>
+const Ciia = `<div class="contract" style="width: 100%; background-color:white; color: black;"><h1 id="title" style="text-align: center;">CIIA</h1><p align="center"><strong><span id="partyName">{{partyName}}</v></strong></p>
 <p align="center"><strong><u>CONFIDENTIAL INFORMATION AND</u><br /> <u>INVENTION ASSIGNMENT AGREEMENT</u></strong></p>
 <p align="center"><em>Consultant Name:</em> <div style="display: inline-block; background-color:#f79632">{{counterPartyName}}</div> (&ldquo;<u>Consultant</u>&rdquo;)</p>
 <p align="center"><em>Effective Date: <div style="display: inline-block; background-color:#f79632">{{effectiveDate}}</div></em></p>

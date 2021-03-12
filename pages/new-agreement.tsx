@@ -1,10 +1,11 @@
 /* eslint-disable import/no-unresolved */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Head from 'next/head';
 import { NextPage } from 'next';
 import router from 'next/router';
 import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
+import TemplateComponent from 'react-mustache-template-component';
 
 import { Card } from 'reactstrap';
 import PdScrollbar from '@/pdComponents/pdScrollbar/PdScrollbar';
@@ -28,14 +29,20 @@ const NewAgreement: NextPage<NewAgreementProps> = ({ templateTypeCode }) => {
   const [jsonSchema, setJsonSchema] = useState({});
   const [uiSchema, setUISchema] = useState({});
   const [dataName, setDataName] = useState('');
+  const [agreementDocument, setAgreementDocument] = useState('');
+  const [agreementData] = useState({});
 
   useEffect(() => {
     const templateData = getContractTemplate(templateTypeCode);
 
+    setDataName(templateData.dataName);
+    setAgreementDocument(templateData.template);
     setJsonSchema(templateData.jsonSchema);
     setUISchema(templateData.uiSchema);
     setDataName(templateData.dataName);
   }, [templateTypeCode, smartAgreementsState]);
+
+  const agreementTemplate = useCallback(() => <div style={{ width: '100%' }}><TemplateComponent template={agreementDocument} data={agreementData} /></div>, [agreementDocument, agreementData]);
 
   return (
     <>
@@ -52,7 +59,7 @@ const NewAgreement: NextPage<NewAgreementProps> = ({ templateTypeCode }) => {
             <div className="row">
               <div className="col-8">
                 <Card className="border-0 content">
-                  <PreviewDocument templateName="Mutual NDA" templateHTML="" />
+                  <PreviewDocument templateName="Mutual NDA" templateHTML={agreementTemplate()} />
                 </Card>
               </div>
               <div className="col-4">

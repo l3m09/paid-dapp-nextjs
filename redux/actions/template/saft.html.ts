@@ -1,5 +1,5 @@
 /* eslint-disable no-tabs */
-const Saft = `<div class="contract" style="width: 800px; background-color:white; color: black;"><p class="western" align="center"><strong><div style="display: inline-block; background-color:#f79632"><span id="partyName">{{partyName}}</span></div></strong></p>
+const Saft = `<div class="contract" style="width: 100%; background-color:white; color: black;"><p class="western" align="center"><strong><div style="display: inline-block; background-color:#f79632"><span id="partyName">{{partyName}}</span></div></strong></p>
 <p class="western" align="center">
 <div style="text-align: center;">
 <h1 id="title">SAFT</h1>	

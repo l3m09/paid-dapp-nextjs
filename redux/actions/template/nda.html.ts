@@ -1,5 +1,5 @@
 /* eslint-disable no-tabs */
-const Nda = `<div class="contract" style="width: 800px; background-color:white; color: black;">
+const Nda = `<div class="contract" style="width: 100%; background-color:white; color: black;">
 <div style="text-align: center;">
 <h3><span id="createDate"><div style="display: inline-block; background-color:#f79632">{{createDate}}</div></span></h3>
 </div>

@@ -5,7 +5,7 @@ import styles from './PreviewDocument.module.scss'
 
 interface PreviewDocumentProps {
   templateName: string;
-  templateHTML: string;
+  templateHTML: any;
 }
 
 const PreviewDocument: FC<PreviewDocumentProps> = ({
