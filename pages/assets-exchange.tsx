@@ -16,7 +16,7 @@ import {
 } from 'reactstrap';
 import styles from '@/pages/assets-exchange.module.scss';
 import InsufficientTokensModal from '@/components/assets-exchange/InsufficientTokensModal';
-import { PdBadge } from '@/pdComponents'
+import { PdBadge } from '@/pdComponents';
 
 const AssetsExchange: React.FC = () => {
   const [open, setOpen] = useState(true);

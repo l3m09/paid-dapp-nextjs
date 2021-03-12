@@ -6,7 +6,8 @@
     "dev": "next dev ",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint . --fix --ext .js,.tsx,.ts"
+    "lint": "eslint . --ext .js,.tsx,.ts",
+    "lint:fix": "eslint . --fix --ext .js,.tsx,.ts"
   },
   "dependencies": {
     "@hookform/error-message": "0.0.5",
