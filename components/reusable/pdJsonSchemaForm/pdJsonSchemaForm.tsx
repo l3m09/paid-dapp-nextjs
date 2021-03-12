@@ -29,6 +29,10 @@ const PdJsonSchemaForm: FC<pdJsonSchemaFormProps> = ({
   );
 
   const onSubmit = ({ formData }) => {
+    console.log(formData);
+  };
+
+  const onChange = ({ formData }) => {
     dispatch(doSetSmartAgreementData({ type, formData }));
   };
 
@@ -42,6 +46,8 @@ const PdJsonSchemaForm: FC<pdJsonSchemaFormProps> = ({
         widgets={widgets}
         formData={smartAgreementsState[dataName]}
         onSubmit={onSubmit}
+        onChange={onChange}
+        showErrorList={false}
       >
         <Button className="w-100 text-center" color="danger">Review </Button>
       </Form>

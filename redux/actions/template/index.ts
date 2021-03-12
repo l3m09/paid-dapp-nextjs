@@ -31,7 +31,7 @@ const getContractTemplate = (contractName: String): contractTemplate => {
   let uiSchema: Object = {};
   const sharedProperties = {
     couterparty: {
-      usernameOrEmail: {
+      counterPartyName: {
         title: 'Email or Username:',
         type: 'string',
       },
@@ -76,14 +76,6 @@ const getContractTemplate = (contractName: String): contractTemplate => {
           },
           ...sharedProperties.couterparty,
           ...sharedProperties.wallet,
-          counterPartyAddress: {
-            title: 'CounterParty Address',
-            type: 'string',
-          },
-          counterPartyWallet: {
-            title: 'CounterParty Wallet',
-            type: 'string',
-          },
         },
       };
       break;
@@ -361,7 +353,7 @@ const getContractTemplate = (contractName: String): contractTemplate => {
       uiSchema = {
         'ui:widget': 'checkbox',
         'ui:order': [
-          'usernameOrEmail',
+          'counterPartyName',
           'counterPartyEmail',
           'counterPartyAddress',
           'counterPartyWallet',

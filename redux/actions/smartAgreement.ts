@@ -64,6 +64,7 @@ export const doSetSaftAgreementData = (payload: SaftAgreementData) => (
 export const doSetSmartAgreementData = (payload: any) => (dispatch: any) => {
   const { type, formData } = payload;
   const mapTypeToComponent = new Map([
+    ['nda', SmartAgreementsTypes.SET_NDA_AGREEMENT_DATA],
     ['advisor', SmartAgreementsTypes.SET_ADVISOR_AGREEMENT_DATA],
     ['ciia', SmartAgreementsTypes.SET_CIIA_AGREEMENT_DATA],
     ['consulting', SmartAgreementsTypes.SET_CONSULTING_AGREEMENT_DATA],

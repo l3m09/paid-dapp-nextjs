@@ -164,7 +164,7 @@ const smartAgreementsReducer = (
         ...state,
         ndaAgreementData: {
           ...state.ndaAgreementData,
-          newNdaData,
+          ...newNdaData,
         },
       };
     }
