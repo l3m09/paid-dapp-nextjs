@@ -1,7 +1,6 @@
-import React, { useState } from "react";
-import Head from "next/head";
-import Image from "next/image";
-import InsufficientTokensModal from "../components/assets-exchange/InsufficientTokensModal";
+import React, { useState } from 'react';
+import Head from 'next/head';
+import Image from 'next/image';
 import {
   Card,
   CardBody,
@@ -14,9 +13,10 @@ import {
   Label,
   Input,
   Button,
-  Badge,
-} from "reactstrap";
+} from 'reactstrap';
 import styles from '@/pages/assets-exchange.module.scss';
+import InsufficientTokensModal from '@/components/assets-exchange/InsufficientTokensModal';
+import { PdBadge } from '@/pdComponents'
 
 const AssetsExchange: React.FC = () => {
   const [open, setOpen] = useState(true);
@@ -67,8 +67,8 @@ const AssetsExchange: React.FC = () => {
                             width={50}
                             height={50}
                           />
-                          <Badge color="warning">BEP20</Badge>
-                          <Badge color="success">Connected</Badge>
+                          <PdBadge color="warning">BEP20</PdBadge>
+                          <PdBadge color="success">Connected</PdBadge>
                           <small>0x9e81...0dd1df</small>
                           <h4>Binance Smart Chain</h4>
                         </div>
@@ -110,17 +110,18 @@ const AssetsExchange: React.FC = () => {
                                   height={50}
                                 />
                                 <small>0x9e81...9ffd540dd1df</small>
-                                <br></br>
+                                <br />
                                 <span>1000 PAID</span>
                               </Col>
                               <Col md={5}>
-                                TO{" "}
+                                TO
+                                {' '}
                                 <Image
                                   src="/assets/icon/paidToken.svg"
                                   width={50}
                                   height={50}
                                 />
-                                <Badge color="warning">BEP20</Badge>
+                                <PdBadge color="warning">BEP20</PdBadge>
                                 <small>0x9e81...9ffd540dd1df</small>
                               </Col>
                               <Col md={2}>10 min</Col>
@@ -133,7 +134,7 @@ const AssetsExchange: React.FC = () => {
                       <Col md={9}>
                         <Row>
                           <Col md={3}>
-                            {" "}
+                            {' '}
                             <Image
                               src="/assets/icon/check.svg"
                               width={50}
@@ -150,7 +151,7 @@ const AssetsExchange: React.FC = () => {
                                   height={50}
                                 />
                                 <small>0x9e81...9ffd540dd1df</small>
-                                <br></br>
+                                <br />
                                 <span>1 PAID</span>
                               </Col>
                               <Col md={5}>
@@ -160,7 +161,7 @@ const AssetsExchange: React.FC = () => {
                                   width={50}
                                   height={50}
                                 />
-                                <Badge color="warning">BEP20</Badge>
+                                <PdBadge color="warning">BEP20</PdBadge>
                                 <small>0x9e81...9ffd540dd1df</small>
                               </Col>
                               <Col md={2}>1 hour ago</Col>
