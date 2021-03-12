@@ -1,4 +1,4 @@
-export enum SmartAgreementsTypes {
+enum SmartAgreementsTypes {
   SET_NDA_AGREEMENT_DATA = 'SET_NDA_AGREEMENT_DATA',
   SET_ADVISOR_AGREEMENT_DATA = 'SET_ADVISOR_AGREEMENT_DATA',
   SET_CIIA_AGREEMENT_DATA = 'SET_CIIA_AGREEMENT_DATA',
@@ -6,3 +6,5 @@ export enum SmartAgreementsTypes {
   SET_REFERRAL_AGEEMENT_DATA = 'SET_REFERRAL_AGEEMENT_DATA',
   SET_SAFT_AGEEMENT_DATA = 'SET_SAFT_AGEEMENT_DATA'
 }
+
+export default SmartAgreementsTypes;

@@ -1,4 +1,5 @@
-export const AdvisorAgreemt = `<div class="contract" style="width: 800px; background-color:white; color: black;"><h1 id="title" style="text-align: center;">ADVISOR AGREEMENT</h1><h1 class="western" style="text-align: center;"><span style="font-size: medium;"><span lang="en-US"><strong>&nbsp;<div style="display: inline-block; background-color:#f79632"><span id="partyName">{{partyName}}</span></div></strong></span></span>
+/* eslint-disable no-tabs */
+const AdvisorAgreemt = `<div class="contract" style="width: 800px; background-color:white; color: black;"><h1 id="title" style="text-align: center;">ADVISOR AGREEMENT</h1><h1 class="western" style="text-align: center;"><span style="font-size: medium;"><span lang="en-US"><strong>&nbsp;<div style="display: inline-block; background-color:#f79632"><span id="partyName">{{partyName}}</span></div></strong></span></span>
 </h1>
 <p align="center"><u><strong>Advisor Agreement</strong></u></p>
 <p>This Advisor Agreement (this &ldquo;<u>Agreement</u>&rdquo;) is entered into as of <div style="display: inline-block; background-color:#f79632"><span id="createDate">{{date}}</span></div>, by and between <div style="display: inline-block; background-color:#f79632">{{partyName}}</div> (the &ldquo;<u>Company</u>&rdquo;), and <div style="display: inline-block; background-color:#f79632"><span id="counterPartyName">{{counterPartyName}}</span></div> (&ldquo;<u>Advisor</u>&rdquo;).</p>
@@ -117,3 +118,5 @@ export const AdvisorAgreemt = `<div class="contract" style="width: 800px; backgr
 <p>Wallet: <div style="display: inline-block; background-color:#f79632"><span id="counterPartyWallet">{{counterPartyWallet}}</span></div>
 <p align="center"><br /> </p>
 </div>`
+
+export default AdvisorAgreemt;

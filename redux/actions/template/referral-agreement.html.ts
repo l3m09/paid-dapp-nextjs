@@ -1,4 +1,5 @@
-export const ReferalAgreement = `<div class="contract" style="width: 800px; background-color:white; color: black;">
+/* eslint-disable no-tabs */
+const ReferalAgreement = `<div class="contract" style="width: 800px; background-color:white; color: black;">
 <h1 id="title" style="text-align: center;">REFERRAL AGREEMENT</h1>
 <p lang="x-none"><img src="file:///tmp/lu3143m6nflh.tmp/lu3143m6nfm1_tmp_5818bcb1de4a4214.gif" width="8" height="9" name="_tx_id_2_" align="bottom" border="0" /></p>
 <p lang="x-none" align="center"><span id="Frame1" dir="ltr"></span><strong><span style="font-size: large;">
@@ -254,3 +255,5 @@ export const ReferalAgreement = `<div class="contract" style="width: 800px; back
 <p class="western" lang="x-none"><span lang="en-US">As used in this </span><span lang="en-US"><u>Schedule B</u></span><span lang="en-US">, &ldquo;Net Revenue&rdquo; means all revenue actually received by the Company, less any applicable taxes or fees payable by the Company. For the avoidance of doubt, Net Revenue shall not include amounts that are (a) billed but not collected, or (b) not yet billed. </span></p>
 <p class="western">&nbsp;</p>
 <p class="western" lang="x-none">&nbsp;</p></div>`;
+
+export default ReferalAgreement;

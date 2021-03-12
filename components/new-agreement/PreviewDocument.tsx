@@ -1,5 +1,5 @@
-import React, { FC } from 'react'
 // eslint-disable-next-line import/no-unresolved
+import React, { FC } from 'react'
 import PdScrollbar from '@/pdComponents/pdScrollbar/PdScrollbar'
 import styles from './PreviewDocument.module.scss'
 

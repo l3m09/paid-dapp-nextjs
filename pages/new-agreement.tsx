@@ -1,16 +1,17 @@
+/* eslint-disable import/no-unresolved */
 import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import { NextPage } from 'next';
 import router from 'next/router';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import { Card } from 'reactstrap';
 import PdScrollbar from '@/pdComponents/pdScrollbar/PdScrollbar';
+import PreviewDocument from '@/components/new-agreement/PreviewDocument';
 import SmartAgreementFormPanel from '../components/new-agreement/SmartAgreementFormPanel';
 
-import { getContractTemplate } from "../redux/actions/template/index";
-import PreviewDocument from "@/components/new-agreement/PreviewDocument";
+import getContractTemplate from '../redux/actions/template/index';
 
 type NewAgreementProps = {
   templateTypeCode?: string;
@@ -21,9 +22,6 @@ const NewAgreement: NextPage<NewAgreementProps> = ({ templateTypeCode }) => {
     router.push('agreements');
   }
 
-  const dispatch = useDispatch();
-  const [agreementDocument, setAgreementDocument] = useState('');
-  const [agreementData, setAgreementData] = useState({});
   const smartAgreementsState = useSelector(
     (state: { smartAgreementsReducer: any }) => state.smartAgreementsReducer,
   );
@@ -33,15 +31,10 @@ const NewAgreement: NextPage<NewAgreementProps> = ({ templateTypeCode }) => {
 
   useEffect(() => {
     const templateData = getContractTemplate(templateTypeCode);
-    const data: any = {
-      ...smartAgreementsState[templateData.dataName],
-    };
 
-    setAgreementDocument(templateData.template);
     setJsonSchema(templateData.jsonSchema);
     setUISchema(templateData.uiSchema);
     setDataName(templateData.dataName);
-    setAgreementData(data);
   }, [templateTypeCode, smartAgreementsState]);
 
   return (

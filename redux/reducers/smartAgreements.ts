@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 import ActionModel from '@/models/actionModel';
 import AdvisorAgreementData from '@/models/advisorAgreementData';
 import CiiaAgreementData from '@/models/ciiaAgreementData';
@@ -5,16 +6,15 @@ import ConsultingAgreementData from '@/models/consultingAgreementData';
 import NdaAgreementData from '@/models/ndaAgreementData';
 import ReferralAgreementData from '@/models/ReferralAgreementData';
 import SaftAgreementData from '@/models/SaftAgreementData';
-
-import { SmartAgreementsTypes } from '../actionTypes/smartAgreements';
+import SmartAgreementsTypes from '../actionTypes/smartAgreements';
 
 interface SmartAgreementsState {
-    ndaAgreementData: NdaAgreementData;
-    advisorAgreementData: AdvisorAgreementData;
-    ciiaAgreementData: CiiaAgreementData;
-    consultingAgreementData: ConsultingAgreementData;
-    referralAgreementData: ReferralAgreementData;
-    saftAgreementData: SaftAgreementData;
+  ndaAgreementData: NdaAgreementData;
+  advisorAgreementData: AdvisorAgreementData;
+  ciiaAgreementData: CiiaAgreementData;
+  consultingAgreementData: ConsultingAgreementData;
+  referralAgreementData: ReferralAgreementData;
+  saftAgreementData: SaftAgreementData;
 }
 
 const initialState: SmartAgreementsState = {
@@ -30,7 +30,7 @@ const initialState: SmartAgreementsState = {
     counterPartyWallet: '',
   },
   advisorAgreementData: {
-    partyName: '[________]',
+    partyName: '',
     partyEmail: '________',
     partyAddress: '________',
     partyWallet: '________',
@@ -149,16 +149,16 @@ const initialState: SmartAgreementsState = {
     ethereum: '',
     bitcoin: '',
   },
-}
+};
 
-export const smartAgreementsReducer = function (
+const smartAgreementsReducer = (
   state: SmartAgreementsState = initialState,
   action: ActionModel,
-) {
+) => {
   const { type, payload } = action;
 
   switch (type) {
-    case SmartAgreementsTypes.SET_NDA_AGREEMENT_DATA:
+    case SmartAgreementsTypes.SET_NDA_AGREEMENT_DATA: {
       const newNdaData = payload;
       return {
         ...state,
@@ -167,7 +167,8 @@ export const smartAgreementsReducer = function (
           newNdaData,
         },
       };
-    case SmartAgreementsTypes.SET_ADVISOR_AGREEMENT_DATA:
+    }
+    case SmartAgreementsTypes.SET_ADVISOR_AGREEMENT_DATA: {
       const newAdvisorData = payload;
       return {
         ...state,
@@ -176,7 +177,8 @@ export const smartAgreementsReducer = function (
           ...newAdvisorData,
         },
       };
-    case SmartAgreementsTypes.SET_CIIA_AGREEMENT_DATA:
+    }
+    case SmartAgreementsTypes.SET_CIIA_AGREEMENT_DATA: {
       const newCiiaData = payload;
       return {
         ...state,
@@ -185,7 +187,8 @@ export const smartAgreementsReducer = function (
           ...newCiiaData,
         },
       };
-    case SmartAgreementsTypes.SET_CONSULTING_AGREEMENT_DATA:
+    }
+    case SmartAgreementsTypes.SET_CONSULTING_AGREEMENT_DATA: {
       const newConsultingData = payload;
       return {
         ...state,
@@ -194,7 +197,8 @@ export const smartAgreementsReducer = function (
           ...newConsultingData,
         },
       };
-    case SmartAgreementsTypes.SET_REFERRAL_AGEEMENT_DATA:
+    }
+    case SmartAgreementsTypes.SET_REFERRAL_AGEEMENT_DATA: {
       const newReferralData = payload;
       return {
         ...state,
@@ -203,7 +207,8 @@ export const smartAgreementsReducer = function (
           ...newReferralData,
         },
       };
-    case SmartAgreementsTypes.SET_SAFT_AGEEMENT_DATA:
+    }
+    case SmartAgreementsTypes.SET_SAFT_AGEEMENT_DATA: {
       const newSaftData = payload;
       return {
         ...state,
@@ -212,7 +217,10 @@ export const smartAgreementsReducer = function (
           ...newSaftData,
         },
       };
+    }
     default:
       return { ...state };
   }
-}
+};
+
+export default smartAgreementsReducer;

@@ -1,1 +1,3 @@
-export { PdModal, PdModalBody, PdModalFooter, PdModalHeader } from './PdModal'
+export {
+  PdModal, PdModalBody, PdModalFooter, PdModalHeader,
+} from './PdModal'

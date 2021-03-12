@@ -1,4 +1,5 @@
-export const ConsultingAgreement = `<div class="contract" style="width: 100%; background-color:white; color: black;"><h1 id="title" style="text-align: center;">CONSULTING AGREEMENT</h1><p align="center"><strong><span id="partyName">{{partyName}}</span></strong></p>
+/* eslint-disable no-tabs */
+const ConsultingAgreement = `<div class="contract" style="width: 100%; background-color:white; color: black;"><h1 id="title" style="text-align: center;">CONSULTING AGREEMENT</h1><p align="center"><strong><span id="partyName">{{partyName}}</span></strong></p>
 <p align="center"><u><strong>CONSULTING AGREEMENT</strong></u></p>
 <p>This Consulting Agreement (this &ldquo;<u>Agreement</u>&rdquo;) is made as of {{date}}, by and between {{partyName}}, (the &ldquo;<u>Company</u>&rdquo;), and {{counterPartyName}}(&ldquo;<u>Consultant</u>&rdquo;).</p>
 <ol>
@@ -141,3 +142,5 @@ export const ConsultingAgreement = `<div class="contract" style="width: 100%; ba
 <p><br /> </p>
 <p><em><u><strong>Instructions</strong></u></em><u>:</u> If no companies need to be excluded under Section 8, please check &ldquo;No Conflicts&rdquo; and sign and date above.</p>
 </div>`;
+
+export default ConsultingAgreement;

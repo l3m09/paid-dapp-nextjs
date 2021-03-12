@@ -1,7 +1,6 @@
-import React, { useState } from "react";
-import Head from "next/head";
-import Image from "next/image";
-import InsufficientTokensModal from "../components/assets-exchange/InsufficientTokensModal";
+import React, { useState } from 'react';
+import Head from 'next/head';
+import Image from 'next/image';
 import {
   Card,
   CardBody,
@@ -15,8 +14,9 @@ import {
   Input,
   Button,
   Badge,
-} from "reactstrap";
+} from 'reactstrap';
 import styles from '@/pages/assets-exchange.module.scss';
+import InsufficientTokensModal from '../components/assets-exchange/InsufficientTokensModal';
 
 const AssetsExchange: React.FC = () => {
   const [open, setOpen] = useState(true);
@@ -110,11 +110,12 @@ const AssetsExchange: React.FC = () => {
                                   height={50}
                                 />
                                 <small>0x9e81...9ffd540dd1df</small>
-                                <br></br>
+                                <br />
                                 <span>1000 PAID</span>
                               </Col>
                               <Col md={5}>
-                                TO{" "}
+                                TO
+                                {' '}
                                 <Image
                                   src="/assets/icon/paidToken.svg"
                                   width={50}
@@ -133,7 +134,7 @@ const AssetsExchange: React.FC = () => {
                       <Col md={9}>
                         <Row>
                           <Col md={3}>
-                            {" "}
+                            {' '}
                             <Image
                               src="/assets/icon/check.svg"
                               width={50}
@@ -150,7 +151,7 @@ const AssetsExchange: React.FC = () => {
                                   height={50}
                                 />
                                 <small>0x9e81...9ffd540dd1df</small>
-                                <br></br>
+                                <br />
                                 <span>1 PAID</span>
                               </Col>
                               <Col md={5}>

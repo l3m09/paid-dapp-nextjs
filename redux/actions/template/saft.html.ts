@@ -1,7 +1,8 @@
-export const Saft = `<div class="contract" style="width: 800px; background-color:white; color: black;"><p class="western" align="center"><strong><div style="display: inline-block; background-color:#f79632"><span id="partyName">{{partyName}}</span></div></strong></p>
+/* eslint-disable no-tabs */
+const Saft = `<div class="contract" style="width: 800px; background-color:white; color: black;"><p class="western" align="center"><strong><div style="display: inline-block; background-color:#f79632"><span id="partyName">{{partyName}}</span></div></strong></p>
 <p class="western" align="center">
 <div style="text-align: center;">
-		<h1 id="title">SAFT</h1>	
+<h1 id="title">SAFT</h1>	
 </div>
 </p>
 <p class="western" align="center"><strong>(Simple Agreement for Future Tokens)</strong></p>
@@ -98,3 +99,5 @@ export const Saft = `<div class="contract" style="width: 800px; background-color
 <p class="western"><strong>For payments by Bitcoin, please remit payment using the following address: </strong></p>
 <p class="western"><span style="color: #000000;"><span style="font-family: Times, serif;"><div style="display: inline-block; background-color:#f79632">{{bitcoin}}</div></span></span></p>
 <p class="western">&nbsp;</p></div>`;
+
+export default Saft;

@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-
+import PropTypes from 'prop-types';
 import PdJsonSchemaForm from '../reusable/pdJsonSchemaForm/pdJsonSchemaForm';
 
 interface SmartAgreementsFormProps {
@@ -76,6 +76,19 @@ const SmartAgreementsForm: FC<SmartAgreementsFormProps> = ({
       )}
     </>
   );
+};
+
+SmartAgreementsForm.propTypes = {
+  jsonSchema: PropTypes.objectOf(PropTypes.object),
+  uiSchema: PropTypes.objectOf(PropTypes.object),
+  dataName: PropTypes.string,
+  type: PropTypes.string.isRequired,
+};
+
+SmartAgreementsForm.defaultProps = {
+  jsonSchema: null,
+  uiSchema: null,
+  dataName: '',
 };
 
 export default SmartAgreementsForm;

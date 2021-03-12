@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-unresolved
 import React, { FC } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Form from '@rjsf/core';
@@ -31,25 +32,7 @@ const PdJsonSchemaForm: FC<pdJsonSchemaFormProps> = ({
     dispatch(doSetSmartAgreementData({ type, formData }));
   };
 
-  const CustomCheckbox = function (props) {
-    return (
-      <div className="form-check">
-        <input
-          className="form-check-input"
-          type="checkbox"
-          value=""
-          name={props.schema.name}
-          id="flexCheckDefault"
-          onClick={() => props.onChange(!props.value)}
-        />
-        <label className="form-check-label">{props.schema.title}</label>
-      </div>
-    );
-  };
-
-  const widgets = {
-    CheckboxWidget: CustomCheckbox,
-  };
+  const widgets = {};
 
   return (
     <div className={`${styles.pdForm} ${className}`}>

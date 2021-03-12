@@ -3,7 +3,6 @@
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable react/no-unescaped-entities */
 import React, { FC } from 'react';
-import PropTypes from 'prop-types';
 import { useTable, useSortBy } from 'react-table';
 import { Button, UncontrolledPopover, PopoverBody } from 'reactstrap';
 import classNames from 'classnames';
@@ -157,13 +156,6 @@ const Table: FC<TableProps> = ({
       )}
     </>
   );
-};
-
-Table.propTypes = {
-  columns: PropTypes.oneOfType([PropTypes.any]).isRequired,
-  data: PropTypes.oneOfType([PropTypes.any]).isRequired,
-  onDetailClick: PropTypes.func.isRequired,
-  onNewAgreementClick: PropTypes.func.isRequired,
 };
 
 export default Table;
