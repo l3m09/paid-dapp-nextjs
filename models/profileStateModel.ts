@@ -1,7 +1,9 @@
-import ProfileModel from './profileModel'
+import ProfileModel from './profileModel';
 
-export default interface ProfileStateModel {
+interface ProfileStateModel {
   profile: ProfileModel;
   loading: boolean;
   error: string;
 }
+
+export default ProfileStateModel;

@@ -1,4 +1,4 @@
-export default interface NdaAgreementData {
+interface NdaAgreementData {
   partyName: string;
   partyEmail: string;
   partyAddress: string;
@@ -9,3 +9,5 @@ export default interface NdaAgreementData {
   counterPartyAddress: string;
   counterPartyWallet: string;
 }
+
+export default NdaAgreementData;

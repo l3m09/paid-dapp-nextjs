@@ -1,4 +1,4 @@
-export default interface CiiaAgreementData {
+interface CiiaAgreementData {
   partyName: string; // Company name
   partyEmail: string; // company data
   partyAddress: string; // company data
@@ -19,3 +19,5 @@ export default interface CiiaAgreementData {
   typeOfComapny: string;
   listCompAgreements: string;
 }
+
+export default CiiaAgreementData;

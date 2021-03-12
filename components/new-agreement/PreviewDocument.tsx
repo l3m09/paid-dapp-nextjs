@@ -1,7 +1,6 @@
-// eslint-disable-next-line import/no-unresolved
-import React, { FC } from 'react'
-import PdScrollbar from '@/pdComponents/pdScrollbar/PdScrollbar'
-import styles from './PreviewDocument.module.scss'
+import React, { FC } from 'react';
+import PdScrollbar from '../reusable/pdScrollbar/PdScrollbar';
+import styles from './PreviewDocument.module.scss';
 
 interface PreviewDocumentProps {
   templateName: string;
@@ -11,32 +10,20 @@ interface PreviewDocumentProps {
 const PreviewDocument: FC<PreviewDocumentProps> = ({
   templateName,
   templateHTML,
-}: PreviewDocumentProps) => {
-  console.log('template html', templateHTML)
-
-  return (
-    <div className={styles.previewDocumentContainer}>
-      <div className={styles.previewDocumentHeader}>
-        <span>
-          {`Template: ${templateName}`}
-        </span>
-        <button
-          className="btn btn-grey-small"
-          type="button"
-        >
-          Edit
-        </button>
-      </div>
-      <div className={styles.previewDocumentBody}>
-        <PdScrollbar
-          noScrollX
-          scrollYHeight={665}
-        >
-          {templateHTML}
-        </PdScrollbar>
-      </div>
+}: PreviewDocumentProps) => (
+  <div className={styles.previewDocumentContainer}>
+    <div className={styles.previewDocumentHeader}>
+      <span>{`Template: ${templateName}`}</span>
+      <button className="btn btn-grey-small" type="button">
+        Edit
+      </button>
     </div>
-  )
-}
+    <div className={styles.previewDocumentBody}>
+      <PdScrollbar noScrollX scrollYHeight={665}>
+        {templateHTML}
+      </PdScrollbar>
+    </div>
+  </div>
+);
 
-export default PreviewDocument
+export default PreviewDocument;

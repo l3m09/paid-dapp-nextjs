@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import TemplateComponent from 'react-mustache-template-component';
 
 import { Card } from 'reactstrap';
-import PdScrollbar from '@/pdComponents/pdScrollbar/PdScrollbar';
+import PdScrollbar from '../components/reusable/pdScrollbar/PdScrollbar';
 import PreviewDocument from '@/components/new-agreement/PreviewDocument';
 import SmartAgreementFormPanel from '../components/new-agreement/SmartAgreementFormPanel';
 

@@ -1,4 +1,4 @@
-export default interface ReferralAgreementData {
+interface ReferralAgreementData {
   partyName: string;
   partyEmail: string;
   partyAddress: string;
@@ -16,3 +16,5 @@ export default interface ReferralAgreementData {
   commision: number;
   commisionDate: string | undefined;
 }
+
+export default ReferralAgreementData;

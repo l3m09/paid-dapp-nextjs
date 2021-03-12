@@ -13,10 +13,10 @@ import {
   Label,
   Input,
   Button,
-  Badge,
 } from 'reactstrap';
 import styles from '@/pages/assets-exchange.module.scss';
-import InsufficientTokensModal from '../components/assets-exchange/InsufficientTokensModal';
+import InsufficientTokensModal from '@/components/assets-exchange/InsufficientTokensModal';
+import { PdBadge } from '@/pdComponents';
 
 const AssetsExchange: React.FC = () => {
   const [open, setOpen] = useState(true);
@@ -67,8 +67,8 @@ const AssetsExchange: React.FC = () => {
                             width={50}
                             height={50}
                           />
-                          <Badge color="warning">BEP20</Badge>
-                          <Badge color="success">Connected</Badge>
+                          <PdBadge color="warning">BEP20</PdBadge>
+                          <PdBadge color="success">Connected</PdBadge>
                           <small>0x9e81...0dd1df</small>
                           <h4>Binance Smart Chain</h4>
                         </div>
@@ -121,7 +121,7 @@ const AssetsExchange: React.FC = () => {
                                   width={50}
                                   height={50}
                                 />
-                                <Badge color="warning">BEP20</Badge>
+                                <PdBadge color="warning">BEP20</PdBadge>
                                 <small>0x9e81...9ffd540dd1df</small>
                               </Col>
                               <Col md={2}>10 min</Col>
@@ -161,7 +161,7 @@ const AssetsExchange: React.FC = () => {
                                   width={50}
                                   height={50}
                                 />
-                                <Badge color="warning">BEP20</Badge>
+                                <PdBadge color="warning">BEP20</PdBadge>
                                 <small>0x9e81...9ffd540dd1df</small>
                               </Col>
                               <Col md={2}>1 hour ago</Col>

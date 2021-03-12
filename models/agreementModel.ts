@@ -1,4 +1,4 @@
-export default interface AgreementModel {
+interface AgreementModel {
     id: number;
     name: string;
     title?: string;
@@ -7,3 +7,5 @@ export default interface AgreementModel {
     signedOn?: string;
     status?: number;
 }
+
+export default AgreementModel;

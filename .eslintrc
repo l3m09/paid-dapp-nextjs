@@ -10,6 +10,14 @@
       "import/resolver": {
         "node": {
           "extensions": [".js", ".jsx", ".ts", ".tsx"]
+        },
+        "alias" : {
+          "map" : [
+            ["@/components", "./components/"],
+            ["@/pages/*", "./sass/module/pages/"],
+            ["@/pdComponents","./components/reusable/"]
+          ],
+          "extensions": [".js", ".jsx", ".ts", ".tsx"]
         }
       }
     },
@@ -20,7 +28,7 @@
       ],
       "no-use-before-define": "off",
       "@typescript-eslint/no-use-before-define": ["error"],
-      "semi": 0,
+      "semi": 2,
       "import/extensions": [
         "error",
         "ignorePackages",
@@ -34,7 +42,8 @@
       "no-shadow": "off",
       "@typescript-eslint/no-shadow": ["error"],
       "@typescript-eslint/no-unused-vars": "error",
-      "react/prop-types": "off"
+      "react/prop-types": "off",
+      "react/jsx-props-no-spreading": "off"
     },
     "globals": {
       "window": true

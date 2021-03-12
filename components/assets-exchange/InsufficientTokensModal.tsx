@@ -1,13 +1,14 @@
 import React, { FC } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Button, Badge } from 'reactstrap';
+import { Button } from 'reactstrap';
 import {
   PdModal,
   PdModalBody,
   PdModalHeader,
   PdModalFooter,
-} from '@/pdComponents/pdModal';
+  PdBadge,
+} from '@/pdComponents';
 import styles from './InsufficientTokensModal.module.scss';
 
 interface InsufficientTokensModalProps {
@@ -56,7 +57,7 @@ const InsufficientTokensModal: FC<InsufficientTokensModalProps> = ({
           {' '}
           PAID
         </span>
-        <Badge color="warning">BEP20</Badge>
+        <PdBadge color="warning">BEP20</PdBadge>
       </div>
       <div className={styles.mB20}>
         <p>You need to transfer PAID Tokens to asset exchange</p>

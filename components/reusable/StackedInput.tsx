@@ -1,5 +1,5 @@
-import React, { FC, InputHTMLAttributes } from 'react'
-import classNames from 'classnames'
+import React, { FC, InputHTMLAttributes } from 'react';
+import classNames from 'classnames';
 
 // eslint-disable-next-line no-undef
 interface StackedInputProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -40,7 +40,7 @@ const StackedInput: FC<StackedInputProps> = ({
       errorComponent
     }
   </div>
-)
+);
 
 StackedInput.defaultProps = {
   innerRef: null,
@@ -48,6 +48,6 @@ StackedInput.defaultProps = {
   labelClassNames: '',
   inputClassNames: '',
   errorComponent: null,
-}
+};
 
-export default StackedInput
+export default StackedInput;

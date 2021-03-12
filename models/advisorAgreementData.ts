@@ -1,4 +1,4 @@
-export default interface AdvisorAgreementData {
+interface AdvisorAgreementData {
   partyName: string;
   partyEmail: string;
   partyAddress: string;
@@ -23,3 +23,5 @@ export default interface AdvisorAgreementData {
   acceptionOption: string;
   numberOfYears: string;
 }
+
+export default AdvisorAgreementData;

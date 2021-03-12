@@ -1,18 +1,18 @@
 import React from 'react';
 import Head from 'next/head';
-import { NextRouter, useRouter } from 'next/router'
+import { NextRouter, useRouter } from 'next/router';
 
 import { Button } from 'reactstrap';
 import { useDispatch } from 'react-redux';
 import doConnectToWallet from '../redux/actions/wallet';
 
 const Index: React.FC = () => {
-  const router: NextRouter = useRouter()
-  const dispatch = useDispatch()
+  const router: NextRouter = useRouter();
+  const dispatch = useDispatch();
 
   const onConnect = () => {
-    dispatch(doConnectToWallet(router))
-  }
+    dispatch(doConnectToWallet(router));
+  };
 
   return (
     <>
@@ -43,7 +43,7 @@ const Index: React.FC = () => {
         </div>
       </div>
     </>
-  )
+  );
 };
 
 export default Index;

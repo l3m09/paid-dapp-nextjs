@@ -1,3 +1,3 @@
 export {
   PdModal, PdModalBody, PdModalFooter, PdModalHeader,
-} from './PdModal'
+} from './PdModal';

@@ -1,4 +1,6 @@
-export default interface WalletStateModel {
+interface WalletStateModel {
   currentWallet: string | null;
   loading: boolean;
 }
+
+export default WalletStateModel;

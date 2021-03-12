@@ -1,4 +1,4 @@
-export default interface SaftAgreementData {
+interface SaftAgreementData {
   partyName: string;
   partyEmail: string;
   partyAddress: string;
@@ -23,3 +23,5 @@ export default interface SaftAgreementData {
   ethereum: string;
   bitcoin: string;
 }
+
+export default SaftAgreementData;

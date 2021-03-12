@@ -1,3 +1,5 @@
-export default interface MenuStateModel {
+interface MenuStateModel {
   isOpen: boolean;
 }
+
+export default MenuStateModel;

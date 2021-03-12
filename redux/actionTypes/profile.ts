@@ -4,4 +4,4 @@ enum ProfileActionTypes {
   SET_PROFILE_DATA = 'SET_PROFILE_DATA',
 }
 
-export default ProfileActionTypes
+export default ProfileActionTypes;

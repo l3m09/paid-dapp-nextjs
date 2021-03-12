@@ -1,5 +1,5 @@
-import React, { FC, TextareaHTMLAttributes } from 'react'
-import classNames from 'classnames'
+import React, { FC, TextareaHTMLAttributes } from 'react';
+import classNames from 'classnames';
 
 // eslint-disable-next-line no-undef
 interface StackedTextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
@@ -34,7 +34,7 @@ const StackedTextarea: FC<StackedTextareaProps> = ({
       errorComponent
     }
   </div>
-)
+);
 
 StackedTextarea.defaultProps = {
   innerRef: null,
@@ -42,6 +42,6 @@ StackedTextarea.defaultProps = {
   labelClassNames: '',
   inputClassNames: '',
   errorComponent: null,
-}
+};
 
-export default StackedTextarea
+export default StackedTextarea;

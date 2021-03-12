@@ -22,7 +22,6 @@ interface PdModalHeaderProps extends ModalHeaderProps {
 }
 
 export const PdModalHeader: FC<PdModalHeaderProps> = ({
-  children,
   className,
   title,
   subtitle,
@@ -34,7 +33,9 @@ export const PdModalHeader: FC<PdModalHeaderProps> = ({
   </ModalHeader>
 );
 
-export const PdModalBody: FC<ModalBodyProps> = ({ children, ...props }) => <ModalBody {...props}>{children}</ModalBody>;
+export const PdModalBody: FC<ModalBodyProps> = ({ children, ...props }) => (
+  <ModalBody {...props}>{children}</ModalBody>
+);
 
 export const PdModalFooter: FC<ModalFooterProps> = ({
   children,

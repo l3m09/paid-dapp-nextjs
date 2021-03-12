@@ -1,7 +1,9 @@
-import AgreementModel from './agreementModel'
+import AgreementModel from './agreementModel';
 
-export default interface AgreementStateModel {
+interface AgreementStateModel {
   agreements: AgreementModel[];
   loading: boolean;
   error: string;
 }
+
+export default AgreementStateModel;

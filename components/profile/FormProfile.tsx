@@ -1,10 +1,10 @@
-import React, { FC } from 'react'
-import { useForm } from 'react-hook-form'
-import { ErrorMessage } from '@hookform/error-message'
-import classNames from 'classnames'
-import StackedInput from '../reusable/StackedInput'
-import StackedTextarea from '../reusable/StackedTextarea'
-import ProfileModel from '../../models/profileModel'
+import React, { FC } from 'react';
+import { useForm } from 'react-hook-form';
+import { ErrorMessage } from '@hookform/error-message';
+import classNames from 'classnames';
+import StackedInput from '../reusable/StackedInput';
+import StackedTextarea from '../reusable/StackedTextarea';
+import ProfileModel from '../../models/profileModel';
 
 interface FormProfileProps {
   profile: ProfileModel;
@@ -30,12 +30,12 @@ const FormProfile: FC<FormProfileProps> = ({
     defaultValues: {
       ...profile,
     },
-  })
+  });
 
   const setCancel = () => {
-    reset(profile)
-    onCancel()
-  }
+    reset(profile);
+    onCancel();
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -150,7 +150,7 @@ const FormProfile: FC<FormProfileProps> = ({
         }
       </div>
     </form>
-  )
-}
+  );
+};
 
-export default FormProfile
+export default FormProfile;

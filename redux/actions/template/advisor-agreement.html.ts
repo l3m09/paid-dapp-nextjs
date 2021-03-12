@@ -117,6 +117,6 @@ const AdvisorAgreemt = `<div class="contract" style="width: 100%; padding:10px; 
 <p>Address: <div style="display: inline-block; background-color:#f79632"><span id="counterPartyAddress">{{counterPartyAddress}}</span></div>
 <p>Wallet: <div style="display: inline-block; background-color:#f79632"><span id="counterPartyWallet">{{counterPartyWallet}}</span></div>
 <p align="center"><br /> </p>
-</div>`
+</div>`;
 
 export default AdvisorAgreemt;

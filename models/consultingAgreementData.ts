@@ -1,4 +1,4 @@
-export default interface ConsultingAgreementData {
+interface ConsultingAgreementData {
   partyName: string;
   partyEmail: string;
   partyAddress: string;
@@ -29,3 +29,5 @@ export default interface ConsultingAgreementData {
   companiesExcluded: string;
   listCompanies: string;
 }
+
+export default ConsultingAgreementData;

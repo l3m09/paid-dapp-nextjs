@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint . --fix --ext .js,.tsx,.ts"
+    "lint": "eslint . --ext .js,.tsx,.ts",
+    "lint:fix": "eslint . --fix --ext .js,.tsx,.ts"
   },
   "dependencies": {
     "@hookform/error-message": "0.0.5",
@@ -35,6 +36,7 @@
     "@typescript-eslint/eslint-plugin": "^4.0.1",
     "@typescript-eslint/parser": "^4.0.1",
     "eslint-config-airbnb": "^18.2.1",
+    "eslint-import-resolver-alias": "^1.1.2",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-react": "^7.22.0",

@@ -1,7 +1,7 @@
-import React, { FC } from 'react'
-import { Scrollbars } from 'react-custom-scrollbars'
-import classNames from 'classnames'
-import styles from './PdScrollbar.module.scss'
+import React, { FC } from 'react';
+import { Scrollbars } from 'react-custom-scrollbars';
+import classNames from 'classnames';
+import styles from './PdScrollbar.module.scss';
 
 interface PdScrollbarProps {
   children: any;
@@ -22,10 +22,10 @@ const PdScrollbar: FC<PdScrollbarProps> = ({
     const mapThumbVertical = new Map([
       ['red', `${styles.pdThumbVerticalRed}`],
       ['blue', `${styles.pdThumbVerticalBlue}`],
-    ])
+    ]);
 
-    return mapThumbVertical.get(color ?? 'red')
-  }
+    return mapThumbVertical.get(color ?? 'red');
+  };
 
   return (
     <Scrollbars
@@ -76,13 +76,13 @@ const PdScrollbar: FC<PdScrollbarProps> = ({
     >
       { children}
     </Scrollbars>
-  )
-}
+  );
+};
 
 PdScrollbar.defaultProps = {
   noScrollX: false,
   noScrollY: false,
   color: 'red',
-}
+};
 
-export default PdScrollbar
+export default PdScrollbar;
