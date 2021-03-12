@@ -35,8 +35,27 @@ const getContractTemplate = (contractName: String): contractTemplate => {
         title: 'Email or Username:',
         type: 'string',
       },
-      name: {
-        title: 'Name:',
+      counterPartyEmail: {
+        title: 'Counterparty Email:',
+        type: 'string',
+      },
+      counterPartyAddress: {
+        title: 'Counterparty Address:',
+        type: 'string',
+      },
+      counterPartyWallet: {
+        title: 'Counterparty Wallet:',
+        type: 'string',
+      },
+    },
+    wallet: {
+      sendWallet: {
+        title: 'Sending Wallet:',
+        type: 'string',
+        readOnly: true,
+      },
+      ReceiveWallet: {
+        title: 'Receiving Wallet:',
         type: 'string',
       },
     },
@@ -50,28 +69,13 @@ const getContractTemplate = (contractName: String): contractTemplate => {
       jsonSchema = {
         type: 'object',
         properties: {
-          partyName: {
-            title: 'Party Name',
-            type: 'string',
-          },
-          partyEmail: {
-            title: 'Party Email',
-            type: 'string',
-          },
-          partyAddress: {
-            title: 'Party Address',
-            type: 'string',
-          },
-          partyWallet: {
-            title: 'Party Wallet',
-            type: 'string',
-          },
           date: {
             title: 'Date',
             type: 'string',
             format: 'date',
           },
           ...sharedProperties.couterparty,
+          ...sharedProperties.wallet,
           counterPartyAddress: {
             title: 'CounterParty Address',
             type: 'string',
@@ -92,6 +96,7 @@ const getContractTemplate = (contractName: String): contractTemplate => {
         type: 'object',
         properties: {
           ...sharedProperties.couterparty,
+          ...sharedProperties.wallet,
           purchaseOption: {
             type: 'string',
             title: 'Purchase Option',
@@ -185,6 +190,7 @@ const getContractTemplate = (contractName: String): contractTemplate => {
         type: 'object',
         properties: {
           ...sharedProperties.couterparty,
+          ...sharedProperties.wallet,
           effectiveDate: {
             title: 'Effective Date',
             type: 'string',
@@ -241,6 +247,7 @@ const getContractTemplate = (contractName: String): contractTemplate => {
         type: 'object',
         properties: {
           ...sharedProperties.couterparty,
+          ...sharedProperties.wallet,
           state: {
             title: 'State',
             type: 'string',
@@ -353,6 +360,29 @@ const getContractTemplate = (contractName: String): contractTemplate => {
       };
       uiSchema = {
         'ui:widget': 'checkbox',
+        'ui:order': [
+          'usernameOrEmail',
+          'counterPartyEmail',
+          'counterPartyAddress',
+          'counterPartyWallet',
+          'sendWallet',
+          'ReceiveWallet',
+          'state',
+          'typeOfCompany',
+          'descriptionConsulting',
+          'serviceRenderChecked',
+          'serviceRate',
+          'servicePayable',
+          'serviceAmountLimit',
+          'consultantChecked',
+          'consultantExecutionAmount',
+          'consultantCompletionAmount',
+          'companyWillChecked',
+          'companyShares',
+          'companyFollows',
+          'otherChecked',
+          'other',
+        ],
         descriptionConsulting: {
           'ui:widget': 'textarea',
           'ui:options': {
@@ -361,52 +391,30 @@ const getContractTemplate = (contractName: String): contractTemplate => {
         },
         serviceRenderChecked: {
           'ui:widget': 'checkbox',
-          classNames: 'order-1',
         },
         serviceRate: {
-          classNames: 'order-1',
           'ui:emptyValue': '0',
         },
         servicePayable: {
-          classNames: 'order-1',
           'ui:emptyValue': '',
         },
         serviceAmountLimit: {
-          classNames: 'order-1',
           'ui:emptyValue': '0',
         },
         consultantChecked: {
           'ui:widget': 'checkbox',
-          classNames: 'order-3',
-        },
-        consultantExecutionAmount: {
-          classNames: 'order-3',
-        },
-        consultantCompletionAmount: {
-          classNames: 'order-3',
-        },
-        companyWillChecked: {
-          classNames: 'order-1',
-        },
-        companyShares: {
-          classNames: 'order-1',
         },
         companyFollows: {
           'ui:widget': 'textarea',
           'ui:options': {
             rows: 9,
           },
-          classNames: 'order-1',
-        },
-        otherChecked: {
-          classNames: 'order-2',
         },
         other: {
           'ui:widget': 'textarea',
           'ui:options': {
             rows: 9,
           },
-          classNames: 'order-2',
         },
       };
       break;
@@ -419,6 +427,7 @@ const getContractTemplate = (contractName: String): contractTemplate => {
         type: 'object',
         properties: {
           ...sharedProperties.couterparty,
+          ...sharedProperties.wallet,
           typeOfCompany: {
             title: 'Type of company',
             type: 'string',
@@ -466,6 +475,7 @@ const getContractTemplate = (contractName: String): contractTemplate => {
         type: 'object',
         properties: {
           ...sharedProperties.couterparty,
+          ...sharedProperties.wallet,
           purchaseAmount: {
             title: 'Purchase amount',
             type: 'number',
