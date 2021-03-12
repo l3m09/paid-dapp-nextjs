@@ -28,7 +28,7 @@
       ],
       "no-use-before-define": "off",
       "@typescript-eslint/no-use-before-define": ["error"],
-      "semi": 0,
+      "semi": 2,
       "import/extensions": [
         "error",
         "ignorePackages",
