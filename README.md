@@ -36,3 +36,6 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 ## Run lint
 npm run lint
 
+## Run lint fix
+npm run lint:fix
+

@@ -15,7 +15,9 @@ export const setIsEditing = (isEditing: boolean) => (dispatch: any) => {
   });
 };
 
-export const setAgreementExists = (agreementExists: boolean) => (dispatch: any) => {
+export const setAgreementExists = (agreementExists: boolean) => (
+  dispatch: any,
+) => {
   dispatch({
     type: AgreementActionTypes.SET_AGREEMENT_EXIST,
     payload: { agreementExists },
