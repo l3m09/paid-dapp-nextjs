@@ -6,6 +6,9 @@ const initialState: AgreementStateModel = {
   agreements: [],
   loading: false,
   error: '',
+  currentAgreement: null,
+  isEditing: false,
+  agreementExists: false,
 };
 
 const agreementReducer = (
@@ -18,6 +21,20 @@ const agreementReducer = (
       return {
         ...state,
         agreements: payload.agreements,
+        isEditing: false,
+        agreementExists: false,
+      };
+    }
+    case AgreementActionTypes.SET_IS_EDITING: {
+      return {
+        ...state,
+        isEditing: payload.isEditing,
+      };
+    }
+    case AgreementActionTypes.SET_AGREEMENT_EXIST: {
+      return {
+        ...state,
+        agreementExists: payload.agreementExists,
       };
     }
     default:

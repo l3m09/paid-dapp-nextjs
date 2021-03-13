@@ -14,6 +14,7 @@ interface pdJsonSchemaFormProps {
   jsonSchema: Object;
   uiSchema?: Object;
   className?: string;
+  onSave: any;
 }
 
 const PdJsonSchemaForm: FC<pdJsonSchemaFormProps> = ({
@@ -22,15 +23,12 @@ const PdJsonSchemaForm: FC<pdJsonSchemaFormProps> = ({
   jsonSchema,
   uiSchema,
   className,
+  onSave,
 }) => {
   const dispatch = useDispatch();
   const smartAgreementsState = useSelector(
     (state: { smartAgreementsReducer: any }) => state.smartAgreementsReducer,
   );
-
-  const onSubmit = ({ formData }) => {
-    console.log(formData);
-  };
 
   const onChange = ({ formData }) => {
     dispatch(doSetSmartAgreementData({ type, formData }));
@@ -45,7 +43,7 @@ const PdJsonSchemaForm: FC<pdJsonSchemaFormProps> = ({
         uiSchema={uiSchema}
         widgets={widgets}
         formData={smartAgreementsState[dataName]}
-        onSubmit={onSubmit}
+        onSubmit={onSave}
         onChange={onChange}
         showErrorList={false}
       >

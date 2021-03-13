@@ -6,6 +6,7 @@ interface SmartAgreementsFormProps {
   uiSchema: Object;
   dataName: string;
   type: string;
+  onSaveFields: any;
 }
 
 const SmartAgreementsForm: FC<SmartAgreementsFormProps> = ({
@@ -13,6 +14,7 @@ const SmartAgreementsForm: FC<SmartAgreementsFormProps> = ({
   dataName,
   jsonSchema,
   uiSchema,
+  onSaveFields,
 }) => {
   const mapTypeToComponent = new Map([
     [
@@ -22,6 +24,7 @@ const SmartAgreementsForm: FC<SmartAgreementsFormProps> = ({
         jsonSchema={jsonSchema}
         uiSchema={uiSchema}
         type={type}
+        onSave={onSaveFields}
       />,
     ],
     [
@@ -31,6 +34,7 @@ const SmartAgreementsForm: FC<SmartAgreementsFormProps> = ({
         jsonSchema={jsonSchema}
         uiSchema={uiSchema}
         type={type}
+        onSave={onSaveFields}
       />,
     ],
     [
@@ -39,6 +43,7 @@ const SmartAgreementsForm: FC<SmartAgreementsFormProps> = ({
         dataName={dataName}
         jsonSchema={jsonSchema}
         type={type}
+        onSave={onSaveFields}
       />,
     ],
     [
@@ -48,6 +53,7 @@ const SmartAgreementsForm: FC<SmartAgreementsFormProps> = ({
         jsonSchema={jsonSchema}
         uiSchema={uiSchema}
         type={type}
+        onSave={onSaveFields}
       />,
     ],
     [
@@ -57,6 +63,7 @@ const SmartAgreementsForm: FC<SmartAgreementsFormProps> = ({
         jsonSchema={jsonSchema}
         uiSchema={uiSchema}
         type={type}
+        onSave={onSaveFields}
       />,
     ],
     [
@@ -65,6 +72,7 @@ const SmartAgreementsForm: FC<SmartAgreementsFormProps> = ({
         dataName={dataName}
         jsonSchema={jsonSchema}
         type={type}
+        onSave={onSaveFields}
       />,
     ],
   ]);

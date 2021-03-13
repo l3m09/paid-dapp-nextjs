@@ -7,6 +7,7 @@ interface SmartAgreementsFormPanelProps {
   uiSchema: Object;
   dataName: string;
   type: string;
+  onSaveFields: any;
 }
 
 const SmartAgreementsFormPanel: FC<SmartAgreementsFormPanelProps> = ({
@@ -14,6 +15,7 @@ const SmartAgreementsFormPanel: FC<SmartAgreementsFormPanelProps> = ({
   dataName,
   jsonSchema,
   uiSchema,
+  onSaveFields,
 }: SmartAgreementsFormPanelProps) => (
   <Card className="card-fields border-0 p-3">
     <div className="title d-flex">
@@ -27,6 +29,7 @@ const SmartAgreementsFormPanel: FC<SmartAgreementsFormPanelProps> = ({
       dataName={dataName}
       jsonSchema={jsonSchema}
       uiSchema={uiSchema}
+      onSaveFields={onSaveFields}
     />
   </Card>
 );

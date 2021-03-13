@@ -3,13 +3,15 @@ import React, { useState, useEffect, useCallback } from 'react';
 import Head from 'next/head';
 import { NextPage } from 'next';
 import router from 'next/router';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import TemplateComponent from 'react-mustache-template-component';
-
+import classNames from 'classnames';
 import { Card } from 'reactstrap';
-import PdScrollbar from '../components/reusable/pdScrollbar/PdScrollbar';
+
 import PreviewDocument from '@/components/new-agreement/PreviewDocument';
+import { setAgreementExists, setIsEditing } from 'redux/actions';
+import PdScrollbar from '../components/reusable/pdScrollbar/PdScrollbar';
 import SmartAgreementFormPanel from '../components/new-agreement/SmartAgreementFormPanel';
 
 import getContractTemplate from '../redux/actions/template/index';
@@ -23,9 +25,38 @@ const NewAgreement: NextPage<NewAgreementProps> = ({ templateTypeCode }) => {
     router.push('agreements');
   }
 
+  const dispatch = useDispatch();
+
   const smartAgreementsState = useSelector(
     (state: { smartAgreementsReducer: any }) => state.smartAgreementsReducer,
   );
+
+  const isEditing = useSelector(
+    (state: { agreementReducer: any }) => state.agreementReducer.isEditing,
+  );
+
+  const agreementExists = useSelector(
+    (state: { agreementReducer: any }) => state.agreementReducer.agreementExists,
+  );
+
+  const currentAgreement = useSelector(
+    (state: { agreementReducer: any }) => state.agreementReducer.currentAgreement,
+  );
+
+  const previewColumn = classNames({
+    'col-8': isEditing,
+    'col-12': !isEditing,
+  });
+
+  const onEditMode = () => {
+    dispatch(setIsEditing(true));
+  };
+
+  const onSaveFields = ({ formData }) => {
+    dispatch(setIsEditing(false));
+    dispatch(setAgreementExists(true));
+  };
+
   const [jsonSchema, setJsonSchema] = useState({});
   const [uiSchema, setUISchema] = useState({});
   const [dataName, setDataName] = useState('');
@@ -42,7 +73,14 @@ const NewAgreement: NextPage<NewAgreementProps> = ({ templateTypeCode }) => {
     setDataName(templateData.dataName);
   }, [templateTypeCode, smartAgreementsState]);
 
-  const agreementTemplate = useCallback(() => <div style={{ width: '100%' }}><TemplateComponent template={agreementDocument} data={agreementData} /></div>, [agreementDocument, agreementData]);
+  const agreementTemplate = useCallback(
+    () => (
+      <div style={{ width: '100%' }}>
+        <TemplateComponent template={agreementDocument} data={agreementData} />
+      </div>
+    ),
+    [agreementDocument, agreementData],
+  );
 
   return (
     <>
@@ -57,21 +95,30 @@ const NewAgreement: NextPage<NewAgreementProps> = ({ templateTypeCode }) => {
           </div>
           <div className="col-12">
             <div className="row">
-              <div className="col-8">
+              <div className={previewColumn}>
                 <Card className="border-0 content">
-                  <PreviewDocument templateName="Mutual NDA" templateHTML={agreementTemplate()} />
+                  <PreviewDocument
+                    templateName="Mutual NDA"
+                    templateHTML={agreementTemplate()}
+                    onEditMode={onEditMode}
+                    isEditing={isEditing}
+                    agreementExists={agreementExists}
+                  />
                 </Card>
               </div>
-              <div className="col-4">
-                <PdScrollbar noScrollX scrollYHeight={665}>
-                  <SmartAgreementFormPanel
-                    type={templateTypeCode}
-                    dataName={dataName}
-                    jsonSchema={jsonSchema}
-                    uiSchema={uiSchema}
-                  />
-                </PdScrollbar>
-              </div>
+              {isEditing && (
+                <div className="col-4">
+                  <PdScrollbar noScrollX scrollYHeight={665}>
+                    <SmartAgreementFormPanel
+                      type={templateTypeCode}
+                      dataName={dataName}
+                      jsonSchema={jsonSchema}
+                      uiSchema={uiSchema}
+                      onSaveFields={onSaveFields}
+                    />
+                  </PdScrollbar>
+                </div>
+              )}
             </div>
           </div>
         </div>

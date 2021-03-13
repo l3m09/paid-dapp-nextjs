@@ -8,4 +8,18 @@ const loadAgreements = () => (dispatch: any) => {
   });
 };
 
+export const setIsEditing = (isEditing: boolean) => (dispatch: any) => {
+  dispatch({
+    type: AgreementActionTypes.SET_IS_EDITING,
+    payload: { isEditing },
+  });
+};
+
+export const setAgreementExists = (agreementExists: boolean) => (dispatch: any) => {
+  dispatch({
+    type: AgreementActionTypes.SET_AGREEMENT_EXIST,
+    payload: { agreementExists },
+  });
+};
+
 export default loadAgreements;
