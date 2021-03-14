@@ -8,13 +8,23 @@ import PropTypes from 'prop-types';
 import TemplateComponent from 'react-mustache-template-component';
 import classNames from 'classnames';
 import { Card } from 'reactstrap';
+import { format } from 'date-fns';
 
+import ProfileStateModel from '@/models/profileStateModel';
 import PreviewDocument from '@/components/new-agreement/PreviewDocument';
 import { setAgreementExists, setIsEditing } from 'redux/actions';
 import PdScrollbar from '../components/reusable/pdScrollbar/PdScrollbar';
 import SmartAgreementFormPanel from '../components/new-agreement/SmartAgreementFormPanel';
 
 import getContractTemplate from '../redux/actions/template/index';
+import { doSetSmartAgreementData } from '../redux/actions/smartAgreement';
+import {
+  AGREEMENT_CREATE_DATE_FIELD,
+  PARTY_ADDRESS_FIELD,
+  PARTY_EMAIL_FIELD,
+  PARTY_NAME_FIELD,
+  PARTY_WALLET_FIELD,
+} from '../utils/agreement';
 
 type NewAgreementProps = {
   templateTypeCode?: string;
@@ -43,6 +53,19 @@ const NewAgreement: NextPage<NewAgreementProps> = ({ templateTypeCode }) => {
     (state: { agreementReducer: any }) => state.agreementReducer.currentAgreement,
   );
 
+  const {
+    firstName,
+    lastName,
+    email,
+    address,
+  } = useSelector(
+    (state: { profileReducer: ProfileStateModel }) => state.profileReducer.profile,
+  );
+
+  const currentWallet = useSelector(
+    (state: {walletReducer: any}) => state.walletReducer.currentWallet,
+  );
+
   const previewColumn = classNames({
     'col-8': isEditing,
     'col-12': !isEditing,
@@ -55,13 +78,17 @@ const NewAgreement: NextPage<NewAgreementProps> = ({ templateTypeCode }) => {
   const onSaveFields = ({ formData }) => {
     dispatch(setIsEditing(false));
     dispatch(setAgreementExists(true));
+    dispatch(doSetSmartAgreementData({
+      type: templateTypeCode,
+      formData,
+    }));
   };
 
   const [jsonSchema, setJsonSchema] = useState({});
   const [uiSchema, setUISchema] = useState({});
   const [dataName, setDataName] = useState('');
   const [agreementDocument, setAgreementDocument] = useState('');
-  const [agreementData] = useState({});
+  const [agreementData, setAgreementData] = useState(null);
 
   useEffect(() => {
     const templateData = getContractTemplate(templateTypeCode);
@@ -70,13 +97,28 @@ const NewAgreement: NextPage<NewAgreementProps> = ({ templateTypeCode }) => {
     setAgreementDocument(templateData.template);
     setJsonSchema(templateData.jsonSchema);
     setUISchema(templateData.uiSchema);
-    setDataName(templateData.dataName);
   }, [templateTypeCode, smartAgreementsState]);
+
+  useEffect(() => {
+    const data = smartAgreementsState[dataName];
+    if (data && data[PARTY_NAME_FIELD] === '') {
+      data[PARTY_NAME_FIELD] = `${firstName} ${lastName}`;
+      data[PARTY_EMAIL_FIELD] = email;
+      data[PARTY_ADDRESS_FIELD] = address;
+      data[PARTY_WALLET_FIELD] = currentWallet;
+      data[AGREEMENT_CREATE_DATE_FIELD] = format(new Date(), 'yyyy/MM/dd');
+    }
+    setAgreementData(data);
+  }, [smartAgreementsState, dataName]);
 
   const agreementTemplate = useCallback(
     () => (
       <div style={{ width: '100%' }}>
-        <TemplateComponent template={agreementDocument} data={agreementData} />
+        {
+          agreementData
+            ? <TemplateComponent template={agreementDocument} data={agreementData} />
+            : null
+        }
       </div>
     ),
     [agreementDocument, agreementData],
@@ -99,7 +141,7 @@ const NewAgreement: NextPage<NewAgreementProps> = ({ templateTypeCode }) => {
                 <Card className="border-0 content">
                   <PreviewDocument
                     templateName="Mutual NDA"
-                    templateHTML={agreementTemplate()}
+                    templateComponent={agreementTemplate()}
                     onEditMode={onEditMode}
                     isEditing={isEditing}
                     agreementExists={agreementExists}

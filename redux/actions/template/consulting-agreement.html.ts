@@ -1,5 +1,5 @@
 /* eslint-disable no-tabs */
-const ConsultingAgreement = `<div class="contract" style="width: 100%; background-color:white; color: black;"><h1 id="title" style="text-align: center;">CONSULTING AGREEMENT</h1><p align="center"><strong><span id="partyName">{{partyName}}</span></strong></p>
+const ConsultingAgreement = `<div class="contract" style="width: 100%; background-color:white; color: black;"><h1 id="title" style="text-align: center;">CONSULTING AGREEMENT</h1><p align="center"><strong><span id="partyName" style="display: none">{{partyName}}</span></strong></p>
 <p align="center"><u><strong>CONSULTING AGREEMENT</strong></u></p>
 <p>This Consulting Agreement (this &ldquo;<u>Agreement</u>&rdquo;) is made as of {{date}}, by and between {{partyName}}, (the &ldquo;<u>Company</u>&rdquo;), and {{counterPartyName}}(&ldquo;<u>Consultant</u>&rdquo;).</p>
 <ol>
@@ -113,13 +113,13 @@ const ConsultingAgreement = `<div class="contract" style="width: 100%; backgroun
 <p align="center"><strong>COMPENSATION</strong></p>
 <p>Check applicable payment terms:</p>
 <div style="display: block; background-color:#f79632; width: 100%; overflow-wrap: break-word;">
-<span>[ {{serviceRenderChecked}} ]</span> <span>For Services rendered by Consultant under this Agreement, the Company shall pay Consultant at the rate of $ {{serviceRate}} per hour, payable {{servicePayable}}.  Unless otherwise agreed upon in writing by Company, Company’s maximum liability for all Services performed during the term of this Agreement shall not exceed $ {{serviceAmountLimit}}.</span>
-<p>[ {{consultantChecked}} ] Consultant shall be paid $ {{consultantExecutionAmount}} upon the execution of this Agreement and $ {{consultantCompletionAmount}} upon completion of the Services specified on Exhibit A to this Agreement.</p>
-<p>[ {{companyWillChecked}} ] The Company will recommend that the Board grant a non-qualified option to purchase {{companyShares}} shares of the Company’s Common Stock, at an exercise price equal to the fair market value (as determined by the Company’s Board of Directors) on the date of grant, and which will vest and become exercisable as follows
+<span>{{#serviceRenderChecked}}[ X ]{{/serviceRenderChecked}}{{^serviceRenderChecked}}[ ]{{/serviceRenderChecked}}</span> <span>For Services rendered by Consultant under this Agreement, the Company shall pay Consultant at the rate of $ {{serviceRate}} per hour, payable {{servicePayable}}.  Unless otherwise agreed upon in writing by Company, Company’s maximum liability for all Services performed during the term of this Agreement shall not exceed $ {{serviceAmountLimit}}.</span>
+<p>{{#consultantChecked}}[ X ]{{/consultantChecked}}{{^consultantChecked}}[ ]{{/consultantChecked}} Consultant shall be paid $ {{consultantExecutionAmount}} upon the execution of this Agreement and $ {{consultantCompletionAmount}} upon completion of the Services specified on Exhibit A to this Agreement.</p>
+<p>{{#companyWillChecked}}[ X ]{{/companyWillChecked}}{{^companyWillChecked}}[ ]{{/companyWillChecked}} The Company will recommend that the Board grant a non-qualified option to purchase {{companyShares}} shares of the Company’s Common Stock, at an exercise price equal to the fair market value (as determined by the Company’s Board of Directors) on the date of grant, and which will vest and become exercisable as follows
 <br/>
 {{companyFollows}}
 </p>
-<p>[ {{otherChecked}} ] Other:</p>
+<p>{{#otherChecked}}[ X ]{{/otherChecked}}{{^otherChecked}}[ ]{{/otherChecked}} Other:</p>
 <p style="white-space:break-spaces">{{other}}</p>
 </div>
 <p align="center"><strong><u>EXHIBIT C</u></strong></p>

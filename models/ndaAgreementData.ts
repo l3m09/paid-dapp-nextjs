@@ -3,7 +3,7 @@ interface NdaAgreementData {
   partyEmail: string;
   partyAddress: string;
   partyWallet: string;
-  date: string;
+  createDate: string;
   counterPartyName: string;
   counterPartyEmail: string;
   counterPartyAddress: string;

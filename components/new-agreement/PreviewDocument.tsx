@@ -7,7 +7,7 @@ import PdScrollbar from '../reusable/pdScrollbar/PdScrollbar';
 
 interface PreviewDocumentProps {
   templateName: string;
-  templateHTML: any;
+  templateComponent: any;
   isEditing: boolean;
   agreementExists: boolean;
   onEditMode: any;
@@ -15,7 +15,7 @@ interface PreviewDocumentProps {
 
 const PreviewDocument: FC<PreviewDocumentProps> = ({
   templateName,
-  templateHTML,
+  templateComponent,
   isEditing,
   agreementExists,
   onEditMode,
@@ -26,7 +26,7 @@ const PreviewDocument: FC<PreviewDocumentProps> = ({
     </div>
     <div className={styles.previewDocumentBody}>
       <PdScrollbar noScrollX scrollYHeight={665}>
-        {templateHTML}
+        {templateComponent}
       </PdScrollbar>
     </div>
 
