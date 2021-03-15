@@ -59,6 +59,11 @@ const getContractTemplate = (contractName: String): contractTemplate => {
         type: 'string',
       },
     },
+    required:[
+      "counterPartyName",
+      "counterPartyEmail",
+      "counterPartyAddress",
+   ],
   };
 
   switch (contractName) {
@@ -77,6 +82,7 @@ const getContractTemplate = (contractName: String): contractTemplate => {
           ...sharedProperties.couterparty,
           ...sharedProperties.wallet,
         },
+        required: sharedProperties.required,
       };
       break;
 
@@ -151,6 +157,7 @@ const getContractTemplate = (contractName: String): contractTemplate => {
             type: 'string',
           },
         },
+        required: sharedProperties.required,
       };
       uiSchema = {
         purchaseOption: {
@@ -228,6 +235,7 @@ const getContractTemplate = (contractName: String): contractTemplate => {
             format: 'textarea',
           },
         },
+        required: sharedProperties.required,
       };
       break;
 
@@ -272,6 +280,7 @@ const getContractTemplate = (contractName: String): contractTemplate => {
             default: '',
           },
         },
+        required: sharedProperties.required,
         dependencies: {
           serviceRenderChecked: {
             oneOf: [
@@ -500,6 +509,7 @@ const getContractTemplate = (contractName: String): contractTemplate => {
             default: 'dollar',
           },
         },
+        required: sharedProperties.required,
         dependencies: {
           paymentOption: {
             oneOf: [
