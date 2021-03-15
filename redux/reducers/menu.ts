@@ -1,6 +1,6 @@
-import ActionModel from '../../models/actionModel'
-import MenuStateModel from '../../models/menuStateModel'
-import MenuActionTypes from '../actionTypes/menu'
+import ActionModel from '../../models/actionModel';
+import MenuStateModel from '../../models/menuStateModel';
+import MenuActionTypes from '../actionTypes/menu';
 
 const initialState: MenuStateModel = {
   isOpen: false,
@@ -18,6 +18,6 @@ const menuReducer = (state: MenuStateModel = initialState, action: ActionModel) 
     default:
       return { ...state };
   }
-}
+};
 
 export default menuReducer;

@@ -1,32 +1,32 @@
-import React, { FC, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import Head from 'next/head'
-import { Card } from 'reactstrap'
-import ProfileStateModel from '../models/profileStateModel'
-import FormProfile from '../components/profile/FormProfile'
-import ProfileModel from '../models/profileModel'
-import doSetProfile from '../redux/actions/profile'
+import React, { FC, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import Head from 'next/head';
+import { Card } from 'reactstrap';
+import ProfileStateModel from '../models/profileStateModel';
+import FormProfile from '../components/profile/FormProfile';
+import ProfileModel from '../models/profileModel';
+import doSetProfile from '../redux/actions/profile';
 
 const Profile: FC = () => {
-  const dispatch = useDispatch()
-  const profileState: ProfileStateModel = useSelector((state: any) => state.profileReducer)
-  const { profile } = profileState
+  const dispatch = useDispatch();
+  const profileState: ProfileStateModel = useSelector((state: any) => state.profileReducer);
+  const { profile } = profileState;
   const {
     firstName,
     lastName,
     email,
-  } = profile
-  const emptyProfile = !(firstName && lastName && email)
-  const [edit, setEdit] = useState(emptyProfile)
+  } = profile;
+  const emptyProfile = !(firstName && lastName && email);
+  const [edit, setEdit] = useState(emptyProfile);
 
   const onSubmit = (values: ProfileModel) => {
-    dispatch(doSetProfile(values))
-    setEdit(false)
-  }
+    dispatch(doSetProfile(values));
+    setEdit(false);
+  };
 
   const onCancel = () => {
-    setEdit(emptyProfile)
-  }
+    setEdit(emptyProfile);
+  };
 
   return (
     <>
@@ -55,7 +55,7 @@ const Profile: FC = () => {
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default Profile
+export default Profile;

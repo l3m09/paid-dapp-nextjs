@@ -21,6 +21,6 @@ const templateAgreements: TemplateAgreementModel[] = [
     code: 'saft',
     name: 'SAFT',
   },
-]
+];
 
-export default templateAgreements
+export default templateAgreements;

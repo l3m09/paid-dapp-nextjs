@@ -1,4 +1,6 @@
-export default interface TemplateAgreementModel {
+interface TemplateAgreementModel {
   code: string;
   name: string;
 }
+
+export default TemplateAgreementModel;

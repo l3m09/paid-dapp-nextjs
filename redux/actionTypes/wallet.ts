@@ -3,4 +3,4 @@ enum WalletActionTypes {
   SET_CURRENT_WALLET = 'SET_CURRENT_WALLET',
 }
 
-export default WalletActionTypes
+export default WalletActionTypes;

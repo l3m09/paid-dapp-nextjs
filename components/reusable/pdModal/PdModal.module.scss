@@ -1,0 +1,19 @@
+.pdModal {
+  .pdModalHeader {
+    border: none;
+
+    .pdModalTitle {
+      font-size: 1.25rem;
+      font-weight: 700;
+      line-height: 1.58rem;
+    }
+  }
+
+  .pdModalFooter {
+    border: none;
+
+    button {
+      min-width: 171px;
+    }
+  }
+}

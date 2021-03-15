@@ -1,0 +1,35 @@
+.pdScrollbar {
+  padding-right: 0.50rem;
+}
+
+.pdTrackHorizontal {
+  background: #E6E6EB;
+  border-radius: 10px;
+
+  &.hidden {
+    display: none;
+  }
+}
+
+.pdThumbHorizontalRed {
+  background: #DA1E5E;
+  border-radius: 10px;
+}
+
+.pdTrackVertical {
+  background: #E6E6EB;
+  border-radius: 10px;
+  width: 5px;
+  right: 0;
+
+  &.hidden {
+    display: none;
+  }
+}
+
+.pdThumbVerticalRed {
+  background: #DA1E5E;
+  border-radius: 10px;
+  width: 5px !important;
+  height: 50px !important;
+}

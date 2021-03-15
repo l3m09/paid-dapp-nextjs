@@ -1,6 +1,6 @@
-import ActionModel from '../../models/actionModel'
-import ProfileStateModel from '../../models/profileStateModel'
-import ProfileActionTypes from '../actionTypes/profile'
+import ActionModel from '../../models/actionModel';
+import ProfileStateModel from '../../models/profileStateModel';
+import ProfileActionTypes from '../actionTypes/profile';
 
 const initialState: ProfileStateModel = {
   profile: {
@@ -30,6 +30,6 @@ const profileReducer = (state: ProfileStateModel = initialState, action: ActionM
     default:
       return { ...state };
   }
-}
+};
 
 export default profileReducer;

@@ -1,6 +1,7 @@
 import React, {
   FC, Fragment, useEffect, useState,
 } from 'react';
+import Link from 'next/link';
 import {
   ListGroup,
   ListGroupItem,
@@ -63,13 +64,25 @@ const TemplateAgreementSelectorModal: FC<TemplateAgreementSelectorModalProps> = 
         >
           Cancel
         </button>
-        <button
-          className="btn btn-primary btn-green"
-          type="button"
-          disabled={templateSelected === ''}
-        >
-          Create Agreement
-        </button>
+        {templateSelected ? (
+          <Link href={`/new-agreement?templateTypeCode=${templateSelected}`}>
+            <button
+              className="btn btn-primary btn-green"
+              type="button"
+              disabled={templateSelected === ''}
+            >
+              Create Agreement
+            </button>
+          </Link>
+        ) : (
+          <button
+            className="btn btn-primary btn-green"
+            type="button"
+            disabled={templateSelected === ''}
+          >
+            Create Agreement
+          </button>
+        )}
       </ModalFooter>
     </Modal>
   );

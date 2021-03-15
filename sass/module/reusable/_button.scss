@@ -86,3 +86,19 @@
         opacity: 0.5;
     }
 }
+
+.btn-grey-small {
+    background: $background-color;
+    border: none;
+    border-radius: 0.31rem;
+    color: $blue-400;
+    font-size: 0.625rem;
+    font-weight: bold;
+    line-height: 0.75rem;
+    width: 3.06rem;
+    height: 1.37rem;
+    &:focus, &:hover, &:active {
+        background-color: $grey-100 !important;
+        color: $blue-400 !important;
+    }
+}

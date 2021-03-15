@@ -1,0 +1,19 @@
+@import 'theme/variable';
+@import 'base/variable';
+
+
+.pdBadge {
+    padding: 0.18rem 0.62rem;
+    border-radius: 0.62rem;
+    font-weight: 500;
+}
+
+.pdBadgeWarning {
+    background-color: $light-transparent-yellow;
+    color: $light-yellow;
+}
+
+.pdBadgeSuccess {
+    background-color: $light-transparent-green;
+    color: $green;
+}

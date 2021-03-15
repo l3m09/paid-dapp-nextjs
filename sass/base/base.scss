@@ -1,1 +1,16 @@
 @import '_variable';
+
+@font-face {
+    src: url("/assets/fonts/Circular_Std.woff");
+    font-family: CircularStd;
+}
+
+body {
+  font-family: CircularStd;  
+}
+
+a {
+    color: $danger;
+    text-decoration: underline;
+}
+

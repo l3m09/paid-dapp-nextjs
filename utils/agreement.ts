@@ -1,23 +1,23 @@
 export const columnsAgreement = [
   {
     Header: 'Counterparty',
-    accessor: 'name',
+    accessor: 'data.counterpartyName',
   },
   {
     Header: 'Title',
-    accessor: 'title',
+    accessor: 'data.documentName',
   },
   {
     Header: 'Last Modified',
-    accessor: 'lastModified',
+    accessor: 'event.updatedAt',
   },
   {
     Header: 'Created',
-    accessor: 'createdDate',
+    accessor: 'event.createdAt',
   },
   {
-    Header: 'SignedOn',
-    accessor: 'signedOn',
+    Header: 'Transaction Hash',
+    accessor: 'transactionHash',
   },
 ];
 
@@ -27,3 +27,9 @@ export enum agreementStatus {
   DECLINED = 2,
   SIGNED = 3,
 }
+
+export const PARTY_NAME_FIELD = 'partyName';
+export const PARTY_EMAIL_FIELD = 'partyEmail';
+export const PARTY_ADDRESS_FIELD = 'partyAddress';
+export const PARTY_WALLET_FIELD = 'partyWallet';
+export const AGREEMENT_CREATE_DATE_FIELD = 'createDate';

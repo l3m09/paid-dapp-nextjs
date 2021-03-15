@@ -1,4 +1,4 @@
-import React, { ButtonHTMLAttributes, FC } from 'react'
+import React, { ButtonHTMLAttributes, FC } from 'react';
 
 // eslint-disable-next-line no-undef
 const ButtonCloseModal: FC<ButtonHTMLAttributes<HTMLButtonElement>> = ({
@@ -8,6 +8,6 @@ const ButtonCloseModal: FC<ButtonHTMLAttributes<HTMLButtonElement>> = ({
   <button className="btn btn-close-modal" onClick={onClick} type="button">
     <img src="/assets/icon/close.svg" alt="" />
   </button>
-)
+);
 
-export default ButtonCloseModal
+export default ButtonCloseModal;

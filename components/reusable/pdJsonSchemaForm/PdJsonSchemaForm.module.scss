@@ -1,0 +1,28 @@
+.pdForm {
+  form {
+    div .panel-danger{
+      display: none;
+    }
+    label {
+      font-style: normal;
+      font-weight: 500;
+      font-size: 0.7rem;
+      line-height: 13px;
+      color: #1a1e3c;
+      margin-bottom: 0.8rem;
+      span{
+        color: #212529;
+      }
+    }
+    input, textarea, select {
+      background: #f4f5f7;
+      border-radius: 7px;
+      border: none;
+      font-style: normal;
+      font-weight: 500;
+      font-size: 0.8rem;
+      color: #1A1E3C;
+      margin-right: 10px;
+    }
+  }
+}
