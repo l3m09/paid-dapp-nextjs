@@ -4,8 +4,8 @@ import AdvisorAgreementData from '@/models/advisorAgreementData';
 import CiiaAgreementData from '@/models/ciiaAgreementData';
 import ConsultingAgreementData from '@/models/consultingAgreementData';
 import NdaAgreementData from '@/models/ndaAgreementData';
-import ReferralAgreementData from '@/models/ReferralAgreementData';
-import SaftAgreementData from '@/models/SaftAgreementData';
+import ReferralAgreementData from '@/models/referralAgreementData';
+import SaftAgreementData from '@/models/saftAgreementData';
 import SmartAgreementsTypes from '../actionTypes/smartAgreements';
 
 interface SmartAgreementsState {
