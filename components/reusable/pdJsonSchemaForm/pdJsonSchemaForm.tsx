@@ -1,38 +1,33 @@
 // eslint-disable-next-line import/no-unresolved
 import React, { FC } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import Form from '@rjsf/core';
 import {
   Button,
 } from 'reactstrap';
-import { doSetSmartAgreementData } from '../../../redux/actions/smartAgreement';
 import styles from './PdJsonSchemaForm.module.scss';
 
 interface pdJsonSchemaFormProps {
-  type: string;
+  type?: string;
   dataName: string;
   jsonSchema: Object;
   uiSchema?: Object;
   className?: string;
-  onSave: any;
+  onChange: any;
+  onSubmit: any;
 }
 
 const PdJsonSchemaForm: FC<pdJsonSchemaFormProps> = ({
-  type,
   dataName,
   jsonSchema,
   uiSchema,
   className,
-  onSave,
+  onChange,
+  onSubmit,
 }) => {
-  const dispatch = useDispatch();
   const smartAgreementsState = useSelector(
     (state: { smartAgreementsReducer: any }) => state.smartAgreementsReducer,
   );
-
-  const onChange = ({ formData }) => {
-    dispatch(doSetSmartAgreementData({ type, formData }));
-  };
 
   const widgets = {};
 
@@ -43,7 +38,7 @@ const PdJsonSchemaForm: FC<pdJsonSchemaFormProps> = ({
         uiSchema={uiSchema}
         widgets={widgets}
         formData={smartAgreementsState[dataName]}
-        onSubmit={onSave}
+        onSubmit={onSubmit}
         onChange={onChange}
         showErrorList={false}
       >

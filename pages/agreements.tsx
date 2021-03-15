@@ -40,7 +40,7 @@ const Agreements: React.FC = () => {
   };
 
   const onDetailClick = (currentId: number) => {
-    setCurrentAgreement(agreements.find(({ id }) => id === currentId));
+    setCurrentAgreement(agreements.find(({ event }) => event.cid === currentId));
     setOpenDetailModal(true);
   };
 

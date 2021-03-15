@@ -61,6 +61,14 @@ export const doSetSaftAgreementData = (payload: SaftAgreementData) => (
   });
 };
 
+export const resetTemplateAgreement = () => (
+  dispatch: any,
+) => {
+  dispatch({
+    type: SmartAgreementsTypes.RESET_AGREEMENT_TEMPLATE,
+  });
+};
+
 export const doSetSmartAgreementData = (payload: any) => (dispatch: any) => {
   const { type, formData } = payload;
   const mapTypeToComponent = new Map([

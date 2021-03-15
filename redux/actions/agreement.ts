@@ -1,3 +1,4 @@
+import AgreementModel from '@/models/agreementModel';
 import agreementsData from '../../data/agreements';
 import AgreementActionTypes from '../actionTypes/agreement';
 
@@ -15,12 +16,21 @@ export const setIsEditing = (isEditing: boolean) => (dispatch: any) => {
   });
 };
 
-export const setAgreementExists = (agreementExists: boolean) => (
+export const setAgreementReviewed = (agreementReviewed: boolean) => (
   dispatch: any,
 ) => {
   dispatch({
-    type: AgreementActionTypes.SET_AGREEMENT_EXIST,
-    payload: { agreementExists },
+    type: AgreementActionTypes.SET_AGREEMENT_REVIEWED,
+    payload: { agreementReviewed },
+  });
+};
+
+export const createAgreement = (newAgreement: AgreementModel) => (
+  dispatch: any,
+) => {
+  dispatch({
+    type: AgreementActionTypes.CREATE_AGREEMENT,
+    payload: { newAgreement },
   });
 };
 

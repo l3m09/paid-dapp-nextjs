@@ -6,7 +6,8 @@ interface SmartAgreementsFormProps {
   uiSchema: Object;
   dataName: string;
   type: string;
-  onSaveFields: any;
+  onChangeFields: any;
+  onReview: any;
 }
 
 const SmartAgreementsForm: FC<SmartAgreementsFormProps> = ({
@@ -14,7 +15,8 @@ const SmartAgreementsForm: FC<SmartAgreementsFormProps> = ({
   dataName,
   jsonSchema,
   uiSchema,
-  onSaveFields,
+  onChangeFields,
+  onReview,
 }) => {
   const mapTypeToComponent = new Map([
     [
@@ -24,7 +26,8 @@ const SmartAgreementsForm: FC<SmartAgreementsFormProps> = ({
         jsonSchema={jsonSchema}
         uiSchema={uiSchema}
         type={type}
-        onSave={onSaveFields}
+        onChange={onChangeFields}
+        onSubmit={onReview}
       />,
     ],
     [
@@ -34,7 +37,8 @@ const SmartAgreementsForm: FC<SmartAgreementsFormProps> = ({
         jsonSchema={jsonSchema}
         uiSchema={uiSchema}
         type={type}
-        onSave={onSaveFields}
+        onChange={onChangeFields}
+        onSubmit={onReview}
       />,
     ],
     [
@@ -43,7 +47,8 @@ const SmartAgreementsForm: FC<SmartAgreementsFormProps> = ({
         dataName={dataName}
         jsonSchema={jsonSchema}
         type={type}
-        onSave={onSaveFields}
+        onChange={onChangeFields}
+        onSubmit={onReview}
       />,
     ],
     [
@@ -53,7 +58,8 @@ const SmartAgreementsForm: FC<SmartAgreementsFormProps> = ({
         jsonSchema={jsonSchema}
         uiSchema={uiSchema}
         type={type}
-        onSave={onSaveFields}
+        onChange={onChangeFields}
+        onSubmit={onReview}
       />,
     ],
     [
@@ -63,7 +69,8 @@ const SmartAgreementsForm: FC<SmartAgreementsFormProps> = ({
         jsonSchema={jsonSchema}
         uiSchema={uiSchema}
         type={type}
-        onSave={onSaveFields}
+        onChange={onChangeFields}
+        onSubmit={onReview}
       />,
     ],
     [
@@ -72,7 +79,8 @@ const SmartAgreementsForm: FC<SmartAgreementsFormProps> = ({
         dataName={dataName}
         jsonSchema={jsonSchema}
         type={type}
-        onSave={onSaveFields}
+        onChange={onChangeFields}
+        onSubmit={onReview}
       />,
     ],
   ]);

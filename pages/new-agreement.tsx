@@ -12,13 +12,20 @@ import { format } from 'date-fns';
 
 import ProfileStateModel from '@/models/profileStateModel';
 import PreviewDocument from '@/components/new-agreement/PreviewDocument';
-import { setAgreementExists, setIsEditing } from 'redux/actions';
+import { setAgreementReviewed, setIsEditing } from 'redux/actions';
+import AgreementModel from '@/models/agreementModel';
+import templateAgreements from 'data/templateAgreements';
+import { createAgreement } from 'redux/actions/agreement';
 import PdScrollbar from '../components/reusable/pdScrollbar/PdScrollbar';
 import SmartAgreementFormPanel from '../components/new-agreement/SmartAgreementFormPanel';
 
 import getContractTemplate from '../redux/actions/template/index';
-import { doSetSmartAgreementData } from '../redux/actions/smartAgreement';
 import {
+  doSetSmartAgreementData,
+  resetTemplateAgreement,
+} from '../redux/actions/smartAgreement';
+import {
+  agreementStatus,
   AGREEMENT_CREATE_DATE_FIELD,
   PARTY_ADDRESS_FIELD,
   PARTY_EMAIL_FIELD,
@@ -45,25 +52,22 @@ const NewAgreement: NextPage<NewAgreementProps> = ({ templateTypeCode }) => {
     (state: { agreementReducer: any }) => state.agreementReducer.isEditing,
   );
 
-  const agreementExists = useSelector(
-    (state: { agreementReducer: any }) => state.agreementReducer.agreementExists,
+  const agreementReviewed = useSelector(
+    (state: { agreementReducer: any }) => state.agreementReducer.agreementReviewed,
   );
 
-  const currentAgreement = useSelector(
-    (state: { agreementReducer: any }) => state.agreementReducer.currentAgreement,
+  const agreements = useSelector(
+    (state: any) => state.agreementReducer.agreements,
   );
 
   const {
-    firstName,
-    lastName,
-    email,
-    address,
+    firstName, lastName, email, address,
   } = useSelector(
     (state: { profileReducer: ProfileStateModel }) => state.profileReducer.profile,
   );
 
   const currentWallet = useSelector(
-    (state: {walletReducer: any}) => state.walletReducer.currentWallet,
+    (state: { walletReducer: any }) => state.walletReducer.currentWallet,
   );
 
   const previewColumn = classNames({
@@ -75,20 +79,12 @@ const NewAgreement: NextPage<NewAgreementProps> = ({ templateTypeCode }) => {
     dispatch(setIsEditing(true));
   };
 
-  const onSaveFields = ({ formData }) => {
-    dispatch(setIsEditing(false));
-    dispatch(setAgreementExists(true));
-    dispatch(doSetSmartAgreementData({
-      type: templateTypeCode,
-      formData,
-    }));
-  };
-
   const [jsonSchema, setJsonSchema] = useState({});
   const [uiSchema, setUISchema] = useState({});
   const [dataName, setDataName] = useState('');
   const [agreementDocument, setAgreementDocument] = useState('');
   const [agreementData, setAgreementData] = useState(null);
+  const [currentFormData, setCurrentFormData] = useState(null);
 
   useEffect(() => {
     const templateData = getContractTemplate(templateTypeCode);
@@ -111,18 +107,87 @@ const NewAgreement: NextPage<NewAgreementProps> = ({ templateTypeCode }) => {
     setAgreementData(data);
   }, [smartAgreementsState, dataName]);
 
+  useEffect(() => () => {
+    dispatch(resetTemplateAgreement());
+  }, []);
+
   const agreementTemplate = useCallback(
     () => (
       <div style={{ width: '100%' }}>
-        {
-          agreementData
-            ? <TemplateComponent template={agreementDocument} data={agreementData} />
-            : null
-        }
+        {agreementData ? (
+          <TemplateComponent
+            template={agreementDocument}
+            data={agreementData}
+          />
+        ) : null}
       </div>
     ),
     [agreementDocument, agreementData],
   );
+
+  const document = useCallback(
+    () => templateAgreements.find(({ code }) => code === templateTypeCode),
+    [],
+  );
+
+  const onChangeFields = ({ formData }) => {
+    setCurrentFormData(formData);
+    dispatch(
+      doSetSmartAgreementData({
+        type: templateTypeCode,
+        formData,
+      }),
+    );
+  };
+  const onReview = () => {
+    dispatch(setIsEditing(false));
+    dispatch(setAgreementReviewed(true));
+  };
+
+  const onSubmitForm = () => {
+    let maxCid = 0;
+    if (agreements.length) {
+      maxCid = Math.max(...agreements.map(({ event }) => event.cid));
+    }
+
+    const createdAt = new Intl.DateTimeFormat('en-US', {
+      year: 'numeric',
+      month: 'numeric',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+      second: 'numeric',
+      hour12: false,
+    }).format(new Date());
+
+    const newAgreement: AgreementModel = {
+      transactionHash:
+        '0x2446f1fd773fbb9f080e674b60c6a033c7ed7427b8b9413cf28a2a4a6da9b56c',
+      event: {
+        id: 1,
+        from: 1,
+        to: 2,
+        agreementFormTemplateId: 1,
+        cid: maxCid + 1,
+        status: agreementStatus.PENDING,
+        createdAt,
+        updatedAt: createdAt,
+      },
+      data: {
+        documentName: document().name,
+        counterpartyName: currentFormData.counterPartyName,
+        agreementForm: null,
+        agreementFormTemplateId: templateTypeCode,
+        escrowed: null,
+        validUntil: '12/21/2023',
+        toSigner: null,
+        fromSigner: null,
+      },
+    };
+
+    dispatch(createAgreement(newAgreement));
+    router.push('/agreements');
+  };
 
   return (
     <>
@@ -140,11 +205,12 @@ const NewAgreement: NextPage<NewAgreementProps> = ({ templateTypeCode }) => {
               <div className={previewColumn}>
                 <Card className="border-0 content">
                   <PreviewDocument
-                    templateName="Mutual NDA"
+                    templateName={document().name}
                     templateComponent={agreementTemplate()}
                     onEditMode={onEditMode}
                     isEditing={isEditing}
-                    agreementExists={agreementExists}
+                    agreementReviewed={agreementReviewed}
+                    onSubmit={onSubmitForm}
                   />
                 </Card>
               </div>
@@ -156,7 +222,8 @@ const NewAgreement: NextPage<NewAgreementProps> = ({ templateTypeCode }) => {
                       dataName={dataName}
                       jsonSchema={jsonSchema}
                       uiSchema={uiSchema}
-                      onSaveFields={onSaveFields}
+                      onChangeFields={onChangeFields}
+                      onReview={onReview}
                     />
                   </PdScrollbar>
                 </div>

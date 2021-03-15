@@ -8,7 +8,7 @@ const initialState: AgreementStateModel = {
   error: '',
   currentAgreement: null,
   isEditing: false,
-  agreementExists: false,
+  agreementReviewed: false,
 };
 
 const agreementReducer = (
@@ -20,9 +20,8 @@ const agreementReducer = (
     case AgreementActionTypes.LOAD_AGREEMENTS: {
       return {
         ...state,
-        agreements: payload.agreements,
         isEditing: false,
-        agreementExists: false,
+        agreementReviewed: false,
       };
     }
     case AgreementActionTypes.SET_IS_EDITING: {
@@ -31,10 +30,16 @@ const agreementReducer = (
         isEditing: payload.isEditing,
       };
     }
-    case AgreementActionTypes.SET_AGREEMENT_EXIST: {
+    case AgreementActionTypes.SET_AGREEMENT_REVIEWED: {
       return {
         ...state,
-        agreementExists: payload.agreementExists,
+        agreementReviewed: payload.agreementReviewed,
+      };
+    }
+    case AgreementActionTypes.CREATE_AGREEMENT: {
+      return {
+        ...state,
+        agreements: [...state.agreements, payload.newAgreement],
       };
     }
     default:

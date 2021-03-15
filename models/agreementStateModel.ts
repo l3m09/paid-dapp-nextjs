@@ -6,7 +6,7 @@ interface AgreementStateModel {
   error: string;
   currentAgreement: any,
   isEditing: boolean,
-  agreementExists: boolean
+  agreementReviewed: boolean
 }
 
 export default AgreementStateModel;

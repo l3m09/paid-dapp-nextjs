@@ -9,16 +9,18 @@ interface PreviewDocumentProps {
   templateName: string;
   templateComponent: any;
   isEditing: boolean;
-  agreementExists: boolean;
+  agreementReviewed: boolean;
   onEditMode: any;
+  onSubmit: any;
 }
 
 const PreviewDocument: FC<PreviewDocumentProps> = ({
   templateName,
   templateComponent,
   isEditing,
-  agreementExists,
+  agreementReviewed,
   onEditMode,
+  onSubmit,
 }: PreviewDocumentProps) => (
   <div className={styles.previewDocumentContainer}>
     <div className={styles.previewDocumentHeader}>
@@ -30,7 +32,7 @@ const PreviewDocument: FC<PreviewDocumentProps> = ({
       </PdScrollbar>
     </div>
 
-    {!isEditing && !agreementExists && (
+    {!isEditing && !agreementReviewed && (
       <div className={styles.previewDocumentFooter}>
         <Link href="/agreements">
           <Button color="default">Close</Button>
@@ -41,13 +43,12 @@ const PreviewDocument: FC<PreviewDocumentProps> = ({
       </div>
     )}
 
-    {!isEditing && agreementExists && (
+    {!isEditing && agreementReviewed && (
       <div className={styles.previewDocumentFooter}>
         <Button color="default" onClick={() => onEditMode()}>
           Back to Edit
         </Button>
-        <Button color="danger">Reject</Button>
-        <Button color="success">Approve and Send</Button>
+        <Button color="success" onClick={() => onSubmit()}>Approve and Send</Button>
       </div>
     )}
   </div>

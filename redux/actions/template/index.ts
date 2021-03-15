@@ -32,7 +32,7 @@ const getContractTemplate = (contractName: String): contractTemplate => {
   const sharedProperties = {
     couterparty: {
       counterPartyName: {
-        title: 'Email or Username:',
+        title: 'Counterparty Name:',
         type: 'string',
       },
       counterPartyEmail: {

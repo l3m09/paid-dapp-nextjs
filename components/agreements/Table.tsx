@@ -82,9 +82,9 @@ const Table: FC<TableProps> = ({
               'row-background': rowIndex % 2 === 0,
             });
             const statusButtonClass = classNames('btn-status mr-3', {
-              'btn-danger': row.original.status === agreementStatus.DECLINED,
-              'btn-success': row.original.status === agreementStatus.SIGNED,
-              'btn-info': row.original.status === agreementStatus.PENDING,
+              'btn-danger': row.original.event.status === agreementStatus.DECLINED,
+              'btn-success': row.original.event.status === agreementStatus.SIGNED,
+              'btn-info': row.original.event.status === agreementStatus.PENDING,
             });
 
             const titleStatus = { 1: 'Pending', 2: 'Declined', 3: 'Signed' };
@@ -102,10 +102,10 @@ const Table: FC<TableProps> = ({
                   ))}
                   <td key={`btn-${rowIndex}`} className="text-right pr-5">
                     <Button className={statusButtonClass}>
-                      {titleStatus[row.original.status]}
+                      {titleStatus[row.original.event.status]}
                     </Button>
                     <Button
-                      id={`detail-button-${row.original.id}`}
+                      id={`detail-button-${row.original.event.cid}`}
                       className="btn-transparent"
                       color="primary"
                     >
@@ -114,14 +114,14 @@ const Table: FC<TableProps> = ({
                     <UncontrolledPopover
                       trigger="legacy"
                       placement="bottom"
-                      target={`detail-button-${row.original.id}`}
+                      target={`detail-button-${row.original.event.cid}`}
                     >
                       <PopoverBody>
                         <Button className="btn-transparent">
                           <img src="/assets/icon/openPdf.svg" alt="" />
                         </Button>
                         <Button
-                          onClick={() => onDetailClick(row.original.id)}
+                          onClick={() => onDetailClick(row.original.event.cid)}
                           className="btn-transparent"
                         >
                           <img src="/assets/icon/agreementDetails.svg" alt="" />

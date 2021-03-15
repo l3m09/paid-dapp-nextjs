@@ -218,6 +218,9 @@ const smartAgreementsReducer = (
         },
       };
     }
+    case SmartAgreementsTypes.RESET_AGREEMENT_TEMPLATE: {
+      return initialState;
+    }
     default:
       return { ...state };
   }
