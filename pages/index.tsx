@@ -14,8 +14,7 @@ const Index: React.FC = () => {
   const [openConnectSelector, setOpenConnectSelector] = useState(false);
 
   const onConnect = (optionSelected) => {
-    dispatch(doConnectToWallet(router));
-    console.log(optionSelected);
+    dispatch(doConnectToWallet({ router, scenarioCode: optionSelected }));
     setOpenConnectSelector(false);
   };
 
