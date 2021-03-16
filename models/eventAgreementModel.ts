@@ -5,6 +5,7 @@ interface EventAgreementModel {
   agreementFormTemplateId?: number;
   cid?: number;
   status?: number;
+  signedOn?: string;
   createdAt?: string;
   updatedAt?: string;
 }

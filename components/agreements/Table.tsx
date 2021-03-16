@@ -97,7 +97,7 @@ const Table: FC<TableProps> = ({
                 <>
                   {row.cells.map((cell, index) => (
                     <td {...cell.getCellProps()} id={`${rowIndex}-${index}`}>
-                      {cell.render('Cell')}
+                      {cell.value ? cell.render('Cell') : ' - '}
                     </td>
                   ))}
                   <td key={`btn-${rowIndex}`} className="text-right pr-5">
