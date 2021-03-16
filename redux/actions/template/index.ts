@@ -68,11 +68,6 @@ const getContractTemplate = (contractName: String): contractTemplate => {
       },
     },
     wallet: {
-      // sendWallet: {
-      //   title: 'Sending Wallet:',
-      //   type: 'string',
-      //   readOnly: true,
-      // },
     },
     required: [
       'partyName',
@@ -109,6 +104,7 @@ const getContractTemplate = (contractName: String): contractTemplate => {
       jsonSchema = {
         type: 'object',
         properties: {
+          ...sharedProperties.party,
           ...sharedProperties.couterparty,
           ...sharedProperties.wallet,
           purchaseOption: {
@@ -204,6 +200,7 @@ const getContractTemplate = (contractName: String): contractTemplate => {
       jsonSchema = {
         type: 'object',
         properties: {
+          ...sharedProperties.party,
           ...sharedProperties.couterparty,
           ...sharedProperties.wallet,
           effectiveDate: {
@@ -262,6 +259,7 @@ const getContractTemplate = (contractName: String): contractTemplate => {
       jsonSchema = {
         type: 'object',
         properties: {
+          ...sharedProperties.party,
           ...sharedProperties.couterparty,
           ...sharedProperties.wallet,
           state: {
@@ -378,6 +376,10 @@ const getContractTemplate = (contractName: String): contractTemplate => {
       uiSchema = {
         'ui:widget': 'checkbox',
         'ui:order': [
+          'partyName',
+          'partyEmail',
+          'partyAddress',
+          'partyWallet',
           'counterPartyName',
           'counterPartyEmail',
           'counterPartyAddress',
@@ -443,6 +445,7 @@ const getContractTemplate = (contractName: String): contractTemplate => {
       jsonSchema = {
         type: 'object',
         properties: {
+          ...sharedProperties.party,
           ...sharedProperties.couterparty,
           ...sharedProperties.wallet,
           typeOfCompany: {
@@ -491,6 +494,7 @@ const getContractTemplate = (contractName: String): contractTemplate => {
       jsonSchema = {
         type: 'object',
         properties: {
+          ...sharedProperties.party,
           ...sharedProperties.couterparty,
           ...sharedProperties.wallet,
           purchaseAmount: {
