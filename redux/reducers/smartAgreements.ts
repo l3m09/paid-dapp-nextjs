@@ -23,7 +23,6 @@ const initialState: SmartAgreementsState = {
     partyEmail: '',
     partyAddress: '',
     partyWallet: '',
-    createDate: '',
     counterPartyName: '',
     counterPartyEmail: '',
     counterPartyAddress: '',

@@ -59,11 +59,11 @@ const getContractTemplate = (contractName: String): contractTemplate => {
         type: 'string',
       },
     },
-    required:[
-      "counterPartyName",
-      "counterPartyEmail",
-      "counterPartyAddress",
-   ],
+    required: [
+      'counterPartyName',
+      'counterPartyEmail',
+      'counterPartyAddress',
+    ],
   };
 
   switch (contractName) {
@@ -74,11 +74,6 @@ const getContractTemplate = (contractName: String): contractTemplate => {
       jsonSchema = {
         type: 'object',
         properties: {
-          date: {
-            title: 'Date',
-            type: 'string',
-            format: 'date',
-          },
           ...sharedProperties.couterparty,
           ...sharedProperties.wallet,
         },
