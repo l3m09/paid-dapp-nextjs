@@ -28,7 +28,7 @@ export const PdModalHeader: FC<PdModalHeaderProps> = ({
   ...props
 }) => (
   <ModalHeader className={`${styles.pdModalHeader} ${className}`} {...props}>
-    <h4 className={styles.pdModalTitle}>{title}</h4>
+    <span className={`h4 ${styles.pdModalTitle}`}>{title}</span>
     {subtitle && <span className="pdModalTitle">{subtitle}</span>}
   </ModalHeader>
 );

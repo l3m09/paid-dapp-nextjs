@@ -1,5 +1,6 @@
 /* eslint-disable import/no-unresolved */
 import React, { useState, useEffect, useCallback } from 'react';
+import { renderToString } from 'react-dom/server';
 import Head from 'next/head';
 import { NextPage } from 'next';
 import router from 'next/router';
@@ -160,6 +161,8 @@ const NewAgreement: NextPage<NewAgreementProps> = ({ templateTypeCode }) => {
       hour12: false,
     }).format(new Date());
 
+    console.log('file string', renderToString(agreementTemplate()));
+
     const newAgreement: AgreementModel = {
       transactionHash:
         '0x2446f1fd773fbb9f080e674b60c6a033c7ed7427b8b9413cf28a2a4a6da9b56c',
@@ -182,6 +185,7 @@ const NewAgreement: NextPage<NewAgreementProps> = ({ templateTypeCode }) => {
         validUntil: '12/21/2023',
         toSigner: null,
         fromSigner: null,
+        fileString: renderToString(agreementTemplate()),
       },
     };
 
