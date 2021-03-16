@@ -59,23 +59,23 @@ const AgreementDetailModal: FC<DetailAgreementModalProps> = ({
           </div>
           <div className="col-6 mb-3  flex-column">
             <p className="title mb-1">Last Modified:</p>
-            <div className="value">{currentAgreement?.event.updatedAt}</div>
+            <div className="value">{currentAgreement?.event.updatedAt || '-'}</div>
           </div>
           <div className="col-6 mb-3 ">
             <p className="title mb-1">Transaction Hash:</p>
-            <div className="value">{currentAgreement?.transactionHash}</div>
+            <div className="value">{currentAgreement?.transactionHash || '-'}</div>
           </div>
           <div className="col-6 mb-3  flex-column">
             <p className="title mb-1">Created:</p>
-            <div className="value">{currentAgreement?.event.createdAt}</div>
+            <div className="value">{currentAgreement?.event.createdAt || '-'}</div>
           </div>
           <div className="col-6 mb-3 ">
             <p className="title mb-1">Document Signature:</p>
             <div className="value">0x9e81de93dC...47e6d64b70ff1dF</div>
           </div>
           <div className="col-12 mb-3  flex-column">
-            <p className="title mb-1">Valid Until:</p>
-            <div className="value">{currentAgreement?.data.validUntil}</div>
+            <p className="title mb-1">Signed On:</p>
+            <div className="value">{currentAgreement?.event.signedOn || '-'}</div>
           </div>
           <div className="col-12 text-center mt-4 mx-auto buttons px-1">
             <Button
