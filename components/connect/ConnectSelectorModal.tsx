@@ -14,7 +14,7 @@ import styles from './ConnectSelectorModal.module.scss';
 interface ConnectSelectorModalProps {
   open: boolean;
   onClose: any;
-  onConnect: (optionSelected) => {};
+  onConnect: any;
 }
 
 const ConnectSelectorModal: FC<ConnectSelectorModalProps> = ({
