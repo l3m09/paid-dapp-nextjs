@@ -87,7 +87,7 @@ const retrieveScenarios = (scenarioCode) => {
             agreementFormTemplateId: 'nda',
             escrowed: null,
             validUntil: '12/21/2023',
-            toSigner: null,
+            toSigner: 'b',
             fromSigner: null,
           },
         }, {
@@ -110,7 +110,7 @@ const retrieveScenarios = (scenarioCode) => {
             agreementFormTemplateId: 'advisor',
             escrowed: null,
             validUntil: '12/21/2023',
-            toSigner: null,
+            toSigner: 'b',
             fromSigner: null,
           },
         }],
