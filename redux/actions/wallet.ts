@@ -1,3 +1,4 @@
+/* eslint-disable no-tabs */
 import { NextRouter } from 'next/router';
 import AgreementActionTypes from '../actionTypes/agreement';
 import ProfileActionTypes from '../actionTypes/profile';

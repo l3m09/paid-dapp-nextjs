@@ -161,8 +161,6 @@ const NewAgreement: NextPage<NewAgreementProps> = ({ templateTypeCode }) => {
       hour12: false,
     }).format(new Date());
 
-    console.log('file string', renderToString(agreementTemplate()));
-
     const newAgreement: AgreementModel = {
       transactionHash:
         '0x2446f1fd773fbb9f080e674b60c6a033c7ed7427b8b9413cf28a2a4a6da9b56c',

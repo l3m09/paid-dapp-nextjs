@@ -14,6 +14,7 @@ interface DetailAgreementModalProps {
   onClose: any;
   onSign: any;
   onReject: any;
+  onOpenPDF: any;
 }
 
 const AgreementDetailModal: FC<DetailAgreementModalProps> = ({
@@ -22,6 +23,7 @@ const AgreementDetailModal: FC<DetailAgreementModalProps> = ({
   onClose,
   onSign,
   onReject,
+  onOpenPDF,
 }: DetailAgreementModalProps) => {
   const statusButtonClass = classNames('btn-status mr-3', {
     'btn-danger': currentAgreement?.event.status === agreementStatus.DECLINED,
@@ -95,7 +97,7 @@ const AgreementDetailModal: FC<DetailAgreementModalProps> = ({
             {currentAgreement?.data.toSigner
             && currentAgreement?.event.status === agreementStatus.PENDING ? (
               <>
-                <Button className="btn btn-action mr-1">Open PDF</Button>
+                <Button onClick={() => onOpenPDF()} className="btn btn-action mr-1">Open PDF</Button>
                 <Button
                   onClick={() => onReject()}
                   className="mr-1"

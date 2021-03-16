@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { Card, Button } from 'reactstrap';
 
+import AgreementPreviewModal from '@/components/agreements/AgreementPreviewModal';
 import Table from '../components/agreements/Table';
 
 import TemplateAgreementSelectorModal from '../components/agreements/TemplateAgreementSelectorModal';
@@ -22,6 +23,7 @@ const Agreements: React.FC = () => {
     (state: any) => state.agreementReducer.agreements,
   );
   const [openTemplateSelector, setOpenTemplateSelector] = useState(false);
+  const [openPreviewModal, setOpenPreviewModal] = useState(false);
   const [openDetailModal, setOpenDetailModal] = useState(false);
   const [currentAgreement, setCurrentAgreement] = useState<AgreementModel>(
     null,
@@ -33,6 +35,10 @@ const Agreements: React.FC = () => {
 
   const onCloseTemplateSelector = () => {
     setOpenTemplateSelector(false);
+  };
+
+  const onClosePreviewModal = () => {
+    setOpenPreviewModal(false);
   };
 
   const onCloseDetailModal = () => {
@@ -67,6 +73,16 @@ const Agreements: React.FC = () => {
       agreements.find(({ event }) => event.cid === currentId),
     );
     setOpenDetailModal(true);
+  };
+
+  const onOpenFile = (id: number) => {
+    if (id) {
+      setCurrentAgreement(
+        agreements.find(({ event }) => event.cid === id),
+      );
+    }
+    setOpenDetailModal(false);
+    setOpenPreviewModal(true);
   };
 
   const onNewAgreementClick = () => {
@@ -128,6 +144,7 @@ const Agreements: React.FC = () => {
                 data={agreements}
                 onDetailClick={onDetailClick}
                 onNewAgreementClick={onNewAgreementClick}
+                onOpenFile={onOpenFile}
               />
               <Button
                 className="new-agreement-button"
@@ -150,6 +167,13 @@ const Agreements: React.FC = () => {
           onClose={onCloseDetailModal}
           onSign={onSignAgreement}
           onReject={onRejectAgreement}
+          onOpenPDF={onOpenFile}
+        />
+
+        <AgreementPreviewModal
+          open={openPreviewModal}
+          onClose={onClosePreviewModal}
+          fileString={currentAgreement?.data.fileString}
         />
       </div>
     </>
