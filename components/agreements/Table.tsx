@@ -18,6 +18,7 @@ type TableProps = {
   onDetailClick: (id: number) => void;
   /** The `onNewAgreementClick` callback */
   onNewAgreementClick: () => void;
+  onOpenFile: (id: number) => void;
 };
 
 const Table: FC<TableProps> = ({
@@ -25,6 +26,7 @@ const Table: FC<TableProps> = ({
   data,
   onDetailClick,
   onNewAgreementClick,
+  onOpenFile,
 }) => {
   const {
     getTableProps,
@@ -97,7 +99,7 @@ const Table: FC<TableProps> = ({
                 <>
                   {row.cells.map((cell, index) => (
                     <td {...cell.getCellProps()} id={`${rowIndex}-${index}`}>
-                      {cell.render('Cell')}
+                      {cell.value ? cell.render('Cell') : ' - '}
                     </td>
                   ))}
                   <td key={`btn-${rowIndex}`} className="text-right pr-5">
@@ -117,7 +119,7 @@ const Table: FC<TableProps> = ({
                       target={`detail-button-${row.original.event.cid}`}
                     >
                       <PopoverBody>
-                        <Button className="btn-transparent">
+                        <Button onClick={() => onOpenFile(row.original.event.cid)} className="btn-transparent">
                           <img src="/assets/icon/openPdf.svg" alt="" />
                         </Button>
                         <Button

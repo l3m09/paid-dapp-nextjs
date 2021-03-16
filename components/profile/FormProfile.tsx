@@ -43,7 +43,7 @@ const FormProfile: FC<FormProfileProps> = ({
         label="Name:"
         name="firstName"
         type="text"
-        placeholder="Jhon"
+        placeholder="Enter your first name"
         inputClassNames={classNames({ 'is-invalid': errors.firstName })}
         innerRef={register({
           required: 'Name is required',
@@ -63,7 +63,7 @@ const FormProfile: FC<FormProfileProps> = ({
         label="Last name:"
         name="lastName"
         type="text"
-        placeholder="Doe"
+        placeholder="Enter your last name"
         inputClassNames={classNames({ 'is-invalid': errors.lastName })}
         innerRef={register({
           required: 'Last name is required',
@@ -83,7 +83,7 @@ const FormProfile: FC<FormProfileProps> = ({
         label="Email:"
         name="email"
         type="text"
-        placeholder="jhon.doe@example.com"
+        placeholder="Enter your email address"
         inputClassNames={classNames({ 'is-invalid': errors.lastName })}
         innerRef={register({
           required: 'Email is required',
@@ -106,7 +106,7 @@ const FormProfile: FC<FormProfileProps> = ({
       <StackedTextarea
         label="Address:"
         name="address"
-        placeholder={'Suite 5A-1204\n799 E Dragram\nTucson AZ 85705\nUSA'}
+        placeholder="Enter your address"
         rows={4}
         innerRef={register}
       />
@@ -114,7 +114,7 @@ const FormProfile: FC<FormProfileProps> = ({
         label="Phone Number:"
         name="phone"
         type="text"
-        placeholder="+1 556 985 6859"
+        placeholder="Enter your phone number"
         groupClassNames="stacked-group-last"
         innerRef={register}
       />
