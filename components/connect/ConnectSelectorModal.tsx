@@ -13,7 +13,7 @@ import styles from './ConnectSelectorModal.module.scss';
 
 interface ConnectSelectorModalProps {
   open: boolean;
-  onClose: () => {};
+  onClose: any;
   onConnect: (optionSelected) => {};
 }
 
