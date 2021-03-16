@@ -12,12 +12,16 @@ interface DetailAgreementModalProps {
   currentAgreement: AgreementModel;
   open: boolean;
   onClose: any;
+  onSign: any;
+  onReject: any;
 }
 
 const AgreementDetailModal: FC<DetailAgreementModalProps> = ({
   currentAgreement,
   open,
   onClose,
+  onSign,
+  onReject,
 }: DetailAgreementModalProps) => {
   const statusButtonClass = classNames('btn-status mr-3', {
     'btn-danger': currentAgreement?.event.status === agreementStatus.DECLINED,
@@ -51,7 +55,9 @@ const AgreementDetailModal: FC<DetailAgreementModalProps> = ({
           <div className="col-12 info mb-4 info mt-3 mb-2"> Details: </div>
           <div className="col-6 mb-3 flex-column">
             <p className="title mb-1">Counterparty:</p>
-            <div className="value">{currentAgreement?.data.counterpartyName}</div>
+            <div className="value">
+              {currentAgreement?.data.counterpartyName}
+            </div>
           </div>
           <div className="col-6 mb-3 ">
             <p className="title mb-1">Signed By:</p>
@@ -59,36 +65,64 @@ const AgreementDetailModal: FC<DetailAgreementModalProps> = ({
           </div>
           <div className="col-6 mb-3  flex-column">
             <p className="title mb-1">Last Modified:</p>
-            <div className="value">{currentAgreement?.event.updatedAt}</div>
+            <div className="value">
+              {currentAgreement?.event.updatedAt || '-'}
+            </div>
           </div>
           <div className="col-6 mb-3 ">
             <p className="title mb-1">Transaction Hash:</p>
-            <div className="value">{currentAgreement?.transactionHash}</div>
+            <div className="value">
+              {currentAgreement?.transactionHash || '-'}
+            </div>
           </div>
           <div className="col-6 mb-3  flex-column">
             <p className="title mb-1">Created:</p>
-            <div className="value">{currentAgreement?.event.createdAt}</div>
+            <div className="value">
+              {currentAgreement?.event.createdAt || '-'}
+            </div>
           </div>
           <div className="col-6 mb-3 ">
             <p className="title mb-1">Document Signature:</p>
             <div className="value">0x9e81de93dC...47e6d64b70ff1dF</div>
           </div>
           <div className="col-12 mb-3  flex-column">
-            <p className="title mb-1">Valid Until:</p>
-            <div className="value">{currentAgreement?.data.validUntil}</div>
+            <p className="title mb-1">Signed On:</p>
+            <div className="value">
+              {currentAgreement?.event.signedOn || '-'}
+            </div>
           </div>
           <div className="col-12 text-center mt-4 mx-auto buttons px-1">
-            <Button
-              className="btn-transparent mr-1"
-              color="primary"
-              onClick={() => onClose()}
-            >
-              Close
-            </Button>
-            <Button className="btn btn-action mr-1">Open PDF</Button>
-            <Button className="mr-1" color="success">
-              Sign Agreement
-            </Button>
+            {currentAgreement?.data.toSigner
+            && currentAgreement?.event.status === agreementStatus.PENDING ? (
+              <>
+                <Button className="btn btn-action mr-1">Open PDF</Button>
+                <Button
+                  onClick={() => onReject()}
+                  className="mr-1"
+                  color="danger"
+                >
+                  Reject
+                </Button>
+                <Button
+                  onClick={() => onSign()}
+                  className="mr-1"
+                  color="success"
+                >
+                  Sign Agreement
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button
+                  className="btn-transparent mr-1"
+                  color="primary"
+                  onClick={() => onClose()}
+                >
+                  Close
+                </Button>
+                <Button className="btn btn-action mr-1">Open PDF</Button>
+              </>
+            )}
           </div>
         </div>
       </ModalBody>

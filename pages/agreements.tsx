@@ -10,8 +10,8 @@ import TemplateAgreementSelectorModal from '../components/agreements/TemplateAgr
 import AgreementDetailModal from '../components/agreements/AgreementDetailModal';
 
 import setOpenMenu from '../redux/actions/menu';
-import loadAgreements from '../redux/actions/agreement';
-import { columnsAgreement } from '../utils/agreement';
+import loadAgreements, { updateAgreement } from '../redux/actions/agreement';
+import { agreementStatus, columnsAgreement } from '../utils/agreement';
 import AgreementModel from '../models/agreementModel';
 
 const Agreements: React.FC = () => {
@@ -39,8 +39,33 @@ const Agreements: React.FC = () => {
     setOpenDetailModal(false);
   };
 
+  const onSignAgreement = () => {
+    const agreementToUpdate = currentAgreement;
+    agreementToUpdate.event.status = agreementStatus.SIGNED;
+    agreementToUpdate.event.signedOn = new Intl.DateTimeFormat('en-US', {
+      year: 'numeric',
+      month: 'numeric',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+      second: 'numeric',
+      hour12: false,
+    }).format(new Date());
+    dispatch(updateAgreement(currentAgreement?.event.cid, agreementToUpdate));
+    setOpenDetailModal(false);
+  };
+
+  const onRejectAgreement = () => {
+    const agreementToUpdate = currentAgreement;
+    agreementToUpdate.event.status = agreementStatus.DECLINED;
+    dispatch(updateAgreement(currentAgreement?.event.cid, agreementToUpdate));
+    setOpenDetailModal(false);
+  };
+
   const onDetailClick = (currentId: number) => {
-    setCurrentAgreement(agreements.find(({ event }) => event.cid === currentId));
+    setCurrentAgreement(
+      agreements.find(({ event }) => event.cid === currentId),
+    );
     setOpenDetailModal(true);
   };
 
@@ -123,6 +148,8 @@ const Agreements: React.FC = () => {
           open={openDetailModal}
           currentAgreement={currentAgreement}
           onClose={onCloseDetailModal}
+          onSign={onSignAgreement}
+          onReject={onRejectAgreement}
         />
       </div>
     </>

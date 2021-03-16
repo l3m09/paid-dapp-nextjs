@@ -34,4 +34,14 @@ export const createAgreement = (newAgreement: AgreementModel) => (
   });
 };
 
+export const updateAgreement = (
+  cid: number,
+  agreementToUpdate: AgreementModel,
+) => (dispatch: any) => {
+  dispatch({
+    type: AgreementActionTypes.UPDATE_AGREEMENT,
+    payload: { cid, agreementToUpdate },
+  });
+};
+
 export default loadAgreements;

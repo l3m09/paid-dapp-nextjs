@@ -42,6 +42,26 @@ const agreementReducer = (
         agreements: [...state.agreements, payload.newAgreement],
       };
     }
+    case AgreementActionTypes.UPDATE_AGREEMENT: {
+      const { cid } = payload;
+      const { agreements } = state;
+      let currentAgreement = agreements.find(
+        (agreement) => agreement.event.cid === cid,
+      );
+
+      if (currentAgreement) {
+        const indextToUpdate = agreements.findIndex(
+          (agreement) => agreement.event.cid === cid,
+        );
+        currentAgreement = { ...currentAgreement, ...payload.data };
+        agreements[indextToUpdate] = currentAgreement;
+      }
+
+      return {
+        ...state,
+        agreements,
+      };
+    }
     default:
       return { ...state };
   }
