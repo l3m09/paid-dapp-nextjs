@@ -1,5 +1,6 @@
 /* eslint-disable import/no-unresolved */
 import React, { useState, useEffect, useCallback } from 'react';
+import { renderToString } from 'react-dom/server';
 import Head from 'next/head';
 import { NextPage } from 'next';
 import router from 'next/router';
@@ -182,6 +183,7 @@ const NewAgreement: NextPage<NewAgreementProps> = ({ templateTypeCode }) => {
         validUntil: '12/21/2023',
         toSigner: null,
         fromSigner: null,
+        fileString: renderToString(agreementTemplate()),
       },
     };
 

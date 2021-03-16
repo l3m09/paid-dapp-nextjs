@@ -16,8 +16,8 @@ export const columnsAgreement = [
     accessor: 'event.createdAt',
   },
   {
-    Header: 'Transaction Hash',
-    accessor: 'transactionHash',
+    Header: 'Signed on',
+    accessor: 'event.signedOn',
   },
 ];
 

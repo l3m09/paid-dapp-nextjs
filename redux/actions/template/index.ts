@@ -30,6 +30,25 @@ const getContractTemplate = (contractName: String): contractTemplate => {
   let jsonSchema: any = [];
   let uiSchema: Object = {};
   const sharedProperties = {
+    party: {
+      partyName: {
+        title: 'Party Name:',
+        type: 'string',
+      },
+      partyEmail: {
+        title: 'Party Email:',
+        type: 'string',
+      },
+      partyAddress: {
+        title: 'Party Address:',
+        type: 'string',
+      },
+      partyWallet: {
+        title: 'Sending Wallet:',
+        type: 'string',
+        readOnly: true,
+      },
+    },
     couterparty: {
       counterPartyName: {
         title: 'Counterparty Name:',
@@ -44,26 +63,22 @@ const getContractTemplate = (contractName: String): contractTemplate => {
         type: 'string',
       },
       counterPartyWallet: {
-        title: 'Counterparty Wallet:',
-        type: 'string',
-      },
-    },
-    wallet: {
-      sendWallet: {
-        title: 'Sending Wallet:',
-        type: 'string',
-        readOnly: true,
-      },
-      ReceiveWallet: {
         title: 'Receiving Wallet:',
         type: 'string',
       },
     },
-    required:[
-      "counterPartyName",
-      "counterPartyEmail",
-      "counterPartyAddress",
-   ],
+    wallet: {
+    },
+    required: [
+      'partyName',
+      'partyEmail',
+      'partyAddress',
+      'partyWallet',
+      'counterPartyName',
+      'counterPartyEmail',
+      'counterPartyAddress',
+      'counterPartyWallet',
+    ],
   };
 
   switch (contractName) {
@@ -74,11 +89,7 @@ const getContractTemplate = (contractName: String): contractTemplate => {
       jsonSchema = {
         type: 'object',
         properties: {
-          date: {
-            title: 'Date',
-            type: 'string',
-            format: 'date',
-          },
+          ...sharedProperties.party,
           ...sharedProperties.couterparty,
           ...sharedProperties.wallet,
         },
@@ -93,6 +104,7 @@ const getContractTemplate = (contractName: String): contractTemplate => {
       jsonSchema = {
         type: 'object',
         properties: {
+          ...sharedProperties.party,
           ...sharedProperties.couterparty,
           ...sharedProperties.wallet,
           purchaseOption: {
@@ -188,6 +200,7 @@ const getContractTemplate = (contractName: String): contractTemplate => {
       jsonSchema = {
         type: 'object',
         properties: {
+          ...sharedProperties.party,
           ...sharedProperties.couterparty,
           ...sharedProperties.wallet,
           effectiveDate: {
@@ -246,6 +259,7 @@ const getContractTemplate = (contractName: String): contractTemplate => {
       jsonSchema = {
         type: 'object',
         properties: {
+          ...sharedProperties.party,
           ...sharedProperties.couterparty,
           ...sharedProperties.wallet,
           state: {
@@ -362,6 +376,10 @@ const getContractTemplate = (contractName: String): contractTemplate => {
       uiSchema = {
         'ui:widget': 'checkbox',
         'ui:order': [
+          'partyName',
+          'partyEmail',
+          'partyAddress',
+          'partyWallet',
           'counterPartyName',
           'counterPartyEmail',
           'counterPartyAddress',
@@ -427,6 +445,7 @@ const getContractTemplate = (contractName: String): contractTemplate => {
       jsonSchema = {
         type: 'object',
         properties: {
+          ...sharedProperties.party,
           ...sharedProperties.couterparty,
           ...sharedProperties.wallet,
           typeOfCompany: {
@@ -475,6 +494,7 @@ const getContractTemplate = (contractName: String): contractTemplate => {
       jsonSchema = {
         type: 'object',
         properties: {
+          ...sharedProperties.party,
           ...sharedProperties.couterparty,
           ...sharedProperties.wallet,
           purchaseAmount: {

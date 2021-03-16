@@ -7,6 +7,7 @@ interface dataAgreementModel {
   validUntil?: string;
   toSigner?: string;
   fromSigner?: string;
+  fileString?: string;
 }
 
 export default dataAgreementModel;
