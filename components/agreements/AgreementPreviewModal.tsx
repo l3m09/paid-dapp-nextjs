@@ -11,7 +11,7 @@ import styles from './AgreementPreviewModal.module.scss';
 
 interface AgreementPreviewModalProps {
   open: boolean;
-  onClose: () => {};
+  onClose: any;
   fileString: string;
 }
 
