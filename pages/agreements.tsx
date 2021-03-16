@@ -141,7 +141,7 @@ const Agreements: React.FC = () => {
             <Card className="border-0 content">
               <Table
                 columns={columns}
-                data={agreements}
+                data={agreements.map((agreement) => ({ ...agreement }))}
                 onDetailClick={onDetailClick}
                 onNewAgreementClick={onNewAgreementClick}
                 onOpenFile={onOpenFile}
