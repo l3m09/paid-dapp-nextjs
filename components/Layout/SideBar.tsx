@@ -3,6 +3,7 @@ import { Navbar } from 'reactstrap';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
 import { useSelector } from 'react-redux';
+import classnames from 'classnames';
 
 import ProfileCard from '../reusable/ProfileCard';
 
@@ -12,6 +13,13 @@ type SideBarProps = {
 
 const SideBar: FC<SideBarProps> = ({ routerName }) => {
   const profile = useSelector((state: any) => state.profileReducer.profile);
+  const {
+    firstName,
+    lastName,
+    email,
+  } = profile;
+
+  const emptyProfile = !(firstName && lastName && email);
 
   return (
     <Navbar className="sidebar" color="primary" light>
@@ -28,28 +36,28 @@ const SideBar: FC<SideBarProps> = ({ routerName }) => {
       </div>
       <div className="menu mt-5">
         <ul className="pl-3">
-          <li className="mb-4 ">
+          <li className={classnames('mb-4', { 'no-cursor': emptyProfile })}>
             <img className="mr-3" src="/assets/icon/home.svg" alt="" />
             {' '}
             Dashboard
           </li>
-          <li className="mb-4">
+          <li className={classnames('mb-4', { 'no-cursor': emptyProfile })}>
             <img className="mr-3" src="/assets/icon/referral.svg" alt="" />
             {' '}
             Referrals
           </li>
-          <li className="mb-4">
+          <li className={classnames('mb-4', { 'no-cursor': emptyProfile })}>
             <img className="mr-3" src="/assets/icon/account.svg" alt="" />
             {' '}
             Account
           </li>
-          <li className="mb-4">
+          <li className={classnames('mb-4', { 'no-cursor': emptyProfile })}>
             <img className="mr-3" src="/assets/icon/audit.svg" alt="" />
             {' '}
             Audit
             &#38; Dispute
           </li>
-          <li className="mb-4">
+          <li className={classnames('mb-4', { 'no-cursor': emptyProfile })}>
             <Link href="/profile">
               <span
                 className={`${
@@ -61,7 +69,7 @@ const SideBar: FC<SideBarProps> = ({ routerName }) => {
               </span>
             </Link>
           </li>
-          <li className="mb-4">
+          <li className={classnames('mb-4', { 'no-cursor': emptyProfile })}>
             <img className="mr-3" src="/assets/icon/setting.svg" alt="" />
             Setting
           </li>
@@ -70,14 +78,14 @@ const SideBar: FC<SideBarProps> = ({ routerName }) => {
 
       <div className="menu mt-5 pt-5">
         <ul className="pl-3">
-          <li className="mb-4 ">
+          <li className={classnames('mb-4', { 'no-cursor': emptyProfile })}>
             <img className="mr-3" src="/assets/icon/paid.svg" alt="" />
             {' '}
             1,458
             PAID
           </li>
-          <li className="mb-4">
-            <Link href="/agreements">
+          <li className={classnames('mb-4', { 'no-cursor': emptyProfile })}>
+            <Link href={emptyProfile ? '/profile' : '/agreements'}>
               <span
                 className={`${
                   routerName.includes('agreements') ? 'selected' : ''
@@ -88,7 +96,7 @@ const SideBar: FC<SideBarProps> = ({ routerName }) => {
               </span>
             </Link>
           </li>
-          <li className="mb-4">
+          <li className={classnames('mb-4', { 'no-cursor': emptyProfile })}>
             <img className="mr-3" src="/assets/icon/wallets.svg" alt="" />
             {' '}
             Wallets
