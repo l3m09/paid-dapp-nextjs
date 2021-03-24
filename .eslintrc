@@ -15,7 +15,8 @@
           "map" : [
             ["@/components", "./components/"],
             ["@/pages/*", "./sass/module/pages/"],
-            ["@/pdComponents","./components/reusable/"]
+            ["@/pdComponents","./components/reusable/"],
+            ["@/models","./models/"]
           ],
           "extensions": [".js", ".jsx", ".ts", ".tsx"]
         }
