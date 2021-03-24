@@ -1,29 +1,17 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Head from 'next/head';
 import { NextRouter, useRouter } from 'next/router';
 
 import { Button } from 'reactstrap';
 import { useDispatch } from 'react-redux';
-import ConnectSelectorModal from '@/components/connect/ConnectSelectorModal';
 import doConnectToWallet from '../redux/actions/wallet';
 
 const Index: React.FC = () => {
   const router: NextRouter = useRouter();
   const dispatch = useDispatch();
 
-  const [openConnectSelector, setOpenConnectSelector] = useState(false);
-
-  const onConnect = (optionSelected) => {
-    dispatch(doConnectToWallet({ router, scenarioCode: optionSelected }));
-    setOpenConnectSelector(false);
-  };
-
-  const onOpenConnectSelector = () => {
-    setOpenConnectSelector(true);
-  };
-
-  const onCloseConnectSelector = () => {
-    setOpenConnectSelector(false);
+  const onConnect = () => {
+    dispatch(doConnectToWallet(router));
   };
 
   return (
@@ -40,7 +28,7 @@ const Index: React.FC = () => {
               src="/assets/images/logo.png"
               alt=""
             />
-            <Button color="danger" onClick={() => onOpenConnectSelector()}>
+            <Button color="danger" onClick={() => onConnect()}>
               Connect to Wallet
             </Button>
             <p className="info mt-4">
@@ -55,11 +43,6 @@ const Index: React.FC = () => {
             </p>
           </div>
         </div>
-        <ConnectSelectorModal
-          open={openConnectSelector}
-          onClose={onCloseConnectSelector}
-          onConnect={onConnect}
-        />
       </div>
     </>
   );
