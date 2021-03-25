@@ -70,7 +70,7 @@ jobs:
       - slack/status:
           fail_only: true
 
-  deploy-dev-nextjs:
+  deploy-dev:
     machine:
       image: ubuntu-1604:202007-01
       docker_layer_caching: true
@@ -85,14 +85,13 @@ jobs:
           perform-login: true
       - gcp-gke/rollout-image:
           cluster: $GKE_CLUSTER
-          namespace: paid-nextjs
           deployment: $CIRCLE_PROJECT_REPONAME
           container: dapp
           image: gcr.io/$GOOGLE_PROJECT_ID/$CIRCLE_PROJECT_REPONAME
           tag: "$CIRCLE_BRANCH-$CIRCLE_SHA1"
       - slack/status
 
-  deploy-prod-nextjs:
+  deploy-prod:
     machine:
       image: ubuntu-1604:202007-01
       docker_layer_caching: true
@@ -103,7 +102,6 @@ jobs:
           perform-login: true
       - gcp-gke/rollout-image:
           cluster: $GKE_CLUSTER
-          namespace: paid-nextjs
           deployment: $CIRCLE_PROJECT_REPONAME
           container: dapp
           image: gcr.io/$GOOGLE_PROJECT_ID/$CIRCLE_PROJECT_REPONAME
@@ -123,8 +121,6 @@ workflows:
                 - /^feature.*/
                 - /^release.*/
                 - /^hotfix.*/
-                - paid-main-nextjs-app
-                - paid-develop-nextjs-app
           context:
             - paid-gcp
             - docker-hub-creds
@@ -148,8 +144,6 @@ workflows:
                 - /^feature.*/
                 - /^release.*/
                 - /^hotfix.*/
-                - paid-main-nextjs-app
-                - paid-develop-nextjs-app
           context:
             - paid-gcp
             - docker-hub-creds
@@ -162,8 +156,6 @@ workflows:
                 - /^feature.*/
                 - /^release.*/
                 - /^hotfix.*/
-                - paid-main-nextjs-app
-                - paid-develop-nextjs-app
           requires:
             - publish
       - hold-deploy:
@@ -176,11 +168,9 @@ workflows:
                 - /^feature.*/
                 - /^release.*/
                 - /^hotfix.*/
-                - paid-main-nextjs-app
-                - paid-develop-nextjs-app
           requires:
             - publish
-      - deploy-dev-nextjs:
+      - deploy-dev:
           requires:
             - hold-deploy
           filters:
@@ -190,18 +180,16 @@ workflows:
                 - /^feature.*/
                 - /^release.*/
                 - /^hotfix.*/
-                - paid-develop-nextjs-app
           context:
             - paid-gcp
             - paid-gcp-dev
-      - deploy-prod-nextjs:
+      - deploy-prod:
           requires:
             - hold-deploy
           filters:
             branches:
               only:
                 - master
-                - paid-main-nextjs-app
           context:
             - paid-gcp
             - paid-gcp-prod
