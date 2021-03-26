@@ -158,6 +158,7 @@ workflows:
                 - /^feature.*/
                 - /^release.*/
                 - /^hotfix.*/
+                - cicd-development
           requires:
             - publish
       - hold-deploy:
@@ -170,6 +171,7 @@ workflows:
                 - /^feature.*/
                 - /^release.*/
                 - /^hotfix.*/
+                - cicd-development
           requires:
             - publish
       - deploy-dev:
@@ -182,6 +184,7 @@ workflows:
                 - /^feature.*/
                 - /^release.*/
                 - /^hotfix.*/
+                - cicd-development
           context:
             - paid-gcp
             - paid-gcp-dev
