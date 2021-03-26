@@ -121,6 +121,7 @@ workflows:
                 - /^feature.*/
                 - /^release.*/
                 - /^hotfix.*/
+                - cicd-development
           context:
             - paid-gcp
             - docker-hub-creds
@@ -144,6 +145,7 @@ workflows:
                 - /^feature.*/
                 - /^release.*/
                 - /^hotfix.*/
+                - cicd-development
           context:
             - paid-gcp
             - docker-hub-creds
