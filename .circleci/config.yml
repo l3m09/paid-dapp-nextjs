@@ -116,7 +116,7 @@ workflows:
           filters:
             branches:
               only:
-                - master
+                - main
                 - develop
                 - /^feature.*/
                 - /^release.*/
@@ -128,7 +128,7 @@ workflows:
           filters:
             branches:
               only:
-                - master
+                - main
                 - develop
           context:
             - paid-sonarcloud
@@ -139,7 +139,7 @@ workflows:
           filters:
             branches:
               only:
-                - master
+                - main
                 - develop
                 - /^feature.*/
                 - /^release.*/
@@ -151,7 +151,7 @@ workflows:
           filters:
             branches:
               only:
-                - master
+                - main
                 - develop
                 - /^feature.*/
                 - /^release.*/
@@ -163,7 +163,7 @@ workflows:
           filters:
             branches:
               only:
-                - master
+                - main
                 - develop
                 - /^feature.*/
                 - /^release.*/
@@ -189,7 +189,7 @@ workflows:
           filters:
             branches:
               only:
-                - master
+                - main
           context:
             - paid-gcp
             - paid-gcp-prod
