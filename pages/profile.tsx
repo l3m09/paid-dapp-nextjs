@@ -9,13 +9,15 @@ import doSetProfile from '../redux/actions/profile';
 
 const Profile: FC = () => {
   const dispatch = useDispatch();
-  const profileState: ProfileStateModel = useSelector((state: any) => state.profileReducer);
+  const profileState: ProfileStateModel = useSelector(
+    (state: any) => state.profileReducer,
+  );
+
+  // const currentWallet = useSelector(
+  //   (state) => state.walletReducer.currentWallet,
+  // );
   const { profile } = profileState;
-  const {
-    firstName,
-    lastName,
-    email,
-  } = profile;
+  const { firstName, lastName, email } = profile;
   const emptyProfile = !(firstName && lastName && email);
   const [edit, setEdit] = useState(emptyProfile);
 
@@ -28,6 +30,10 @@ const Profile: FC = () => {
     setEdit(emptyProfile);
   };
 
+  // const onDisconnect = () => {
+  //   dispatch(doDisconnect());
+  // };
+
   return (
     <>
       <Head>
@@ -37,7 +43,10 @@ const Profile: FC = () => {
       <div className="profile m-0 p-0 px-4 container-fluid">
         <div className="row m-0 p-0 h-100">
           <div className="col-12 py-4">
-            <h3>My Profile</h3>
+            <h3>
+              My Profile
+              {/* : {currentWallet} */}
+            </h3>
           </div>
           <div className="col-12">
             <Card className="border-0">
@@ -49,6 +58,7 @@ const Profile: FC = () => {
                   onSubmit={onSubmit}
                   onCancel={onCancel}
                 />
+                {/* <Button onClick={() => onDisconnect()}>Disconnect</Button> */}
               </div>
             </Card>
           </div>

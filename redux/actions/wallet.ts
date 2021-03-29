@@ -20,29 +20,95 @@ const retrieveDID = () => {
     },
   ];
 
-  const randomIndex = (Math.floor(Math.random() * 2) + 1) - 1;
+  const randomIndex = Math.floor(Math.random() * 2) + 1 - 1;
 
   return currentProfiles[randomIndex];
 };
 
-const doConnectToWallet = (router: NextRouter) => (dispatch: any) => {
-  dispatch({ type: WalletActionTypes.CONNECTING_WALLET });
-  const currentWallet = '0x3442C44B4Bbf87144Ad0e4a2C60e4bE801d30FA8';
+// const doConnectToWallet = (router: NextRouter) => (dispatch: any) => {
+//   dispatch({ type: WalletActionTypes.CONNECTING_WALLET });
+//   const currentWallet = '0x3442C44B4Bbf87144Ad0e4a2C60e4bE801d30FA8';
+//   const currentProfile = retrieveDID();
+//   const {
+//     firstName,
+//     lastName,
+//     email,
+//   } = currentProfile;
+
+//   if (!(firstName && lastName && email)) {
+//     dispatch({ type: WalletActionTypes.SET_CURRENT_WALLET, payload: currentWallet });
+//     router.push('/profile');
+//   } else {
+//     dispatch({ type: ProfileActionTypes.SET_PROFILE_DATA, payload: currentProfile });
+//     dispatch({ type: WalletActionTypes.SET_CURRENT_WALLET, payload: currentWallet });
+//     router.push('/agreements');
+//   }
+// };
+
+const doConnectToWallet = (provider: string) => (dispatch: any) => {
+  dispatch({
+    type: WalletActionTypes.CONNECTING_WALLET,
+    payload: { provider },
+  });
+  // const currentWallet = "0x3442C44B4Bbf87144Ad0e4a2C60e4bE801d30FA8";
+  // const currentProfile = retrieveDID();
+  // const { firstName, lastName, email } = currentProfile;
+
+  // if (!(firstName && lastName && email)) {
+  //   dispatch({
+  //     type: WalletActionTypes.SET_CURRENT_WALLET,
+  //     payload: currentWallet,
+  //   });
+  //   router.push("/profile");
+  // } else {
+  //   dispatch({
+  //     type: ProfileActionTypes.SET_PROFILE_DATA,
+  //     payload: currentProfile,
+  //   });
+  //   dispatch({
+  //     type: WalletActionTypes.SET_CURRENT_WALLET,
+  //     payload: currentWallet,
+  //   });
+  //   router.push("/agreements");
+  // }
+};
+
+export const setCurrentWallet = (currentWallet: string, router: NextRouter) => (
+  dispatch: any,
+) => {
+  dispatch({
+    type: WalletActionTypes.SET_CURRENT_WALLET,
+    payload: { currentWallet },
+  });
+
   const currentProfile = retrieveDID();
-  const {
-    firstName,
-    lastName,
-    email,
-  } = currentProfile;
+  const { firstName, lastName, email } = currentProfile;
 
   if (!(firstName && lastName && email)) {
-    dispatch({ type: WalletActionTypes.SET_CURRENT_WALLET, payload: currentWallet });
     router.push('/profile');
   } else {
-    dispatch({ type: ProfileActionTypes.SET_PROFILE_DATA, payload: currentProfile });
-    dispatch({ type: WalletActionTypes.SET_CURRENT_WALLET, payload: currentWallet });
+    dispatch({
+      type: ProfileActionTypes.SET_PROFILE_DATA,
+      payload: currentProfile,
+    });
     router.push('/agreements');
   }
+};
+
+export const doDisconnect = () => (
+  dispatch: any,
+) => {
+  dispatch({
+    type: WalletActionTypes.SET_DISCONECTING,
+  });
+};
+
+export const doDisconnected = () => (
+  dispatch: any,
+) => {
+  dispatch({
+    type: WalletActionTypes.SET_DISCONECTED,
+  });
 };
 
 export default doConnectToWallet;
