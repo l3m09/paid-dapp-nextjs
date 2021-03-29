@@ -1,21 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
-import { NextRouter, useRouter } from 'next/router';
 
 import { Button } from 'reactstrap';
-import { useDispatch } from 'react-redux';
-import ConnectSelectorModal from '@/components/connect/ConnectSelectorModal';
+import { useDispatch, useSelector } from 'react-redux';
+import WalletSelectorModal from '@/components/connect/WalletSelectorModal';
 import doConnectToWallet from '../redux/actions/wallet';
 
 const Index: React.FC = () => {
-  const router: NextRouter = useRouter();
   const dispatch = useDispatch();
 
+  const currentWallet = useSelector((state) => state.walletReducer.currentWallet);
   const [openConnectSelector, setOpenConnectSelector] = useState(false);
 
-  const onConnect = (optionSelected) => {
-    dispatch(doConnectToWallet({ router, scenarioCode: optionSelected }));
-    setOpenConnectSelector(false);
+  const onConnect = async (provider) => {
+    // dispatch(doConnectToWallet(router));
+    dispatch(doConnectToWallet(provider));
   };
 
   const onOpenConnectSelector = () => {
@@ -26,12 +25,19 @@ const Index: React.FC = () => {
     setOpenConnectSelector(false);
   };
 
+  useEffect(() => {
+    if (currentWallet) {
+      setOpenConnectSelector(false);
+    }
+  }, [currentWallet]);
+
   return (
     <>
       <Head>
         <title>Paid-Dapp</title>
         <link rel="icon" href="/assets/icon/.ico" />
       </Head>
+
       <div className="index m-0 p-0 container-fluid">
         <div className="row h-100  justify-content-center align-items-center">
           <div className="col-12 text-center">
@@ -55,7 +61,7 @@ const Index: React.FC = () => {
             </p>
           </div>
         </div>
-        <ConnectSelectorModal
+        <WalletSelectorModal
           open={openConnectSelector}
           onClose={onCloseConnectSelector}
           onConnect={onConnect}
