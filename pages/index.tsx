@@ -21,10 +21,6 @@ const Index: React.FC = () => {
     setOpenConnectSelector(true);
   };
 
-  const onCloseConnectSelector = () => {
-    setOpenConnectSelector(false);
-  };
-
   useEffect(() => {
     if (currentWallet) {
       setOpenConnectSelector(false);
