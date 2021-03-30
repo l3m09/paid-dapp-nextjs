@@ -62,7 +62,6 @@ const WalletSelectorModal: FC<WalletSelectorModalProps> = ({
           </p>
         </div>
       </div>
-      ˝
     </PdModalBody>
   </PdModal>
 );
