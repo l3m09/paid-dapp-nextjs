@@ -63,7 +63,6 @@ const Index: React.FC = () => {
         </div>
         <WalletSelectorModal
           open={openConnectSelector}
-          onClose={onCloseConnectSelector}
           onConnect={onConnect}
         />
       </div>

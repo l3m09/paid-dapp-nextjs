@@ -16,18 +16,30 @@ const Profile: FC = () => {
   // const currentWallet = useSelector(
   //   (state) => state.walletReducer.currentWallet,
   // );
-  const { profile } = profileState;
-  const { firstName, lastName, email } = profile;
-  const emptyProfile = !(firstName && lastName && email);
-  const [edit, setEdit] = useState(emptyProfile);
+
+  const [profile, setProfile] = useState<ProfileModel>(profileState.profile);
+
+  const { name } = profile;
+  const emptyProfile = !name;
 
   const onSubmit = (values: ProfileModel) => {
-    dispatch(doSetProfile(values));
-    setEdit(false);
-  };
-
-  const onCancel = () => {
-    setEdit(emptyProfile);
+    const created = new Intl.DateTimeFormat('en-US', {
+      year: 'numeric',
+      month: 'numeric',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+      second: 'numeric',
+      hour12: false,
+    }).format(new Date());
+    const currentProfile = {
+      ...values,
+      created,
+      did: 'didkeyz6kghijklXXJPT17VIakupmu89NSTYI8mni',
+      address: '0x9e81de93dC...47e6d64b70ff1dF',
+    };
+    dispatch(doSetProfile(currentProfile));
+    setProfile(currentProfile);
   };
 
   // const onDisconnect = () => {
@@ -53,10 +65,8 @@ const Profile: FC = () => {
               <div className="form-wrapper">
                 <FormProfile
                   profile={profile}
-                  edit={edit}
-                  onEdit={() => setEdit(true)}
+                  emptyProfile={emptyProfile}
                   onSubmit={onSubmit}
-                  onCancel={onCancel}
                 />
                 {/* <Button onClick={() => onDisconnect()}>Disconnect</Button> */}
               </div>
