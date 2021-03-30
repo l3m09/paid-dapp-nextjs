@@ -52,17 +52,21 @@
 
 .btn-form-save {
     @extend .btn-form;
-    background: $danger;
+    background: $primary;
     &:focus, &:hover, &:active {
         background-color: $pink !important;
     }
 }
 
 .btn-link-form-cancel {
-    color: $blue;
+    @extend .btn-form;
+    color: $danger;
+    border: 1px solid $danger;
     font-size: $btn-font-size;
-    &:focus, &:hover {
+    &:focus, &:hover, &:active {
         text-decoration: none;
+        color: $white;
+        background-color: $pink !important;
     }
 }
 

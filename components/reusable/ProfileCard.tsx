@@ -14,7 +14,7 @@ const ProfileCard: FC<ProfileCardProps> = ({ profile }) => (
     <div className="info d-inline-block ml-1">
       <span className="name d-block">
         {' '}
-        {profile ? `${profile?.firstName} ${profile.lastName} ` : 'No data yet' }
+        {profile ? `${profile?.name} ` : 'No data yet' }
       </span>
       <p className="network">PAID Network</p>
     </div>

@@ -8,8 +8,6 @@ import doConnectToWallet from '../redux/actions/wallet';
 
 const Index: React.FC = () => {
   const dispatch = useDispatch();
-
-  const currentWallet = useSelector((state) => state.walletReducer.currentWallet);
   const [openConnectSelector, setOpenConnectSelector] = useState(false);
 
   const onConnect = async (provider) => {
@@ -21,9 +19,9 @@ const Index: React.FC = () => {
     setOpenConnectSelector(true);
   };
 
-  const onCloseConnectSelector = () => {
-    setOpenConnectSelector(false);
-  };
+  const currentWallet = useSelector(
+    (state: { walletReducer: any }) => state?.walletReducer.currentWallet,
+  );
 
   useEffect(() => {
     if (currentWallet) {
@@ -63,7 +61,6 @@ const Index: React.FC = () => {
         </div>
         <WalletSelectorModal
           open={openConnectSelector}
-          onClose={onCloseConnectSelector}
           onConnect={onConnect}
         />
       </div>

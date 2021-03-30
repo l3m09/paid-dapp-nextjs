@@ -62,7 +62,7 @@ const NewAgreement: NextPage<NewAgreementProps> = ({ templateTypeCode }) => {
   );
 
   const {
-    firstName, lastName, email, address,
+    name, email, address,
   } = useSelector(
     (state: { profileReducer: ProfileStateModel }) => state.profileReducer.profile,
   );
@@ -99,7 +99,7 @@ const NewAgreement: NextPage<NewAgreementProps> = ({ templateTypeCode }) => {
   useEffect(() => {
     const data = smartAgreementsState[dataName];
     if (data && data[PARTY_NAME_FIELD] === '') {
-      data[PARTY_NAME_FIELD] = `${firstName} ${lastName}`;
+      data[PARTY_NAME_FIELD] = `${name}`;
       data[PARTY_EMAIL_FIELD] = email;
       data[PARTY_ADDRESS_FIELD] = address;
       data[PARTY_WALLET_FIELD] = currentWallet;

@@ -4,11 +4,9 @@ import ProfileActionTypes from '../actionTypes/profile';
 
 const initialState: ProfileStateModel = {
   profile: {
-    firstName: '',
-    lastName: '',
-    email: '',
+    name: '',
     address: '',
-    phone: '',
+    did: '',
   },
   loading: false,
   error: '',
