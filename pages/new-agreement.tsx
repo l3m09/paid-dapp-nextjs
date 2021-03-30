@@ -62,7 +62,7 @@ const NewAgreement: NextPage<NewAgreementProps> = ({ templateTypeCode }) => {
   );
 
   const {
-    name, lastName, email, address,
+    name, email, address,
   } = useSelector(
     (state: { profileReducer: ProfileStateModel }) => state.profileReducer.profile,
   );
