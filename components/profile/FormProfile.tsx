@@ -136,7 +136,7 @@ const FormProfile: FC<FormProfileProps> = ({
           <PdAlert
             className="my-5"
             color="danger"
-            message="Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet."
+            message="For create your DID, We need to create a DID wallet for you, are you agree?"
           />
         )}
         <div className="d-flex justify-content-end">
@@ -150,7 +150,7 @@ const FormProfile: FC<FormProfileProps> = ({
               Cancel
             </button> */}
               <button className="btn btn-primary btn-form-save" type="submit">
-                Save
+                Accept
               </button>
             </>
           ) : (
