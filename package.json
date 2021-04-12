@@ -10,6 +10,7 @@
     "lint:fix": "eslint . --fix --ext .js,.tsx,.ts"
   },
   "dependencies": {
+    "@connext/vector-modal": "^1.0.3-beta.23",
     "@hookform/error-message": "0.0.5",
     "@rjsf/core": "^2.4.2",
     "bootstrap": "^4.6.0",

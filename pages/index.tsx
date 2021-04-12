@@ -1,17 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import { NextRouter, useRouter } from 'next/router';
-
 import { Button } from 'reactstrap';
 import { useDispatch } from 'react-redux';
 import ConnectSelectorModal from '@/components/connect/ConnectSelectorModal';
 import doConnectToWallet from '../redux/actions/wallet';
+import { ConnextModal } from "@connext/vector-modal";
+
 
 const Index: React.FC = () => {
   const router: NextRouter = useRouter();
   const dispatch = useDispatch();
 
+  const [showModalConnext, setShowModalConnext] = useState(false);
+
   const [openConnectSelector, setOpenConnectSelector] = useState(false);
+
+  const [ether,setEther] = useState(null)
+
+  useEffect(()=>{
+    window.ethereum.enable();
+    setEther(window.ethereum)
+  },[])
 
   const onConnect = (optionSelected) => {
     dispatch(doConnectToWallet({ router, scenarioCode: optionSelected }));
@@ -19,7 +29,9 @@ const Index: React.FC = () => {
   };
 
   const onOpenConnectSelector = () => {
-    setOpenConnectSelector(true);
+    //setOpenConnectSelector(true);
+    setShowModalConnext(true);
+
   };
 
   const onCloseConnectSelector = () => {
@@ -41,7 +53,7 @@ const Index: React.FC = () => {
               alt=""
             />
             <Button color="danger" onClick={() => onOpenConnectSelector()}>
-              Connect to Wallet
+              Use Connext
             </Button>
             <p className="info mt-4">
               By continuing you agree to our
@@ -60,7 +72,25 @@ const Index: React.FC = () => {
           onClose={onCloseConnectSelector}
           onConnect={onConnect}
         />
+
+
+        <ConnextModal
+          loginProvider={ether}
+          showModal={showModalConnext}
+          onClose={() => setShowModalConnext(false)}
+          onReady={(params) => console.log("MODAL IS READY =======>", params)}
+          withdrawalAddress={"0xaCf5ABBB75c4B5bA7609De6f89a4d0466483225a"}
+          routerPublicIdentifier="vector6qeYVCr9gXGTdspU35isiu5TZ2pVPEYssQovJdTqFcMSxKsy5c"
+          depositAssetId={"0xB4a04eCF1855FBccf5C770BA6DB1dde7c96b17Be"}
+          depositChainProvider="https://rinkeby.infura.io/v3/bce97999b34a4b759ca27229313f96ec"
+          withdrawAssetId={"0xc825e75837a3f10e6cc7bda1b85eaac572ac3b8d"}
+          withdrawChainProvider="https://data-seed-prebsc-1-s1.binance.org:8545"
+        />
+
+        
       </div>
+
+      
     </>
   );
 };
