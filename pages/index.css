@@ -1,6 +1,6 @@
 /*Connext widget CSS Customization*/
 /* Modal */
-.jXalby.jXalby.jXalby {
+section #modalContent {
   border: 0px !important;
   background-color: #fff !important;
 }
@@ -37,7 +37,6 @@ hr{
 }
 
 
-
 div[spacing="4"] > div > div > p {
   color: #110252 !important;
   font-size: 15px !important;
@@ -45,12 +44,6 @@ div[spacing="4"] > div > div > p {
   text-align: left !important;
 }
 
-div[spacing="5"] div[spacing="5"] p{
-  color: #9D9CB2 !important;
-  font-size: 15px !important;
-  font-weight: bold !important;
-  text-align: left !important;
-}
 
 p{
   color: #9D9CB2 !important;
@@ -95,4 +88,14 @@ button[aria-label='Clipboard']{
   background-color: #FFF !important;
   color: #000 !important;
   border: 1px solid #000 !important;
+}
+
+div:has(input){
+  background-color: #E6E6EB !important;
+}
+
+
+
+div[spacing="1"] > div:nth-child(2) {
+  background-color:#F4F5F7 !important;
 }
