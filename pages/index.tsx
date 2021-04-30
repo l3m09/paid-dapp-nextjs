@@ -3,21 +3,11 @@ import Head from 'next/head';
 import { Button } from 'reactstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import WalletSelectorModal from '@/components/connect/WalletSelectorModal';
-import SwapModal from '@/components/swap/SwapModal';
 import doConnectToWallet from '../redux/actions/wallet';
 
 const Index: React.FC = () => {
   const dispatch = useDispatch();
   const [openConnectSelector, setOpenConnectSelector] = useState(false);
-
-  const [showModalConnext, setShowModalConnext] = useState(false);
-
-  const [ether, setEther] = useState(null);
-
-  useEffect(() => {
-    window.ethereum.enable();
-    setEther(window.ethereum);
-  }, []);
 
   const onConnect = async (provider) => {
     dispatch(doConnectToWallet(provider));
@@ -25,10 +15,6 @@ const Index: React.FC = () => {
 
   const onOpenConnectSelector = () => {
     setOpenConnectSelector(true);
-  };
-
-  const onOpenConnextModal = () => {
-    setShowModalConnext(true);
   };
 
   const currentWallet = useSelector(
@@ -59,9 +45,6 @@ const Index: React.FC = () => {
             <Button color="danger" onClick={() => onOpenConnectSelector()}>
               Connect to Wallet
             </Button>
-            <Button color="danger" className="ml-1" onClick={() => onOpenConnextModal()}>
-              Use Connext
-            </Button>
             <p className="info mt-4">
               By continuing you agree to our
               {' '}
@@ -77,12 +60,6 @@ const Index: React.FC = () => {
         <WalletSelectorModal
           open={openConnectSelector}
           onConnect={onConnect}
-        />
-        <SwapModal
-          loginProvider={ether}
-          showModal={showModalConnext}
-          onClose={() => setShowModalConnext(false)}
-          onReady={(params) => console.log('MODAL IS READY =======>', params)}
         />
       </div>
     </>
