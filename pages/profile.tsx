@@ -9,24 +9,42 @@ import doSetProfile from '../redux/actions/profile';
 
 const Profile: FC = () => {
   const dispatch = useDispatch();
-  const profileState: ProfileStateModel = useSelector((state: any) => state.profileReducer);
-  const { profile } = profileState;
-  const {
-    firstName,
-    lastName,
-    email,
-  } = profile;
-  const emptyProfile = !(firstName && lastName && email);
-  const [edit, setEdit] = useState(emptyProfile);
+  const profileState: ProfileStateModel = useSelector(
+    (state: any) => state.profileReducer,
+  );
+
+  // const currentWallet = useSelector(
+  //   (state) => state.walletReducer.currentWallet,
+  // );
+
+  const [profile, setProfile] = useState<ProfileModel>(profileState.profile);
+
+  const { name } = profile;
+  const emptyProfile = !name;
 
   const onSubmit = (values: ProfileModel) => {
-    dispatch(doSetProfile(values));
-    setEdit(false);
+    const created = new Intl.DateTimeFormat('en-US', {
+      year: 'numeric',
+      month: 'numeric',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+      second: 'numeric',
+      hour12: false,
+    }).format(new Date());
+    const currentProfile = {
+      ...values,
+      created,
+      did: 'didkeyz6kghijklXXJPT17VIakupmu89NSTYI8mni',
+      address: '0x9e81de93dC...47e6d64b70ff1dF',
+    };
+    dispatch(doSetProfile(currentProfile));
+    setProfile(currentProfile);
   };
 
-  const onCancel = () => {
-    setEdit(emptyProfile);
-  };
+  // const onDisconnect = () => {
+  //   dispatch(doDisconnect());
+  // };
 
   return (
     <>
@@ -37,18 +55,20 @@ const Profile: FC = () => {
       <div className="profile m-0 p-0 px-4 container-fluid">
         <div className="row m-0 p-0 h-100">
           <div className="col-12 py-4">
-            <h3>My Profile</h3>
+            <h3>
+              My Profile
+              {/* : {currentWallet} */}
+            </h3>
           </div>
           <div className="col-12">
             <Card className="border-0">
               <div className="form-wrapper">
                 <FormProfile
                   profile={profile}
-                  edit={edit}
-                  onEdit={() => setEdit(true)}
+                  emptyProfile={emptyProfile}
                   onSubmit={onSubmit}
-                  onCancel={onCancel}
                 />
+                {/* <Button onClick={() => onDisconnect()}>Disconnect</Button> */}
               </div>
             </Card>
           </div>

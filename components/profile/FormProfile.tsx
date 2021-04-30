@@ -1,155 +1,175 @@
-import React, { FC } from 'react';
+import React, { FC, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
 import classNames from 'classnames';
 import StackedInput from '../reusable/StackedInput';
-import StackedTextarea from '../reusable/StackedTextarea';
 import ProfileModel from '../../models/profileModel';
+import PdAlert from '../reusable/pdAlert';
+import ExportWalletModal from '../export-wallet/ExportWalletModal';
 
 interface FormProfileProps {
   profile: ProfileModel;
-  edit: boolean;
-  onEdit: any;
+  emptyProfile: boolean;
   onSubmit: any;
-  onCancel: any;
 }
 
 const FormProfile: FC<FormProfileProps> = ({
   profile,
-  edit,
-  onEdit,
+  emptyProfile,
   onSubmit,
-  onCancel,
 }: FormProfileProps) => {
+  const [openExportModal, setOpenExportModal] = useState(false);
+
+  const onOpenExportModal = () => {
+    setOpenExportModal(true);
+  };
+
+  const onCopy = () => {};
+
   const {
-    register,
-    errors,
-    handleSubmit,
-    reset,
+    register, errors, handleSubmit, watch,
   } = useForm<ProfileModel>({
     defaultValues: {
       ...profile,
     },
   });
 
-  const setCancel = () => {
-    reset(profile);
-    onCancel();
-  };
+  const passPharse = useRef({});
+  passPharse.current = watch('passPharse', '');
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <StackedInput
-        label="Name:"
-        name="firstName"
-        type="text"
-        placeholder="Enter your first name"
-        inputClassNames={classNames({ 'is-invalid': errors.firstName })}
-        innerRef={register({
-          required: 'Name is required',
-        })}
-        errorComponent={
-          (
+    <>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <StackedInput
+          label="Name:"
+          readOnly={!emptyProfile}
+          name="name"
+          type="text"
+          placeholder="Enter your Name"
+          inputClassNames={classNames({ 'is-invalid': errors.name })}
+          innerRef={register({
+            required: 'Name is required',
+          })}
+          errorComponent={(
             <ErrorMessage
               className="error-message"
-              name="firstName"
+              name="name"
               as="div"
               errors={errors}
             />
-          )
-        }
-      />
-      <StackedInput
-        label="Last name:"
-        name="lastName"
-        type="text"
-        placeholder="Enter your last name"
-        inputClassNames={classNames({ 'is-invalid': errors.lastName })}
-        innerRef={register({
-          required: 'Last name is required',
-        })}
-        errorComponent={
-          (
-            <ErrorMessage
-              className="error-message"
-              name="lastName"
-              as="div"
-              errors={errors}
+          )}
+        />
+        {!emptyProfile && (
+          <>
+            <StackedInput
+              label="DID:"
+              readOnly
+              name="did"
+              type="text"
+              value={profile.did}
             />
-          )
-        }
-      />
-      <StackedInput
-        label="Email:"
-        name="email"
-        type="text"
-        placeholder="Enter your email address"
-        inputClassNames={classNames({ 'is-invalid': errors.lastName })}
-        innerRef={register({
-          required: 'Email is required',
-          pattern: {
-            value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
-            message: 'Invalid email address format',
-          },
-        })}
-        errorComponent={
-          (
-            <ErrorMessage
-              className="error-message"
-              name="email"
-              as="div"
-              errors={errors}
+            <StackedInput
+              readOnly
+              label="Address: "
+              name="address"
+              type="text"
+              value={profile.address}
             />
-          )
-        }
-      />
-      <StackedTextarea
-        label="Address:"
-        name="address"
-        placeholder="Enter your address"
-        rows={4}
-        innerRef={register}
-      />
-      <StackedInput
-        label="Phone Number:"
-        name="phone"
-        type="text"
-        placeholder="Enter your phone number"
-        groupClassNames="stacked-group-last"
-        innerRef={register}
-      />
-      <div className="d-flex justify-content-end">
-        {
-          edit ? (
+            <StackedInput
+              readOnly
+              label="Created: "
+              name="created"
+              type="text"
+              value={profile.created}
+            />
+          </>
+        )}
+
+        {emptyProfile && (
+          <>
+            <StackedInput
+              label="PassPhrase:"
+              name="passPharse"
+              type="password"
+              placeholder="Enter your PassPharse"
+              inputClassNames={classNames({ 'is-invalid': errors.passPharse })}
+              innerRef={register({
+                required: 'PassPharse is required',
+                minLength: {
+                  value: 7,
+                  message: 'PassPharse must have 7 characters',
+                },
+              })}
+              errorComponent={(
+                <ErrorMessage
+                  className="error-message"
+                  name="passPharse"
+                  as="div"
+                  errors={errors}
+                />
+              )}
+            />
+            <StackedInput
+              label="Confirm PassPhrase:"
+              name="confirmPassPharse"
+              type="password"
+              placeholder="Enter your Confim PassPharse"
+              inputClassNames={classNames({
+                'is-invalid': errors.confirmPassPharse,
+              })}
+              innerRef={register({
+                validate: (value) => value === passPharse.current || 'The passwords do not match',
+              })}
+              errorComponent={(
+                <ErrorMessage
+                  className="error-message"
+                  name="confirmPassPharse"
+                  as="div"
+                  errors={errors}
+                />
+              )}
+            />
+          </>
+        )}
+
+        {emptyProfile && (
+          <PdAlert
+            className="my-5"
+            color="danger"
+            message="For create your DID, We need to create a DID wallet for you, are you agree?"
+          />
+        )}
+        <div className="d-flex justify-content-end">
+          {emptyProfile ? (
             <>
-              <button
-                className="btn btn-link btn-link-form-cancel mr-5"
-                type="button"
-                onClick={setCancel}
-              >
-                Cancel
-              </button>
-              <button
-                className="btn btn-primary btn-form-save"
-                type="submit"
-              >
-                Save
+              {/* <button
+              className="btn btn-link btn-link-form-cancel mr-5"
+              type="button"
+              onClick={setCancel}
+            >
+              Cancel
+            </button> */}
+              <button className="btn btn-primary btn-form-save" type="submit">
+                Accept
               </button>
             </>
           ) : (
             <button
-              className="btn btn-primary btn-form-img-text-primary"
+              className="btn btn-secondary btn-form-img-text-primary"
               type="button"
-              onClick={() => onEdit()}
+              onClick={onOpenExportModal}
             >
-              <img className="mr-1" src="/assets/icon/edit.svg" alt="" />
-              {' '}
-              Edit Profile
+              Export Wallet
             </button>
-          )
-        }
-      </div>
-    </form>
+          )}
+        </div>
+      </form>
+      <ExportWalletModal
+        open={openExportModal}
+        onCopy={onCopy}
+        onClose={() => setOpenExportModal(false)}
+      />
+    </>
   );
 };
 

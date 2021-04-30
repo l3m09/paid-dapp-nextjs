@@ -14,12 +14,11 @@ type SideBarProps = {
 const SideBar: FC<SideBarProps> = ({ routerName }) => {
   const profile = useSelector((state: any) => state.profileReducer.profile);
   const {
-    firstName,
-    lastName,
-    email,
+    name,
+    did,
   } = profile;
 
-  const emptyProfile = !(firstName && lastName && email);
+  const emptyProfile = !(name && did);
 
   return (
     <Navbar className="sidebar" color="primary" light>
