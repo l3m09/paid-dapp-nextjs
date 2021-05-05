@@ -13,7 +13,7 @@ type SwapModalProps = {
   onSwap?: (inputSenderAmountWei: string, node: any) => Promise<void>;
   onDepositTxCreated?: (txHash: string) => void;
   onFinished?: (txHash: string, amountWei: string) => void;
-  generateCallData?: (toWithdraw: string, toAssetId: string, node: BrowserNode) => Promise<{
+  generateCallData?: (toWithdraw: string, toAssetId: string, node: any) => Promise<{
       callData?: string;
   }>;
 };
