@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
-
 import { Button } from 'reactstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import WalletSelectorModal from '@/components/connect/WalletSelectorModal';
@@ -11,7 +10,6 @@ const Index: React.FC = () => {
   const [openConnectSelector, setOpenConnectSelector] = useState(false);
 
   const onConnect = async (provider) => {
-    // dispatch(doConnectToWallet(router));
     dispatch(doConnectToWallet(provider));
   };
 

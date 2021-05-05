@@ -1,25 +1,27 @@
-import React, { useEffect } from "react";
-import { useRouter } from "next/router";
-import { Provider, useSelector, useDispatch } from "react-redux";
-import { useWallet, UseWalletProvider } from "use-wallet";
+import React, { useEffect } from 'react';
+import { useRouter } from 'next/router';
+import { Provider, useSelector, useDispatch } from 'react-redux';
+import { useWallet, UseWalletProvider } from 'use-wallet';
 import {
   BscConnector,
   UserRejectedRequestError,
-} from "@binance-chain/bsc-connector";
+  ConnectionRejectedError,
+} from '@binance-chain/bsc-connector';
 
-import PrivateLayout from "../components/Layout/PrivateLayout";
-import { setCurrentWallet, doDisconnected,  } from "../redux/actions/wallet";
-import { useStore } from "../redux/store";
-import "../sass/styles.scss";
+import PrivateLayout from '../components/Layout/PrivateLayout';
+import { setCurrentWallet, doDisconnected } from '../redux/actions/wallet';
+import { useStore } from '../redux/store';
+import '../sass/styles.scss';
+import './index.css';
 
 // eslint-disable-next-line react/prop-types
-function MyApp({ Component, pageProps, router }) {
+function MyApp({ Component, pageProps }) {
   // eslint-disable-next-line react/prop-types
   const store = useStore(pageProps.initialReduxState);
 
   const ConnectOptions = () => {
     const wallet = useWallet();
-    const { account, connect, reset, status } = useWallet();
+    const { account, connect, reset } = useWallet();
 
     const dispatch = useDispatch();
     const router = useRouter();
@@ -27,7 +29,7 @@ function MyApp({ Component, pageProps, router }) {
 
     useEffect(() => {
       if (walletReducer.provider) {
-        if (walletReducer.provider === "meta") {
+        if (walletReducer.provider === 'meta') {
           wallet.connect();
         } else {
           connect(walletReducer.provider);
@@ -45,7 +47,7 @@ function MyApp({ Component, pageProps, router }) {
       if (walletReducer.isDisconnecting) {
         reset();
         dispatch(doDisconnected());
-        router.push("/");
+        router.push('/');
       }
     }, [account, walletReducer.isDisconnecting]);
 
@@ -62,7 +64,8 @@ function MyApp({ Component, pageProps, router }) {
         ) : (
           <PrivateLayout routerName={router.pathname}>
             <Component {...pageProps} />
-            <style global jsx>{`
+            <style global jsx>
+              {`
               html,
               body,
               body > div:first-child,
@@ -70,7 +73,8 @@ function MyApp({ Component, pageProps, router }) {
               div#__next > div {
                 height: 100%;
               }
-            `}</style>
+            `}
+            </style>
           </PrivateLayout>
         )}
       </>
@@ -89,8 +93,9 @@ function MyApp({ Component, pageProps, router }) {
               if (err instanceof UserRejectedRequestError) {
                 return new ConnectionRejectedError();
               }
+              return null;
             },
-          }
+          },
         }}
       >
         <ConnectOptions />
