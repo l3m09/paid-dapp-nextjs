@@ -18,7 +18,7 @@ spec:
         app: dapp
     spec:
       containers:
-        - image: gcr.io/vivid-plateau-278712/paid-dapp-nextjs:cicd-development-latest
+        - image: gcr.io/paid-network-202104/paid-dapp-nextjs:develop-latest
           imagePullPolicy: Always
           name: dapp
           ports:
