@@ -30,12 +30,12 @@ const SwapModal: FC<SwapModalProps> = ({
       showModal={showModal}
       onReady={onReady}
       onClose={onClose}
-      withdrawalAddress={process.env.WITHDRAWALADDRESS}
-      routerPublicIdentifier={process.env.ROUTERPUBLICIDENTIFIER}
-      depositAssetId={process.env.DEPOSITASSETID}
-      depositChainProvider={process.env.DEPOSITCHAINPROVIDER}
-      withdrawAssetId={process.env.WITHDRAWASSETID}
-      withdrawChainProvider={process.env.WITHDRAWCHAINPROVIDER}
+      withdrawalAddress={process.env.NEXT_PUBLIC_WITHDRAWALADDRESS}
+      routerPublicIdentifier={process.env.NEXT_PUBLIC_ROUTERPUBLICIDENTIFIER}
+      depositAssetId={process.env.NEXT_PUBLIC_DEPOSITASSETID}
+      depositChainProvider={process.env.NEXT_PUBLIC_DEPOSITCHAINPROVIDER}
+      withdrawAssetId={process.env.NEXT_PUBLIC_WITHDRAWASSETID}
+      withdrawChainProvider={process.env.NEXT_PUBLIC_WITHDRAWCHAINPROVIDER}
     />
   </div>
 );
