@@ -1,5 +1,5 @@
 /* eslint-disable no-tabs */
-const ConsultingAgreement = `<div class="contract" style="width: 100%; background-color:white; color: black;"><h1 id="title" style="text-align: center;">CONSULTING AGREEMENT</h1><p align="center"><strong><span id="partyName" style="display: none">{{partyName}}</span></strong></p>
+const ConsultingAgreement = `<div class="contract" style="width: 100%; background-color:white; color: black;"><span id="customTitle" style="display: none">{{customTitle}}</span><h1 id="title" style="text-align: center;">CONSULTING AGREEMENT</h1><p align="center"><strong><span id="partyName" style="display: none">{{partyName}}</span></strong></p>
 <p align="center"><u><strong>CONSULTING AGREEMENT</strong></u></p>
 <p>This Consulting Agreement (this &ldquo;<u>Agreement</u>&rdquo;) is made as of {{date}}, by and between {{partyName}}, (the &ldquo;<u>Company</u>&rdquo;), and {{counterPartyName}}(&ldquo;<u>Consultant</u>&rdquo;).</p>
 <ol>

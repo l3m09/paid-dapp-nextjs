@@ -3,7 +3,6 @@ import Head from 'next/head';
 import { Button } from 'reactstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import WalletSelectorModal from '@/components/connect/WalletSelectorModal';
-import PdAlert from '@/components/reusable/pdAlert';
 import doConnectToWallet from '../redux/actions/wallet';
 
 const Index: React.FC = () => {
@@ -43,12 +42,9 @@ const Index: React.FC = () => {
               src="/assets/images/logo.png"
               alt=""
             />
-            {/* <Button color="danger" onClick={() => onOpenConnectSelector()}>
+            <Button color="danger" onClick={() => onOpenConnectSelector()}>
               Connect to Wallet
-            </Button> */}
-            <div className="ml-5 mr-5">
-              <PdAlert color="warning" message="Coming soon PAID 2.0" />
-            </div>
+            </Button>
             <p className="info mt-4">
               By continuing you agree to our
               {' '}

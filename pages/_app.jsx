@@ -13,6 +13,7 @@ import { setCurrentWallet, doDisconnected } from '../redux/actions/wallet';
 import { useStore } from '../redux/store';
 import '../sass/styles.scss';
 import './index.css';
+import '../node_modules/font-awesome/css/font-awesome.min.css';
 
 // eslint-disable-next-line react/prop-types
 function MyApp({ Component, pageProps }) {
@@ -59,7 +60,7 @@ function MyApp({ Component, pageProps }) {
 
     return (
       <>
-        {router.pathname === "/" ? (
+        {router.pathname === '/' ? (
           <Component {...pageProps} />
         ) : (
           <PrivateLayout routerName={router.pathname}>

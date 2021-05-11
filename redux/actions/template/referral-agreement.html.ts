@@ -1,5 +1,6 @@
 /* eslint-disable no-tabs */
 const ReferalAgreement = `<div class="contract" style="width: 100%; background-color:white; color: black;">
+<span id="customTitle" style="display: none">{{customTitle}}</span>
 <h1 id="title" style="text-align: center;">REFERRAL AGREEMENT</h1>
 <p lang="x-none" align="center"><span id="Frame1" dir="ltr"></span><strong><span style="font-size: large;">
 

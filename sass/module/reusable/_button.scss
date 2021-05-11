@@ -18,6 +18,19 @@
     border-color: transparent;
 }
 
+.btn-transparent-title {
+    background: transparent;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    border-color: transparent;
+    &:focus, &:hover, &:active {
+        background: transparent !important;
+        border-color: transparent !important;
+        box-shadow: none !important;
+    }
+}
+
 .btn-action {
     background: $orange;
     color: $white;
