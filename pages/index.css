@@ -77,13 +77,6 @@ a > p{
   content: "Powered by Connext"
 }
 
-button{
-  background-color: #DA1E5E !important;
-  color: #FFF !important;
-  border: 0px !important;
-}
-
-
 button[aria-label='Clipboard']{
   background-color: #FFF !important;
   color: #000 !important;

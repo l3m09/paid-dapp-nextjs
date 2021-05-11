@@ -2,6 +2,7 @@
 const Saft = `<div class="contract" style="width: 100%; background-color:white; color: black;"><p class="western" align="center"><strong><div style="display: inline-block; background-color:#f79632"><span id="partyName" style="display: none">{{partyName}}</span></div></strong></p>
 <p class="western" align="center">
 <div style="text-align: center;">
+<span id="customTitle" style="display: none">{{customTitle}}</span>
 <h1 id="title">SAFT</h1>	
 </div>
 </p>

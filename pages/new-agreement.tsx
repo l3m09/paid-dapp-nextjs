@@ -7,10 +7,11 @@ import router from 'next/router';
 import { useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import TemplateComponent from 'react-mustache-template-component';
+import { useForm } from 'react-hook-form';
+import { ErrorMessage } from '@hookform/error-message';
 import classNames from 'classnames';
-import { Card } from 'reactstrap';
+import { Button, Card, Tooltip } from 'reactstrap';
 import { format } from 'date-fns';
-
 import ProfileStateModel from '@/models/profileStateModel';
 import PreviewDocument from '@/components/new-agreement/PreviewDocument';
 import { setAgreementReviewed, setIsEditing } from 'redux/actions';
@@ -86,6 +87,14 @@ const NewAgreement: NextPage<NewAgreementProps> = ({ templateTypeCode }) => {
   const [agreementDocument, setAgreementDocument] = useState('');
   const [agreementData, setAgreementData] = useState(null);
   const [currentFormData, setCurrentFormData] = useState(null);
+  const [editTitle, setEditTitle] = useState(false);
+  const [tooltipEditTitle, setTooltipEditTitle] = useState(false);
+  const [tooltipIconEdit, setTooltipIconEdit] = useState(false);
+  const [agreementTitle, setAgreementTitle] = useState('Untitled Agreement');
+
+  const {
+    register, errors, handleSubmit,
+  } = useForm();
 
   useEffect(() => {
     const templateData = getContractTemplate(templateTypeCode);
@@ -145,6 +154,11 @@ const NewAgreement: NextPage<NewAgreementProps> = ({ templateTypeCode }) => {
     dispatch(setAgreementReviewed(true));
   };
 
+  const onSubmitTitle = (values) => {
+    setAgreementTitle(values.title);
+    setEditTitle(false);
+  };
+
   const onSubmitForm = () => {
     let maxCid = 0;
     if (agreements.length) {
@@ -199,8 +213,86 @@ const NewAgreement: NextPage<NewAgreementProps> = ({ templateTypeCode }) => {
       </Head>
       <div className="new-agreement m-0 p-0 px-4 container-fluid">
         <div className="row m-0 p-0 h-100">
-          <div className="col-12 py-4 d-flex">
-            <h3 className="d-flex mr-auto">New Agreeement</h3>
+          <div className="col-12 py-4 d-flex align-items-center">
+            { !editTitle
+              ? (
+                <>
+                  { !isEditing
+                    ? (
+                      <h3 className="d-flex mr-auto">{agreementTitle || 'Untitled Agreement'}</h3>
+                    )
+                    : (
+                      <>
+                        <Button id="EditTitle" className="btn-transparent-title" onClick={() => setEditTitle(true)}>
+                          <h3 className="d-flex mr-auto title-agreement">
+                            {agreementTitle || 'Untitled Agreement'}
+                          </h3>
+                        </Button>
+                        <Button
+                          className="btn-transparent-title ml-n2 pt-0"
+                          onClick={() => setEditTitle(true)}
+                          id="IconEditTitle"
+                        >
+                          <i className="fa fa-pencil" />
+                        </Button>
+                        <Tooltip
+                          placement="bottom"
+                          isOpen={tooltipIconEdit}
+                          target="IconEditTitle"
+                          toggle={() => setTooltipIconEdit(!tooltipIconEdit)}
+                        >
+                          Edit title
+                        </Tooltip>
+                        <Tooltip
+                          placement="bottom"
+                          isOpen={tooltipEditTitle}
+                          target="EditTitle"
+                          toggle={() => setTooltipEditTitle(!tooltipEditTitle)}
+                        >
+                          Edit title
+                        </Tooltip>
+                      </>
+                    )}
+                </>
+              )
+              : (
+                <form className="d-flex align-items-center w-100" onSubmit={handleSubmit(onSubmitTitle)}>
+                  <div className="title-input mr-2">
+                    <input
+                      name="title"
+                      type="text"
+                      placeholder="Enter your title"
+                      className={classNames('input-white pl-3 w-100', {
+                        'is-invalid': errors.title,
+                      })}
+                      defaultValue={agreementTitle}
+                      ref={register({
+                        required: 'Title is required',
+                      })}
+                    />
+                    <ErrorMessage
+                      className="error-message"
+                      name="title"
+                      as="div"
+                      errors={errors}
+                    />
+                  </div>
+                  <Button
+                    color="primary"
+                    className="btn btn-primary d-block mr-2 accept-title-btn"
+                    type="submit"
+                  >
+                    Accept
+                  </Button>
+                  <Button
+                    color="link"
+                    className="vd-block btn-link-form-cancel"
+                    onClick={() => setEditTitle(false)}
+                  >
+                    Cancelar
+                  </Button>
+                </form>
+              )}
           </div>
           <div className="col-12">
             <div className="row">
