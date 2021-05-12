@@ -33,3 +33,4 @@ export const PARTY_EMAIL_FIELD = 'partyEmail';
 export const PARTY_ADDRESS_FIELD = 'partyAddress';
 export const PARTY_WALLET_FIELD = 'partyWallet';
 export const AGREEMENT_CREATE_DATE_FIELD = 'createDate';
+export const AGREEMENT_TITLE_FIELD = 'customTitle';

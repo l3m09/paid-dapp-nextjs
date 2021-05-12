@@ -28,6 +28,7 @@ import {
 } from '../redux/actions/smartAgreement';
 import {
   agreementStatus,
+  AGREEMENT_TITLE_FIELD,
   AGREEMENT_CREATE_DATE_FIELD,
   PARTY_ADDRESS_FIELD,
   PARTY_EMAIL_FIELD,
@@ -107,15 +108,18 @@ const NewAgreement: NextPage<NewAgreementProps> = ({ templateTypeCode }) => {
 
   useEffect(() => {
     const data = smartAgreementsState[dataName];
-    if (data && data[PARTY_NAME_FIELD] === '') {
-      data[PARTY_NAME_FIELD] = `${name}`;
-      data[PARTY_EMAIL_FIELD] = email;
-      data[PARTY_ADDRESS_FIELD] = address;
-      data[PARTY_WALLET_FIELD] = currentWallet;
-      data[AGREEMENT_CREATE_DATE_FIELD] = format(new Date(), 'yyyy/MM/dd');
+    if (data) {
+      data[AGREEMENT_TITLE_FIELD] = agreementTitle;
+      if (data[PARTY_NAME_FIELD] === '') {
+        data[PARTY_NAME_FIELD] = `${name}`;
+        data[PARTY_EMAIL_FIELD] = email;
+        data[PARTY_ADDRESS_FIELD] = address;
+        data[PARTY_WALLET_FIELD] = currentWallet;
+        data[AGREEMENT_CREATE_DATE_FIELD] = format(new Date(), 'yyyy/MM/dd');
+      }
     }
     setAgreementData(data);
-  }, [smartAgreementsState, dataName]);
+  }, [smartAgreementsState, dataName, agreementTitle]);
 
   useEffect(() => () => {
     dispatch(resetTemplateAgreement());

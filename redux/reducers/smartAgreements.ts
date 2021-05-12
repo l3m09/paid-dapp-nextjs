@@ -19,6 +19,7 @@ interface SmartAgreementsState {
 
 const initialState: SmartAgreementsState = {
   ndaAgreementData: {
+    customTitle: '',
     partyName: '',
     partyEmail: '',
     partyAddress: '',
@@ -29,6 +30,7 @@ const initialState: SmartAgreementsState = {
     counterPartyWallet: '',
   },
   advisorAgreementData: {
+    customTitle: '',
     partyName: '',
     partyEmail: '',
     partyAddress: '',
@@ -54,6 +56,7 @@ const initialState: SmartAgreementsState = {
     numberOfYears: '',
   },
   ciiaAgreementData: {
+    customTitle: '',
     partyName: '',
     partyEmail: '',
     partyAddress: '',
@@ -75,6 +78,7 @@ const initialState: SmartAgreementsState = {
     listCompAgreements: '',
   },
   consultingAgreementData: {
+    customTitle: '',
     partyName: '',
     partyEmail: '',
     partyAddress: '',
@@ -106,6 +110,7 @@ const initialState: SmartAgreementsState = {
     listCompanies: '',
   },
   referralAgreementData: {
+    customTitle: '',
     partyName: '',
     partyEmail: '',
     partyAddress: '',
@@ -124,6 +129,7 @@ const initialState: SmartAgreementsState = {
     commisionDate: undefined,
   },
   saftAgreementData: {
+    customTitle: '',
     partyName: '',
     partyEmail: '',
     partyAddress: '',
