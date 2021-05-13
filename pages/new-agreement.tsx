@@ -3,6 +3,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { renderToString } from 'react-dom/server';
 import Head from 'next/head';
 import { NextPage } from 'next';
+import Image from 'next/image';
 import router from 'next/router';
 import { useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -266,7 +267,7 @@ const NewAgreement: NextPage<NewAgreementProps> = ({ templateTypeCode }) => {
                       name="title"
                       type="text"
                       placeholder="Enter your title"
-                      className={classNames('input-white pl-3 w-100', {
+                      className={classNames('input-new-agreement pl-3 w-100', {
                         'is-invalid': errors.title,
                       })}
                       defaultValue={agreementTitle}
@@ -282,18 +283,24 @@ const NewAgreement: NextPage<NewAgreementProps> = ({ templateTypeCode }) => {
                     />
                   </div>
                   <Button
-                    color="primary"
-                    className="btn btn-primary d-block mr-2 accept-title-btn"
                     type="submit"
+                    className="mr-2 btn-new-agreement"
                   >
-                    Accept
+                    <Image
+                      src="/assets/icon/check.svg"
+                      width={15}
+                      height={15}
+                    />
                   </Button>
                   <Button
-                    color="link"
-                    className="vd-block btn-link-form-cancel"
                     onClick={() => setEditTitle(false)}
+                    className="btn-new-agreement"
                   >
-                    Cancelar
+                    <Image
+                      src="/assets/icon/close.svg"
+                      width={15}
+                      height={15}
+                    />
                   </Button>
                 </form>
               )}
