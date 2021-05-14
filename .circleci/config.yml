@@ -244,7 +244,8 @@ workflows:
                 - /^release.*/
                 - /^hotfix.*/
           requires:
-            - publish
+            - publish-dev
+            - publish-prod
       - deploy-dev:
           requires:
             - hold-deploy
