@@ -231,7 +231,8 @@ workflows:
                 - /^release.*/
                 - /^hotfix.*/
           requires:
-            - publish
+            - publish-dev
+            - publish-prod
       - hold-deploy:
           type: approval
           filters:
