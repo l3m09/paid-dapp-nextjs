@@ -1,10 +1,32 @@
-.profile  {
-  .card {
-    padding: $card-spacer-x;
-    .form-wrapper {
-      .stacked-group-last {
-        margin-bottom: 1.875rem;
+@media (min-width: 1025px){
+  .profile  {
+    .card {
+      padding: $card-spacer-x;
+      .form-wrapper {
+        .stacked-group-last {
+          margin-bottom: 1.875rem;
+        }
       }
     }
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  .profile  {
+    .card {
+      padding: $card-spacer-x;
+      .form-wrapper {
+        .stacked-group-last {
+          margin-bottom: 1.875rem;
+        }
+      }
+    }
+  }
+  .info{
+    display: none !important;
+  }
+  .profile-component{
+    width: 60px !important;
+    margin-left: -5px !important;
   }
 }
