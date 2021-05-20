@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import classnames from 'classnames';
 
 import ProfileCard from '../reusable/ProfileCard';
+import useWindowSize from 'hooks/useWindowsSize';
 
 type SideBarProps = {
   routerName: string;
@@ -18,20 +19,39 @@ const SideBar: FC<SideBarProps> = ({ routerName }) => {
     did,
   } = profile;
 
+  const size = useWindowSize();
+
   const emptyProfile = !(name && did);
 
   return (
     <Navbar className="sidebar" color="primary" light>
-      <div className="logos mt-2">
-        <img
-          className="logo d-block mx-auto pb-4"
-          src="/assets/images/logo.png"
-          alt=""
-        />
-      </div>
+      
+      
+        {size.width > 1024 ? 
+          (
+            <div className="logos mt-2">
+              <img
+                className="logo d-block mx-auto pb-4"
+                src="/assets/images/logo.png"
+                alt=""
+              />
+            </div>
+          )
+          :
+          (
+            <div className="mt-2">
+              <img
+                className="logo d-block mx-auto pb-4"
+                src="/assets/icon/logoSmall.svg"
+                alt="" width={40}
+              />
+            </div>
+          )
+        }
+      
       <hr />
       <Link href="/profile">
-        <a>
+        <a className={routerName === '/profile' ? 'selected' : ''}>
           <div className="profile-card mt-2">
             <ProfileCard profile={profile} />
           </div>
@@ -41,7 +61,7 @@ const SideBar: FC<SideBarProps> = ({ routerName }) => {
         <ul className="pl-3">
           <Link href="/agreements">
             <li className={classnames('mb-4', { 'no-cursor': emptyProfile })}>
-              <a>
+              <a className={routerName === '/agreements' ? 'selected' : ''}>
                 <img className="mr-3" src="/assets/icon/list-log.svg" alt="" />
                 {' '}
                 Standard Agreements
@@ -50,7 +70,7 @@ const SideBar: FC<SideBarProps> = ({ routerName }) => {
           </Link>
           <Link href="/smart_agreements">
             <li className={classnames('mb-4', { 'no-cursor': emptyProfile })}>
-              <a>
+              <a className={routerName === '/smart_agreements' ? 'selected' : ''}>
                 <img className="mr-3" src="/assets/icon/smartAgreement.svg" alt="" />
                 {' '}
                 Smart Agreements
@@ -62,10 +82,14 @@ const SideBar: FC<SideBarProps> = ({ routerName }) => {
             {' '}
             1,458 PAID
           </li>
-          <li className={classnames('mb-4', { 'no-cursor': emptyProfile })}>
-            <img className="mr-3" src="/assets/icon/binanceSmartChain.svg" alt="" />
-            Binance Smart Chain
-          </li>
+          <Link href="/binance_chain">
+            <li className={classnames('mb-4', { 'no-cursor': emptyProfile })}>
+              <a className={routerName === '/binance_chain' ? 'selected' : ''}>
+                <img className="mr-3" src="/assets/icon/binanceSmartChain.svg" alt="" />
+                Binance Smart Chain
+              </a>
+            </li>
+          </Link>
         </ul>
       </div>
 
@@ -73,8 +97,10 @@ const SideBar: FC<SideBarProps> = ({ routerName }) => {
         <ul className="pl-3">
           
           <li className="mb-4 no-cursor">
-            <img className="mr-3" src="/assets/icon/profile.svg" alt="" />
-            Network: RINKEBY
+            <a>
+              <img className="mr-3" src="/assets/icon/networkBi.svg" alt="" />
+              Network: RINKEBY
+            </a>
           </li>
         </ul>
       </div>
