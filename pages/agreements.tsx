@@ -98,7 +98,7 @@ const Agreements: React.FC = () => {
 
       <div className="agreements m-0 p-0 px-4 container-fluid">
         <div className="row m-0 p-0 h-100">
-          {agreements.length === 0 &&
+          {agreements.length > 0 &&
             <div className="col-12 py-4 d-flex">
               <span
                 tabIndex={0}

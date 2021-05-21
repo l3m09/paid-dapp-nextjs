@@ -112,10 +112,14 @@ const NewAgreement: NextPage<NewAgreementProps> = ({ templateTypeCode }) => {
     if (data) {
       data[AGREEMENT_TITLE_FIELD] = agreementTitle;
       if (data[PARTY_NAME_FIELD] === '') {
-        data[PARTY_NAME_FIELD] = `${name}`;
-        data[PARTY_EMAIL_FIELD] = email;
-        data[PARTY_ADDRESS_FIELD] = address;
-        data[PARTY_WALLET_FIELD] = currentWallet;
+        //data[PARTY_NAME_FIELD] = `${name}`;
+        //data[PARTY_EMAIL_FIELD] = email;
+        //data[PARTY_ADDRESS_FIELD] = address;
+        //data[PARTY_WALLET_FIELD] = currentWallet;
+        data[PARTY_NAME_FIELD] = 'Your name';
+        data[PARTY_EMAIL_FIELD] = 'Your email';
+        data[PARTY_ADDRESS_FIELD] = 'Wallet Address';
+        data[PARTY_WALLET_FIELD] = 'Wallet';
         data[AGREEMENT_CREATE_DATE_FIELD] = format(new Date(), 'yyyy/MM/dd');
       }
     }
