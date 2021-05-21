@@ -13,6 +13,7 @@ type SideBarProps = {
 };
 
 const SideBar: FC<SideBarProps> = ({ routerName }) => {
+  const isOpen = useSelector((state: any) => state.menuReducer.isOpen);
   const profile = useSelector((state: any) => state.profileReducer.profile);
   const {
     name,
@@ -24,10 +25,10 @@ const SideBar: FC<SideBarProps> = ({ routerName }) => {
   const emptyProfile = !(name && did);
 
   return (
-    <Navbar className="sidebar" color="primary" light>
+    <Navbar className={isOpen ? "sidebar" : "collapse_sidebar"} color="primary" light>
       
       
-        {size.width > 1024 ? 
+        {isOpen ? 
           (
             <div className="logos mt-2">
               <img

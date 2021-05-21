@@ -1,5 +1,4 @@
-@media (min-width: 1025px){
-  .sidebar {
+.sidebar {
     height: 100vh;
     width: 260px;
     color: $white;
@@ -93,11 +92,12 @@
         }
       }
     }
-  }
 }
 
-@media (min-width: 768px) and (max-width: 1024px) {
-  .sidebar {
+
+
+/*@media (min-width: 768px) and (max-width: 1024px) {*/
+.collapse_sidebar{
     height: 100vh;
     width: 80px;
     color: $white;
@@ -182,4 +182,3 @@
       }
     }
   }
-}
