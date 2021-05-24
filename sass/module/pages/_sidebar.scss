@@ -5,13 +5,14 @@
 
     &.navbar {
       display: block;
+      padding: 5px !important;
     }
 
     .logos {
       margin: auto;
 
       img {
-        width: 101px;
+        width: 100px;
       }
     }
     hr {
@@ -29,6 +30,8 @@
         display: flex;
         cursor: pointer;
         text-decoration: none;
+        
+      
 
         &.no-cursor {
           cursor: unset;
@@ -40,6 +43,7 @@
 
         img {
           width: 24px;
+          
         }
 
         &:hover {
@@ -94,7 +98,32 @@
     }
 }
 
+.active{
+  border-right: 2px solid #fff !important;
+}
 
+.logo:hover{
+  cursor: pointer; 
+}
+
+.hide-button-collapse{
+  display: none;
+}
+
+.button-collapse{
+  position: absolute;
+  left: 200px;
+  top: 30px;
+}
+
+.button-collapse:hover{
+  cursor: pointer;
+}
+
+.left{
+  margin-left: 15px !important;
+  transition: margin-left 3s steps(1000, start) !important;
+}
 
 /*@media (min-width: 768px) and (max-width: 1024px) {*/
 .collapse_sidebar{
@@ -104,14 +133,20 @@
 
     &.navbar {
       display: block;
+      padding: 5px !important;
     }
 
     .logos {
       margin: auto;
 
       img {
-        width: 101px;
+        width: 100px;
+        .left{
+          margin-left: 15px;
+        }
       }
+
+      
     }
     hr {
       background: $blue-800;
