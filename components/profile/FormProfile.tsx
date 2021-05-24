@@ -88,16 +88,16 @@ const FormProfile: FC<FormProfileProps> = ({
         {emptyProfile && (
           <>
             <StackedInput
-              label="PassPhrase:"
+              label="Passphrase:"
               name="passPharse"
               type="password"
-              placeholder="Enter your PassPharse"
+              placeholder="Enter your Passphrase"
               inputClassNames={classNames({ 'is-invalid': errors.passPharse })}
               innerRef={register({
-                required: 'PassPharse is required',
+                required: 'Passphrase is required',
                 minLength: {
                   value: 7,
-                  message: 'PassPharse must have 7 characters',
+                  message: 'Passphrase must have 7 characters',
                 },
               })}
               errorComponent={(
@@ -110,10 +110,10 @@ const FormProfile: FC<FormProfileProps> = ({
               )}
             />
             <StackedInput
-              label="Confirm PassPhrase:"
+              label="Confirm Passphrase:"
               name="confirmPassPharse"
               type="password"
-              placeholder="Enter your Confim PassPharse"
+              placeholder="Enter your Confim Passphrase"
               inputClassNames={classNames({
                 'is-invalid': errors.confirmPassPharse,
               })}
