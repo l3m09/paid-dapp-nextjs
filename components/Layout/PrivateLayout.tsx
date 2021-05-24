@@ -39,11 +39,10 @@ const PrivateLayout: FC<PrivateLayoutProps> = ({ children, routerName }) => {
 
   return (
     <div className="layout d-flex">
-      {(isOpen || size.width > 1024) && (
-        <div className="sidebar d-inline-block">
-          <SideBar routerName={routerName} />
-        </div>
-      )}
+      
+      <div className="sidebar d-inline-block">
+        <SideBar routerName={routerName} />
+      </div>
       <div className="main-content container-fluid d-inline-block m-0 p-0">
         {children}
       </div>
