@@ -3,20 +3,24 @@ import { Card, Button } from 'reactstrap';
 import SmartAgreementForm from './SmartAgreementForm';
 
 interface SmartAgreementsFormPanelProps {
-  jsonSchema: Object;
+  jsonSchemas: Array<Object>;
   uiSchema: Object;
   dataName: string;
   type: string;
   onChangeFields: any;
+  activePageIndex: number,
+  setActivePageIndex: any,
   onReview: any;
 }
 
 const SmartAgreementsFormPanel: FC<SmartAgreementsFormPanelProps> = ({
   type,
   dataName,
-  jsonSchema,
+  jsonSchemas,
   uiSchema,
   onChangeFields,
+  activePageIndex,
+  setActivePageIndex,
   onReview,
 }: SmartAgreementsFormPanelProps) => (
   <Card className="card-fields border-0 p-3">
@@ -29,10 +33,12 @@ const SmartAgreementsFormPanel: FC<SmartAgreementsFormPanelProps> = ({
     <SmartAgreementForm
       type={type}
       dataName={dataName}
-      jsonSchema={jsonSchema}
+      jsonSchemas={jsonSchemas}
       uiSchema={uiSchema}
       onChangeFields={onChangeFields}
       onReview={onReview}
+      activePageIndex={activePageIndex}
+      setActivePageIndex={setActivePageIndex}
     />
   </Card>
 );
