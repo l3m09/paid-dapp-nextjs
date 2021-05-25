@@ -1,7 +1,9 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Head from 'next/head';
 import { Card } from 'reactstrap';
+// import { Wallet } from 'xdv-universal-wallet-core';
+import router from 'next/router';
 import ProfileStateModel from '../models/profileStateModel';
 import FormProfile from '../components/profile/FormProfile';
 import ProfileModel from '../models/profileModel';
@@ -13,16 +15,24 @@ const Profile: FC = () => {
     (state: any) => state.profileReducer,
   );
 
-  // const currentWallet = useSelector(
-  //   (state) => state.walletReducer.currentWallet,
-  // );
+  const currentWallet = useSelector(
+    (state: { walletReducer: any }) => state.walletReducer.currentWallet,
+  );
 
   const [profile, setProfile] = useState<ProfileModel>(profileState.profile);
+
+  useEffect(() => {
+    const getCurrentWallet = global.sessionStorage.getItem(currentWallet);
+    if (getCurrentWallet) {
+      router.push('/agreements');
+    }
+  },
+  []);
 
   const { name } = profile;
   const emptyProfile = !name;
 
-  const onSubmit = (values: ProfileModel) => {
+  const onSubmit = async (values: ProfileModel) => {
     const created = new Intl.DateTimeFormat('en-US', {
       year: 'numeric',
       month: 'numeric',
@@ -32,12 +42,22 @@ const Profile: FC = () => {
       second: 'numeric',
       hour12: false,
     }).format(new Date());
+    // const xdvWallet = new Wallet({ isWeb: true });
+    // const did = await xdvWallet.createES256K({
+    //   passphrase: values.passPharse,
+    //   rpcUrl: process.env.RPC_URL,
+    // });
+    // console.log(did);
+
+    const walletSessionStorage = { walletId: 'keyz6kghijklXXJPT17VIakupmu89NSTYI8mni', profileName: values.name };
+    global.sessionStorage.setItem(currentWallet, JSON.stringify(walletSessionStorage));
     const currentProfile = {
       ...values,
       created,
       did: 'didkeyz6kghijklXXJPT17VIakupmu89NSTYI8mni',
       address: '0x9e81de93dC...47e6d64b70ff1dF',
     };
+
     dispatch(doSetProfile(currentProfile));
     setProfile(currentProfile);
   };
