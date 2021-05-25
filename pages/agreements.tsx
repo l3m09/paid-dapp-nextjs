@@ -10,7 +10,6 @@ import Table from '../components/agreements/Table';
 import TemplateAgreementSelectorModal from '../components/agreements/TemplateAgreementSelectorModal';
 import AgreementDetailModal from '../components/agreements/AgreementDetailModal';
 
-import setOpenMenu from '../redux/actions/menu';
 import loadAgreements, { updateAgreement } from '../redux/actions/agreement';
 import { agreementStatus, columnsAgreement } from '../utils/agreement';
 import AgreementModel from '../models/agreementModel';
@@ -18,7 +17,6 @@ import AgreementModel from '../models/agreementModel';
 const Agreements: React.FC = () => {
   const columns = React.useMemo(() => columnsAgreement, []);
   const dispatch = useDispatch();
-  const isOpen = useSelector((state: any) => state.menuReducer.isOpen);
   const agreements = useSelector(
     (state: any) => state.agreementReducer.agreements,
   );
@@ -100,19 +98,6 @@ const Agreements: React.FC = () => {
         <div className="row m-0 p-0 h-100">
           {agreements.length > 0 &&
             <div className="col-12 py-4 d-flex">
-              <span
-                tabIndex={0}
-                className="d-flex"
-                role="button"
-                onClick={() => dispatch(setOpenMenu(!isOpen))}
-                onKeyDown={() => dispatch(setOpenMenu(!isOpen))}
-              >
-                <img
-                  className="d-inline mr-5 hambunguer"
-                  src="/assets/icon/hamburguer.svg"
-                  alt=""
-                />
-              </span>
               <h3 className="d-flex mr-auto">Smart Agreements</h3>
               <div className="d-flex">
                 <Button className="btn-white mr-2" color="primary">
