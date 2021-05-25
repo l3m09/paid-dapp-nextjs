@@ -1,4 +1,4 @@
-import React, { FC, useRef, useState } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
 import classNames from 'classnames';
@@ -27,7 +27,7 @@ const FormProfile: FC<FormProfileProps> = ({
   const onCopy = () => {};
 
   const {
-    register, errors, handleSubmit, watch,
+    register, errors, handleSubmit, watch, reset,
   } = useForm<ProfileModel>({
     defaultValues: {
       ...profile,
@@ -36,6 +36,12 @@ const FormProfile: FC<FormProfileProps> = ({
 
   const passPharse = useRef({});
   passPharse.current = watch('passPharse', '');
+
+  useEffect(() => {
+    reset({
+      name: profile.name,
+    });
+  }, [profile]);
 
   return (
     <>

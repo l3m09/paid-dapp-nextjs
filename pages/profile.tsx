@@ -2,7 +2,7 @@ import React, { FC, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Head from 'next/head';
 import { Card } from 'reactstrap';
-// import { Wallet } from 'xdv-universal-wallet-core';
+import { Wallet } from 'xdv-universal-wallet-core';
 import router from 'next/router';
 import ProfileStateModel from '../models/profileStateModel';
 import FormProfile from '../components/profile/FormProfile';
@@ -22,10 +22,43 @@ const Profile: FC = () => {
   const [profile, setProfile] = useState<ProfileModel>(profileState.profile);
 
   useEffect(() => {
-    const getCurrentWallet = global.sessionStorage.getItem(currentWallet);
-    if (getCurrentWallet) {
-      router.push('/agreements');
-    }
+    const bootstrapAsync = async () => {
+      const getCurrentWallet = global.sessionStorage.getItem(currentWallet);
+      if (!profile.name && getCurrentWallet) {
+        try {
+          const profileData = JSON.parse(getCurrentWallet);
+          const name = profileData.profileName;
+          const accountName = profileData.profileName.replaceAll(' ', '').toLowerCase();
+          const xdvWallet = new Wallet({ isWeb: true });
+          await xdvWallet.open(accountName, '123456789abcd');
+          await xdvWallet.enrollAccount({
+            passphrase: '123456789abcd',
+            accountName,
+          });
+          let acct = await xdvWallet.getAccount();
+          const walletDid = await xdvWallet.createES256K({
+            rpcUrl: process.env.NEXT_PUBLIC_RPC_URL,
+            walletId: profileData.walletId,
+            registry: '',
+            accountName: profileData.accountName,
+          });
+
+          const currentProfile = {
+            name,
+            created: profileData.createdAt,
+            did: walletDid.did.did,
+            address: walletDid.address,
+          };
+
+          dispatch(doSetProfile(currentProfile));
+          setProfile(currentProfile);
+        } catch (e) {
+          console.log('passphrase invalid');
+        }
+      }
+    };
+
+    bootstrapAsync();
   },
   []);
 
@@ -42,24 +75,38 @@ const Profile: FC = () => {
       second: 'numeric',
       hour12: false,
     }).format(new Date());
-    // const xdvWallet = new Wallet({ isWeb: true });
-    // const did = await xdvWallet.createES256K({
-    //   passphrase: values.passPharse,
-    //   rpcUrl: process.env.RPC_URL,
-    // });
-    // console.log(did);
+    try {
+      const accountName = values.name.replaceAll(' ', '').toLowerCase();
+      const xdvWallet = new Wallet({ isWeb: true });
+      await xdvWallet.open(accountName, values.passPharse);
+      await xdvWallet.enrollAccount({
+        passphrase: values.passPharse,
+        accountName,
+      });
+      let acct = await xdvWallet.getAccount();
+      const walletId = await xdvWallet.addWallet();
+      const walletDid = await xdvWallet.createES256K({
+        passphrase: values.passPharse,
+        rpcUrl: process.env.NEXT_PUBLIC_RPC_URL,
+        walletId,
+        registry: '',
+        accountName: values.name,
+      });
 
-    const walletSessionStorage = { walletId: 'keyz6kghijklXXJPT17VIakupmu89NSTYI8mni', profileName: values.name };
-    global.sessionStorage.setItem(currentWallet, JSON.stringify(walletSessionStorage));
-    const currentProfile = {
-      ...values,
-      created,
-      did: 'didkeyz6kghijklXXJPT17VIakupmu89NSTYI8mni',
-      address: '0x9e81de93dC...47e6d64b70ff1dF',
-    };
+      const walletSessionStorage = { walletId, profileName: values.name, createdAt: created };
+      global.sessionStorage.setItem(currentWallet, JSON.stringify(walletSessionStorage));
+      const currentProfile = {
+        ...values,
+        created,
+        did: walletDid.did.did,
+        address: walletDid.address,
+      };
 
-    dispatch(doSetProfile(currentProfile));
-    setProfile(currentProfile);
+      dispatch(doSetProfile(currentProfile));
+      setProfile(currentProfile);
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   // const onDisconnect = () => {
