@@ -1,18 +1,23 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { Navbar } from 'reactstrap';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
-import { useSelector } from 'react-redux';
+import { useDispatch,useSelector } from 'react-redux';
 import classnames from 'classnames';
 
 import ProfileCard from '../reusable/ProfileCard';
 import useWindowSize from 'hooks/useWindowsSize';
+import setOpenMenu from 'redux/actions/menu';
+
 
 type SideBarProps = {
   routerName: string;
 };
 
 const SideBar: FC<SideBarProps> = ({ routerName }) => {
+  const [toggleVisible, setToggleVisible] = useState(false);
+  const isOpen = useSelector((state: any) => state.menuReducer.isOpen);
+  const dispatch = useDispatch();
   const profile = useSelector((state: any) => state.profileReducer.profile);
   const {
     name,
@@ -20,21 +25,46 @@ const SideBar: FC<SideBarProps> = ({ routerName }) => {
   } = profile;
 
   const size = useWindowSize();
+  const paidSmallLogo = "/assets/icon/logoSmall.svg";
+  const collapseOut = "/assets/icon/collapse_out.png"
+  const [smallLogo, setSmallLogo] = useState(paidSmallLogo);
 
   const emptyProfile = !(name && did);
 
   return (
-    <Navbar className="sidebar" color="primary" light>
+    <Navbar className={isOpen ? "sidebar" : "collapse_sidebar"} color="primary" light
+      onMouseEnter={()=> {
+          setToggleVisible(true)
+        }
+      }
+      onMouseLeave={()=> {
+          setToggleVisible(false)
+        }
+      }
+    >
       
       
-        {size.width > 1024 ? 
+        {isOpen ? 
           (
             <div className="logos mt-2">
               <img
-                className="logo d-block mx-auto pb-4"
+                className={toggleVisible ? "left logo d-block mx-auto pb-4" : "logo d-block mx-auto pb-4"}
                 src="/assets/images/logo.png"
                 alt=""
+                
               />
+              <div className={toggleVisible ? "button-collapse" : "hide-button-collapse"}>
+                <img
+                  style={{width:'30px',height:'30px',display: 'block', marginLeft: 'auto', marginRight: 'auto'}}
+                  src="/assets/icon/collapse_in.png"
+                  alt=""
+                  onClick={() => {
+                      setSmallLogo(paidSmallLogo)
+                      dispatch(setOpenMenu(!isOpen))
+                    }
+                  }
+                />
+              </div>
             </div>
           )
           :
@@ -42,8 +72,11 @@ const SideBar: FC<SideBarProps> = ({ routerName }) => {
             <div className="mt-2">
               <img
                 className="logo d-block mx-auto pb-4"
-                src="/assets/icon/logoSmall.svg"
+                src={smallLogo}
                 alt="" width={40}
+                onMouseEnter={()=> setSmallLogo(collapseOut)}
+                onMouseLeave={()=> setSmallLogo(paidSmallLogo)}
+                onClick={() => dispatch(setOpenMenu(!isOpen))}
               />
             </div>
           )
@@ -60,8 +93,8 @@ const SideBar: FC<SideBarProps> = ({ routerName }) => {
       <div className="menu mt-5">
         <ul className="pl-3">
           <Link href="/agreements">
-            <li className={classnames('mb-4', { 'no-cursor': emptyProfile })}>
-              <a className={routerName === '/agreements' ? 'selected' : ''}>
+            <li className={routerName === '/agreements' ? 'mb-4 active' : 'mb-4'}>
+              <a>
                 <img className="mr-3" src="/assets/icon/list-log.svg" alt="" />
                 {' '}
                 Standard Agreements
@@ -69,7 +102,7 @@ const SideBar: FC<SideBarProps> = ({ routerName }) => {
             </li>
           </Link>
           <Link href="/smart_agreements">
-            <li className={classnames('mb-4', { 'no-cursor': emptyProfile })}>
+            <li className={routerName === '/smart_agreements' ? 'mb-4 active' : 'mb-4'}>
               <a className={routerName === '/smart_agreements' ? 'selected' : ''}>
                 <img className="mr-3" src="/assets/icon/smartAgreement.svg" alt="" />
                 {' '}
@@ -83,7 +116,7 @@ const SideBar: FC<SideBarProps> = ({ routerName }) => {
             1,458 PAID
           </li>
           <Link href="/binance_chain">
-            <li className={classnames('mb-4', { 'no-cursor': emptyProfile })}>
+            <li className={routerName === '/binance_chain' ? 'mb-4 active' : 'mb-4'}>
               <a className={routerName === '/binance_chain' ? 'selected' : ''}>
                 <img className="mr-3" src="/assets/icon/binanceSmartChain.svg" alt="" />
                 Binance Smart Chain

@@ -40,7 +40,7 @@ const PrivateLayout: FC<PrivateLayoutProps> = ({ children, routerName }) => {
   return (
     <div className="layout d-flex">
       
-      <div className="sidebar d-inline-block">
+      <div className={isOpen ? "sidebar d-inline-block" : "collapse_sidebar d-inline-block"}>
         <SideBar routerName={routerName} />
       </div>
       <div className="main-content container-fluid d-inline-block m-0 p-0">
