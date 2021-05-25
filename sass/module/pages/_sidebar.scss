@@ -1,94 +1,184 @@
-.sidebar {
-  height: 100vh;
-  width: 260px;
-  color: $white;
+@media (min-width: 1025px){
+  .sidebar {
+    height: 100vh;
+    width: 260px;
+    color: $white;
 
-  &.navbar {
-    display: block;
-  }
-
-  .logos {
-    margin: auto;
-
-    img {
-      width: 101px;
+    &.navbar {
+      display: block;
     }
-  }
-  hr {
-    background: $blue-800;
-  }
-  .menu {
-    li,
-    a {
-      font-weight: normal;
-      font-size: 15px;
-      color: $blue-500;
-      line-height: 24px;
-      list-style-type: none;
-      align-items: center;
-      display: flex;
-      cursor: pointer;
-      text-decoration: none;
 
-      &.no-cursor {
-        cursor: unset;
-        &:hover {
-          color: $blue-500;
-          font-weight: normal;
-        }
-      }
+    .logos {
+      margin: auto;
 
       img {
-        width: 24px;
+        width: 101px;
       }
+    }
+    hr {
+      background: $blue-800;
+    }
+    .menu {
+      li,
+      a {
+        font-weight: normal;
+        font-size: 15px;
+        color: $blue-500;
+        line-height: 24px;
+        list-style-type: none;
+        align-items: center;
+        display: flex;
+        cursor: pointer;
+        text-decoration: none;
 
-      &:hover {
-        color: $white;
-        font-weight: bold;
+        &.no-cursor {
+          cursor: unset;
+          &:hover {
+            color: $blue-500;
+            font-weight: normal;
+          }
+        }
+
+        img {
+          width: 24px;
+        }
+
+        &:hover {
+          color: $white;
+          font-weight: bold;
+        }
+
+        &.selected {
+          color: $white;
+          font-weight: bold;
+        }
       }
+    }
+    .menu-bottom{
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      li,
+      a {
+        font-weight: normal;
+        font-size: 15px;
+        color: $blue-500;
+        line-height: 24px;
+        list-style-type: none;
+        align-items: center;
+        display: flex;
+        cursor: pointer;
+        text-decoration: none;
 
-      &.selected {
-        color: $white;
-        font-weight: bold;
+        &.no-cursor {
+          cursor: unset;
+          &:hover {
+            color: $blue-500;
+            font-weight: normal;
+          }
+        }
+
+        img {
+          width: 24px;
+        }
+
+        &:hover {
+          color: $white;
+          font-weight: bold;
+        }
+
+        &.selected {
+          color: $white;
+          font-weight: bold;
+        }
       }
     }
   }
-  .menu-bottom{
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    li,
-    a {
-      font-weight: normal;
-      font-size: 15px;
-      color: $blue-500;
-      line-height: 24px;
-      list-style-type: none;
-      align-items: center;
-      display: flex;
-      cursor: pointer;
-      text-decoration: none;
+}
 
-      &.no-cursor {
-        cursor: unset;
-        &:hover {
-          color: $blue-500;
-          font-weight: normal;
-        }
-      }
+@media (min-width: 768px) and (max-width: 1024px) {
+  .sidebar {
+    height: 100vh;
+    width: 80px;
+    color: $white;
+
+    &.navbar {
+      display: block;
+    }
+
+    .logos {
+      margin: auto;
 
       img {
-        width: 24px;
+        width: 101px;
       }
+    }
+    hr {
+      background: $blue-800;
+    }
+    .menu {
+      li,
+      a {
+        line-height: 0; 
+        font-size: 0;
+        color: transparent; 
+        
+        &.no-cursor {
+          cursor: unset;
+          &:hover {
+            color: $blue-500;
+            font-weight: normal;
+          }
+        }
 
-      &:hover {
-        color: $white;
-        font-weight: bold;
+        img {
+          width: 24px;
+          margin-left: -5px !important;
+        }
+
+        &:hover {
+          color: $white;
+          font-weight: bold;
+        }
+
+        &.selected {
+          color: $white;
+          font-weight: bold;
+        }
       }
+    }
+    .menu-bottom{
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      li,
+      a {
+        line-height: 0; 
+        font-size: 0;
+        color: transparent; 
 
-      &.selected {
-        color: $white;
-        font-weight: bold;
+        &.no-cursor {
+          cursor: unset;
+          &:hover {
+            color: $blue-500;
+            font-weight: normal;
+          }
+        }
+
+        img {
+          width: 24px;
+          margin-left: 10px !important;
+        }
+
+        &:hover {
+          color: $white;
+          font-weight: bold;
+        }
+
+        &.selected {
+          color: $white;
+          font-weight: bold;
+        }
       }
     }
   }

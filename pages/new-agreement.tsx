@@ -83,9 +83,10 @@ const NewAgreement: NextPage<NewAgreementProps> = ({ templateTypeCode }) => {
     dispatch(setIsEditing(true));
   };
 
-  const [jsonSchema, setJsonSchema] = useState({});
+  const [jsonSchemas, setJsonSchema] = useState([]);
   const [uiSchema, setUISchema] = useState({});
   const [dataName, setDataName] = useState('');
+  const [activePageIndex, setActivePageIndex] = useState(0);
   const [agreementDocument, setAgreementDocument] = useState('');
   const [agreementData, setAgreementData] = useState(null);
   const [currentFormData, setCurrentFormData] = useState(null);
@@ -103,7 +104,7 @@ const NewAgreement: NextPage<NewAgreementProps> = ({ templateTypeCode }) => {
 
     setDataName(templateData.dataName);
     setAgreementDocument(templateData.template);
-    setJsonSchema(templateData.jsonSchema);
+    setJsonSchema(templateData.jsonSchemas);
     setUISchema(templateData.uiSchema);
   }, [templateTypeCode, smartAgreementsState]);
 
@@ -159,8 +160,13 @@ const NewAgreement: NextPage<NewAgreementProps> = ({ templateTypeCode }) => {
     );
   };
   const onReview = () => {
-    dispatch(setIsEditing(false));
-    dispatch(setAgreementReviewed(true));
+    const activePageLength = (activePageIndex + 1);
+    if (activePageLength === jsonSchemas.length) {
+      dispatch(setIsEditing(false));
+      dispatch(setAgreementReviewed(true));
+    } else {
+      setActivePageIndex((index) => index + 1);
+    }
   };
 
   const onSubmitTitle = (values) => {
@@ -329,7 +335,9 @@ const NewAgreement: NextPage<NewAgreementProps> = ({ templateTypeCode }) => {
                     <SmartAgreementFormPanel
                       type={templateTypeCode}
                       dataName={dataName}
-                      jsonSchema={jsonSchema}
+                      jsonSchemas={jsonSchemas}
+                      activePageIndex={activePageIndex}
+                      setActivePageIndex={setActivePageIndex}
                       uiSchema={uiSchema}
                       onChangeFields={onChangeFields}
                       onReview={onReview}

@@ -19,7 +19,7 @@ interface contractTemplate {
   // interpolationFields: Object;
   template: string;
   dataName: string;
-  jsonSchema: any;
+  jsonSchemas: any;
   uiSchema: Object;
 }
 
@@ -27,7 +27,7 @@ const getContractTemplate = (contractName: String): contractTemplate => {
   let contractTemplate;
   let title;
   let dataName = '';
-  let jsonSchema: any = [];
+  let jsonSchemas: any = [];
   let uiSchema: Object = {};
   const sharedProperties = {
     party: {
@@ -38,6 +38,7 @@ const getContractTemplate = (contractName: String): contractTemplate => {
       partyEmail: {
         title: 'Party Email:',
         type: 'string',
+        pattern: '[^@\\s]+@[^@\\s]+\\.[^@\\s]+',
       },
       partyAddress: {
         title: 'Party Address:',
@@ -57,6 +58,7 @@ const getContractTemplate = (contractName: String): contractTemplate => {
       counterPartyEmail: {
         title: 'Counterparty Email:',
         type: 'string',
+        pattern: '[^@\\s]+@[^@\\s]+\\.[^@\\s]+',
       },
       counterPartyAddress: {
         title: 'Counterparty Address:',
@@ -86,91 +88,120 @@ const getContractTemplate = (contractName: String): contractTemplate => {
       title = 'MUTUAL NONDISCLOSURE AGREEMENT';
       contractTemplate = Nda;
       dataName = 'ndaAgreementData';
-      jsonSchema = {
-        type: 'object',
-        properties: {
-          ...sharedProperties.party,
-          ...sharedProperties.couterparty,
-          ...sharedProperties.wallet,
+      jsonSchemas = [
+        {
+          type: 'object',
+          properties: {
+            ...sharedProperties.party,
+          },
+          required: sharedProperties.required,
         },
-        required: sharedProperties.required,
-      };
+        {
+          type: 'object',
+          properties: {
+            ...sharedProperties.couterparty,
+          },
+          required: sharedProperties.required,
+        },
+      ];
       break;
 
     case contractsTemplates.TemplateAdvisorAgreement:
       title = 'ADVISOR AGREEMENT';
       contractTemplate = AdvisorAgreemt;
       dataName = 'advisorAgreementData';
-      jsonSchema = {
-        type: 'object',
-        properties: {
-          ...sharedProperties.party,
-          ...sharedProperties.couterparty,
-          ...sharedProperties.wallet,
-          purchaseOption: {
-            type: 'string',
-            title: 'Purchase Option',
-            enum: ['A Nonstatutory Option', 'A Right'],
+      jsonSchemas = [
+        {
+          type: 'object',
+          properties: {
+            ...sharedProperties.party,
           },
-          numberOfShares: {
-            title: 'Number of Shares',
-            type: 'number',
+          required: sharedProperties.required,
+        },
+        {
+          type: 'object',
+          properties: {
+            ...sharedProperties.couterparty,
           },
-          termsConditions: {
-            type: 'string',
-            title: 'Terms and Conditions',
-            enum: ['Options', 'Restricted stock purchase awards'],
-          },
-          stockPlanName: {
-            title: 'Stock Plan name',
-            type: 'string',
-          },
-          stockPlanNameValue: {
-            type: 'string',
-            title: 'Stock Plan Name Value',
-            enum: ['Stock option', 'Restricted stock purchase'],
-          },
-          percentageVest: {
-            title: 'Percentage Vest',
-            type: 'number',
-          },
-          anniversaryMonth: {
-            title: 'Anniversary Month',
-            type: 'number',
-          },
-          vestingCommencement: {
-            title: 'Vesting Commencement %',
-            type: 'number',
-          },
-          typeOfTriggerAcceleration: {
-            type: 'string',
-            title: 'Type of Trigger Acceleration',
-            enum: [
-              'Single Trigger Acceleration...',
-              'Double Trigger Acceleration...',
-            ],
-          },
-          typeOfPrice: {
-            type: 'string',
-            title: 'Terms and Conditions',
-            enum: ['Exersice', 'Purchase'],
-          },
-          acceptionOption: {
-            type: 'string',
-            title: 'Accepting Option',
-            enum: ['An Option', 'A Right'],
-          },
-          numberOfYears: {
-            title: 'Number Of Years',
-            type: 'number',
-          },
-          state: {
-            title: 'State',
-            type: 'string',
+          required: sharedProperties.required,
+        },
+        {
+          type: 'object',
+          properties: {
+            purchaseOption: {
+              type: 'string',
+              title: 'Purchase Option',
+              enum: ['A Nonstatutory Option', 'A Right'],
+            },
+            numberOfShares: {
+              title: 'Number of Shares',
+              type: 'number',
+            },
+            termsConditions: {
+              type: 'string',
+              title: 'Terms and Conditions',
+              enum: ['Options', 'Restricted stock purchase awards'],
+            },
+            stockPlanName: {
+              title: 'Stock Plan name',
+              type: 'string',
+            },
+            stockPlanNameValue: {
+              type: 'string',
+              title: 'Stock Plan Name Value',
+              enum: ['Stock option', 'Restricted stock purchase'],
+            },
           },
         },
-        required: sharedProperties.required,
-      };
+        {
+          type: 'object',
+          properties: {
+            percentageVest: {
+              title: 'Percentage Vest',
+              type: 'number',
+            },
+            anniversaryMonth: {
+              title: 'Anniversary Month',
+              type: 'number',
+            },
+            vestingCommencement: {
+              title: 'Vesting Commencement %',
+              type: 'number',
+            },
+            typeOfTriggerAcceleration: {
+              type: 'string',
+              title: 'Type of Trigger Acceleration',
+              enum: [
+                'Single Trigger Acceleration...',
+                'Double Trigger Acceleration...',
+              ],
+            },
+          },
+        },
+        {
+          type: 'object',
+          properties: {
+            typeOfPrice: {
+              type: 'string',
+              title: 'Terms and Conditions',
+              enum: ['Exersice', 'Purchase'],
+            },
+            acceptionOption: {
+              type: 'string',
+              title: 'Accepting Option',
+              enum: ['An Option', 'A Right'],
+            },
+            numberOfYears: {
+              title: 'Number Of Years',
+              type: 'number',
+            },
+            state: {
+              title: 'State',
+              type: 'string',
+            },
+          },
+        },
+      ];
       uiSchema = {
         purchaseOption: {
           'ui:widget': 'radio',
@@ -197,182 +228,218 @@ const getContractTemplate = (contractName: String): contractTemplate => {
       title = 'CONFIDENTIAL INFORMATION AND INVENTION ASSIGNMENT AGREEMENT';
       contractTemplate = Ciia;
       dataName = 'ciiaAgreementData';
-      jsonSchema = {
-        type: 'object',
-        properties: {
-          ...sharedProperties.party,
-          ...sharedProperties.couterparty,
-          ...sharedProperties.wallet,
-          effectiveDate: {
-            title: 'Effective Date',
-            type: 'string',
-            format: 'date',
+      jsonSchemas = [
+        {
+          type: 'object',
+          properties: {
+            ...sharedProperties.party,
           },
-          companyState: {
-            title: 'Company State',
-            type: 'string',
+          required: sharedProperties.required,
+        },
+        {
+          type: 'object',
+          properties: {
+            ...sharedProperties.couterparty,
           },
-          stateConsultant: {
-            title: 'State',
-            type: 'string',
-          },
-          typeOfCompanyConsultant: {
-            title: 'Type of company',
-            type: 'string',
-          },
-          title: {
-            title: 'Title',
-            type: 'string',
-          },
-          datea: {
-            title: 'Date',
-            type: 'string',
-            format: 'date',
-          },
-          idNumberBriefDesc: {
-            title: 'Identifying # or Brief Desc.',
-            type: 'string',
-          },
-          stateCompany: {
-            title: 'State',
-            type: 'string',
-          },
-          typeOfComapny: {
-            title: 'Type of Company',
-            type: 'string',
-          },
-          listCompAgreements: {
-            title:
-              'List of companies and/or agreements excluded under section 10(b)',
-            type: 'string',
-            format: 'textarea',
+          required: sharedProperties.required,
+        },
+        {
+          type: 'object',
+          properties: {
+            effectiveDate: {
+              title: 'Effective Date',
+              type: 'string',
+              format: 'date',
+            },
+            companyState: {
+              title: 'Company State',
+              type: 'string',
+            },
+            stateConsultant: {
+              title: 'State',
+              type: 'string',
+            },
+            typeOfCompanyConsultant: {
+              title: 'Type of company',
+              type: 'string',
+            },
+            title: {
+              title: 'Title',
+              type: 'string',
+            },
           },
         },
-        required: sharedProperties.required,
-      };
+        {
+          type: 'object',
+          properties: {
+            datea: {
+              title: 'Date',
+              type: 'string',
+              format: 'date',
+            },
+            idNumberBriefDesc: {
+              title: 'Identifying # or Brief Desc.',
+              type: 'string',
+            },
+            stateCompany: {
+              title: 'State',
+              type: 'string',
+            },
+            typeOfComapny: {
+              title: 'Type of Company',
+              type: 'string',
+            },
+            listCompAgreements: {
+              title:
+              'List of companies and/or agreements excluded under section 10(b)',
+              type: 'string',
+              format: 'textarea',
+            },
+          },
+        },
+      ];
       break;
 
     case contractsTemplates.TemplateConsultingAgreement:
       title = 'CONSULTING AGREEMENT';
       contractTemplate = ConsultingAgreement;
       dataName = 'consultingAgreementData';
-      jsonSchema = {
-        type: 'object',
-        properties: {
-          ...sharedProperties.party,
-          ...sharedProperties.couterparty,
-          ...sharedProperties.wallet,
-          state: {
-            title: 'State',
-            type: 'string',
+      jsonSchemas = [
+        {
+          type: 'object',
+          properties: {
+            ...sharedProperties.party,
           },
-          typeOfCompany: {
-            title: 'Type of Company',
-            type: 'string',
+          required: sharedProperties.required,
+        },
+        {
+          type: 'object',
+          properties: {
+            ...sharedProperties.couterparty,
           },
-          descriptionConsulting: {
-            title: 'Description of Consulting Service',
-            type: 'string',
+          required: sharedProperties.required,
+        },
+        {
+          type: 'object',
+          properties: {
+            state: {
+              title: 'State',
+              type: 'string',
+            },
+            typeOfCompany: {
+              title: 'Type of Company',
+              type: 'string',
+            },
+            descriptionConsulting: {
+              title: 'Description of Consulting Service',
+              type: 'string',
+            },
+            serviceRenderChecked: {
+              title: 'For Services rendered',
+              type: 'boolean',
+              default: false,
+            },
           },
-          serviceRenderChecked: {
-            title: 'For Services rendered',
-            type: 'boolean',
-            default: false,
-          },
-          consultantChecked: {
-            title: 'Consultan Shall',
-            type: 'boolean',
-            default: false,
-          },
-          companyWillChecked: {
-            title: 'The Company will recommend',
-            type: 'boolean',
-          },
-          otherChecked: {
-            title: 'Other',
-            type: 'boolean',
-            default: '',
+          dependencies: {
+            serviceRenderChecked: {
+              oneOf: [
+                {
+                  properties: {
+                    serviceRenderChecked: {
+                      enum: [true],
+                    },
+                    serviceRate: {
+                      type: 'number',
+                      title: 'Service Rate',
+                    },
+                    servicePayable: {
+                      type: 'string',
+                      title: 'Service Payable',
+                    },
+                    serviceAmountLimit: {
+                      type: 'number',
+                      title: 'Service Payable',
+                    },
+                  },
+                },
+              ],
+            },
           },
         },
-        required: sharedProperties.required,
-        dependencies: {
-          serviceRenderChecked: {
-            oneOf: [
-              {
-                properties: {
-                  serviceRenderChecked: {
-                    enum: [true],
-                  },
-                  serviceRate: {
-                    type: 'number',
-                    title: 'Service Rate',
-                  },
-                  servicePayable: {
-                    type: 'string',
-                    title: 'Service Payable',
-                  },
-                  serviceAmountLimit: {
-                    type: 'number',
-                    title: 'Service Payable',
-                  },
-                },
-              },
-            ],
+        {
+          type: 'object',
+          properties: {
+            consultantChecked: {
+              title: 'Consultan Shall',
+              type: 'boolean',
+              default: false,
+            },
+            companyWillChecked: {
+              title: 'The Company will recommend',
+              type: 'boolean',
+            },
+            otherChecked: {
+              title: 'Other',
+              type: 'boolean',
+              default: '',
+            },
           },
-          consultantChecked: {
-            oneOf: [
-              {
-                properties: {
-                  consultantChecked: {
-                    enum: [true],
-                  },
-                  consultantExecutionAmount: {
-                    type: 'number',
-                    title: 'Consultant Execution Amount',
-                  },
-                  consultantCompletionAmount: {
-                    type: 'number',
-                    title: 'Consultant Completion Amount',
-                  },
-                },
-              },
-            ],
-          },
-          companyWillChecked: {
-            oneOf: [
-              {
-                properties: {
-                  companyWillChecked: {
-                    enum: [true],
-                  },
-                  companyShares: {
-                    type: 'string',
-                    title: 'Company Shares',
-                  },
-                  companyFollows: {
-                    type: 'string',
-                    title: 'Follows',
+          dependencies: {
+            consultantChecked: {
+              oneOf: [
+                {
+                  properties: {
+                    consultantChecked: {
+                      enum: [true],
+                    },
+                    consultantExecutionAmount: {
+                      type: 'number',
+                      title: 'Consultant Execution Amount',
+                    },
+                    consultantCompletionAmount: {
+                      type: 'number',
+                      title: 'Consultant Completion Amount',
+                    },
                   },
                 },
-              },
-            ],
-          },
-          otherChecked: {
-            oneOf: [
-              {
-                properties: {
-                  otherChecked: {
-                    enum: [true],
-                  },
-                  other: {
-                    type: 'string',
+              ],
+            },
+            companyWillChecked: {
+              oneOf: [
+                {
+                  properties: {
+                    companyWillChecked: {
+                      enum: [true],
+                    },
+                    companyShares: {
+                      type: 'string',
+                      title: 'Company Shares',
+                    },
+                    companyFollows: {
+                      type: 'string',
+                      title: 'Follows',
+                    },
                   },
                 },
-              },
-            ],
+              ],
+            },
+            otherChecked: {
+              oneOf: [
+                {
+                  properties: {
+                    otherChecked: {
+                      enum: [true],
+                    },
+                    other: {
+                      type: 'string',
+                    },
+                  },
+                },
+              ],
+            },
           },
         },
-      };
+      ];
       uiSchema = {
         'ui:widget': 'checkbox',
         'ui:order': [
@@ -442,41 +509,59 @@ const getContractTemplate = (contractName: String): contractTemplate => {
       title = 'SALES COMMISSION AGREEMENT';
       contractTemplate = ReferalAgreement;
       dataName = 'referralAgreementData';
-      jsonSchema = {
-        type: 'object',
-        properties: {
-          ...sharedProperties.party,
-          ...sharedProperties.couterparty,
-          ...sharedProperties.wallet,
-          typeOfCompany: {
-            title: 'Type of company',
-            type: 'string',
+      jsonSchemas = [
+        {
+          type: 'object',
+          properties: {
+            ...sharedProperties.party,
           },
-          terminationDate: {
-            title: 'Termination date',
-            type: 'string',
-            format: 'date',
-            ui: 'emptyValue',
+          required: sharedProperties.required,
+        },
+        {
+          type: 'object',
+          properties: {
+            ...sharedProperties.couterparty,
           },
-          stateOfCompany: {
-            title: 'State of company',
-            type: 'string',
-          },
-          county: {
-            title: 'County',
-            type: 'string',
-          },
-          commision: {
-            title: 'Commision',
-            type: 'number',
-          },
-          commisionDate: {
-            title: 'Commision date',
-            type: 'string',
-            format: 'date',
+          required: sharedProperties.required,
+        },
+        {
+          type: 'object',
+          properties: {
+            typeOfCompany: {
+              title: 'Type of company',
+              type: 'string',
+            },
+            terminationDate: {
+              title: 'Termination date',
+              type: 'string',
+              format: 'date',
+              ui: 'emptyValue',
+            },
+            stateOfCompany: {
+              title: 'State of company',
+              type: 'string',
+            },
           },
         },
-      };
+        {
+          type: 'object',
+          properties: {
+            county: {
+              title: 'County',
+              type: 'string',
+            },
+            commision: {
+              title: 'Commision',
+              type: 'number',
+            },
+            commisionDate: {
+              title: 'Commision date',
+              type: 'string',
+              format: 'date',
+            },
+          },
+        },
+      ];
       uiSchema = {
         terminationDate: {
           'ui:emptyValue': '',
@@ -491,101 +576,118 @@ const getContractTemplate = (contractName: String): contractTemplate => {
       title = 'SIMPLE AGREEMENT FOR FUTURE TOKENS';
       contractTemplate = Saft;
       dataName = 'saftAgreementData';
-      jsonSchema = {
-        type: 'object',
-        properties: {
-          ...sharedProperties.party,
-          ...sharedProperties.couterparty,
-          ...sharedProperties.wallet,
-          purchaseAmount: {
-            title: 'Purchase amount',
-            type: 'number',
+      jsonSchemas = [
+        {
+          type: 'object',
+          properties: {
+            ...sharedProperties.party,
           },
-          jurisdiction: {
-            title: 'Jurisdiction (Non U.S.)',
-            type: 'string',
+          required: sharedProperties.required,
+        },
+        {
+          type: 'object',
+          properties: {
+            ...sharedProperties.couterparty,
           },
-          tokenAmount: {
-            title: 'Token amount',
-            type: 'number',
-          },
-          typeOfCompany: {
-            title: 'Type of company',
-            type: 'string',
-          },
-          discountRate: {
-            title: 'Discount Rate %',
-            type: 'number',
-          },
-          website: {
-            title: 'Website',
-            type: 'string',
-          },
-          paymentOption: {
-            title: 'Payment Options',
-            type: 'string',
-            enum: ['dollar', 'eth', 'btc'],
-            enumNames: ['U.S. Dollars', 'Ethereum', 'Bitcoin'],
-            default: 'dollar',
+          required: sharedProperties.required,
+        },
+        {
+          type: 'object',
+          properties: {
+            purchaseAmount: {
+              title: 'Purchase amount',
+              type: 'number',
+            },
+            jurisdiction: {
+              title: 'Jurisdiction (Non U.S.)',
+              type: 'string',
+            },
+            tokenAmount: {
+              title: 'Token amount',
+              type: 'number',
+            },
+            typeOfCompany: {
+              title: 'Type of company',
+              type: 'string',
+            },
           },
         },
-        required: sharedProperties.required,
-        dependencies: {
-          paymentOption: {
-            oneOf: [
-              {
-                properties: {
-                  paymentOption: {
-                    enum: ['dollar'],
-                  },
-                  bankName: {
-                    title: 'Bank Name',
-                    type: 'string',
-                  },
-                  address: {
-                    title: 'Address',
-                    type: 'string',
-                  },
-                  aba: {
-                    title: 'ABA#',
-                    type: 'string',
-                  },
-                  payeeAccount: {
-                    title: 'Payee Account #',
-                    type: 'string',
-                  },
-                  payeeAccountName: {
-                    title: 'Payee Account Name',
-                    type: 'string',
-                  },
-                },
-              },
-              {
-                properties: {
-                  paymentOption: {
-                    enum: ['eth'],
-                  },
-                  ethereum: {
-                    title: 'Ethereum address',
-                    type: 'string',
-                  },
-                },
-              },
-              {
-                properties: {
-                  paymentOption: {
-                    enum: ['btc'],
-                  },
-                  bitcoin: {
-                    title: 'Bitcoin address',
-                    type: 'string',
+        {
+          type: 'object',
+          properties: {
+            discountRate: {
+              title: 'Discount Rate %',
+              type: 'number',
+            },
+            website: {
+              title: 'Website',
+              type: 'string',
+            },
+            paymentOption: {
+              title: 'Payment Options',
+              type: 'string',
+              enum: ['dollar', 'eth', 'btc'],
+              enumNames: ['U.S. Dollars', 'Ethereum', 'Bitcoin'],
+              default: 'dollar',
+            },
+          },
+          dependencies: {
+            paymentOption: {
+              oneOf: [
+                {
+                  properties: {
+                    paymentOption: {
+                      enum: ['dollar'],
+                    },
+                    bankName: {
+                      title: 'Bank Name',
+                      type: 'string',
+                    },
+                    address: {
+                      title: 'Address',
+                      type: 'string',
+                    },
+                    aba: {
+                      title: 'ABA#',
+                      type: 'string',
+                    },
+                    payeeAccount: {
+                      title: 'Payee Account #',
+                      type: 'string',
+                    },
+                    payeeAccountName: {
+                      title: 'Payee Account Name',
+                      type: 'string',
+                    },
                   },
                 },
-              },
-            ],
+                {
+                  properties: {
+                    paymentOption: {
+                      enum: ['eth'],
+                    },
+                    ethereum: {
+                      title: 'Ethereum address',
+                      type: 'string',
+                    },
+                  },
+                },
+                {
+                  properties: {
+                    paymentOption: {
+                      enum: ['btc'],
+                    },
+                    bitcoin: {
+                      title: 'Bitcoin address',
+                      type: 'string',
+                    },
+                  },
+                },
+              ],
+            },
           },
         },
-      };
+      ];
       break;
 
     default:
@@ -596,7 +698,7 @@ const getContractTemplate = (contractName: String): contractTemplate => {
     // interpolationFields: findElementsInterpolation(contractTemplate),
     template: contractTemplate,
     dataName,
-    jsonSchema,
+    jsonSchemas,
     uiSchema,
   };
 };
