@@ -120,6 +120,7 @@ const NewAgreement: NextPage<NewAgreementProps> = ({ templateTypeCode }) => {
         data[AGREEMENT_CREATE_DATE_FIELD] = format(new Date(), 'yyyy/MM/dd');
       }
     }
+    
     setAgreementData(data);
   }, [smartAgreementsState, dataName, agreementTitle]);
 

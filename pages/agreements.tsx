@@ -96,33 +96,34 @@ const Agreements: React.FC = () => {
 
       <div className="agreements m-0 p-0 px-4 container-fluid">
         <div className="row m-0 p-0 h-100">
-          <div className="col-12 py-4 d-flex">
-            
-            <h3 className="d-flex mr-auto">Agreements</h3>
-            <div className="d-flex">
-              <Button className="btn-white mr-2" color="primary">
-                Send
-              </Button>
-              <Button className="btn-white mr-2" color="primary">
-                Received
-              </Button>
-              <Button className="btn-white mr-2" color="primary">
-                <img src="/assets/icon/filter.svg" alt="" />
-              </Button>
-              <div className="form-group has-search">
-                <img
-                  className="search-icon"
-                  src="/assets/icon/search.svg"
-                  alt=""
-                />
-                <input
-                  type="text"
-                  className="form-control input-white"
-                  placeholder="Search"
-                />
+          {agreements.length > 0 &&
+            <div className="col-12 py-4 d-flex">
+              <h3 className="d-flex mr-auto">Smart Agreements</h3>
+              <div className="d-flex">
+                <Button className="btn-white mr-2" color="primary">
+                  Send
+                </Button>
+                <Button className="btn-white mr-2" color="primary">
+                  Received
+                </Button>
+                <Button className="btn-white mr-2" color="primary">
+                  <img src="/assets/icon/filter.svg" alt="" />
+                </Button>
+                <div className="form-group has-search">
+                  <img
+                    className="search-icon"
+                    src="/assets/icon/search.svg"
+                    alt=""
+                  />
+                  <input
+                    type="text"
+                    className="form-control input-white"
+                    placeholder="Search"
+                  />
+                </div>
               </div>
             </div>
-          </div>
+          }
           <div className="col-12">
             <Card className="border-0 content">
               <Table
@@ -132,14 +133,16 @@ const Agreements: React.FC = () => {
                 onNewAgreementClick={onNewAgreementClick}
                 onOpenFile={onOpenFile}
               />
-              <Button
-                className="new-agreement-button"
-                color="primary"
-                onClick={() => setOpenTemplateSelector(true)}
-              >
-                <img className="mr-1" src="/assets/icon/plus.svg" alt="" />
-                New agreement
-              </Button>
+              {agreements.length > 0 && 
+                <Button
+                  className="new-agreement-button"
+                  color="primary"
+                  onClick={() => setOpenTemplateSelector(true)}
+                >
+                  <img className="mr-1" src="/assets/icon/plus.svg" alt="" />
+                  New agreement
+                </Button>
+              }
             </Card>
           </div>
         </div>

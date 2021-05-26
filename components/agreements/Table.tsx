@@ -45,6 +45,7 @@ const Table: FC<TableProps> = ({
   const firstPageRows = rows.slice(0, 20);
   return (
     <>
+      {data.length > 0 && (
       <table {...getTableProps()} className="custom-table">
         <thead>
           {headerGroups.map((headerGroup) => (
@@ -137,12 +138,12 @@ const Table: FC<TableProps> = ({
           })}
         </tbody>
       </table>
+      )}
       <br />
       {data.length < 1 && (
         <div className="empty-result row justify-content-center align-items-center">
           <p className="text-center">
-            You don&apos;t have any agreements yet. Click bellow to create your first
-            smart agreement!
+            You don&apos;t have any agreements yet. Click bellow to create your first SMART agreement!
             {' '}
             <br />
             <Button
