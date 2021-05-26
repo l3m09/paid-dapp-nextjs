@@ -143,8 +143,7 @@ const Table: FC<TableProps> = ({
       {data.length < 1 && (
         <div className="empty-result row justify-content-center align-items-center">
           <p className="text-center">
-            You don&apos;t have any agreements yet. Click bellow to create your first 
-            <span style={{backgroundColor:'#fff',color:'red'}}> SMART</span> agreement!
+            You don&apos;t have any agreements yet. Click bellow to create your first SMART agreement!
             {' '}
             <br />
             <Button
