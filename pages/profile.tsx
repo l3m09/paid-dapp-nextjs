@@ -3,9 +3,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import Head from 'next/head';
 import { Card } from 'reactstrap';
 import { Wallet } from 'xdv-universal-wallet-core';
-import router from 'next/router';
 import ProfileStateModel from '../models/profileStateModel';
 import FormProfile from '../components/profile/FormProfile';
+import PassphraseModal from '../components/profile/PassphraseModal';
 import ProfileModel from '../models/profileModel';
 import doSetProfile from '../redux/actions/profile';
 
@@ -20,47 +20,61 @@ const Profile: FC = () => {
   );
 
   const [profile, setProfile] = useState<ProfileModel>(profileState.profile);
+  const [openPassphraseModal, setOpenPassphraseModal] = useState(false);
+  const [passphrase, setPassphrase] = useState(null);
+  const [errorPassphrase, setErrorPassphrase] = useState(false);
+
+  useEffect(() => {
+    const getCurrentWallet = global.sessionStorage.getItem(currentWallet);
+    if (!profile.name && getCurrentWallet) {
+      setOpenPassphraseModal(true);
+    }
+  }, []);
 
   useEffect(() => {
     const bootstrapAsync = async () => {
       const getCurrentWallet = global.sessionStorage.getItem(currentWallet);
       if (!profile.name && getCurrentWallet) {
-        try {
-          const profileData = JSON.parse(getCurrentWallet);
-          const name = profileData.profileName;
-          const accountName = profileData.profileName.replaceAll(' ', '').toLowerCase();
-          const xdvWallet = new Wallet({ isWeb: true });
-          await xdvWallet.open(accountName, '123456789abcd');
-          await xdvWallet.enrollAccount({
-            passphrase: '123456789abcd',
-            accountName,
-          });
-          let acct = await xdvWallet.getAccount();
-          const walletDid = await xdvWallet.createES256K({
-            rpcUrl: process.env.NEXT_PUBLIC_RPC_URL,
-            walletId: profileData.walletId,
-            registry: '',
-            accountName: profileData.accountName,
-          });
+        if (passphrase) {
+          try {
+            const profileData = JSON.parse(getCurrentWallet);
+            const name = profileData.profileName;
+            const accountName = profileData.profileName.replaceAll(' ', '').toLowerCase();
+            const xdvWallet = new Wallet({ isWeb: true });
+            await xdvWallet.open(accountName, passphrase);
+            await xdvWallet.enrollAccount({
+              passphrase,
+              accountName,
+            });
+            const acct = await xdvWallet.getAccount();
+            const walletDid = await xdvWallet.createES256K({
+              rpcUrl: process.env.NEXT_PUBLIC_RPC_URL,
+              walletId: profileData.walletId,
+              registry: '',
+              accountName: profileData.accountName,
+            });
 
-          const currentProfile = {
-            name,
-            created: profileData.createdAt,
-            did: walletDid.did.did,
-            address: walletDid.address,
-          };
-
-          dispatch(doSetProfile(currentProfile));
-          setProfile(currentProfile);
-        } catch (e) {
-          console.log('passphrase invalid');
+            const currentProfile = {
+              name,
+              created: profileData.createdAt,
+              did: walletDid.did.did,
+              address: walletDid.address,
+            };
+            setErrorPassphrase(false);
+            setPassphrase(null);
+            setOpenPassphraseModal(false);
+            dispatch(doSetProfile(currentProfile));
+            setProfile(currentProfile);
+          } catch (e) {
+            setErrorPassphrase(true);
+          }
         }
       }
     };
 
     bootstrapAsync();
   },
-  []);
+  [passphrase]);
 
   const { name } = profile;
   const emptyProfile = !name;
@@ -83,7 +97,7 @@ const Profile: FC = () => {
         passphrase: values.passPharse,
         accountName,
       });
-      let acct = await xdvWallet.getAccount();
+      const acct = await xdvWallet.getAccount();
       const walletId = await xdvWallet.addWallet();
       const walletDid = await xdvWallet.createES256K({
         passphrase: values.passPharse,
@@ -141,6 +155,11 @@ const Profile: FC = () => {
           </div>
         </div>
       </div>
+      <PassphraseModal
+        open={openPassphraseModal}
+        errorPassphrase={errorPassphrase}
+        setPassphrase={setPassphrase}
+      />
     </>
   );
 };

@@ -102,8 +102,8 @@ const FormProfile: FC<FormProfileProps> = ({
               innerRef={register({
                 required: 'Passphrase is required',
                 minLength: {
-                  value: 7,
-                  message: 'Passphrase must have 7 characters',
+                  value: 12,
+                  message: 'Passphrase must have 12 characters',
                 },
               })}
               errorComponent={(
