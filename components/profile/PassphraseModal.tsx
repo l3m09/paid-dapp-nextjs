@@ -22,7 +22,7 @@ const PassphraseModal: FC<PassphraseModalProps> = ({
   } = useForm();
 
   const onSubmit = (values) => {
-    setPassphrase(values.passPharse);
+    setPassphrase(values.passphrase);
   };
 
   return (
@@ -31,17 +31,17 @@ const PassphraseModal: FC<PassphraseModalProps> = ({
         <form onSubmit={handleSubmit(onSubmit)}>
           <StackedInput
             label="Passphrase:"
-            name="passPharse"
+            name="passphrase"
             type="password"
             placeholder="Enter your Passphrase"
-            inputClassNames={classNames({ 'is-invalid': errors.passPharse })}
+            inputClassNames={classNames({ 'is-invalid': errors.passphrase })}
             innerRef={register({
               required: 'Passphrase is required',
             })}
             errorComponent={(
               <ErrorMessage
                 className="error-message"
-                name="passPharse"
+                name="passphrase"
                 as="div"
                 errors={errors}
               />

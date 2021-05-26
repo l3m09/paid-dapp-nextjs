@@ -34,8 +34,8 @@ const FormProfile: FC<FormProfileProps> = ({
     },
   });
 
-  const passPharse = useRef({});
-  passPharse.current = watch('passPharse', '');
+  const passphrase = useRef({});
+  passphrase.current = watch('passphrase', '');
 
   useEffect(() => {
     reset({
@@ -95,10 +95,10 @@ const FormProfile: FC<FormProfileProps> = ({
           <>
             <StackedInput
               label="Passphrase:"
-              name="passPharse"
+              name="passphrase"
               type="password"
               placeholder="Enter your Passphrase"
-              inputClassNames={classNames({ 'is-invalid': errors.passPharse })}
+              inputClassNames={classNames({ 'is-invalid': errors.passphrase })}
               innerRef={register({
                 required: 'Passphrase is required',
                 minLength: {
@@ -109,7 +109,7 @@ const FormProfile: FC<FormProfileProps> = ({
               errorComponent={(
                 <ErrorMessage
                   className="error-message"
-                  name="passPharse"
+                  name="passphrase"
                   as="div"
                   errors={errors}
                 />
@@ -117,19 +117,19 @@ const FormProfile: FC<FormProfileProps> = ({
             />
             <StackedInput
               label="Confirm Passphrase:"
-              name="confirmPassPharse"
+              name="confirmPassphrase"
               type="password"
               placeholder="Enter your Confim Passphrase"
               inputClassNames={classNames({
-                'is-invalid': errors.confirmPassPharse,
+                'is-invalid': errors.confirmPassphrase,
               })}
               innerRef={register({
-                validate: (value) => value === passPharse.current || 'The passwords do not match',
+                validate: (value) => value === passphrase.current || 'The passwords do not match',
               })}
               errorComponent={(
                 <ErrorMessage
                   className="error-message"
-                  name="confirmPassPharse"
+                  name="confirmPassphrase"
                   as="div"
                   errors={errors}
                 />

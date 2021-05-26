@@ -92,15 +92,15 @@ const Profile: FC = () => {
     try {
       const accountName = values.name.replaceAll(' ', '').toLowerCase();
       const xdvWallet = new Wallet({ isWeb: true });
-      await xdvWallet.open(accountName, values.passPharse);
+      await xdvWallet.open(accountName, values.passphrase);
       await xdvWallet.enrollAccount({
-        passphrase: values.passPharse,
+        passphrase: values.passphrase,
         accountName,
       });
       const acct = await xdvWallet.getAccount();
       const walletId = await xdvWallet.addWallet();
       const walletDid = await xdvWallet.createES256K({
-        passphrase: values.passPharse,
+        passphrase: values.passphrase,
         rpcUrl: process.env.NEXT_PUBLIC_RPC_URL,
         walletId,
         registry: '',
